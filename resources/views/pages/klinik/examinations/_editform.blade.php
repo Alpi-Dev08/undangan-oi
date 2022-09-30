@@ -381,54 +381,6 @@
 
                         <div class="row mb-6">
                             <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Symtomp Area</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <div class="col-lg-8">
-                                <div class="input-group input-group-solid has-validation mb-3">
-                                    <input type="text" name="symtomp_area" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('symtomp_area') is-invalid @enderror" placeholder="Symtomp Area" value="{{ $examination->symtomp_area }}"/>
-                                </div>
-                                @error('symtomp_area')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <!--end::Input-->
-                        </div>
-
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Symtomp</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <div class="col-lg-8">
-                                <div class="input-group input-group-solid has-validation mb-3">
-                                    <input type="text" name="symtomp" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('symtomp') is-invalid @enderror" placeholder="Symtomp" value="{{ $examination->symtomp }}"/>
-                                </div>
-                                @error('symtomp')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <!--end::Input-->
-                        </div>
-
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Symtomp Date</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <div class="col-lg-8">
-                                <div class="input-group input-group-solid has-validation mb-3">
-                                    <input type="date" name="symtomp_date" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('symtomp_date') is-invalid @enderror" placeholder="Symtomp Date" value="{{ $examination->symtomp_date }}"/>
-                                </div>
-                                @error('symtomp_date')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <!--end::Input-->
-                        </div>
-
-                        <div class="row mb-6">
-                            <!--begin::Label-->
                             <label class="col-lg-4 col-form-label fw-bold fs-6">Subjective</label>
                             <!--end::Label-->
                             <!--begin::Input-->
@@ -465,8 +417,14 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <div class="col-lg-8">
-                                <div class="input-group input-group-solid has-validation mb-3">
-                                    <textarea name="assessment" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('assessment') is-invalid @enderror" placeholder="Assessment">{{ $examination->assessment }}</textarea>
+                                <select id="icdtens" aria-label="{{ __('Select a Diagnosa') }}" data-control="select2" data-placeholder="{{ __('Select a Diagnosa...') }}" class="form-select form-select-solid form-select-lg fw-bold">
+                                    <option value="">{{ __('Select a Diagnosa...') }}</option>
+                                    @foreach($icdtens as $icdten)
+                                        <option value="{{ $icdten->id }}">{{  $icdten->code.' '.$icdten->name }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="input-group input-group-solid has-validation mb-3 mt-3">
+                                    <textarea name="assessment" id="assessment" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('assessment') is-invalid @enderror" placeholder="Assessment">{{ $examination->assessment }}</textarea>
                                 </div>
                                 @error('assessment')
                                 <div class="text-danger">{{ $message }}</div>
@@ -475,16 +433,38 @@
                             <!--end::Input-->
                         </div>
 
+                         <!--begin::Input group-->
+                         <div class="row mb-6">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">
+                                <span>{{ __('Plan') }}</span>
+
+                            </label>
+                            <!--end::Label-->
+
+                            <!--begin::Col-->
+                            <div class="col-lg-8">
+                                <select name="plan_id" aria-label="{{ __('Select a Plan') }}" data-control="select2" data-placeholder="{{ __('Select a Plan...') }}" class="form-select form-select-solid form-select-lg fw-bold">
+                                    <option value="">{{ __('Select a Plan...') }}</option>
+                                    @foreach($plans as $plan)
+                                        <option value="{{ $plan->id }}" {{  $plan->id === old('plan_id', $examination->plan_id ?? '') ? 'selected' :'' }}>{{  $plan->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+
                         <div class="row mb-6">
                             <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Plan</label>
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">Resep</label>
                             <!--end::Label-->
                             <!--begin::Input-->
                             <div class="col-lg-8">
                                 <div class="input-group input-group-solid has-validation mb-3">
-                                    <textarea name="plan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('plan') is-invalid @enderror" placeholder="Plan">{{ $examination->plan }}</textarea>
+                                    <textarea name="resep" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('resep') is-invalid @enderror" placeholder="Resep">{{ $examination->resep }}</textarea>
                                 </div>
-                                @error('plan')
+                                @error('resep')
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -519,3 +499,14 @@
         </div>
     </div>
 </div>
+
+@push('customscript')
+<script>
+    $(function(){
+        $assesment = $("#assessment").html();
+        $("#icdtens").change(function(){
+            $("#assessment").append($(this).find("option:selected").text()+'\n');
+        });
+    })
+</script>
+@endpush

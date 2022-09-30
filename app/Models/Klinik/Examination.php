@@ -15,6 +15,7 @@ class Examination extends Model
     protected $fillable = [
         'user_id',
         'patient_id',
+        'plan_id',
         'medical_record_id',
         'health_profesional_id',
         'service_type_id',
@@ -30,6 +31,7 @@ class Examination extends Model
         'plan',
         'total',
         'status',
+        'resep',
         'is_lab'
     ];
 

@@ -17,6 +17,8 @@
     use App\Models\Klinik\Transaction;
     use App\Models\Klinik\TransactionDetail;
     use App\Models\User;
+    use App\Models\Klinik\Plan;
+    use App\Models\Klinik\Icdten;
     use Doctrine\DBAL\Driver\PDO\Exception;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
@@ -123,9 +125,11 @@
 
             $user = User::find($examination->user_id);
             $healthprofesionals = HealthProfesional::all();
+            $plans = Plan::all();
+            $icdtens = Icdten::all();
 
             $info      = $user->info;
-            return view('pages.klinik.examinations.edit',compact('examination','user','healthprofesionals','info'));
+            return view('pages.klinik.examinations.edit',compact('examination','user','healthprofesionals','info','plans','icdtens'));
         }
 
         /**

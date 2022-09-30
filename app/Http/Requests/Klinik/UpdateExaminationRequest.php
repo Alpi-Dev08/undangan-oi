@@ -26,6 +26,7 @@ class UpdateExaminationRequest extends FormRequest
         return [
             'user_id'               => 'nullable',
             'patient_id'            => 'nullable',
+            'plan_id'            => 'nullable',
             'medical_record_id'     => 'nullable',
             'health_profesional_id' => 'nullable',
             'examination_code'      => 'nullable',
@@ -39,6 +40,7 @@ class UpdateExaminationRequest extends FormRequest
             'plan'                  => 'nullable',
             'total'                 => 'nullable',
             'status'                => 'nullable',
+            'resep'                => 'nullable',
             'is_lab'                => 'nullable',
         ];
     }
