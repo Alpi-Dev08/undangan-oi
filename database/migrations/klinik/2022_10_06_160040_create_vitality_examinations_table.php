@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('body_fat')->nullable();
             $table->string('bmi_conclusion')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('examination_id')->references('id')->on('examinations')->onDelete('cascade');
         });

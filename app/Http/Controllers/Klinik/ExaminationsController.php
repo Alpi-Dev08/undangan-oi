@@ -18,6 +18,7 @@
     use App\Models\Klinik\ServiceType;
     use App\Models\Klinik\Transaction;
     use App\Models\Klinik\TransactionDetail;
+    use App\Models\Klinik\VitalityExamination;
     use App\Models\User;
     use App\Models\Klinik\Plan;
     use App\Models\Klinik\Icdten;
@@ -130,9 +131,10 @@
             $healthprofesionals = HealthProfesional::all();
             $plans = Plan::all();
             $icdtens = Icdten::all();
+            $vitalityexamination = VitalityExamination::where('examination_id', $examination->id)->first();
 
             $info      = $user->info;
-            return view('pages.klinik.examinations.edit',compact('examination','user','healthprofesionals','info','plans','icdtens'));
+            return view('pages.klinik.examinations.edit',compact('examination','user','healthprofesionals','info','plans','icdtens','vitalityexamination'));
         }
 
         /**
@@ -258,11 +260,11 @@
 
                 TransactionDetail::create([
                     'transaction_id' => $transaction->id,
-                    'status' => 'waiting payment',
-                    'service_id' => $service->id,
-                    'name' => $service->name,
-                    'price' => $service->price,
-                    'total' => $service->price
+                    'status'         => 'waiting payment',
+                    'service_id'     => $service->id,
+                    'name'           => $service->name,
+                    'price'          => $service->price,
+                    'total'          => $service->price
                 ]);
 
                 $total = $total + $service->price;
@@ -274,9 +276,21 @@
             if($request->payment==1){
                 return redirect()->route('transactions.edit',['transaction'=>$transaction->id]);
             } else {
-                return redirect()->route('examination.vitality',['id'=>$examination->id]);
+                return redirect()->route('examinations.vitality',['id'=>$examination->id]);
             }
+        }
 
+        public function vitality(Request $request){
+            $id = $request->id;
+            $examination = Examination::find($id);
+            $vitalityexamination = VitalityExamination::where('examination_id',$examination->id)->first();
 
+            $user = User::find($examination->user_id);
+            $info      = $user->info;
+
+            // get the default inner page
+            return view('pages.klinik.examinations.vitality', compact([
+                'user','info', 'examination','vitalityexamination'
+            ]));
         }
     }

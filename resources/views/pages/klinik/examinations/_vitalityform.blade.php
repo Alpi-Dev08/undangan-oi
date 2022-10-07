@@ -22,16 +22,6 @@
                 </a>
             </li>
             <li class="nav-item p-0 ms-0">
-                <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#vitality">
-                    <!--begin::Title-->
-                    <span class="nav-text fw-semibold fs-4 mb-3">Vitality</span>
-                    <!--end::Title-->
-                    <!--begin::Bullet-->
-                    <span class="bullet-custom position-absolute z-index-2 w-100 h-1px top-100 bottom-n100 bg-primary rounded"></span>
-                    <!--end::Bullet-->
-                </a>
-            </li>
-            <li class="nav-item p-0 ms-0">
                 <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#disease">
                     <!--begin::Title-->
                     <span class="nav-text fw-semibold fs-4 mb-3">Disease</span>
@@ -56,7 +46,7 @@
             <li class="nav-item p-0 ms-0">
                 <a class="nav-link btn btn-color-gray-400 flex-center px-3 active" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#examination">
                     <!--begin::Title-->
-                    <span class="nav-text fw-semibold fs-4 mb-3">Examination</span>
+                    <span class="nav-text fw-semibold fs-4 mb-3">Vitality Examination</span>
                     <!--end::Title-->
                     <!--begin::Bullet-->
                     <span class="bullet-custom position-absolute z-index-2 w-100 h-1px top-100 bottom-n100 bg-primary rounded"></span>
@@ -364,152 +354,216 @@
                 <!--end::details View-->
             </div>
 
-            <div class="tab-pane" id="vitality" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
-                <!--begin::details View-->
-                <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
-                    <h2>Vitality Check {{ $vitalityexamination->created_at }}</h2>
-                    <div class="row">
-                        <div class="col-4 fw-bold">Weight</div>
-                        <div class="col-8">: {{ $vitalityexamination->weight }}</div>
-                        <div class="col-4 fw-bold">Height</div>
-                        <div class="col-8">: {{ $vitalityexamination->height }}</div>
-                        <div class="col-4 fw-bold">Blood Pressure</div>
-                        <div class="col-8">: {{ $vitalityexamination->blood_pressure }}</div>
-                        <div class="col-4 fw-bold">Heart Rate</div>
-                        <div class="col-8">: {{ $vitalityexamination->heart_rate }}</div>
-                        <div class="col-4 fw-bold">Respiratory Rate</div>
-                        <div class="col-8">: {{ $vitalityexamination->respiratory_rate }}</div>
-                        <div class="col-4 fw-bold">Temperature</div>
-                        <div class="col-8">: {{ $vitalityexamination->temperature }}</div>
-                        <div class="col-4 fw-bold">Oxygen Saturation</div>
-                        <div class="col-8">: {{ $vitalityexamination->oxygen_saturation }}</div>
-                        <div class="col-4 fw-bold">Body Mass Index</div>
-                        <div class="col-8">: {{ $vitalityexamination->body_mass_index }}</div>
-                        <div class="col-4 fw-bold">Ideal Weight</div>
-                        <div class="col-8">: {{ $vitalityexamination->ideal_weight }}</div>
-                        <div class="col-4 fw-bold">Body Fat</div>
-                        <div class="col-8">: {{ $vitalityexamination->body_fat }}</div>
-                        <div class="col-4 fw-bold">BMI Conclusion</div>
-                        <div class="col-8">: {{ $vitalityexamination->bmi_conclusion }}</div>
-                    </div>
-                </div>
-            </div>
             <div class="tab-pane active" id="examination" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
-                <form id="kt_modal_add_examinations_form" method="POST" class="form" action="{{ route('examinations.update',['examination' => $examination->id]) }}">
-                @method('PUT')
+                @if(isset($vitalityexamination->id))
+                    <form id="kt_modal_add_examinations_form" method="POST" class="form" action="{{ route('vitalityexaminations.update',['vitalityexamination' => $vitalityexamination->id]) }}">
+                    @method('PUT')
+                    @else
+                            <form id="kt_modal_add_examinations_form" method="POST" class="form" action="{{ route('vitalityexaminations.store') }}">
+
+                            @method('POST')
+                    @endif
                 {{ csrf_field() }}
                 <!--begin::Scroll-->
                     <div class="d-flex flex-column flex-row-fluid">
                         <!--begin::Input group-->
                         <div class="row mb-6">
                             <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Health Profesional Type') }}</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <input type="hidden" name="user_id" value="{{$user->id}}">
-                                <select name="health_profesional_id" aria-label="{{ __('Health Profesional') }}" data-control="select2" data-placeholder="{{ __('Select a Health Profesional...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                                    <option value="">{{ __('Select a Health Profesional...') }}</option>
-                                    @foreach($healthprofesionals as $healthprofesional)
-                                        <option value="{{ $healthprofesional->id }}" {{ $healthprofesional->id === old('health_profesional_id', $examination->health_profesional_id ?? '') ? 'selected' :'' }}>
-                                            {{ ($healthprofesional->user->info->title_prefix !='' ? $healthprofesional->user->info->title_prefix.'. ' : '').$healthprofesional->user->name.($healthprofesional->user->info->title_suffix!='' ? ', '.$healthprofesional->user->info->title_suffix : '') }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Subjective</label>
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">Weight</label>
                             <!--end::Label-->
                             <!--begin::Input-->
                             <div class="col-lg-8">
                                 <div class="input-group input-group-solid has-validation mb-3">
-                                    <textarea name="subjective" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('subjective') is-invalid @enderror" placeholder="Subjective">{{ $examination->subjective }}</textarea>
+                                    <input type="hidden" name="examination_id" value="{{ $examination->id }}">
+                                    <input type="text" name="weight" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('weight') is-invalid @enderror" placeholder="Weight" value="{{ $vitalityexamination->weight ?? "" }}">
                                 </div>
-                                @error('subjective')
+                                @error('weight')
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <!--end::Input-->
-                        </div>
-
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Objective</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <div class="col-lg-8">
-                                <div class="input-group input-group-solid has-validation mb-3">
-                                    <textarea name="objective" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('objective') is-invalid @enderror" placeholder="Objective">{{ $examination->objective }}</textarea>
-                                </div>
-                                @error('objective')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <!--end::Input-->
-                        </div>
-
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Assessment</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <div class="col-lg-8">
-                                <select id="icdtens" aria-label="{{ __('Select a Diagnosa') }}" data-control="select2" data-placeholder="{{ __('Select a Diagnosa...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                                    <option value="">{{ __('Select a Diagnosa...') }}</option>
-                                    @foreach($icdtens as $icdten)
-                                        <option value="{{ $icdten->id }}">{{  $icdten->code.' '.$icdten->name }}</option>
-                                    @endforeach
-                                </select>
-                                <div class="input-group input-group-solid has-validation mb-3 mt-3">
-                                    <textarea name="assessment" id="assessment" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('assessment') is-invalid @enderror" placeholder="Assessment">{{ $examination->assessment }}</textarea>
-                                </div>
-                                @error('assessment')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <!--end::Input-->
-                        </div>
-
-                         <!--begin::Input group-->
-                         <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">
-                                <span>{{ __('Plan') }}</span>
-
-                            </label>
-                            <!--end::Label-->
-
-                            <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <select name="plan_id" aria-label="{{ __('Select a Plan') }}" data-control="select2" data-placeholder="{{ __('Select a Plan...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                                    <option value="">{{ __('Select a Plan...') }}</option>
-                                    @foreach($plans as $plan)
-                                        <option value="{{ $plan->id }}" {{  $plan->id === old('plan_id', $examination->plan_id ?? '') ? 'selected' :'' }}>{{  $plan->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <!--end::Col-->
                         </div>
                         <!--end::Input group-->
 
+                        <!--begin::Input group-->
                         <div class="row mb-6">
                             <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Resep</label>
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">Height</label>
                             <!--end::Label-->
                             <!--begin::Input-->
                             <div class="col-lg-8">
                                 <div class="input-group input-group-solid has-validation mb-3">
-                                    <textarea name="resep" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('resep') is-invalid @enderror" placeholder="Resep">{{ $examination->resep }}</textarea>
+                                    <input type="text" name="height" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('height') is-invalid @enderror" placeholder="Height" value="{{ $vitalityexamination->height ?? "" }}">
                                 </div>
-                                @error('resep')
+                                @error('height')
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <!--end::Input-->
                         </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-6">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">Blood Pressure</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="col-lg-8">
+                                <div class="input-group input-group-solid has-validation mb-3">
+                                    <input type="text" name="blood_pressure" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('blood_pressure') is-invalid @enderror" placeholder="Blood Pressure" value="{{ $vitalityexamination->blood_pressure ?? "" }}">
+                                </div>
+                                @error('blood_pressure')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-6">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">Heart Rate</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="col-lg-8">
+                                <div class="input-group input-group-solid has-validation mb-3">
+                                    <input type="text" name="heart_rate" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('heart_rate') is-invalid @enderror" placeholder="Heart Rate" value="{{ $vitalityexamination->heart_rate ?? "" }}">
+                                </div>
+                                @error('heart_rate')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-6">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">Respiratory Rate</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="col-lg-8">
+                                <div class="input-group input-group-solid has-validation mb-3">
+                                    <input type="text" name="respiratory_rate" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('respiratory_rate') is-invalid @enderror" placeholder="Respiratory Rate" value="{{ $vitalityexamination->respiratory_rate ?? "" }}">
+                                </div>
+                                @error('respiratory_rate')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-6">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">Temperature</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="col-lg-8">
+                                <div class="input-group input-group-solid has-validation mb-3">
+                                    <input type="text" name="temperature" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('temperature') is-invalid @enderror" placeholder="Temperature" value="{{ $vitalityexamination->temperature ?? "" }}">
+                                </div>
+                                @error('temperature')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-6">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">Oxygen Saturation</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="col-lg-8">
+                                <div class="input-group input-group-solid has-validation mb-3">
+                                    <input type="text" name="oxygen_saturation" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('oxygen_saturation') is-invalid @enderror" placeholder="Oxygen Saturation" value="{{ $vitalityexamination->oxygen_saturation ?? "" }}">
+                                </div>
+                                @error('oxygen_saturation')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-6">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">Body Mass Index</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="col-lg-8">
+                                <div class="input-group input-group-solid has-validation mb-3">
+                                    <input type="text" name="body_mass_index" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('body_mass_index') is-invalid @enderror" placeholder="Body Mass Index" value="{{ $vitalityexamination->body_mass_index ?? "" }}">
+                                </div>
+                                @error('body_mass_index')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-6">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">Ideal Weight</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="col-lg-8">
+                                <div class="input-group input-group-solid has-validation mb-3">
+                                    <input type="text" name="ideal_weight" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('ideal_weight') is-invalid @enderror" placeholder="Ideal Weight" value="{{ $vitalityexamination->ideal_weight ?? "" }}">
+                                </div>
+                                @error('ideal_weight')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-6">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">Body Fat</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="col-lg-8">
+                                <div class="input-group input-group-solid has-validation mb-3">
+                                    <input type="text" name="body_fat" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('body_fat') is-invalid @enderror" placeholder="Body Fat" value="{{ $vitalityexamination->body_fat ?? "" }}">
+                                </div>
+                                @error('body_fat')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-6">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">BMI Conclusion</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="col-lg-8">
+                                <div class="input-group input-group-solid has-validation mb-3">
+                                    <input type="text" name="bmi_conclusion" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('bmi_conclusion') is-invalid @enderror" placeholder="BMI Conclusion" value="{{ $vitalityexamination->bmi_conclusion ?? "" }}">
+                                </div>
+                                @error('bmi_conclusion')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
                     </div>
                     <!--end::Scroll-->
                     <!--begin::Actions-->

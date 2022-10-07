@@ -141,7 +141,7 @@ Route::middleware('auth')->group(function () {
         Route::get('examinations-payments', [ExaminationsController::class, 'payments'])->name('examinations.payment');
         Route::post('examinations-payments', [ExaminationsController::class, 'createPayment'])->name('examinations.create.payment');
         Route::resource('transactions', TransactionsController::class);
-
+        Route::get('examinations-vitality', [ExaminationsController::class, 'vitality'])->name('examinations.vitality');
         Route::POST('examinations-service-store', [ExaminationsController::class, 'storeservices'])->name('examinations.storeservices');
 
         Route::resource('servicecategories', \App\Http\Controllers\Klinik\ServiceCategoriesController::class);
