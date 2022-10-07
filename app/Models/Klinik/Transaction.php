@@ -16,7 +16,8 @@ class Transaction extends Model
         'invoice_number',
         'amount',
         'notes',
-        'status'
+        'status',
+        'metode_pembayaran'
     ];
 
     public function transactionDetails()

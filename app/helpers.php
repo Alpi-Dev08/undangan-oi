@@ -2,7 +2,7 @@
 
     use App\Core\Adapters\Theme;
     use App\Core\Adapters\Util;
-    use App\Models\Klinik\LaboratoryExaminationType;
+    use App\Models\Klinik\Service;
     use App\Models\User;
 
     if (!function_exists('get_svg_icon')) {
@@ -209,14 +209,14 @@
         }
     }
 
-    if (!function_exists('types')) {
+    if (!function_exists('services')) {
         /**
          * Check if the request has RTL param
          */
-        function types($id)
+        function services($id)
         {
-            $types = LaboratoryExaminationType::where('laboratory_examination_category_id', $id)->get();
+            $services = Service::where('service_category_id', $id)->get();
 
-            return $types;
+            return $services;
         }
     }

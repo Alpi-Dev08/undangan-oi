@@ -29,7 +29,21 @@
                         <td class="pe-7">
                             <input type="hidden" name="id[]" value="{{$detail->id}}">
 
-                            <input type="text" class="form-control form-control-solid mb-2" name="name[]" placeholder="Item name"  value="{{$detail->name}}"/>
+                            @if($detail->service->category->id == $examination->service_category_id)
+                            <select name="service_id[]" aria-label="{{ __('Select a Service') }}" data-control="select2" data-placeholder="{{ __('Select a service...') }}" class="mb-2 form-select form-select-solid form-select-lg fw-bold">
+                                <option value="">{{ __('Select a Service...') }}</option>
+                                @foreach($category->services as $key => $value)
+                                    <option value="{{ $value['id'] }}" {{ $value['id']==$detail->service_id ? "selected" : '' }}>{{ $value['name'] }}</option>
+                                @endforeach
+                            </select>
+                            @else
+                                <select name="service_id[]" aria-label="{{ __('Select a Service') }}" data-control="select2" data-placeholder="{{ __('Select a service...') }}" class="mb-2 form-select form-select-solid form-select-lg fw-bold">
+                                    <option value="">{{ __('Select a Service...') }}</option>
+                                    @foreach($services as $key => $value)
+                                        <option value="{{ $value['id'] }}" {{ $value['id']==$detail->service_id ? "selected" : '' }}>{{ $value['name'] }}</option>
+                                    @endforeach
+                                </select>
+                            @endif
                             <input type="text" class="form-control form-control-solid" name="description[]" placeholder="Description" value="{{$detail->description}}" />
                         </td>
                         <td class="ps-0">
@@ -88,7 +102,12 @@
             <table class="table d-none" data-kt-element="item-template">
                 <tr class="border-bottom border-bottom-dashed" data-kt-element="item">
                     <td class="pe-7">
-                        <input type="text" class="form-control form-control-solid mb-2" name="name[]" placeholder="Item name" />
+                        <select name="service_id[]" aria-label="{{ __('Select a Service') }}" data-placeholder="{{ __('Select a service...') }}" class="mb-2 form-select form-select-solid form-select-lg fw-bold">
+                            <option value="">{{ __('Select a Service...') }}</option>
+                            @foreach($services as $key => $value)
+                                <option value="{{ $value['id'] }}">{{ $value['name'] }}</option>
+                            @endforeach
+                        </select>
                         <input type="text" class="form-control form-control-solid" name="description[]" placeholder="Description" />
                     </td>
                     <td class="ps-0">
@@ -126,6 +145,15 @@
                 <textarea name="notes" class="form-control form-control-solid" rows="3" placeholder="Thanks for your business">{{ $transaction->notes }}</textarea>
             </div>
             <!--end::Notes-->
+
+            <div class="mt-5 mb-0">
+                <label class="form-label fs-6 fw-bold text-gray-700">Payment Method</label>
+                <select name="metode_pembayaran" aria-label="{{ __('Select a Payment Method') }}" data-placeholder="{{ __('Select a Payment Method...') }}" class="mb-2 form-select form-select-solid form-select-lg fw-bold">
+                    <option value="cash" {{ $transaction->metode_pembayaran=='cash' ? 'selected' : "" }}>Cash</option>
+                    <option value="transfer" {{ $transaction->metode_pembayaran=='transfer' ? 'selected' : "" }}>Transfer</option>
+                    <option value="qris" {{ $transaction->metode_pembayaran=='qris' ? 'selected' : "" }}>QRIS</option>
+                </select>
+            </div>
 
             <!--begin::Actions-->
             <div class="text-center pt-15">

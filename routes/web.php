@@ -136,12 +136,17 @@ Route::middleware('auth')->group(function () {
         Route::resource('specialities', SpecialitiesController::class);
         Route::resource('diseases', DiseasesController::class);
         Route::resource('examinations', ExaminationsController::class);
+        Route::get('examinations-service', [ExaminationsController::class, 'services'])->name('examinations.services');
         Route::get('examinations-invoice', [ExaminationsController::class, 'invoice'])->name('examinations.invoice');
         Route::get('examinations-payments', [ExaminationsController::class, 'payments'])->name('examinations.payment');
         Route::post('examinations-payments', [ExaminationsController::class, 'createPayment'])->name('examinations.create.payment');
         Route::resource('transactions', TransactionsController::class);
+
+        Route::POST('examinations-service-store', [ExaminationsController::class, 'storeservices'])->name('examinations.storeservices');
+
         Route::resource('servicecategories', \App\Http\Controllers\Klinik\ServiceCategoriesController::class);
         Route::resource('services', \App\Http\Controllers\Klinik\ServicesController::class);
+        Route::resource('vitalityexaminations', \App\Http\Controllers\Klinik\VitalityExaminationsController::class);
     });
 
 

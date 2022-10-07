@@ -5,11 +5,14 @@
     use App\DataTables\Klinik\TransactionsDataTable;
     use App\Http\Controllers\Controller;
     use App\Models\Klinik\Examination;
+    use App\Models\Klinik\Service;
+    use App\Models\Klinik\ServiceCategory;
     use App\Models\Klinik\Transaction;
     use App\Http\Requests\Klinik\StoreTransactionRequest;
     use App\Http\Requests\Klinik\UpdateTransactionRequest;
     use App\Models\Klinik\TransactionDetail;
     use Doctrine\DBAL\Driver\PDO\Exception;
+    use Illuminate\Database\Eloquent\Builder;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
 
@@ -128,7 +131,12 @@
             }
 
             $transaction = Transaction::find($id);
-            return view('pages.klinik.transactions.edit',compact('transaction'));
+            $examination = Examination::find($transaction->examination_id);
+            $category = ServiceCategory::with('services')->where('id', $examination->service_category_id)->first();
+            $services = Service::whereHas('category',function(Builder $query){
+                return $query->where('is_global', 1);
+            })->get();
+            return view('pages.klinik.transactions.edit',compact('transaction','category','services','examination'));
         }
 
         /**
@@ -149,7 +157,8 @@
                 $transaction = Transaction::find($request->transaction_id);
 
                 $total = 0;
-                foreach($request->name as $key => $value){
+                TransactionDetail::where('transaction_id',$transaction->id)->delete();
+                foreach($request->service_id as $key => $value){
                     if($value !=null) {
                         $price = str_replace('.00', '', $request->price[$key]);
                         $price = str_replace(',', '', $price);
@@ -159,8 +168,11 @@
                         if(isset($request->id[$key])) {
                             $id = $request->id[$key];
                         }
+
+                        $service = Service::find($request->service_id[$key]);
                         TransactionDetail::updateOrCreate(['id' => $id,'transaction_id' => $request->transaction_id],[
-                            'name'        => $value,
+                            'service_id'  => $request->service_id[$key],
+                            'name'        => $service->name,
                             'description' => $request->description[$key],
                             'price'       => $price,
                             'qty'         => $request->quantity[$key],
@@ -173,6 +185,7 @@
                 $transaction->amount = $total;
                 $transaction->notes = $request->notes;
                 $transaction->status = 'waiting payment';
+                $transaction->metode_pembayaran = $request->metode_pembayaran;
                 $transaction->save();
             }catch(Exception $e){
                 report($e);
