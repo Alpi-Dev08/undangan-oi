@@ -13,16 +13,16 @@
                         </svg>
                     </span>
                     <!--end::Svg Icon-->
-                    <input type="text" id="searchbox" class="form-control form-control-solid border border-gray-300 w-250px ps-15" placeholder="Search Provinces">
+                    <input type="text" id="searchbox" class="form-control form-control-solid border border-gray-300 w-250px ps-15" placeholder="Search Services">
                 </div>
 
             </h3>
 
-            @if(Auth::user()->can('masters.create'))
+            @if(Auth::user()->can('klinik.create'))
                 <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
                      title=""
                      data-bs-original-title="Click to add a role">
-                    <a href="{{ route('provinces.create')  }}" class="btn btn-sm btn-light-primary">
+                    <a href="{{ route('services.create')  }}" class="btn btn-sm btn-light-primary">
                         <!--begin::Svg Icon | path: /var/www/preview.keenthemes.com/kt-products/metronic/releases/2022-07-14-092914/core/html/src/media/icons/duotune/arrows/arr013.svg-->
                         <span class="svg-icon svg-icon-muted svg-icon-2hx">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -31,13 +31,13 @@
                             </svg>
                         </span>
                         <!--end::Svg Icon-->
-                        New Province
+                        New Service
                     </a>
                 </div>
             @endif
         </div>
         <div class="card-body pt-6">
-            @include('pages.masters.provinces._table')
+            @include('pages.klinik.services._table')
         </div>
         <!--end::Card body-->
     </div>

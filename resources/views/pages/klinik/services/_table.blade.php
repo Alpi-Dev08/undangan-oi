@@ -10,11 +10,11 @@
 @push('customscript')
     <script>
         $("#searchbox").on("keyup search input paste cut", function() {
-            LaravelDataTables["provinces-table"].search(this.value).draw();
+            LaravelDataTables["services-table"].search(this.value).draw();
         });
 
         $(function(){
-            LaravelDataTables["provinces-table"].on('click','.delete',function(event){
+            LaravelDataTables["services-table"].on('click','.delete',function(event){
                 var form =  $(this).closest("form");
                 event.preventDefault();
                 Swal.fire({
@@ -30,7 +30,7 @@
                         form.submit();
                         Swal.fire(
                             'Deleted!',
-                            'Province has been deleted.',
+                            'Service has been deleted.',
                             'success'
                         )
                     }
