@@ -21,7 +21,7 @@
                 <!--begin::Input group-->
                 <div class="row mb-6">
                     <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Health Profesional Type') }}</label>
+                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Health Profesional') }}</label>
                     <!--end::Label-->
                     <!--begin::Col-->
                     <div class="col-lg-8">
@@ -32,6 +32,22 @@
                                 <option value="{{ $healthprofesional->id }}" >
                                     {{ ($healthprofesional->user->info->title_prefix !='' ? $healthprofesional->user->info->title_prefix.'. ' : '').$healthprofesional->user->name.($healthprofesional->user->info->title_suffix!='' ? ', '.$healthprofesional->user->info->title_suffix : '') }}
                                 </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Service Category') }}</label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-8">
+                        <select name="service_category_id" aria-label="{{ __('Service Category') }}" data-control="select2" data-placeholder="{{ __('Select a Service Category...') }}" class="form-select form-select-solid form-select-lg fw-bold">
+                            <option value="">{{ __('Select a Service Category...') }}</option>
+                            @foreach($servicecategories as $servicecategory)
+                                <option value="{{ $servicecategory->id }}">{{ $servicecategory->name }}</option>
                             @endforeach
                         </select>
                     </div>

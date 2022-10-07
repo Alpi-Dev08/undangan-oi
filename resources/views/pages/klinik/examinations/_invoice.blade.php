@@ -52,10 +52,7 @@
                 </div>
                 <div class="flex-root d-flex flex-column">
                     <span class="text-muted">Payment Method</span>
-                    <span class="fs-6">Transfer Bank</span>
-                    <span class="fs-6">Bank BCA</span>
-                    <span class="fs-6">No. Rekening 1234567890</span>
-                    <span class="fs-6">a/n Yayasan Satriabudi Dharma Setia</span>
+                    <span class="fs-6">{{ ucwords($transaction->metode_pembayaran) }}</span>
                 </div>
             </div>
             <!--end::Billing & shipping-->

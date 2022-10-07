@@ -18,8 +18,7 @@ class Examination extends Model
         'plan_id',
         'medical_record_id',
         'health_profesional_id',
-        'service_type_id',
-        'package_id',
+        'service_category_id',
         'examination_code',
         'examination_date',
         'symtomp_area',
@@ -32,17 +31,11 @@ class Examination extends Model
         'total',
         'status',
         'resep',
-        'is_lab'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function package()
-    {
-        return $this->belongsTo(Package::class);
     }
 
 }

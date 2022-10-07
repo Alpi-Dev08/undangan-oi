@@ -13,6 +13,8 @@
     use App\Models\Klinik\LaboratoryExaminationCategory;
     use App\Models\Klinik\LaboratoryUnit;
     use App\Models\Klinik\Package;
+    use App\Models\Klinik\Service;
+    use App\Models\Klinik\ServiceCategory;
     use App\Models\Klinik\ServiceType;
     use App\Models\Klinik\Transaction;
     use App\Models\Klinik\TransactionDetail;
@@ -20,10 +22,11 @@
     use App\Models\Klinik\Plan;
     use App\Models\Klinik\Icdten;
     use Doctrine\DBAL\Driver\PDO\Exception;
+    use Illuminate\Database\Eloquent\Builder;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
 
-
+    use Illuminate\Support\Carbon;
     class ExaminationsController extends Controller
     {
         public $user;
@@ -228,5 +231,52 @@
             $examination->save();
 
             return redirect()->route('transactions.index');
+        }
+
+        public function services(Request $request){
+            $id = $request->id;
+            $examination = Examination::find($id);
+            $user = User::find($examination->user_id);
+            $info      = $user->info;
+
+            $services = Service::where('service_category_id',$examination->service_category_id)->get();
+            $servicecategories = ServiceCategory::where('is_global',1)->get();
+
+            // get the default inner page
+            return view('pages.klinik.examinations.services', compact([
+                'user','info', 'examination','services','servicecategories'
+            ]));
+        }
+
+        public function storeservices(Request $request){
+            $examination = Examination::find($request->examination_id);
+            $transaction = Transaction::where('examination_id',$examination->id)->first();
+
+            $total = $transaction->amount;
+            foreach ($request->service_id as $service_id){
+                $service = Service::find($service_id);
+
+                TransactionDetail::create([
+                    'transaction_id' => $transaction->id,
+                    'status' => 'waiting payment',
+                    'service_id' => $service->id,
+                    'name' => $service->name,
+                    'price' => $service->price,
+                    'total' => $service->price
+                ]);
+
+                $total = $total + $service->price;
+            }
+
+            $transaction->amount  = $total;
+            $transaction->save();
+
+            if($request->payment==1){
+                return redirect()->route('transactions.edit',['transaction'=>$transaction->id]);
+            } else {
+                return redirect()->route('examination.vitality',['id'=>$examination->id]);
+            }
+
+
         }
     }
