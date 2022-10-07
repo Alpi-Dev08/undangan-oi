@@ -12,6 +12,7 @@
     use App\Models\Klinik\HealthProfesionalType;
     use App\Models\Klinik\MedicalRecord;
     use App\Models\Klinik\Package;
+    use App\Models\Klinik\ServiceCategory;
     use App\Models\Klinik\ServiceType;
     use App\Models\Klinik\Speciality;
     use App\Models\Klinik\Transaction;
@@ -105,13 +106,14 @@
             $id                = $request->id;
             $user              = $id != '' ? User::find($id) : auth()->user();
             $healthprofesional = HealthProfesional::all();
+            $servicecategories = ServiceCategory::where('is_global',0)->get();
 
             $info     = $user->info;
 
 
             // get the default inner page
             return view('pages.account.examinations.examinations', compact([
-                'user', 'info', 'healthprofesional'
+                'user', 'info', 'healthprofesional', 'servicecategories'
             ]));
         }
 
@@ -137,6 +139,7 @@
             $examination->medical_record_id     = $medical_record->id;
             $examination->examination_code      = $examination_code;
             $examination->health_profesional_id = $request->health_profesional_id;
+            $examination->service_category_id = $request->service_category_id;
             $examination->examination_date      = date('Y-m-d H:i:s');
             $examination->total                 = 0;
             $examination->status                = 'waiting';
@@ -152,7 +155,7 @@
             $transactions->status = 'waiting';
             $transactions->save();
 
-            return redirect()->route('examinations.index');
+            return redirect()->route('examinations.services', ['id' => $examination->id]);
         }
 
         /**

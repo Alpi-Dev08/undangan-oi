@@ -157,6 +157,13 @@
                             'bullet'     => '<span class="bullet bullet-dot"></span>',
                             'permission' => ['klinik.read'],
                         ]
+                        ],
+                        [
+                            'title'      => 'Service Category',
+                            'path'       => 'klinik/servicecategories',
+                            'bullet'     => '<span class="bullet bullet-dot"></span>',
+                            'permission' => ['klinik.read'],
+                        ],
                     ]
                 ]
             ],

@@ -140,6 +140,7 @@ Route::middleware('auth')->group(function () {
         Route::get('examinations-payments', [ExaminationsController::class, 'payments'])->name('examinations.payment');
         Route::post('examinations-payments', [ExaminationsController::class, 'createPayment'])->name('examinations.create.payment');
         Route::resource('transactions', TransactionsController::class);
+        Route::resource('servicecategories', \App\Http\Controllers\Klinik\ServiceCategoriesController::class);
     });
 
 
