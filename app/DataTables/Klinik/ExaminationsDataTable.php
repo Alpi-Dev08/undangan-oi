@@ -30,6 +30,9 @@
                 ->addColumn('examination_code', function (Examination $model) {
                     return $model->examination_code;
                 })
+                ->addColumn('service', function (Examination $model) {
+                    return $model->service_category->name ?? "-";
+                })
                 ->addColumn('name', function (Examination $model) {
                     return $model->user->name;
                 })
@@ -88,6 +91,7 @@
             return [
                 Column::make('DT_RowIndex')->title('No')->orderable(false)->searchable(false),
                 Column::make('examination_code')->title(__('Examination Code'))->searchable(true),
+                Column::make('service')->title(__('Service'))->searchable(true),
                 Column::make('name')->title(__('Name'))->searchable(true),
                 Column::make('register_date')->title(__('Examination Date'))->searchable(true),
                 Column::make('status')->title(__('Status'))->searchable(true),

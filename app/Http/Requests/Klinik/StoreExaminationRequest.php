@@ -24,10 +24,12 @@
         public function rules()
         {
             return [
-                'user_id'               => 'nullable',
-                'patient_id'            => 'nullable',
-                'medical_record_id'     => 'nullable',
-                'health_profesional_id' => 'nullable',
+                'user_id'               => 'nullable|integer|exists:users,id',
+                'patient_id'            => 'nullable|integer|exists:patients,id',
+                'medical_record_id'     => 'nullable|integer|exists:medical_records,id',
+                'health_profesional_id' => 'nullable|integer|exists:health_profesionals,id',
+                'service_category_id'   => 'nullable|integer|exists:service_categories,id',
+                'plan_id'               => 'nullable|integer|exists:plans,id',
                 'examination_code'      => 'nullable',
                 'examination_date'      => 'nullable',
                 'symtomp_area'          => 'nullable',
@@ -38,7 +40,8 @@
                 'assessment'            => 'nullable',
                 'plan'                  => 'nullable',
                 'total'                 => 'nullable',
-                'status'                => 'nullable'
+                'status'                => 'nullable',
+                'resep'                 => 'nullable',
             ];
         }
     }

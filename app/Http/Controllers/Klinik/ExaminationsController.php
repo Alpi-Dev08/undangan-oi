@@ -4,6 +4,8 @@
 
     use App\DataTables\Klinik\ExaminationsDataTable;
     use App\Http\Controllers\Controller;
+    use App\Models\Klinik\Anamnesis;
+    use App\Models\Klinik\AnamnesisCategory;
     use App\Models\Klinik\Examination;
     use App\Http\Requests\Klinik\StoreExaminationRequest;
     use App\Http\Requests\Klinik\UpdateExaminationRequest;
@@ -131,10 +133,14 @@
             $healthprofesionals = HealthProfesional::all();
             $plans = Plan::all();
             $icdtens = Icdten::all();
-            $vitalityexamination = VitalityExamination::where('examination_id', $examination->id)->first();
+            $anamnesiscategories = [];
+            if($examination->service_category->is_mcu==1){
+                $anamnesiscategories = AnamnesisCategory::all();
+            }
+            $vitalityexaminations = VitalityExamination::where('user_id', $examination->user_id)->orderBy('created_at','desc')->get();
 
             $info      = $user->info;
-            return view('pages.klinik.examinations.edit',compact('examination','user','healthprofesionals','info','plans','icdtens','vitalityexamination'));
+            return view('pages.klinik.examinations.edit',compact('examination','user','healthprofesionals','info','plans','icdtens','vitalityexaminations','anamnesiscategories'));
         }
 
         /**

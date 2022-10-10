@@ -5,7 +5,7 @@
     <div class="card-header position-relative py-0 border-bottom-1">
         <!--begin::Card title-->
         <h3 class="card-title text-gray-800 fw-bold">
-            Examination {{  $examination->examination_code }}
+            Examination
         </h3>
         <!--end::Card title-->
         <!--begin::Tabs-->
@@ -44,7 +44,19 @@
             <!--end::Nav item-->
             <!--begin::Nav item-->
             <li class="nav-item p-0 ms-0">
-                <a class="nav-link btn btn-color-gray-400 flex-center px-3 active" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#examination">
+                <a class="nav-link btn btn-color-gray-400 flex-center px-3 active" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#anamnesis">
+                    <!--begin::Title-->
+                    <span class="nav-text fw-semibold fs-4 mb-3">Anamnesis</span>
+                    <!--end::Title-->
+                    <!--begin::Bullet-->
+                    <span class="bullet-custom position-absolute z-index-2 w-100 h-1px top-100 bottom-n100 bg-primary rounded"></span>
+                    <!--end::Bullet-->
+                </a>
+            </li>
+            <!--end::Nav item-->
+            <!--begin::Nav item-->
+            <li class="nav-item p-0 ms-0">
+                <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#examination">
                     <!--begin::Title-->
                     <span class="nav-text fw-semibold fs-4 mb-3">Examination</span>
                     <!--end::Title-->
@@ -429,7 +441,56 @@
                     </div>
                 </div>
             </div>
-            <div class="tab-pane active" id="examination" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
+            <div class="tab-pane active" id="anamnesis" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
+                <!--begin::details View-->
+                <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+                    <ol type="I">
+                    @foreach($anamnesiscategories as $anamnesiscategory)
+                        <li class="fw-bolder text-lg">
+                            {{$anamnesiscategory->name}}
+                            <ol>
+                            @foreach(anamnesis($anamnesiscategory->id) as $anamnesis)
+                                <li class="fw-normal text-base mb-6">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            {{$anamnesis->name}}
+                                        </div>
+                                        <div class="col-6">
+                                            @php
+                                                $options = json_decode($anamnesis->options);
+												//$options = json_encode($options);
+                                            @endphp
+                                            <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100" >
+                                            @if($options->radio)
+                                                @foreach($options->radio as $radio)
+                                                    <div class="form-check form-check-custom form-check-solid">
+                                                        <input class="form-check-input" type="checkbox" value="{{$radio->id}}" id="radio-{{$anamnesis->id}}"/>
+                                                        <label class="form-check-label" for="radio-{{$anamnesis->id}}">
+                                                            {{$radio->value}}
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                            @endif
+                                                @if($options->additional)
+                                                    @foreach($options->additional as $additional)
+                                                        @if($additional->type == "text")
+                                                            <input type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="{{$additional->name}}" />
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            @endforeach
+                            </ol>
+                        </li>
+                    @endforeach
+                    </ol>
+                </div>
+                <!--end::details View-->
+            </div>
+            <div class="tab-pane" id="examination" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
                 <form id="kt_modal_add_examinations_form" method="POST" class="form" action="{{ route('examinations.update',['examination' => $examination->id]) }}">
                     @method('PUT')
                     {{ csrf_field() }}

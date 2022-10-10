@@ -32,16 +32,6 @@
                 </a>
             </li>
             <li class="nav-item p-0 ms-0">
-                <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#disease">
-                    <!--begin::Title-->
-                    <span class="nav-text fw-semibold fs-4 mb-3">Disease</span>
-                    <!--end::Title-->
-                    <!--begin::Bullet-->
-                    <span class="bullet-custom position-absolute z-index-2 w-100 h-1px top-100 bottom-n100 bg-primary rounded"></span>
-                    <!--end::Bullet-->
-                </a>
-            </li>
-            <li class="nav-item p-0 ms-0">
                 <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#medicalrecord">
                     <!--begin::Title-->
                     <span class="nav-text fw-semibold fs-4 mb-3">Medical Record</span>
@@ -367,38 +357,83 @@
             <div class="tab-pane" id="vitality" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
-                    <h2>Vitality Check {{ $vitalityexamination->created_at }}</h2>
-                    <div class="row">
-                        <div class="col-4 fw-bold">Weight</div>
-                        <div class="col-8">: {{ $vitalityexamination->weight }}</div>
-                        <div class="col-4 fw-bold">Height</div>
-                        <div class="col-8">: {{ $vitalityexamination->height }}</div>
-                        <div class="col-4 fw-bold">Blood Pressure</div>
-                        <div class="col-8">: {{ $vitalityexamination->blood_pressure }}</div>
-                        <div class="col-4 fw-bold">Heart Rate</div>
-                        <div class="col-8">: {{ $vitalityexamination->heart_rate }}</div>
-                        <div class="col-4 fw-bold">Respiratory Rate</div>
-                        <div class="col-8">: {{ $vitalityexamination->respiratory_rate }}</div>
-                        <div class="col-4 fw-bold">Temperature</div>
-                        <div class="col-8">: {{ $vitalityexamination->temperature }}</div>
-                        <div class="col-4 fw-bold">Oxygen Saturation</div>
-                        <div class="col-8">: {{ $vitalityexamination->oxygen_saturation }}</div>
-                        <div class="col-4 fw-bold">Body Mass Index</div>
-                        <div class="col-8">: {{ $vitalityexamination->body_mass_index }}</div>
-                        <div class="col-4 fw-bold">Ideal Weight</div>
-                        <div class="col-8">: {{ $vitalityexamination->ideal_weight }}</div>
-                        <div class="col-4 fw-bold">Body Fat</div>
-                        <div class="col-8">: {{ $vitalityexamination->body_fat }}</div>
-                        <div class="col-4 fw-bold">BMI Conclusion</div>
-                        <div class="col-8">: {{ $vitalityexamination->bmi_conclusion }}</div>
+                    <div class="timeline-label">
+                        @foreach($vitalityexaminations as $vitalityexamination)
+                        <!--begin::Item-->
+                        <div class="timeline-item">
+                            <!--begin::Label-->
+                            <div class="timeline-label fw-bold text-gray-800 fs-6">{{ $vitalityexamination->created_at->format("d F Y H:i:s") }}</div>
+                            <!--end::Label-->
+                            <!--begin::Badge-->
+                            <div class="timeline-badge">
+                                @php
+                                $array = array('success', 'primary', 'warning', 'danger', 'info', 'dark');
+                                $color = array_rand($array,1);
+                                @endphp
+                                <i class="fa fa-genderless text-{{ $array[$color] }} fs-1"></i>
+                            </div>
+                            <!--end::Badge-->
+                            <!--begin::Text-->
+                            <div class="fw-mormal timeline-content text-muted ps-3">
+                                <div class="row p-2 border border-gray-300 bg-gray-200 rounded">
+                                    <div class="col-6 row">
+                                        <div class="col-4 fw-bold">Weight</div>
+                                        <div class="col-8">: {{ $vitalityexamination->weight }} Kg</div>
+                                    </div>
+                                    <div class="col-6 row">
+                                        <div class="col-4 fw-bold">Height</div>
+                                        <div class="col-8">: {{ $vitalityexamination->height }} cm</div>
+                                    </div>
+                                    <div class="col-6 row">
+                                        <div class="col-4 fw-bold">Blood Pressure</div>
+                                        <div class="col-8">: {{ $vitalityexamination->blood_pressure }}</div>
+                                    </div>
+                                    <div class="col-6 row">
+                                        <div class="col-4 fw-bold">Heart Rate</div>
+                                        <div class="col-8">: {{ $vitalityexamination->heart_rate }}</div>
+                                    </div>
+                                    <div class="col-6 row">
+                                        <div class="col-4 fw-bold">Respiratory Rate</div>
+                                        <div class="col-8">: {{ $vitalityexamination->respiratory_rate }}</div>
+                                    </div>
+                                    <div class="col-6 row">
+                                        <div class="col-4 fw-bold">Temperature</div>
+                                        <div class="col-8">: {{ $vitalityexamination->temperature }}</div>
+                                    </div>
+                                    <div class="col-6 row">
+                                        <div class="col-4 fw-bold">Oxygen Saturation</div>
+                                        <div class="col-8">: {{ $vitalityexamination->oxygen_saturation }}</div>
+                                    </div>
+                                    <div class="col-6 row">
+                                        <div class="col-4 fw-bold">Body Mass Index</div>
+                                        <div class="col-8">: {{ $vitalityexamination->body_mass_index }}</div>
+                                    </div>
+                                    <div class="col-6 row">
+                                        <div class="col-4 fw-bold">Ideal Weight</div>
+                                        <div class="col-8">: {{ $vitalityexamination->ideal_weight }} Kg</div>
+                                    </div>
+                                    <div class="col-6 row">
+                                        <div class="col-4 fw-bold">Body Fat</div>
+                                        <div class="col-8">: {{ $vitalityexamination->body_fat }}</div>
+                                    </div>
+                                    <div class="col-6 row">
+                                        <div class="col-4 fw-bold">BMI Conclusion</div>
+                                        <div class="col-8">: {{ $vitalityexamination->bmi_conclusion }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Text-->
+                        </div>
+                        <!--end::Item-->
+                        @endforeach
                     </div>
                 </div>
             </div>
             <div class="tab-pane active" id="examination" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
                 <form id="kt_modal_add_examinations_form" method="POST" class="form" action="{{ route('examinations.update',['examination' => $examination->id]) }}">
-                @method('PUT')
-                {{ csrf_field() }}
-                <!--begin::Scroll-->
+                    @method('PUT')
+                    {{ csrf_field() }}
+                    <!--begin::Scroll-->
                     <div class="d-flex flex-column flex-row-fluid">
                         <!--begin::Input group-->
                         <div class="row mb-6">
@@ -473,8 +508,8 @@
                             <!--end::Input-->
                         </div>
 
-                         <!--begin::Input group-->
-                         <div class="row mb-6">
+                        <!--begin::Input group-->
+                        <div class="row mb-6">
                             <!--begin::Label-->
                             <label class="col-lg-4 col-form-label fw-bold fs-6">
                                 <span>{{ __('Plan') }}</span>
@@ -540,13 +575,25 @@
     </div>
 </div>
 
+@section('styles')
+    <style>
+        .timeline-label .timeline-label {
+            width:200px !important
+        }
+
+        .timeline-label:before{
+            left: 201px !important;
+        }
+    </style>
+@endsection
+
 @push('customscript')
-<script>
-    $(function(){
-        $assesment = $("#assessment").html();
-        $("#icdtens").change(function(){
-            $("#assessment").append($(this).find("option:selected").text()+'\n');
-        });
-    })
-</script>
+    <script>
+        $(function () {
+            $assesment = $("#assessment").html();
+            $("#icdtens").change(function () {
+                $("#assessment").append($(this).find("option:selected").text() + '\n');
+            });
+        })
+    </script>
 @endpush

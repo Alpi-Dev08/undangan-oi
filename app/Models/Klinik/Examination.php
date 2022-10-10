@@ -38,4 +38,41 @@ class Examination extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class);
+    }
+
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
+    }
+
+    public function medical_record()
+    {
+        return $this->belongsTo(MedicalRecord::class);
+    }
+
+    public function health_profesional()
+    {
+        return $this->belongsTo(HealthProfesional::class);
+    }
+
+    public function service_category()
+    {
+        return $this->belongsTo(ServiceCategory::class);
+    }
+
+    public function anamnesis(){
+        return $this->hasOne(AnamnesisExamination::class);
+    }
+
+    public function physical(){
+        return $this->hasOne(PhysicalExamination::class);
+    }
+
+    public function vitality(){
+        return $this->hasOne(VitalityExamination::class);
+    }
+
 }
