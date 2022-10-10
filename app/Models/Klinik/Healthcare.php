@@ -100,4 +100,6 @@ class Healthcare extends Model
     {
         return $this->belongsTo(SubDistrict::class);
     }
+
+
 }

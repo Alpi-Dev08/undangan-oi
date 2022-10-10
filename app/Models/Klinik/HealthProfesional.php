@@ -26,13 +26,20 @@ class HealthProfesional extends Model
         'health_profesional_status',
     ];
 
-    /**
-     * User info relation to user model
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
+    public function type()
+    {
+        return $this->belongsTo(HealthProfesionalType::class);
+    }
+
+    public function speciality()
+    {
+        return $this->belongsTo(Speciality::class);
+    }
+
+
 }

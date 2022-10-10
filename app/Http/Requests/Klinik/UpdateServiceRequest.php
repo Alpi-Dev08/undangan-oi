@@ -24,7 +24,7 @@ class UpdateServiceRequest extends FormRequest
     public function rules()
     {
         return [
-            'service_category_id' => 'required',
+            'service_category_id' => 'required|exists:service_categories,id',
             'name'                => 'required|max:100|unique:services,name,'.$this->service->id,
             'price'               => 'nullable|numeric'
         ];

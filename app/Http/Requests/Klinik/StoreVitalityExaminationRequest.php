@@ -24,7 +24,8 @@ class StoreVitalityExaminationRequest extends FormRequest
     public function rules()
     {
         return [
-            'examination_id'    => 'required|integer',
+            'user_id'    => 'required|integer|exists:users,id',
+            'examination_id'    => 'required|integer|exists:examinations,id',
             'weight'            => 'nullable',
             'height'            => 'nullable',
             'blood_pressure'    => 'nullable',

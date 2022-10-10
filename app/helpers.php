@@ -2,6 +2,7 @@
 
     use App\Core\Adapters\Theme;
     use App\Core\Adapters\Util;
+    use App\Models\Klinik\Anamnesis;
     use App\Models\Klinik\Service;
     use App\Models\User;
 
@@ -218,5 +219,17 @@
             $services = Service::where('service_category_id', $id)->get();
 
             return $services;
+        }
+    }
+
+    if (!function_exists('anamnesis')) {
+        /**
+         * Check if the request has RTL param
+         */
+        function anamnesis($id)
+        {
+            $anamnesis = Anamnesis::where('anamnesis_category_id', $id)->get();
+
+            return $anamnesis;
         }
     }

@@ -24,7 +24,7 @@
         public function rules()
         {
             return [
-                'service_category_id' => 'required',
+                'service_category_id' => 'required|exists:service_categories,id',
                 'name'                => 'required|max:100|unique:services',
                 'price'               => 'nullable|numeric'
             ];

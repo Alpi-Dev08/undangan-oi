@@ -12,7 +12,9 @@ class ServiceCategory extends Model
     use SpatieLogsActivity, HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name'
+        'name',
+        'is_global',
+        'is_mcu'
     ];
 
     public function services()

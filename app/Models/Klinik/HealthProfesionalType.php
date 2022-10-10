@@ -14,4 +14,9 @@ class HealthProfesionalType extends Model
     protected $fillable = [
         'name'
     ];
+
+    public function healthProfesional()
+    {
+        return $this->HasMany(HealthProfesional::class);
+    }
 }

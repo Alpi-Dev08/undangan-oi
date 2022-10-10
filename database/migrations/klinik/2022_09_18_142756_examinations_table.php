@@ -36,7 +36,6 @@ return new class extends Migration
             $table->string('plan')->nullable();
             $table->string('total')->nullable();
             $table->string('status')->nullable();
-            $table->string('is_lab')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

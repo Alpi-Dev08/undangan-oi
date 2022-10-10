@@ -1,30 +1,32 @@
 <?php
 
-namespace App\Http\Requests\Klinik;
+    namespace App\Http\Requests\Klinik;
 
-use Illuminate\Foundation\Http\FormRequest;
+    use Illuminate\Foundation\Http\FormRequest;
 
-class StoreServiceCategoryRequest extends FormRequest
-{
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    class StoreServiceCategoryRequest extends FormRequest
     {
-        return true;
-    }
+        /**
+         * Determine if the user is authorized to make this request.
+         *
+         * @return bool
+         */
+        public function authorize()
+        {
+            return true;
+        }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
-    public function rules()
-    {
-        return [
-            'name' => 'required|max:100|unique:service_categories'
-        ];
+        /**
+         * Get the validation rules that apply to the request.
+         *
+         * @return array<string, mixed>
+         */
+        public function rules()
+        {
+            return [
+                'name'      => 'required|max:100|unique:service_categories',
+                'is_global' => 'required|boolean',
+                'is_mcu'    => 'required|boolean',
+            ];
+        }
     }
-}

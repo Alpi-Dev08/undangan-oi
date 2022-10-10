@@ -2,7 +2,7 @@
 
 namespace App\Models\Klinik;
 
-use App\Core\Traits\SpatieLogsActivity;
+use     App\Core\Traits\SpatieLogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,6 +12,7 @@ class VitalityExamination extends Model
     use SpatieLogsActivity, HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'user_id',
         'examination_id',
         'weight',
         'height',
@@ -25,4 +26,9 @@ class VitalityExamination extends Model
         'body_fat',
         'bmi_conclusion',
     ];
+
+    public function examination()
+    {
+        return $this->belongsTo(Examination::class);
+    }
 }

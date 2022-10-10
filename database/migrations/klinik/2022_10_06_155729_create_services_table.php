@@ -18,7 +18,9 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(ServiceCategory::class);
             $table->string('name')->nullable();
+            $table->json('items')->nullable();
             $table->float('price')->nullable();
+            $table->char('parent_price',1)->default(0);
             $table->timestamps();
             $table->softDeletes();
 

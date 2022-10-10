@@ -16,6 +16,9 @@ return new class extends Migration
         Schema::create('service_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->char('is_global',1)->default(0);
+            $table->char('is_mcu',1)->default(0);
+            $table->float('price',15,2)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
