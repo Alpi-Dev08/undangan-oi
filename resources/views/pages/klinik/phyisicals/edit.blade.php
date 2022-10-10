@@ -4,12 +4,12 @@
         <!--begin::Card body-->
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
-                Edit Service {{  $service->name }}
+                Edit Physical {{  $physical->name }}
             </h3>
 
             <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title=""
                  data-bs-original-title="Click to cancel">
-                <a href="{{ route('services.index')  }}" class="btn btn-sm btn-light-primary">
+                <a href="{{ route('physicals.index')  }}" class="btn btn-sm btn-light-primary">
                     <!--begin::Svg Icon | path: assets/media/icons/duotune/arrows/arr079.svg-->
                     <span class="svg-icon svg-icon-muted svg-icon-2hx">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="card-body pt-6">
-            @include('pages.klinik.services._editform')
+            @include('pages.klinik.physicals._editform')
         </div>
         <!--end::Card body-->
     </div>
