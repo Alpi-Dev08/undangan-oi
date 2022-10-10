@@ -10,11 +10,11 @@
 @push('customscript')
     <script>
         $("#searchbox").on("keyup search input paste cut", function() {
-            LaravelDataTables["anamnesiscategories-table"].search(this.value).draw();
+            LaravelDataTables["physicalcategories-table"].search(this.value).draw();
         });
 
         $(function(){
-            LaravelDataTables["anamnesiscategories-table"].on('click','.delete',function(event){
+            LaravelDataTables["physicalcategories-table"].on('click','.delete',function(event){
                 var form =  $(this).closest("form");
                 event.preventDefault();
                 Swal.fire({
@@ -30,7 +30,7 @@
                         form.submit();
                         Swal.fire(
                             'Deleted!',
-                            'Anamnesis Category has been deleted.',
+                            'Physical Category has been deleted.',
                             'success'
                         )
                     }

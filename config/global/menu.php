@@ -181,6 +181,12 @@
                             'bullet'     => '<span class="bullet bullet-dot"></span>',
                             'permission' => ['klinik.read'],
                         ],
+                        [
+                            'title'      => 'Physical Category',
+                            'path'       => 'klinik/physicalcategories',
+                            'bullet'     => '<span class="bullet bullet-dot"></span>',
+                            'permission' => ['klinik.read'],
+                        ],
 
                     ]
                 ]
