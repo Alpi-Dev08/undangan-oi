@@ -148,6 +148,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('services', \App\Http\Controllers\Klinik\ServicesController::class);
         Route::resource('vitalityexaminations', \App\Http\Controllers\Klinik\VitalityExaminationsController::class);
         Route::resource('anamnesiscategories', \App\Http\Controllers\Klinik\AnamnesisCategoriesController::class);
+        Route::resource('anamnesis', \App\Http\Controllers\Klinik\AnamnesisController::class);
     });
 
 

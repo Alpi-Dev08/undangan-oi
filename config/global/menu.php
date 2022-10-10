@@ -175,6 +175,12 @@
                             'bullet'     => '<span class="bullet bullet-dot"></span>',
                             'permission' => ['klinik.read'],
                         ],
+                        [
+                            'title'      => 'Anamnesis',
+                            'path'       => 'klinik/anamnesis',
+                            'bullet'     => '<span class="bullet bullet-dot"></span>',
+                            'permission' => ['klinik.read'],
+                        ],
 
                     ]
                 ]
