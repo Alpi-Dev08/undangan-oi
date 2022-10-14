@@ -358,11 +358,11 @@
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
                     <div class="timeline-label">
-                        @foreach($vitalityexaminations as $vitalityexamination)
+                        @foreach($examinations as $exam)
                         <!--begin::Item-->
                         <div class="timeline-item">
                             <!--begin::Label-->
-                            <div class="timeline-label fw-bold text-gray-800 fs-6">{{ $vitalityexamination->created_at->format("d F Y H:i:s") }}</div>
+                            <div class="timeline-label fw-bold text-gray-800 fs-6">{{ $exam->created_at->format("d F Y") }} <br>{{ $exam->created_at->format("H:i:s") }}</div>
                             <!--end::Label-->
                             <!--begin::Badge-->
                             <div class="timeline-badge">
@@ -375,50 +375,70 @@
                             <!--end::Badge-->
                             <!--begin::Text-->
                             <div class="fw-mormal timeline-content text-muted ps-3">
-                                <div class="row p-2 border border-gray-300 bg-gray-200 rounded">
+                                <div class="row p-2 border border-gray-200 bg-gray-100 rounded">
+                                    <div class="col-12 row">
+                                        <div class="col-2 fw-bolder">Full Name</div>
+                                        <div class="col-10">: {{ $user->name }}</div>
+                                    </div>
+                                    <div class="col-12 row">
+                                        <div class="col-2 fw-bolder">Doctor</div>
+                                        <div class="col-10">: {{ $exam->health_profesional->user->name }}</div>
+                                    </div>
+                                    <div class="col-12 row">
+                                        <div class="col-2 fw-bolder">Jenis Pemeriksaan</div>
+                                        <div class="col-10">: {{ $exam->service_category->name }}
+                                            <ul class="row">
+                                                @foreach(service_examination($exam->id) as $service)
+                                                    <li class="col-4">{{ $service->service->name }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <br>
                                     <div class="col-6 row">
                                         <div class="col-4 fw-bold">Weight</div>
-                                        <div class="col-8">: {{ $vitalityexamination->weight }} Kg</div>
+                                        <div class="col-8">: {{ $exam->vitality->weight ?? "-" }} Kg</div>
                                     </div>
                                     <div class="col-6 row">
                                         <div class="col-4 fw-bold">Height</div>
-                                        <div class="col-8">: {{ $vitalityexamination->height }} cm</div>
+                                        <div class="col-8">: {{ $exam->vitality->height ?? "-" }} cm</div>
                                     </div>
                                     <div class="col-6 row">
                                         <div class="col-4 fw-bold">Blood Pressure</div>
-                                        <div class="col-8">: {{ $vitalityexamination->blood_pressure }}</div>
+                                        <div class="col-8">: {{ $exam->vitality->blood_pressure ?? "-" }}</div>
                                     </div>
                                     <div class="col-6 row">
                                         <div class="col-4 fw-bold">Heart Rate</div>
-                                        <div class="col-8">: {{ $vitalityexamination->heart_rate }}</div>
+                                        <div class="col-8">: {{ $exam->vitality->heart_rate ?? "-" }}</div>
                                     </div>
                                     <div class="col-6 row">
                                         <div class="col-4 fw-bold">Respiratory Rate</div>
-                                        <div class="col-8">: {{ $vitalityexamination->respiratory_rate }}</div>
+                                        <div class="col-8">: {{ $exam->vitality->respiratory_rate ?? "-" }}</div>
                                     </div>
                                     <div class="col-6 row">
                                         <div class="col-4 fw-bold">Temperature</div>
-                                        <div class="col-8">: {{ $vitalityexamination->temperature }}</div>
+                                        <div class="col-8">: {{ $exam->vitality->temperature ?? "-" }}</div>
                                     </div>
                                     <div class="col-6 row">
                                         <div class="col-4 fw-bold">Oxygen Saturation</div>
-                                        <div class="col-8">: {{ $vitalityexamination->oxygen_saturation }}</div>
+                                        <div class="col-8">: {{ $exam->vitality->oxygen_saturation ?? "-" }}</div>
                                     </div>
                                     <div class="col-6 row">
                                         <div class="col-4 fw-bold">Body Mass Index</div>
-                                        <div class="col-8">: {{ $vitalityexamination->body_mass_index }}</div>
+                                        <div class="col-8">: {{ $exam->vitality->body_mass_index ?? "-" }}</div>
                                     </div>
                                     <div class="col-6 row">
                                         <div class="col-4 fw-bold">Ideal Weight</div>
-                                        <div class="col-8">: {{ $vitalityexamination->ideal_weight }} Kg</div>
+                                        <div class="col-8">: {{ $exam->vitality->ideal_weight ?? "-" }} Kg</div>
                                     </div>
                                     <div class="col-6 row">
                                         <div class="col-4 fw-bold">Body Fat</div>
-                                        <div class="col-8">: {{ $vitalityexamination->body_fat }}</div>
+                                        <div class="col-8">: {{ $exam->vitality->body_fat ?? "-" }}</div>
                                     </div>
                                     <div class="col-6 row">
                                         <div class="col-4 fw-bold">BMI Conclusion</div>
-                                        <div class="col-8">: {{ $vitalityexamination->bmi_conclusion }}</div>
+                                        <div class="col-8">: {{ $exam->vitality->bmi_conclusion ?? "-" }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -438,7 +458,7 @@
                         <!--begin::Input group-->
                         <div class="row mb-6">
                             <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Health Profesional Type') }}</label>
+                            <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Health Profesional') }}</label>
                             <!--end::Label-->
                             <!--begin::Col-->
                             <div class="col-lg-8">

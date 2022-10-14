@@ -21,4 +21,8 @@ class Service extends Model
     {
         return $this->belongsTo(ServiceCategory::class,'service_category_id','id');
     }
+
+    public function transaction_detail(){
+        return $this->hasMany(TransactionDetail::class);
+    }
 }

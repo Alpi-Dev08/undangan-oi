@@ -25,6 +25,7 @@ use App\Models\Klinik\TransactionDetail;
 use App\Models\Klinik\VitalityExamination;
 use App\Models\User;
 use Doctrine\DBAL\Driver\PDO\Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -124,7 +125,6 @@ class ExaminationsController extends Controller
         }
 
         $examination = Examination::find($id);
-
         $examination->status = 'processing';
         $examination->save();
 
@@ -137,11 +137,13 @@ class ExaminationsController extends Controller
             $anamnesiscategories = AnamnesisCategory::all();
         }
 
+        $examinations = Examination::where('user_id', $examination->user_id)->where('status','done')->get();
         $anamnesisexamination = AnamnesisExamination::where('examination_id', $examination->id)->first();
-        $vitalityexaminations = VitalityExamination::where('user_id', $examination->user_id)->orderBy('created_at', 'desc')->get();
+        //$vitalityexaminations = VitalityExamination::where('user_id', $examination->user_id)->orderBy('created_at', 'desc')->get();
+
 
         $info = $user->info;
-        return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'vitalityexaminations', 'anamnesiscategories','anamnesisexamination'));
+        return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories','anamnesisexamination','examinations'));
     }
 
     /**

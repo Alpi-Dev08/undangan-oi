@@ -4,7 +4,10 @@
     use App\Core\Adapters\Util;
     use App\Models\Klinik\Anamnesis;
     use App\Models\Klinik\Service;
+    use App\Models\Klinik\Transaction;
+    use App\Models\Klinik\TransactionDetail;
     use App\Models\User;
+    use Illuminate\Database\Eloquent\Builder;
 
     if (!function_exists('get_svg_icon')) {
         function get_svg_icon($path, $class = null, $svgClass = null)
@@ -222,6 +225,8 @@
         }
     }
 
+
+
     if (!function_exists('anamnesis')) {
         /**
          * Check if the request has RTL param
@@ -231,5 +236,20 @@
             $anamnesis = Anamnesis::where('anamnesis_category_id', $id)->get();
 
             return $anamnesis;
+        }
+    }
+
+    if (!function_exists('service_examination')) {
+        /**
+         * Check if the request has RTL param
+         */
+        function service_examination($id)
+        {
+            $transaction         = Transaction::where('examination_id', $id)->first();
+            $transaction_detail = TransactionDetail::with('service','service.category')->where('transaction_id', $transaction->id)->whereHas('service.category', function(Builder $query){
+                $query->where('is_global', 0);
+            })->get();
+
+            return $transaction_detail;
         }
     }
