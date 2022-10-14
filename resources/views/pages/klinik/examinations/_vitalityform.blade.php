@@ -21,27 +21,6 @@
                     <!--end::Bullet-->
                 </a>
             </li>
-            <li class="nav-item p-0 ms-0">
-                <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#disease">
-                    <!--begin::Title-->
-                    <span class="nav-text fw-semibold fs-4 mb-3">Disease</span>
-                    <!--end::Title-->
-                    <!--begin::Bullet-->
-                    <span class="bullet-custom position-absolute z-index-2 w-100 h-1px top-100 bottom-n100 bg-primary rounded"></span>
-                    <!--end::Bullet-->
-                </a>
-            </li>
-            <li class="nav-item p-0 ms-0">
-                <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#medicalrecord">
-                    <!--begin::Title-->
-                    <span class="nav-text fw-semibold fs-4 mb-3">Medical Record</span>
-                    <!--end::Title-->
-                    <!--begin::Bullet-->
-                    <span class="bullet-custom position-absolute z-index-2 w-100 h-1px top-100 bottom-n100 bg-primary rounded"></span>
-                    <!--end::Bullet-->
-                </a>
-            </li>
-            <!--end::Nav item-->
             <!--begin::Nav item-->
             <li class="nav-item p-0 ms-0">
                 <a class="nav-link btn btn-color-gray-400 flex-center px-3 active" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#examination">
@@ -348,6 +327,146 @@
                             <!--end::Col-->
                         </div>
                         <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 fw-bold text-muted">{{ __('Patient Trustee Name') }}</label>
+                            <!--end::Label-->
+
+                            <!--begin::Col-->
+                            <div class="col-lg-8 fv-row">
+                                <span class="fw-bold fs-6">{{ $info->patient_trustee_name ?? "" }}</span>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 fw-bold text-muted">{{ __('Company Name') }}</label>
+                            <!--end::Label-->
+
+                            <!--begin::Col-->
+                            <div class="col-lg-8 fv-row">
+                                <span class="fw-bold fs-6">{{ $info->company_name ?? "" }}</span>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 fw-bold text-muted">{{ __('Date of Hire') }}</label>
+                            <!--end::Label-->
+
+                            <!--begin::Col-->
+                            <div class="col-lg-8 fv-row">
+                                <span class="fw-bold fs-6">{{ $info->date_of_hire ?? "" }}</span>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 fw-bold text-muted">{{ __('Job Title') }}</label>
+                            <!--end::Label-->
+
+                            <!--begin::Col-->
+                            <div class="col-lg-8 fv-row">
+                                <span class="fw-bold fs-6">{{ $info->job_title ?? "" }}</span>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 fw-bold text-muted">{{ __('Division') }}</label>
+                            <!--end::Label-->
+
+                            <!--begin::Col-->
+                            <div class="col-lg-8 fv-row">
+                                <span class="fw-bold fs-6">{{ $info->division ?? "" }}</span>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 fw-bold text-muted">{{ __('Department') }}</label>
+                            <!--end::Label-->
+
+                            <!--begin::Col-->
+                            <div class="col-lg-8 fv-row">
+                                <span class="fw-bold fs-6">{{ $info->department ?? "" }}</span>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 fw-bold text-muted">{{ __('Section') }}</label>
+                            <!--end::Label-->
+
+                            <!--begin::Col-->
+                            <div class="col-lg-8 fv-row">
+                                <span class="fw-bold fs-6">{{ $info->section ?? "" }}</span>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 fw-bold text-muted">{{ __('Employee ID') }}</label>
+                            <!--end::Label-->
+
+                            <!--begin::Col-->
+                            <div class="col-lg-8 fv-row">
+                                <span class="fw-bold fs-6">{{ $info->employee_id ?? "" }}</span>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 fw-bold text-muted">{{ __('Kind of Job') }}</label>
+                            <!--end::Label-->
+
+                            <!--begin::Col-->
+                            <div class="col-lg-8 fv-row">
+                                <span class="fw-bold fs-6">{{ $info->kind_of_job ?? "" }}</span>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row mb-7">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 fw-bold text-muted">{{ __('Shift') }}</label>
+                            <!--end::Label-->
+
+                            <!--begin::Col-->
+                            <div class="col-lg-8 fv-row">
+                                <span class="fw-bold fs-6">{{ $info->shift ?? "" }}</span>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
                     </div>
                     <!--end::Card body-->
                 </div>
@@ -471,6 +590,56 @@
                                         <label for="bmi_conclusion" class="form-label">BMI Conclusion</label>
                                         <input id="bmi_conclusion" name="bmi_conclusion"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('bmi_conclusion') is-invalid @enderror" placeholder="BMI Conclusion" value="{{ $vitalityexamination->bmi_conclusion ?? "" }}"/>
                                         @error('bmi_conclusion')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    <!--begin::Input group-->
+                                    <div class="col-6 mb-6">
+                                        <label for="breath" class="form-label">Breath</label>
+                                        <input id="breath" name="breath"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('breath') is-invalid @enderror" placeholder="Breath" value="{{ $vitalityexamination->breath ?? "" }}"/>
+                                        @error('breath')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    <!--begin::Input group-->
+                                    <div class="col-6 mb-6">
+                                        <label for="apex_beat" class="form-label">Apex Beat</label>
+                                        <input id="apex_beat" name="apex_beat"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('apex_beat') is-invalid @enderror" placeholder="Apex Beat" value="{{ $vitalityexamination->apex_beat ?? "" }}"/>
+                                        @error('apex_beat')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    <!--begin::Input group-->
+                                    <div class="col-6 mb-6">
+                                        <label for="waist_circumferennce" class="form-label">Waist Circumference</label>
+                                        <input id="waist_circumferennce" name="waist_circumferennce"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('waist_circumferennce') is-invalid @enderror" placeholder="Waist Circumference" value="{{ $vitalityexamination->waist_circumferennce ?? "" }}"/>
+                                        @error('waist_circumferennce')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    <!--begin::Input group-->
+                                    <div class="col-6 mb-6">
+                                        <label for="neck_circumference" class="form-label">Neck Circumference</label>
+                                        <input id="neck_circumference" name="neck_circumference"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('neck_circumference') is-invalid @enderror" placeholder="Neck Circumference" value="{{ $vitalityexamination->neck_circumference ?? "" }}"/>
+                                        @error('neck_circumference')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    <!--begin::Input group-->
+                                    <div class="col-12 mb-6">
+                                        <label for="others" class="form-label">Others</label>
+                                        <input id="others" name="others"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('others') is-invalid @enderror" placeholder="Others" value="{{ $vitalityexamination->others ?? "" }}"/>
+                                        @error('others')
                                         <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>

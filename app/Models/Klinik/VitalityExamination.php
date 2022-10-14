@@ -28,7 +28,7 @@ class VitalityExamination extends Model
         'breath',
         'apex_beat',
         'waist_circumferennce',
-        'next_circumference',
+        'neck_circumference',
         'others'
     ];
 

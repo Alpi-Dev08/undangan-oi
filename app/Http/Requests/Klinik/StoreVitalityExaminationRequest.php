@@ -40,7 +40,7 @@ class StoreVitalityExaminationRequest extends FormRequest
             'breath'               => 'nullable',
             'apex_beat'            => 'nullable',
             'waist_circumferennce' => 'nullable',
-            'next_circumference'   => 'nullable',
+            'neck_circumference'   => 'nullable',
             'others'               => 'nullable',
         ];
     }

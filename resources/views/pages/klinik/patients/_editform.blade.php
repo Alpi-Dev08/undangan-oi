@@ -409,6 +409,147 @@
                     <!--end::Col-->
                 </div>
                 <!--end::Input group-->
+
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Nama Wali  Pasien (Hubungan dengan Pasien)') }}</label>
+                    <!--end::Label-->
+
+                    <!--begin::Col-->
+                    <div class="col-lg-8 fv-row">
+                        <input type="text" name="patient_trusetee_name" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Nama Wali  Pasien (Hubungan dengan Pasien)" value="{{ old('patient_trustee_name', $info->patient_trustee_name ?? '') }}"/>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Company Name') }}</label>
+                    <!--end::Label-->
+
+                    <!--begin::Col-->
+                    <div class="col-lg-8 fv-row">
+                        <input type="text" name="company_name" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Company Name" value="{{ old('company_name', $info->company_name ?? '') }}"/>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Date of Hire') }}</label>
+                    <!--end::Label-->
+
+                    <!--begin::Col-->
+                    <div class="col-lg-8 fv-row">
+                        <input type="date" name="date_of_hire" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Date of Hire" value="{{ old('date_of_hire', $info->date_of_hire ?? '') }}"/>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Job Title') }}</label>
+                    <!--end::Label-->
+
+                    <!--begin::Col-->
+                    <div class="col-lg-8 fv-row">
+                        <input type="text" name="job_title" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Job Title" value="{{ old('job_title', $info->job_title ?? '') }}"/>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Division') }}</label>
+                    <!--end::Label-->
+
+                    <!--begin::Col-->
+                    <div class="col-lg-8 fv-row">
+                        <input type="text" name="division" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Division" value="{{ old('division', $info->division ?? '') }}"/>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 required col-form-label fw-bold fs-6">{{ __('Department') }}</label>
+                    <!--end::Label-->
+
+                    <!--begin::Col-->
+                    <div class="col-lg-8 fv-row">
+                        <input type="text" name="department" required class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Department" value="{{ old('department', $info->department ?? '') }}"/>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Section') }}</label>
+                    <!--end::Label-->
+
+                    <!--begin::Col-->
+                    <div class="col-lg-8 fv-row">
+                        <input type="text" name="section" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Section" value="{{ old('section', $info->section ?? '') }}"/>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Employee ID') }}</label>
+                    <!--end::Label-->
+
+                    <!--begin::Col-->
+                    <div class="col-lg-8 fv-row">
+                        <input type="text" name="employee_id" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Employee ID" value="{{ old('employee_id', $info->employee_id ?? '') }}"/>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Kind of Job') }}</label>
+                    <!--end::Label-->
+
+                    <!--begin::Col-->
+                    <div class="col-lg-8 fv-row">
+                        <input type="text" name="kind_of_job" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Kind of Job" value="{{ old('kind_of_job', $info->kind_of_job ?? '') }}"/>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Shift') }}</label>
+                    <!--end::Label-->
+
+                    <!--begin::Col-->
+                    <div class="col-lg-8 fv-row">
+                        <input type="text" name="shift" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Shift" value="{{ old('shift', $info->shift ?? '') }}"/>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+
             </div>
             <!--end::Card body-->
 
