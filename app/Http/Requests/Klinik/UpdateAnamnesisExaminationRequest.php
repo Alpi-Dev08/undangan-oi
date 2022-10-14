@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Klinik;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -13,7 +13,7 @@ class UpdateAnamnesisExaminationRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class UpdateAnamnesisExaminationRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'examination_id'  => 'required|integer|exists:examinations,id',
+            'request'         => 'nullable',
+            'anamnesis_value' => 'json',
         ];
     }
 }
