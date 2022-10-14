@@ -25,18 +25,6 @@
             </li>
             <li class="nav-item p-0 ms-0">
                 <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab"
-                   data-bs-toggle="tab" href="#vitality">
-                    <!--begin::Title-->
-                    <span class="nav-text fw-semibold fs-4 mb-3">Vitality</span>
-                    <!--end::Title-->
-                    <!--begin::Bullet-->
-                    <span
-                        class="bullet-custom position-absolute z-index-2 w-100 h-1px top-100 bottom-n100 bg-primary rounded"></span>
-                    <!--end::Bullet-->
-                </a>
-            </li>
-            <li class="nav-item p-0 ms-0">
-                <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab"
                    data-bs-toggle="tab" href="#medicalrecord">
                     <!--begin::Title-->
                     <span class="nav-text fw-semibold fs-4 mb-3">Medical Record</span>
@@ -54,6 +42,20 @@
                    data-bs-toggle="tab" href="#anamnesis">
                     <!--begin::Title-->
                     <span class="nav-text fw-semibold fs-4 mb-3">Anamnesis</span>
+                    <!--end::Title-->
+                    <!--begin::Bullet-->
+                    <span
+                        class="bullet-custom position-absolute z-index-2 w-100 h-1px top-100 bottom-n100 bg-primary rounded"></span>
+                    <!--end::Bullet-->
+                </a>
+            </li>
+            <!--end::Nav item-->
+            <!--begin::Nav item-->
+            <li class="nav-item p-0 ms-0">
+                <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab"
+                   data-bs-toggle="tab" href="#physical">
+                    <!--begin::Title-->
+                    <span class="nav-text fw-semibold fs-4 mb-3">Physical</span>
                     <!--end::Title-->
                     <!--begin::Bullet-->
                     <span
@@ -386,17 +388,15 @@
                 <!--end::details View-->
             </div>
 
-            <div class="tab-pane" id="vitality" role="tabpanel" aria-labelledby="all-tab"
-                 data-kt-timeline-widget-4-blockui="true">
+            <div class="tab-pane" id="medicalrecord" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
                     <div class="timeline-label">
-                        @foreach($vitalityexaminations as $vitalityexamination)
+                        @foreach($examinations as $exam)
                             <!--begin::Item-->
                             <div class="timeline-item">
                                 <!--begin::Label-->
-                                <div
-                                    class="timeline-label fw-bold text-gray-800 fs-6">{{ $vitalityexamination->created_at->format("d F Y H:i:s") }}</div>
+                                <div class="timeline-label fw-bold text-gray-800 fs-6">{{ $exam->created_at->format("d F Y") }} <br>{{ $exam->created_at->format("H:i:s") }}</div>
                                 <!--end::Label-->
                                 <!--begin::Badge-->
                                 <div class="timeline-badge">
@@ -409,50 +409,70 @@
                                 <!--end::Badge-->
                                 <!--begin::Text-->
                                 <div class="fw-mormal timeline-content text-muted ps-3">
-                                    <div class="row p-2 border border-gray-300 bg-gray-200 rounded">
+                                    <div class="row p-2 border border-gray-200 bg-gray-100 rounded">
+                                        <div class="col-12 row">
+                                            <div class="col-2 fw-bolder">Full Name</div>
+                                            <div class="col-10">: {{ $user->name }}</div>
+                                        </div>
+                                        <div class="col-12 row">
+                                            <div class="col-2 fw-bolder">Doctor</div>
+                                            <div class="col-10">: {{ $exam->health_profesional->user->name }}</div>
+                                        </div>
+                                        <div class="col-12 row">
+                                            <div class="col-2 fw-bolder">Jenis Pemeriksaan</div>
+                                            <div class="col-10">: {{ $exam->service_category->name }}
+                                                <ul class="row">
+                                                    @foreach(service_examination($exam->id) as $service)
+                                                        <li class="col-4">{{ $service->service->name }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <br>
                                         <div class="col-6 row">
                                             <div class="col-4 fw-bold">Weight</div>
-                                            <div class="col-8">: {{ $vitalityexamination->weight }} Kg</div>
+                                            <div class="col-8">: {{ $exam->vitality->weight ?? "-" }} Kg</div>
                                         </div>
                                         <div class="col-6 row">
                                             <div class="col-4 fw-bold">Height</div>
-                                            <div class="col-8">: {{ $vitalityexamination->height }} cm</div>
+                                            <div class="col-8">: {{ $exam->vitality->height ?? "-" }} cm</div>
                                         </div>
                                         <div class="col-6 row">
                                             <div class="col-4 fw-bold">Blood Pressure</div>
-                                            <div class="col-8">: {{ $vitalityexamination->blood_pressure }}</div>
+                                            <div class="col-8">: {{ $exam->vitality->blood_pressure ?? "-" }}</div>
                                         </div>
                                         <div class="col-6 row">
                                             <div class="col-4 fw-bold">Heart Rate</div>
-                                            <div class="col-8">: {{ $vitalityexamination->heart_rate }}</div>
+                                            <div class="col-8">: {{ $exam->vitality->heart_rate ?? "-" }}</div>
                                         </div>
                                         <div class="col-6 row">
                                             <div class="col-4 fw-bold">Respiratory Rate</div>
-                                            <div class="col-8">: {{ $vitalityexamination->respiratory_rate }}</div>
+                                            <div class="col-8">: {{ $exam->vitality->respiratory_rate ?? "-" }}</div>
                                         </div>
                                         <div class="col-6 row">
                                             <div class="col-4 fw-bold">Temperature</div>
-                                            <div class="col-8">: {{ $vitalityexamination->temperature }}</div>
+                                            <div class="col-8">: {{ $exam->vitality->temperature ?? "-" }}</div>
                                         </div>
                                         <div class="col-6 row">
                                             <div class="col-4 fw-bold">Oxygen Saturation</div>
-                                            <div class="col-8">: {{ $vitalityexamination->oxygen_saturation }}</div>
+                                            <div class="col-8">: {{ $exam->vitality->oxygen_saturation ?? "-" }}</div>
                                         </div>
                                         <div class="col-6 row">
                                             <div class="col-4 fw-bold">Body Mass Index</div>
-                                            <div class="col-8">: {{ $vitalityexamination->body_mass_index }}</div>
+                                            <div class="col-8">: {{ $exam->vitality->body_mass_index ?? "-" }}</div>
                                         </div>
                                         <div class="col-6 row">
                                             <div class="col-4 fw-bold">Ideal Weight</div>
-                                            <div class="col-8">: {{ $vitalityexamination->ideal_weight }} Kg</div>
+                                            <div class="col-8">: {{ $exam->vitality->ideal_weight ?? "-" }} Kg</div>
                                         </div>
                                         <div class="col-6 row">
                                             <div class="col-4 fw-bold">Body Fat</div>
-                                            <div class="col-8">: {{ $vitalityexamination->body_fat }}</div>
+                                            <div class="col-8">: {{ $exam->vitality->body_fat ?? "-" }}</div>
                                         </div>
                                         <div class="col-6 row">
                                             <div class="col-4 fw-bold">BMI Conclusion</div>
-                                            <div class="col-8">: {{ $vitalityexamination->bmi_conclusion }}</div>
+                                            <div class="col-8">: {{ $exam->vitality->bmi_conclusion ?? "-" }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -561,6 +581,130 @@
                                             </li>
                                         @endforeach
                                     </ol>
+
+                                    <!--begin::Actions-->
+                                    <div class="text-center pt-15">
+                                        <a href="{{ route('examinations.index')  }}"
+                                           class="btn btn-sm btn-light-primary">
+                                            <!--begin::Svg Icon | path: assets/media/icons/duotune/arrows/arr079.svg-->
+                                            <span class="svg-icon svg-icon-muted svg-icon-2hx">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <path opacity="0.5"
+                                                          d="M14.2657 11.4343L18.45 7.25C18.8642 6.83579 18.8642 6.16421 18.45 5.75C18.0358 5.33579 17.3642 5.33579 16.95 5.75L11.4071 11.2929C11.0166 11.6834 11.0166 12.3166 11.4071 12.7071L16.95 18.25C17.3642 18.6642 18.0358 18.6642 18.45 18.25C18.8642 17.8358 18.8642 17.1642 18.45 16.75L14.2657 12.5657C13.9533 12.2533 13.9533 11.7467 14.2657 11.4343Z"
+                                                          fill="currentColor"/>
+                                                    <path
+                                                        d="M8.2657 11.4343L12.45 7.25C12.8642 6.83579 12.8642 6.16421 12.45 5.75C12.0358 5.33579 11.3642 5.33579 10.95 5.75L5.40712 11.2929C5.01659 11.6834 5.01659 12.3166 5.40712 12.7071L10.95 18.25C11.3642 18.6642 12.0358 18.6642 12.45 18.25C12.8642 17.8358 12.8642 17.1642 12.45 16.75L8.2657 12.5657C7.95328 12.2533 7.95328 11.7467 8.2657 11.4343Z"
+                                                        fill="currentColor"/>
+                                                </svg>
+                                            </span>
+                                            <!--end::Svg Icon-->
+                                            Cancel
+                                        </a>
+                                        <button type="submit" class="btn btn-primary"
+                                                data-kt-examinations-modal-action="submit">
+                                            <span class="indicator-label">Submit</span>
+                                            <span class="indicator-progress">Please wait...
+                                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                </span>
+                                        </button>
+                                    </div>
+                                    <!--end::Actions-->
+                                </form>
+                </div>
+                <!--end::details View-->
+
+            </div>
+            <div class="tab-pane" id="physical" role="tabpanel" aria-labelledby="all-tab"
+                 data-kt-timeline-widget-4-blockui="true">
+                <!--begin::details View-->
+                <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+                    @if(isset($physicalexamination->id))
+                        <form id="kt_modal_add_examinations_form" method="POST" class="form"
+                              action="{{ route('physicalexaminations.update',['physicalexamination' => $physicalexamination->id]) }}">
+                            @method('PUT')
+                            {{ csrf_field() }}
+                            @else
+                                <form id="kt_modal_add_examinations_form" method="POST" class="form"
+                                      action="{{ route('physicalexaminations.store') }}">
+                                    @method('POST')
+                                    {{ csrf_field() }}
+                                    @endif
+                                    <input type="hidden" name="examination_id" value="{{ $examination->id }}">
+
+                                        @foreach($physicalscategories as $physicalscategory)
+                                        <h2 class="font-bold">{{$physicalscategory->name}}</h2>
+                                                <ol style="margin-left:-10px">
+                                                    @foreach(physicals($physicalscategory->id) as $physicals)
+                                                        <li class="fw-normal text-base mb-6">
+                                                            <div class="row">
+                                                                <div class="col-4">
+                                                                    {{$physicals->name}}
+                                                                    <input type="hidden" name="physical[{{$physicals->id}}]">
+                                                                </div>
+                                                                <div class="col-8">
+                                                                    @php
+                                                                        $options = json_decode($physicals->options);
+                                                                        $option = [];
+                                                                        if(isset($physicalexamination->id)){
+                                                                            $option = json_decode($physicalexamination->physical_value,true);
+                                                                        }
+
+                                                                    @endphp
+                                                                    <div
+                                                                        class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                                        @if(isset($options->radio))
+                                                                            @foreach($options->radio as $radio)
+                                                                                @php
+                                                                                    $r=[];
+                                                                                    if(isset($option[$physicals->id])){
+                                                                                        if(isset($option[$physicals->id]['radio'])){
+                                                                                            $r = $option[$physicals->id]['radio'];
+                                                                                        }
+
+                                                                                    }
+                                                                                @endphp
+                                                                                <div
+                                                                                    class="form-check form-check-custom form-check-solid">
+                                                                                    <input class="form-check-input"
+                                                                                           type="checkbox"
+                                                                                           {{ in_array($radio->id,$r) ? 'checked' : '' }}
+                                                                                           name = "physical[{{$physicals->id}}][radio][{{$radio->id}}]"
+                                                                                           value="{{$radio->id}}"
+                                                                                           id="radio-{{$physicals->id}}"/>
+                                                                                    <label class="form-check-label"
+                                                                                           for="radio-{{$physicals->id}}">
+                                                                                        {{$radio->value}}
+                                                                                    </label>
+                                                                                </div>
+                                                                            @endforeach
+                                                                        @endif
+                                                                        @if(isset($options->additional))
+                                                                            @foreach($options->additional as $additional)
+                                                                                @php
+                                                                                    $adt=[];
+                                                                                    if(isset($option[$anamnesis->id])){
+                                                                                        if(isset($option[$physicals->id]['additional'])){
+                                                                                         $adt = $option[$physicals->id]['additional'];
+                                                                                         }
+                                                                                    }
+                                                                                @endphp
+                                                                                @if($additional->type == "text")
+                                                                                    <input type="text"
+                                                                                           value="{{ $adt[$additional->type] ?? '' }}"
+                                                                                           name="physical[{{$physicals->id}}][additional][{{$additional->type}}]"
+                                                                                           class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0"
+                                                                                           placeholder="{{$additional->name}}"/>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    @endforeach
+                                                </ol>
+                                        @endforeach
+
 
                                     <!--begin::Actions-->
                                     <div class="text-center pt-15">

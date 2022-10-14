@@ -22,16 +22,6 @@
                 </a>
             </li>
             <li class="nav-item p-0 ms-0">
-                <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#vitality">
-                    <!--begin::Title-->
-                    <span class="nav-text fw-semibold fs-4 mb-3">Vitality</span>
-                    <!--end::Title-->
-                    <!--begin::Bullet-->
-                    <span class="bullet-custom position-absolute z-index-2 w-100 h-1px top-100 bottom-n100 bg-primary rounded"></span>
-                    <!--end::Bullet-->
-                </a>
-            </li>
-            <li class="nav-item p-0 ms-0">
                 <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#medicalrecord">
                     <!--begin::Title-->
                     <span class="nav-text fw-semibold fs-4 mb-3">Medical Record</span>
@@ -353,8 +343,7 @@
                 </div>
                 <!--end::details View-->
             </div>
-
-            <div class="tab-pane" id="vitality" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
+            <div class="tab-pane" id="medicalrecord" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
                     <div class="timeline-label">

@@ -66,7 +66,7 @@ class AnamnesisExaminationsController extends Controller
             }
 
             session()->flash('success', 'Disease has been created !!');
-            return redirect()->route('examinations.index');
+            return redirect()->route('examinations.edit',['examination' => $request->examination_id]);
         }
 
         return false;
@@ -121,7 +121,7 @@ class AnamnesisExaminationsController extends Controller
             }
 
             session()->flash('success', 'Disease has been created !!');
-            return redirect()->route('examinations.index');
+            return redirect()->route('examinations.edit',['examination' => $request->examination_id]);
         }
 
         return false;

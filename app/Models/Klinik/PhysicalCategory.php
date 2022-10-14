@@ -14,4 +14,9 @@ class PhysicalCategory extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function physicals()
+    {
+        return $this->HasMany(Physical::class);
+    }
 }

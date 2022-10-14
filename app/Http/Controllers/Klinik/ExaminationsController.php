@@ -16,6 +16,8 @@ use App\Models\Klinik\LaboratoryExamination;
 use App\Models\Klinik\LaboratoryExaminationCategory;
 use App\Models\Klinik\LaboratoryUnit;
 use App\Models\Klinik\Package;
+use App\Models\Klinik\PhysicalCategory;
+use App\Models\Klinik\PhysicalExamination;
 use App\Models\Klinik\Plan;
 use App\Models\Klinik\Service;
 use App\Models\Klinik\ServiceCategory;
@@ -133,17 +135,20 @@ class ExaminationsController extends Controller
         $plans               = Plan::all();
         $icdtens             = Icdten::all();
         $anamnesiscategories = [];
+        $physicalscategories = [];
         if ($examination->service_category->is_mcu == 1) {
             $anamnesiscategories = AnamnesisCategory::all();
+            $physicalscategories = PhysicalCategory::all();
         }
 
         $examinations = Examination::where('user_id', $examination->user_id)->where('status','done')->get();
         $anamnesisexamination = AnamnesisExamination::where('examination_id', $examination->id)->first();
+        $physicalexamination = PhysicalExamination::where('examination_id', $examination->id)->first();
         //$vitalityexaminations = VitalityExamination::where('user_id', $examination->user_id)->orderBy('created_at', 'desc')->get();
 
 
         $info = $user->info;
-        return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories','anamnesisexamination','examinations'));
+        return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories','anamnesisexamination','examinations','physicalscategories','physicalexamination'));
     }
 
     /**

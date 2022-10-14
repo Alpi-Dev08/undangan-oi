@@ -24,9 +24,9 @@ class StorePhysicalRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'        => 'required|string|max:255',
+            'name'                 => 'required|string|max:255',
             'physical_category_id' => 'required|integer|exists:physical_categories,id',
-            'options'     => 'nullable|json',
+            'options'              => 'nullable|json',
         ];
     }
 }

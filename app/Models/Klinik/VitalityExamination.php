@@ -25,6 +25,11 @@ class VitalityExamination extends Model
         'ideal_weight',
         'body_fat',
         'bmi_conclusion',
+        'breath',
+        'apex_beat',
+        'waist_circumferennce',
+        'next_circumference',
+        'others'
     ];
 
     public function examination()

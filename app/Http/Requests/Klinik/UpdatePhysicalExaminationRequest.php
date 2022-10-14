@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Klinik;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StorePhysicalExaminationRequest extends FormRequest
+class UpdatePhysicalExaminationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class StorePhysicalExaminationRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class StorePhysicalExaminationRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'examination_id'  => 'required|integer|exists:examinations,id',
+            'request'         => 'nullable',
+            'physical_value' => 'json',
         ];
     }
 }

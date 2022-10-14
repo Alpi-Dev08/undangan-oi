@@ -12,8 +12,13 @@ class PhysicalExamination extends Model
     use SpatieLogsActivity, HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'physical_id',
+        'examination_id',
         'request',
         'physical_value',
     ];
+
+    public function examination()
+    {
+        return $this->belongsTo(Examination::class);
+    }
 }

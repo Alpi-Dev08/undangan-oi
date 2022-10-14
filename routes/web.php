@@ -152,6 +152,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('physicalcategories', \App\Http\Controllers\Klinik\PhysicalCategoriesController::class);
         Route::resource('physicals', \App\Http\Controllers\Klinik\PhysicalsController::class);
         Route::resource('anamnesisexaminations', \App\Http\Controllers\Klinik\AnamnesisExaminationsController::class);
+        Route::resource('physicalexaminations', \App\Http\Controllers\Klinik\PhysicalExaminationsController::class);
     });
 
 

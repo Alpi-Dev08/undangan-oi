@@ -37,7 +37,11 @@ class StoreVitalityExaminationRequest extends FormRequest
             'ideal_weight'      => 'nullable',
             'body_fat'          => 'nullable',
             'bmi_conclusion'    => 'nullable',
-
+            'breath'               => 'nullable',
+            'apex_beat'            => 'nullable',
+            'waist_circumferennce' => 'nullable',
+            'next_circumference'   => 'nullable',
+            'others'               => 'nullable',
         ];
     }
 }
