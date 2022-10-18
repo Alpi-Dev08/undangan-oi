@@ -18,7 +18,7 @@ class UsersDataTable extends DataTable
     {
         $query = $query->whereHas(
             'roles', function($q){
-            $q->orWhere('name', 'admin');
+            $q->Where('name', 'admin');
             $q->orWhere('name', 'ners');
         });
         return datatables()
