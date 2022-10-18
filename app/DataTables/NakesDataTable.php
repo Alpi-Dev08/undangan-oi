@@ -18,7 +18,7 @@
         {
             $query = $query->whereHas(
                 'roles', function($q){
-                $q->where('name', 'nakes');
+                $q->where('name', 'dokter');
             });
             return datatables()
                 ->eloquent($query)

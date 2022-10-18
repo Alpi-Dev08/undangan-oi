@@ -18,8 +18,8 @@ class UsersDataTable extends DataTable
     {
         $query = $query->whereHas(
             'roles', function($q){
-            $q->where('name', 'administrator');
-            $q->orWhere('name', 'member');
+            $q->orWhere('name', 'admin');
+            $q->orWhere('name', 'ners');
         });
         return datatables()
             ->eloquent($query)

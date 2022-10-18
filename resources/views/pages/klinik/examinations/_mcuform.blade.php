@@ -712,7 +712,10 @@
                                                                 <div class="col-6">
                                                                     @php
                                                                         $options = json_decode($anamnesis->options);
-                                                                        $option = json_decode($anamnesisexamination->anamnesis_value,true);
+																		$option = [];
+																		if(isset($anamnesisexamination->anamnesis_value)){
+                                                                            $option = json_decode($anamnesisexamination->anamnesis_value,true);
+																		}
 
                                                                     @endphp
                                                                     <div
@@ -755,10 +758,10 @@
                                                                                     @endphp
                                                                                 @if($additional->type == "text")
                                                                                     <input type="text"
-                                                                                           value="{{ $adt[$additional->type] ?? '' }}"
-                                                                                           name="anamnesis[{{$anamnesis->id}}][additional][{{$additional->type}}]"
+                                                                                           value="{{ $adt[$additional->name] ?? '' }}"
+                                                                                           name="anamnesis[{{$anamnesis->id}}][additional][{{$additional->name}}]"
                                                                                            class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0"
-                                                                                           placeholder="{{$additional->name}}"/>
+                                                                                           placeholder="{{ ucwords($additional->name)}}"/>
                                                                                 @endif
                                                                             @endforeach
                                                                         @endif
@@ -824,7 +827,6 @@
                             </div>
                         </div>
                         <!--end::Wrapper-->
-
                     </div>
                     <!--end::Alert-->
 
@@ -874,7 +876,7 @@
                                                                                     }
                                                                                 @endphp
                                                                                 <div
-                                                                                    class="form-check form-check-custom form-check-solid">
+                                                                                    class="form-check form-check-custom form-check-solid w-200px">
                                                                                     <input class="form-check-input"
                                                                                            type="checkbox"
                                                                                            {{ in_array($radio->id,$r) ? 'checked' : '' }}
@@ -900,14 +902,41 @@
                                                                                 @endphp
                                                                                 @if($additional->type == "text")
                                                                                     <input type="text"
-                                                                                           value="{{ $adt[$additional->type] ?? '' }}"
-                                                                                           name="physical[{{$physicals->id}}][additional][{{$additional->type}}]"
+                                                                                           value="{{ $adt[$additional->name] ?? '' }}"
+                                                                                           name="physical[{{$physicals->id}}][additional][{{$additional->name}}]"
                                                                                            class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0"
-                                                                                           placeholder="{{$additional->name}}"/>
+                                                                                           placeholder="{{ucwords($additional->name)}}"/>
                                                                                 @endif
                                                                             @endforeach
                                                                         @endif
                                                                     </div>
+                                                                    @if($physicals->id==65)
+                                                                        <!--begin::Alert-->
+                                                                        <div class="alert alert-dismissible bg-light-info border border-info d-flex flex-column flex-sm-row p-5 mb-10 mt-10">
+                                                                            <!--begin::Wrapper-->
+                                                                            <div class="d-flex flex-column pe-0 pe-sm-10 w-100">
+                                                                                <!--begin::Title-->
+                                                                                <h5 class="mb-1">Keterangan</h5>
+                                                                                <!--end::Title-->
+                                                                                <div class="col-10 row w-100">
+                                                                                    <span class="col-2">C: Karang Gigi</span>
+                                                                                    <span class="col-2">X: Gigi Tanggal</span>
+                                                                                    <span class="col-2">D: Gigi Berlubang</span>
+                                                                                    <span class="col-2">F: Tambalan Gigi</span>
+                                                                                    <span class="col-2">MG: Gigi Miring</span>
+                                                                                    <span class="col-2">B: Bridge</span>
+                                                                                    <span class="col-2">PR: Prothesa</span>
+                                                                                    <span class="col-2">GP: Gangren Pulpa</span>
+                                                                                    <span class="col-2">CR: Crown</span>
+                                                                                    <span class="col-2">FR: Fracture</span>
+                                                                                    <span class="col-2">R: Radix</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!--end::Wrapper-->
+
+                                                                        </div>
+                                                                        <!--end::Alert-->
+                                                                    @endif
                                                                 </div>
                                                             </div>
                                                         </li>

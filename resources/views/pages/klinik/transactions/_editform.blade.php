@@ -99,13 +99,13 @@
             </div>
             <!--end::Table-->
             <!--begin::Item template-->
-            <table class="table d-none" data-kt-element="item-template">
+            <table class="table d-none services" data-kt-element="item-template">
                 <tr class="border-bottom border-bottom-dashed" data-kt-element="item">
                     <td class="pe-7">
                         <select name="service_id[]" aria-label="{{ __('Select a Service') }}" data-placeholder="{{ __('Select a service...') }}" class="mb-2 form-select form-select-solid form-select-lg fw-bold">
                             <option value="">{{ __('Select a Service...') }}</option>
                             @foreach($services as $key => $value)
-                                <option value="{{ $value['id'] }}">{{ $value['name'] }}</option>
+                                <option value="{{ $value['id'] }}" data-harga="{{ $value['price'] }}">{{ $value['name'] }}</option>
                             @endforeach
                         </select>
                         <input type="text" class="form-control form-control-solid" name="description[]" placeholder="Description" />
@@ -173,4 +173,9 @@
 
 @push('customscript')
     <script src="{{ asset(theme()->getDemo().'/js/custom/apps/invoices/create.js') }}"></script>
+    <script>
+        $(".services > .form-select").change(function(){
+            alert("The text has been changed.");
+        });
+    </script>
     @endpush
