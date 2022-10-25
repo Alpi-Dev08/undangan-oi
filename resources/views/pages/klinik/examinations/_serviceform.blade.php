@@ -443,7 +443,7 @@
                                         <hr>
                                         @if($exam->service_category->is_mcu == 1)
                                             <h5 class="col-12">Check up Result</h5>
-                                            @if($exam->anamnesis->anamnesis_value)
+                                            @if(isset($exam->anamnesis->anamnesis_value))
                                                 <h3 class="col-12">1. Anamnesis</h3>
                                                 @php
                                                     $anamnesis = json_decode($exam->anamnesis->anamnesis_value);
@@ -490,7 +490,7 @@
                                                     @endif
                                                 @endforeach
                                             @endif
-                                            @if($exam->physical->physical_value)
+                                            @if(isset($exam->physical->physical_value))
                                                 <h3 class="col-12">2. Physical</h3>
                                                 @php
                                                     $physicals = json_decode($exam->physical->physical_value);
@@ -537,7 +537,7 @@
                                                     @endif
                                                 @endforeach
                                             @endif
-                                            @if($exam->other->other_value)
+                                            @if(isset($exam->other->other_value))
                                                 <h3 class="col-12">3. Other</h3>
                                                 @php
                                                     $others = json_decode($exam->other->other_value);

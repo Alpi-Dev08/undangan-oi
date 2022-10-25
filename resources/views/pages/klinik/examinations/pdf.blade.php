@@ -93,7 +93,7 @@
         @if($examination->service_category->is_mcu == 1)
 
                 <h1  class="w-full text-2xl font-bold mb-2 mt-10">Check up Result</h1>
-        @if($examination->anamnesis->anamnesis_value)
+        @if(isset($examination->anamnesis->anamnesis_value))
             <h3 class="text-xl font-bold">1. Anamnesis</h3>
             @php
                 $anamnesis = json_decode($examination->anamnesis->anamnesis_value);
@@ -145,7 +145,7 @@
             @endforeach
         </table>
             @endif
-        @if($examination->physical->physical_value)
+        @if(isset($examination->physical->physical_value))
             <h3 class="text-xl font-bold">2. Physical</h3>
             <table style="width:100%">
             @php
@@ -199,7 +199,7 @@
             @endif
             <table style="width:100%">
 
-                @if($examination->other->other_value)
+                @if(isset($examination->other->other_value))
             <h3 class="text-xl font-bold">3. Other</h3>
             @php
                 $others = json_decode($examination->other->other_value);
