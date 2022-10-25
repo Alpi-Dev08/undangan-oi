@@ -48,17 +48,26 @@
             [
                 'title' => 'Patients',
                 'path'  => 'klinik/patients',
+                'role' => ['admin','administrator'],
+                'icon'  => theme()->getSvgIcon("demo1/media/icons/duotune/art/art002.svg", "svg-icon-2"),
+            ],
+            [
+                'title' => 'Vitality Examinations',
+                'path'  => 'klinik/examinations',
+                'role' => ['ners','administrator'],
                 'icon'  => theme()->getSvgIcon("demo1/media/icons/duotune/art/art002.svg", "svg-icon-2"),
             ],
 
             [
                 'title' => 'Examinations',
                 'path'  => 'klinik/examinations',
+                'role' => ['dokter','administrator'],
                 'icon'  => theme()->getSvgIcon("demo1/media/icons/duotune/art/art002.svg", "svg-icon-2"),
             ],
             [
                 'title' => 'Transactions',
                 'path'  => 'klinik/transactions',
+                'role' => ['admin','administrator'],
                 'icon'  => theme()->getSvgIcon("demo1/media/icons/duotune/art/art002.svg", "svg-icon-2"),
             ],
 
@@ -117,7 +126,7 @@
                     "data-kt-menu-trigger" => "click",
                 ],
                 //'permission' => ['klinik.read'],
-                'role' => ['administrator','nakes'],
+                'role' => ['administrator','admin'],
                 'sub'        => [
                     'class' => 'menu-sub-accordion menu-active-bg',
                     'items' => [

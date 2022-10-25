@@ -137,12 +137,14 @@ Route::middleware('auth')->group(function () {
         Route::resource('diseases', DiseasesController::class);
         Route::resource('examinations', ExaminationsController::class);
         Route::get('examinations-service', [ExaminationsController::class, 'services'])->name('examinations.services');
+        Route::get('examinations-pdf', [ExaminationsController::class, 'pdf'])->name('examinations.pdf');
         Route::get('examinations-invoice', [ExaminationsController::class, 'invoice'])->name('examinations.invoice');
         Route::get('examinations-payments', [ExaminationsController::class, 'payments'])->name('examinations.payment');
         Route::post('examinations-payments', [ExaminationsController::class, 'createPayment'])->name('examinations.create.payment');
         Route::resource('transactions', TransactionsController::class);
         Route::get('examinations-vitality', [ExaminationsController::class, 'vitality'])->name('examinations.vitality');
         Route::POST('examinations-service-store', [ExaminationsController::class, 'storeservices'])->name('examinations.storeservices');
+        Route::get('transactions-service', [TransactionsController::class, 'service'])->name('transactions.service');
 
         Route::resource('servicecategories', \App\Http\Controllers\Klinik\ServiceCategoriesController::class);
         Route::resource('services', \App\Http\Controllers\Klinik\ServicesController::class);
@@ -153,6 +155,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('physicals', \App\Http\Controllers\Klinik\PhysicalsController::class);
         Route::resource('anamnesisexaminations', \App\Http\Controllers\Klinik\AnamnesisExaminationsController::class);
         Route::resource('physicalexaminations', \App\Http\Controllers\Klinik\PhysicalExaminationsController::class);
+        Route::resource('otherexaminations', \App\Http\Controllers\Klinik\OtherExaminationsController::class);
     });
 
 

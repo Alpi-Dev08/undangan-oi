@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Klinik;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Klinik\StorePhysicalExaminationRequest;
-use App\Http\Requests\Klinik\UpdatePhysicalExaminationRequest;
+use App\Http\Requests\Klinik\StoreOtherExaminationRequest;
+use App\Http\Requests\Klinik\UpdateOtherExaminationRequest;
 use App\Models\Klinik\Examination;
-use App\Models\Klinik\PhysicalExamination;
+use App\Models\Klinik\OtherExamination;
 use Doctrine\DBAL\Driver\PDO\Exception;
 use Illuminate\Support\Facades\Auth;
 
-class PhysicalExaminationsController extends Controller
+class OtherExaminationsController extends Controller
 {
     public $user;
 
@@ -44,23 +44,23 @@ class PhysicalExaminationsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\Klinik\StorePhysicalExaminationRequest  $request
+     * @param  \App\Http\Requests\Klinik\StoreOtherExaminationRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePhysicalExaminationRequest $request)
+    public function store(StoreOtherExaminationRequest $request)
     {
         if (is_null($this->user) || !$this->user->can('klinik.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any master data !');
         }
-        $request->physical_value = json_encode($request->physical);
-
+        $request->other_value = json_encode($request->other);
+        // Validation Data
         $validated = $request->validated();
 
         // Process Data
         if($validated){
             try{
-                $validated['physical_value'] = json_encode($request->physical);
-                PhysicalExamination::create($validated);
+                $validated['other_value'] = json_encode($request->other);
+                OtherExamination::create($validated);
             }catch(Exception $e){
                 report($e);
                 return false;
@@ -71,7 +71,7 @@ class PhysicalExaminationsController extends Controller
                 $examination->status = "waiting payment";
                 $examination->save();
 
-                return redirect()->route('transactions.create', ['id' => $examination->id])->with('success', 'Physical Examination successfully created');
+                return redirect()->route('transactions.create', ['id' => $examination->id])->with('success', 'Other Examination successfully created');
             }
 
             session()->flash('success', 'Disease has been created !!');
@@ -84,10 +84,10 @@ class PhysicalExaminationsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Klinik\PhysicalExamination  $physicalexamination
+     * @param  \App\Models\Klinik\OtherExamination  $otherexamination
      * @return \Illuminate\Http\Response
      */
-    public function show(PhysicalExamination $physicalexamination)
+    public function show(OtherExamination $otherexamination)
     {
         //
     }
@@ -95,10 +95,10 @@ class PhysicalExaminationsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Klinik\PhysicalExamination  $physicalexamination
+     * @param  \App\Models\Klinik\OtherExamination  $otherexamination
      * @return \Illuminate\Http\Response
      */
-    public function edit(PhysicalExamination $physicalexamination)
+    public function edit(OtherExamination $otherexamination)
     {
 
     }
@@ -106,25 +106,24 @@ class PhysicalExaminationsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\Klinik\UpdatePhysicalExaminationRequest  $request
-     * @param  \App\Models\Klinik\PhysicalExamination  $physicalexamination
+     * @param  \App\Http\Requests\Klinik\UpdateOtherExaminationRequest  $request
+     * @param  \App\Models\Klinik\OtherExamination  $otherexamination
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePhysicalExaminationRequest $request, PhysicalExamination $physicalexamination)
+    public function update(UpdateOtherExaminationRequest $request, OtherExamination $otherexamination)
     {
         if (is_null($this->user) || !$this->user->can('klinik.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any master data !');
         }
-        $request->physical_value = json_encode($request->physical);
-
+        $request->other_value = json_encode($request->other);
         // Validation Data
         $validated = $request->validated();
 
         // Process Data
         if($validated){
             try{
-                $validated['physical_value'] = json_encode($request->physical);
-                $physicalexamination->update($validated);
+                $validated['other_value'] = json_encode($request->other);
+                $otherexamination->update($validated);
             }catch(Exception $e){
                 report($e);
                 return false;
@@ -135,10 +134,10 @@ class PhysicalExaminationsController extends Controller
                 $examination->status = "waiting payment";
                 $examination->save();
 
-                return redirect()->route('transactions.create', ['id' => $examination->id])->with('success', 'Physical Examination successfully created');
+                return redirect()->route('transactions.create', ['id' => $examination->id])->with('success', 'Other Examination successfully created');
             }
 
-            session()->flash('success', 'Disease has been created !!');
+            session()->flash('success', 'Other Examination has been created !!');
             return redirect()->route('examinations.edit',['examination' => $request->examination_id]);
         }
 
@@ -148,10 +147,10 @@ class PhysicalExaminationsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Klinik\PhysicalExamination  $physicalexamination
+     * @param  \App\Models\Klinik\OtherExamination  $otherexamination
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PhysicalExamination $physicalexamination)
+    public function destroy(OtherExamination $otherexamination)
     {
         //
     }

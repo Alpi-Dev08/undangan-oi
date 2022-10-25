@@ -16,6 +16,7 @@
          */
         public function dataTable($query)
         {
+            $query = $query->orderBy('created_at', 'desc');
             return datatables()
                 ->eloquent($query)
                 ->filter(function ($query) {

@@ -250,7 +250,7 @@
                     <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Blood Type') }}</label>
                     <!--end::Label-->
                     <!--begin::Col-->
-                    <div class="col-lg-2">
+                    <div class="col-lg-8">
                         <select name="blood_type_id" aria-label="{{ __('Blood Type') }}" data-control="select2" data-placeholder="{{ __('Select a Blood Type...') }}" class="form-select form-select-solid form-select-lg fw-bold">
                             <option value="">{{ __('Select a Blood Type...') }}</option>
                             @foreach($bloods as $blood)
@@ -258,26 +258,6 @@
                             @endforeach
                         </select>
                     </div>
-
-                    <!--begin::Label-->
-                    <label class="col-lg-1 col-form-label required fw-bold fs-6">{{ __('Weight') }}</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-2">
-                        <!--begin::Row-->
-                        <input type="text" name="weight" class="form-control form-control-lg form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Weight" value="{{ old('weight', $info->weight ?? '') }}"/>
-                        <!--end::Row-->
-                    </div>
-                    <!--end::Col-->
-                    <!--begin::Label-->
-                    <label class="col-lg-1 col-form-label required fw-bold fs-6">{{ __('Height') }}</label>
-                    <!--end::Label-->
-                    <!--begin::Col-->
-                    <div class="col-lg-2">
-                        <input type="text" name="height" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Height" value="{{ old('height', $info->height ?? '') }}"/>
-                    </div>
-                    <!--end::Col-->
                 </div>
                 <!--end::Input group-->
 

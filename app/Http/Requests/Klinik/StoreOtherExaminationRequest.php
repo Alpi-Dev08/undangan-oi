@@ -4,7 +4,7 @@
 
     use Illuminate\Foundation\Http\FormRequest;
 
-    class StoreServiceCategoryRequest extends FormRequest
+    class StoreOtherExaminationRequest extends FormRequest
     {
         /**
          * Determine if the user is authorized to make this request.
@@ -24,9 +24,11 @@
         public function rules()
         {
             return [
-                'name'      => 'required|max:100|unique:service_categories',
-                'is_global' => 'nullable|boolean',
-                'is_mcu'    => 'nullable|boolean',
+                'examination_id' => 'required|integer|exists:examinations,id',
+                'result'         => 'nullable',
+                'other_value'    => 'nullable|json',
+                'file'           => 'nullable',
+                'description'    => 'nullable',
             ];
         }
     }

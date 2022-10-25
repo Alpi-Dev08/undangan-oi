@@ -16,18 +16,19 @@
          */
         public function dataTable($query)
         {
+            $query = $query->orderBy('created_at', 'desc');
             return datatables()
                 ->eloquent($query)
-                /*->filter(function ($query) {
+                ->filter(function ($query) {
                     if (request()->has('search')) {
                         $search = request()->get('search');
-                        $query->where('name', 'like', "%" . $search['value'] . "%");
+                        $query->where('invoice_number', 'like', "%" . $search['value'] . "%");
                     }
-                })*/
-                ->rawColumns(['action'])
+                })
+                ->rawColumns(['action','invoice_number'])
                 ->addIndexColumn()
                 ->addColumn('invoice_number', function (Transaction $model) {
-                    return $model->invoice_number;
+                    return $model->examination->user->name . '<br>' . $model->invoice_number;
                 })
                 ->addColumn('amount', function (Transaction $model) {
                     return $model->amount;
@@ -63,7 +64,6 @@
                 ->setTableId('transactions-table')
                 ->columns($this->getColumns())
                 ->minifiedAjax()
-                ->orderBy(1,'asc')
                 ->stateSave(false)
                 ->responsive()
                 ->autoWidth(false)

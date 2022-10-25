@@ -223,7 +223,7 @@
                 <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Gender') }}</label>
                 <!--end::Label-->
                 <!--begin::Col-->
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <select name="gender_id" aria-label="{{ __('Gender') }}" data-control="select2" data-placeholder="{{ __('Select a Gender...') }}" required class="form-select form-select-solid form-select-lg fw-bold">
                         <option value="">{{ __('Select a Gender...') }}</option>
                         @foreach($genders as $gender)
@@ -233,10 +233,10 @@
                 </div>
 
                 <!--begin::Label-->
-                <label class="col-lg-2 col-form-label required fw-bold fs-6">{{ __('Marital Status') }}</label>
+                <label class="col-lg-1 col-form-label required fw-bold fs-6">{{ __('Marital Status') }}</label>
                 <!--end::Label-->
                 <!--begin::Col-->
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <select name="marital_status_id" aria-label="{{ __('Marital Status') }}" data-control="select2" data-placeholder="{{ __('Select a Marital Status...') }}" required class="form-select form-select-solid form-select-lg fw-bold">
                         <option value="">{{ __('Select a Marital Status...') }}</option>
                         @foreach($maritals as $marital)
@@ -244,12 +244,8 @@
                         @endforeach
                     </select>
                 </div>
-            </div>
-
-            <!--begin::Input group-->
-            <div class="row mb-6">
                 <!--begin::Label-->
-                <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Blood Type') }}</label>
+                <label class="col-lg-1 col-form-label required fw-bold fs-6">{{ __('Blood Type') }}</label>
                 <!--end::Label-->
                 <!--begin::Col-->
                 <div class="col-lg-2">
@@ -260,29 +256,7 @@
                         @endforeach
                     </select>
                 </div>
-
-                <!--begin::Label-->
-                <label class="col-lg-1 col-form-label fw-bold fs-6">{{ __('Weight') }}</label>
-                <!--end::Label-->
-
-                <!--begin::Col-->
-                <div class="col-lg-2">
-                    <!--begin::Row-->
-                    <input type="text" name="weight" class="form-control form-control-lg form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Weight" value="{{ old('weight', $info->weight ?? '') }}"/>
-                    <!--end::Row-->
-                </div>
-                <!--end::Col-->
-                <!--begin::Label-->
-                <label class="col-lg-1 col-form-label fw-bold fs-6">{{ __('Height') }}</label>
-                <!--end::Label-->
-                <!--begin::Col-->
-                <div class="col-lg-2">
-                    <input type="text" name="height" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Height" value="{{ old('height', $info->height ?? '') }}"/>
-                </div>
-                <!--end::Col-->
             </div>
-            <!--end::Input group-->
-
             <!--begin::Input group-->
             <div class="row mb-6">
                 <!--begin::Label-->
@@ -484,7 +458,7 @@
             <!--end::Input group-->
 
             <!--begin::Input group-->
-            <div class="row mb-6">
+            <div class="row mb-6 d-none">
                 <!--begin::Label-->
                 <label class="col-lg-4 required col-form-label fw-bold fs-6">{{ __('Date of Hire') }}</label>
                 <!--end::Label-->
@@ -512,7 +486,7 @@
             <!--end::Input group-->
 
             <!--begin::Input group-->
-            <div class="row mb-6">
+            <div class="row mb-6 d-none">
                 <!--begin::Label-->
                 <label class="col-lg-4 required col-form-label fw-bold fs-6">{{ __('Division)') }}</label>
                 <!--end::Label-->
@@ -540,7 +514,7 @@
             <!--end::Input group-->
 
             <!--begin::Input group-->
-            <div class="row mb-6">
+            <div class="row mb-6 d-none">
                 <!--begin::Label-->
                 <label class="col-lg-4 required col-form-label fw-bold fs-6">{{ __('Section') }}</label>
                 <!--end::Label-->
@@ -568,7 +542,7 @@
             <!--end::Input group-->
 
             <!--begin::Input group-->
-            <div class="row mb-6">
+            <div class="row mb-6 d-none">
                 <!--begin::Label-->
                 <label class="col-lg-4 required col-form-label fw-bold fs-6">{{ __('Kind of Job') }}</label>
                 <!--end::Label-->
@@ -582,7 +556,7 @@
             <!--end::Input group-->
 
             <!--begin::Input group-->
-            <div class="row mb-6">
+            <div class="row mb-6 d-none">
                 <!--begin::Label-->
                 <label class="col-lg-4 required col-form-label fw-bold fs-6">{{ __('Shift') }}</label>
                 <!--end::Label-->

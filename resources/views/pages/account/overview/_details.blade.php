@@ -183,35 +183,6 @@
             <!--end::Col-->
         </div>
         <!--end::Input group-->
-
-        <!--begin::Input group-->
-        <div class="row mb-7">
-            <!--begin::Label-->
-            <label class="col-lg-4 fw-bold text-muted">{{ __('Weight') }}</label>
-            <!--end::Label-->
-
-            <!--begin::Col-->
-            <div class="col-lg-8 fv-row">
-                <span class="fw-bold fs-6">{{ $info->weight }} Kg</span>
-            </div>
-            <!--end::Col-->
-        </div>
-        <!--end::Input group-->
-
-        <!--begin::Input group-->
-        <div class="row mb-7">
-            <!--begin::Label-->
-            <label class="col-lg-4 fw-bold text-muted">{{ __('Height') }}</label>
-            <!--end::Label-->
-
-            <!--begin::Col-->
-            <div class="col-lg-8 fv-row">
-                <span class="fw-bold fs-6">{{ $info->height}} cm</span>
-            </div>
-            <!--end::Col-->
-        </div>
-        <!--end::Input group-->
-
         <!--begin::Input group-->
         <div class="row mb-7">
             <!--begin::Label-->

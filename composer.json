@@ -10,6 +10,7 @@
     "require": {
         "php": "^8.0.2",
         "anlutro/l4-settings": "^1.0",
+        "barryvdh/laravel-dompdf": "^2.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
         "haruncpi/laravel-id-generator": "^1.1",
@@ -47,7 +48,9 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [
+                "barryvdh/laravel-ide-helper"
+            ]
         },
         "google/apiclient-services": [
             "Drive",

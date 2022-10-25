@@ -67,6 +67,20 @@
             <!--begin::Nav item-->
             <li class="nav-item p-0 ms-0">
                 <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab"
+                   data-bs-toggle="tab" href="#other">
+                    <!--begin::Title-->
+                    <span class="nav-text fw-semibold fs-4 mb-3">Other</span>
+                    <!--end::Title-->
+                    <!--begin::Bullet-->
+                    <span
+                        class="bullet-custom position-absolute z-index-2 w-100 h-1px top-100 bottom-n100 bg-primary rounded"></span>
+                    <!--end::Bullet-->
+                </a>
+            </li>
+            <!--end::Nav item-->
+            <!--begin::Nav item-->
+            <li class="nav-item p-0 ms-0 d-none">
+                <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab"
                    data-bs-toggle="tab" href="#examination">
                     <!--begin::Title-->
                     <span class="nav-text fw-semibold fs-4 mb-3">Examination</span>
@@ -576,73 +590,225 @@
                                                 </ul>
                                             </div>
                                         </div>
+                                    </div>
                                         <hr>
-                                        <br>
-                                        <div class="col-6 row">
+                                    <div class="row p-2 border border-gray-200 bg-gray-100 rounded">
+                                        <h5 class="col-12">Vitality</h5>
+                                        <div class="col-4 row">
                                             <div class="col-4 fw-bold">Weight</div>
                                             <div class="col-8">: {{ $exam->vitality->weight ?? "-" }} Kg</div>
                                         </div>
-                                        <div class="col-6 row">
+                                        <div class="col-4 row">
                                             <div class="col-4 fw-bold">Height</div>
                                             <div class="col-8">: {{ $exam->vitality->height ?? "-" }} cm</div>
                                         </div>
-                                        <div class="col-6 row">
+                                        <div class="col-4 row">
                                             <div class="col-4 fw-bold">Blood Pressure</div>
                                             <div class="col-8">: {{ $exam->vitality->blood_pressure ?? "-" }}</div>
                                         </div>
-                                        <div class="col-6 row">
+                                        <div class="col-4 row">
                                             <div class="col-4 fw-bold">Heart Rate</div>
                                             <div class="col-8">: {{ $exam->vitality->heart_rate ?? "-" }}</div>
                                         </div>
-                                        <div class="col-6 row">
+                                        <div class="col-4 row">
                                             <div class="col-4 fw-bold">Respiratory Rate</div>
                                             <div class="col-8">: {{ $exam->vitality->respiratory_rate ?? "-" }}</div>
                                         </div>
-                                        <div class="col-6 row">
+                                        <div class="col-4 row">
                                             <div class="col-4 fw-bold">Temperature</div>
                                             <div class="col-8">: {{ $exam->vitality->temperature ?? "-" }}</div>
                                         </div>
-                                        <div class="col-6 row">
+                                        <div class="col-4 row">
                                             <div class="col-4 fw-bold">Oxygen Saturation</div>
                                             <div class="col-8">: {{ $exam->vitality->oxygen_saturation ?? "-" }}</div>
                                         </div>
-                                        <div class="col-6 row">
+                                        <div class="col-4 row">
                                             <div class="col-4 fw-bold">Body Mass Index</div>
                                             <div class="col-8">: {{ $exam->vitality->body_mass_index ?? "-" }}</div>
                                         </div>
-                                        <div class="col-6 row">
+                                        <div class="col-4 row">
                                             <div class="col-4 fw-bold">Ideal Weight</div>
                                             <div class="col-8">: {{ $exam->vitality->ideal_weight ?? "-" }} Kg</div>
                                         </div>
-                                        <div class="col-6 row">
+                                        <div class="col-4 row">
                                             <div class="col-4 fw-bold">Body Fat</div>
                                             <div class="col-8">: {{ $exam->vitality->body_fat ?? "-" }}</div>
                                         </div>
-                                        <div class="col-6 row">
+                                        <div class="col-4 row">
                                             <div class="col-4 fw-bold">BMI Conclusion</div>
                                             <div class="col-8">: {{ $exam->vitality->bmi_conclusion ?? "-" }}</div>
                                         </div>
+                                        <hr>
+                                        @if($exam->service_category->is_mcu == 1)
+                                            <h5 class="col-12">Check up Result</h5>
+                                            <h3 class="col-12">1. Anamnesis</h3>
+                                            @php
+                                                $anamnesis = json_decode($exam->anamnesis->anamnesis_value);
+                                                $header = '';
+                                            @endphp
+                                            @foreach($anamnesis as $key => $value)
+                                                @php
+                                                    $radio = '';
+                                                    if(isset($value->radio)){
+                                                        $radio = json_decode(json_encode($value->radio),true);
+                                                        $radioKeys = array_keys($radio);
+                                                    }
+                                                    $additional = json_decode(json_encode($value->additional),true);
+                                                    $additionalKeys = array_keys($additional);
+                                                @endphp
 
-                                        <div class="col-12 row">
-                                            <div class="col-2 fw-bolder">Subjective</div>
-                                            <div class="col-10">: {{ $exam->subjective }}</div>
-                                        </div>
-                                        <div class="col-12 row">
-                                            <div class="col-2 fw-bolder">Objective</div>
-                                            <div class="col-10">: {{ $exam->objective }}</div>
-                                        </div>
-                                        <div class="col-12 row">
-                                            <div class="col-2 fw-bolder">Assessment</div>
-                                            <div class="col-10">: {{ $exam->assessment }}</div>
-                                        </div>
-                                        <div class="col-12 row">
-                                            <div class="col-2 fw-bolder">Plan</div>
-                                            <div class="col-10">: {{ $exam->plan }}</div>
-                                        </div>
-                                        <div class="col-12 row">
-                                            <div class="col-2 fw-bolder">Resep</div>
-                                            <div class="col-10">: {{ $exam->resep }}</div>
-                                        </div>
+                                                @if($radio && $additional[$additionalKeys[0]])
+                                                    @if($header != getAnamnesis($key)->anamnesis_category_id)
+                                                        <div class="col-12" style="padding-left:35px">{{ getAnamnesisCategory(getAnamnesis($key)->anamnesis_category_id)->name }}</div>
+                                                        @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
+                                                    @endif
+                                                    <div class="col-12 row">
+                                                        <div class="col-4 fw-bold" style="padding-left:50px">{{getAnamnesis($key)->name }}</div>
+                                                        <div class="col-8">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</div>
+                                                    </div>
+                                                @elseif($radio)
+                                                    @if($header != getAnamnesis($key)->anamnesis_category_id)
+                                                        <div class="col-12" style="padding-left:35px">{{ getAnamnesisCategory(getAnamnesis($key)->anamnesis_category_id)->name }}</div>
+                                                        @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
+                                                    @endif
+                                                    <div class="col-12 row">
+                                                        <div class="col-4 fw-bold" style="padding-left:50px">{{getAnamnesis($key)->name }}</div>
+                                                        <div class="col-8">: {{ ucwords($radio[$radioKeys[0]])}}</div>
+                                                    </div>
+                                                @elseif($additional[$additionalKeys[0]])
+                                                    @if($header != getAnamnesis($key)->anamnesis_category_id)
+                                                        <div class="col-12" style="padding-left:35px">{{ getAnamnesisCategory(getAnamnesis($key)->anamnesis_category_id)->name }}</div>
+                                                        @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
+                                                    @endif
+                                                    <div class="col-12 row">
+                                                        <div class="col-4 fw-bold" style="padding-left:50px">{{getAnamnesis($key)->name }}</div>
+                                                        <div class="col-8">: {{$additional[$additionalKeys[0]] }}</div>
+                                                    </div>
+                                                @endif
+                                            @endforeach
+
+                                            <h3 class="col-12">2. Physical</h3>
+                                            @php
+                                                $physicals = json_decode($exam->physical->physical_value);
+                                                $header = '';
+                                            @endphp
+                                            @foreach($physicals as $key => $value)
+                                                @php
+                                                    $radio = '';
+                                                    if(isset($value->radio)){
+                                                        $radio = json_decode(json_encode($value->radio),true);
+                                                        $radioKeys = array_keys($radio);
+                                                    }
+                                                    $additional = json_decode(json_encode($value->additional),true);
+                                                    $additionalKeys = array_keys($additional);
+                                                @endphp
+
+                                                @if($radio && $additional[$additionalKeys[0]])
+                                                    @if($header != getPhysicals($key)->physical_category_id)
+                                                        <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                        @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                    @endif
+                                                    <div class="col-12 row">
+                                                        <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                        <div class="col-8">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</div>
+                                                    </div>
+                                                @elseif($radio)
+                                                    @if($header != getPhysicals($key)->physical_category_id)
+                                                        <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                        @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                    @endif
+                                                    <div class="col-12 row">
+                                                        <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                        <div class="col-8">: {{ ucwords($radio[$radioKeys[0]])}}</div>
+                                                    </div>
+                                                @elseif($additional[$additionalKeys[0]])
+                                                    @if($header != getPhysicals($key)->physical_category_id)
+                                                        <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                        @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                    @endif
+                                                    <div class="col-12 row">
+                                                        <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                        <div class="col-8">: {{$additional[$additionalKeys[0]] }}</div>
+                                                    </div>
+                                                @endif
+                                            @endforeach
+
+                                            <h3 class="col-12">3. Other</h3>
+                                            @php
+                                                $others = json_decode($exam->other->other_value);
+                                                $header = '';
+                                            @endphp
+                                            @foreach($others as $key => $value)
+                                                @php
+                                                    $radio = '';
+                                                    if(isset($value->radio)){
+                                                        $radio = json_decode(json_encode($value->radio),true);
+                                                        $radioKeys = array_keys($radio);
+                                                    }
+                                                    $additional = json_decode(json_encode($value->additional),true);
+                                                    $additionalKeys = array_keys($additional);
+                                                @endphp
+
+                                                @if($radio && $additional[$additionalKeys[0]])
+                                                    @if($header != getPhysicals($key)->anamnesis_category_id)
+                                                        <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                        @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                    @endif
+                                                    <div class="col-12 row">
+                                                        <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                        <div class="col-8">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</div>
+                                                    </div>
+                                                @elseif($radio)
+                                                    @if($header != getPhysicals($key)->physical_category_id)
+                                                        <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                        @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                    @endif
+                                                    <div class="col-12 row">
+                                                        <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                        <div class="col-8">: {{ ucwords($radio[$radioKeys[0]])}}</div>
+                                                    </div>
+                                                @elseif($additional[$additionalKeys[0]])
+                                                    @if($header != getPhysicals($key)->physical_category_id)
+                                                        <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                        @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                    @endif
+                                                    <div class="col-12 row">
+                                                        <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                        <div class="col-8">: {{$additional[$additionalKeys[0]] }}</div>
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                            <div class="col-12 row mt-5">
+                                                <div class="col-4 fw-bold" style="padding-left:35px">Result</div>
+                                                <div class="col-8">: {{ $exam->other->result  }}</div>
+                                            </div>
+                                            <div class="col-12 row">
+                                                <div class="col-4 fw-bold" style="padding-left:35px">Description</div>
+                                                <div class="col-8">: {{$exam->other->description }}</div>
+                                            </div>
+                                        @else
+                                            <h5 class="col-12">Check up Result</h5>
+                                            <div class="col-12 row">
+                                                <div class="col-2 fw-bolder">Subjective</div>
+                                                <div class="col-10">: {{ $exam->subjective }}</div>
+                                            </div>
+                                            <div class="col-12 row">
+                                                <div class="col-2 fw-bolder">Objective</div>
+                                                <div class="col-10">: {{ $exam->objective }}</div>
+                                            </div>
+                                            <div class="col-12 row">
+                                                <div class="col-2 fw-bolder">Assessment</div>
+                                                <div class="col-10">: {{ $exam->assessment }}</div>
+                                            </div>
+                                            <div class="col-12 row">
+                                                <div class="col-2 fw-bolder">Plan</div>
+                                                <div class="col-10">: {{ $exam->plan }}</div>
+                                            </div>
+                                            <div class="col-12 row">
+                                                <div class="col-2 fw-bolder">Resep</div>
+                                                <div class="col-10">: {{ $exam->resep }}</div>
+                                            </div>
+                                        @endif;
                                     </div>
 
                                 </div>
@@ -793,12 +959,18 @@
                                             <!--end::Svg Icon-->
                                             Cancel
                                         </a>
-                                        <button type="submit" class="btn btn-primary"
-                                                data-kt-examinations-modal-action="submit">
-                                            <span class="indicator-label">Submit</span>
+                                        <button type="submit" class="btn btn-primary" name="selesai" value="1" data-kt-examinations-modal-action="submit">
+                                            <span class="indicator-label">Finish</span>
                                             <span class="indicator-progress">Please wait...
-                                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                </span>
+                                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                            </span>
+                                        </button>
+
+                                        <button type="submit" class="btn btn-info" name="continue" value="1" data-kt-examinations-modal-action="submit">
+                                            <span class="indicator-label">Continue</span>
+                                            <span class="indicator-progress">Please wait...
+                                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                            </span>
                                         </button>
                                     </div>
                                     <!--end::Actions-->
@@ -963,21 +1135,216 @@
                                             <!--end::Svg Icon-->
                                             Cancel
                                         </a>
-                                        <button type="submit" class="btn btn-primary"
-                                                data-kt-examinations-modal-action="submit">
-                                            <span class="indicator-label">Submit</span>
+                                        <button type="submit" class="btn btn-primary" name="selesai" value="1" data-kt-examinations-modal-action="submit">
+                                            <span class="indicator-label">Finish</span>
                                             <span class="indicator-progress">Please wait...
-                                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                </span>
+                                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                            </span>
+                                        </button>
+
+                                        <button type="submit" class="btn btn-info" name="continue" value="1" data-kt-examinations-modal-action="submit">
+                                                            <span class="indicator-label">Continue</span>
+                                                            <span class="indicator-progress">Please wait...
+                                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                            </span>
                                         </button>
                                     </div>
                                     <!--end::Actions-->
                                 </form>
+
                 </div>
                 <!--end::details View-->
 
             </div>
-            <div class="tab-pane" id="examination" role="tabpanel" aria-labelledby="all-tab"
+            <div class="tab-pane" id="other" role="tabpanel" aria-labelledby="all-tab"
+                 data-kt-timeline-widget-4-blockui="true">
+                <!--begin::details View-->
+                <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+                    <!--begin::Alert-->
+                    <div class="alert alert-dismissible bg-light-primary border border-primary d-flex flex-column flex-sm-row p-5 mb-10">
+                        <!--begin::Wrapper-->
+                        <div class="d-flex flex-column pe-0 pe-sm-10">
+                            <!--begin::Title-->
+                            <h5 class="mb-1">Jenis Pemeriksaan</h5>
+                            <!--end::Title-->
+                            <div class="col-10">{{ $examination->service_category->name }}
+                                <ul class="row">
+                                    @foreach(service_examination($examination->id) as $service)
+                                        <li class="col-4">{{ $service->service->name }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                        <!--end::Wrapper-->
+                    </div>
+                    <!--end::Alert-->
+
+                    @if(isset($otherexamination->id))
+                        <form id="kt_modal_add_examinations_form" method="POST" class="form"
+                              action="{{ route('otherexaminations.update',['otherexamination' => $otherexamination->id]) }}">
+                            @method('PUT')
+                            {{ csrf_field() }}
+                            @else
+                                <form id="kt_modal_add_examinations_form" method="POST" class="form"
+                                      action="{{ route('otherexaminations.store') }}">
+                                    @method('POST')
+                                    {{ csrf_field() }}
+                                    @endif
+                                    <input type="hidden" name="examination_id" value="{{ $examination->id }}">
+
+                                    @foreach($otherscategories as $otherscategory)
+                                        <h2 class="font-bold">{{$otherscategory->name}}</h2>
+                                        <ol style="margin-left:-10px">
+                                            @foreach(physicals($otherscategory->id) as $others)
+                                                <li class="fw-normal text-base mb-6">
+                                                    <div class="row">
+                                                        <div class="col-4">
+                                                            {{$others->name}}
+                                                            <input type="hidden" name="other[{{$others->id}}]">
+                                                        </div>
+                                                        <div class="col-8">
+                                                            @php
+                                                                $options = json_decode($others->options);
+                                                                $option = [];
+                                                                if(isset($otherexamination->id)){
+                                                                    $option = json_decode($otherexamination->other_value,true);
+                                                                }
+
+                                                            @endphp
+                                                            <div
+                                                                class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                                @if(isset($options->radio))
+                                                                    @foreach($options->radio as $radio)
+                                                                        @php
+                                                                            $r=[];
+                                                                            if(isset($option[$others->id])){
+                                                                                if(isset($option[$others->id]['radio'])){
+                                                                                    $r = $option[$others->id]['radio'];
+                                                                                }
+
+                                                                            }
+                                                                        @endphp
+                                                                        <div
+                                                                            class="form-check form-check-custom form-check-solid w-200px">
+                                                                            <input class="form-check-input"
+                                                                                   type="checkbox"
+                                                                                   {{ in_array($radio->id,$r) ? 'checked' : '' }}
+                                                                                   name = "other[{{$others->id}}][radio][{{$radio->id}}]"
+                                                                                   value="{{$radio->id}}"
+                                                                                   id="radio-{{$others->id}}"/>
+                                                                            <label class="form-check-label"
+                                                                                   for="radio-{{$others->id}}">
+                                                                                {{$radio->value}}
+                                                                            </label>
+                                                                        </div>
+                                                                    @endforeach
+                                                                @endif
+                                                                @if(isset($options->additional))
+                                                                    @foreach($options->additional as $additional)
+                                                                        @php
+                                                                            $adt=[];
+                                                                            if(isset($option[$anamnesis->id])){
+                                                                                if(isset($option[$others->id]['additional'])){
+                                                                                 $adt = $option[$others->id]['additional'];
+                                                                                 }
+                                                                            }
+                                                                        @endphp
+                                                                        @if($additional->type == "text")
+                                                                            <input type="text"
+                                                                                   value="{{ $adt[$additional->name] ?? '' }}"
+                                                                                   name="other[{{$others->id}}][additional][{{$additional->name}}]"
+                                                                                   class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0"
+                                                                                   placeholder="{{ucwords($additional->name)}}"/>
+                                                                        @endif
+                                                                    @endforeach
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            @endforeach
+                                        </ol>
+                                    @endforeach
+
+                                    <!--begin::Input group-->
+                                    <div class="row mb-6">
+                                        <!--begin::Label-->
+                                        <label class="col-lg-4 col-form-label fw-bold fs-6">
+                                            <span>{{ __('Result') }}</span>
+
+                                        </label>
+                                        <!--end::Label-->
+
+                                        <!--begin::Col-->
+                                        <div class="col-lg-8">
+                                            <select name="result" aria-label="{{ __('Select a Plan') }}" data-control="select2" data-placeholder="{{ __('Select a Plan...') }}" class="form-select form-select-solid form-select-lg fw-bold">
+                                                <option value="">{{ __('Select a Plan...') }}</option>
+                                                <option value="fitwork" {{ $otherexamination->result=='fitwork' ? 'selected' :'' }}>Fit to Work</option>
+                                                <option value="fit"  {{ $otherexamination->result=='fit' ? 'selected' :'' }}>Fit with Note</option>
+                                                <option value="unfit" {{ $otherexamination->result=='unfit' ? 'selected' :'' }}>Unfit</option>
+                                            </select>
+                                        </div>
+                                        <!--end::Col-->
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    <div class="row mb-6">
+                                        <!--begin::Label-->
+                                        <label class="col-lg-4 col-form-label fw-bold fs-6">Description</label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <div class="col-lg-8">
+                                            <div class="input-group input-group-solid has-validation mb-3">
+                                                <textarea name="description" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('description') is-invalid @enderror" placeholder="Description">{{ $otherexamination->description }}</textarea>
+                                            </div>
+                                            @error('description')
+                                            <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <!--end::Input-->
+                                    </div>
+
+
+                                    <!--begin::Actions-->
+                                    <div class="text-center pt-15">
+                                        <a href="{{ route('examinations.index')  }}"
+                                           class="btn btn-sm btn-light-primary">
+                                            <!--begin::Svg Icon | path: assets/media/icons/duotune/arrows/arr079.svg-->
+                                            <span class="svg-icon svg-icon-muted svg-icon-2hx">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <path opacity="0.5"
+                                                          d="M14.2657 11.4343L18.45 7.25C18.8642 6.83579 18.8642 6.16421 18.45 5.75C18.0358 5.33579 17.3642 5.33579 16.95 5.75L11.4071 11.2929C11.0166 11.6834 11.0166 12.3166 11.4071 12.7071L16.95 18.25C17.3642 18.6642 18.0358 18.6642 18.45 18.25C18.8642 17.8358 18.8642 17.1642 18.45 16.75L14.2657 12.5657C13.9533 12.2533 13.9533 11.7467 14.2657 11.4343Z"
+                                                          fill="currentColor"/>
+                                                    <path
+                                                        d="M8.2657 11.4343L12.45 7.25C12.8642 6.83579 12.8642 6.16421 12.45 5.75C12.0358 5.33579 11.3642 5.33579 10.95 5.75L5.40712 11.2929C5.01659 11.6834 5.01659 12.3166 5.40712 12.7071L10.95 18.25C11.3642 18.6642 12.0358 18.6642 12.45 18.25C12.8642 17.8358 12.8642 17.1642 12.45 16.75L8.2657 12.5657C7.95328 12.2533 7.95328 11.7467 8.2657 11.4343Z"
+                                                        fill="currentColor"/>
+                                                </svg>
+                                            </span>
+                                            <!--end::Svg Icon-->
+                                            Cancel
+                                        </a>
+                                        <button type="submit" class="btn btn-primary" name="selesai" value="1" data-kt-examinations-modal-action="submit">
+                                            <span class="indicator-label">Finish</span>
+                                            <span class="indicator-progress">Please wait...
+                                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                            </span>
+                                        </button>
+
+                                        <button type="submit" class="btn btn-info" name="continue" value="1" data-kt-examinations-modal-action="submit">
+                                            <span class="indicator-label">Continue</span>
+                                            <span class="indicator-progress">Please wait...
+                                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                    <!--end::Actions-->
+                                </form>
+
+                </div>
+                <!--end::details View-->
+
+            </div>
+            <div class="tab-pane d-none" id="examination" role="tabpanel" aria-labelledby="all-tab"
                  data-kt-timeline-widget-4-blockui="true">
                 <!--begin::Alert-->
                 <div class="alert alert-dismissible bg-light-primary border border-primary d-flex flex-column flex-sm-row p-5 mb-10">

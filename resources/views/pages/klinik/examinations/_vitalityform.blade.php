@@ -283,7 +283,8 @@
                             </div>
                             <!--end::Col-->
                         </div>
-                        <!--end::Input group-->
+
+
 
                         <!--begin::Input group-->
                         <div class="row mb-7">
@@ -486,25 +487,6 @@
                                 <div class="row">
                                     <input type="hidden" name="examination_id" value="{{ $examination->id }}">
                                     <input type="hidden" name="user_id" value="{{ $user->id }}">
-                                    <!--begin::Input group-->
-                                    <div class="col-6 mb-6">
-                                        <label for="weight" class="form-label">Weight (kg)</label>
-                                        <input id="weight" name="weight"  type="number" step=".01" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('weight') is-invalid @enderror" placeholder="Weight" value="{{ $vitalityexamination->weight ?? "" }}"/>
-                                        @error('weight')
-                                        <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <!--end::Input group-->
-
-                                    <!--begin::Input group-->
-                                    <div class="col-6 mb-6">
-                                        <label for="height" class="form-label">Height (cm)</label>
-                                        <input id="height" name="height"  type="number" step=".01" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('height') is-invalid @enderror" placeholder="Height" value="{{ $vitalityexamination->height ?? "" }}"/>
-                                        @error('height')
-                                        <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <!--end::Input group-->
 
                                     <!--begin::Input group-->
                                     <div class="col-6 mb-6">
@@ -558,6 +540,48 @@
 
                                     <!--begin::Input group-->
                                     <div class="col-6 mb-6">
+                                        <label for="waist_circumferennce" class="form-label">Waist Circumference</label>
+                                        <input id="waist_circumferennce" name="waist_circumferennce"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('waist_circumferennce') is-invalid @enderror" placeholder="Waist Circumference" value="{{ $vitalityexamination->waist_circumferennce ?? "" }}"/>
+                                        @error('waist_circumferennce')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    <!--begin::Input group-->
+                                    <div class="col-6 mb-6">
+                                        <label for="neck_circumference" class="form-label">Neck Circumference</label>
+                                        <input id="neck_circumference" name="neck_circumference"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('neck_circumference') is-invalid @enderror" placeholder="Neck Circumference" value="{{ $vitalityexamination->neck_circumference ?? "" }}"/>
+                                        @error('neck_circumference')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    <div class="col-6 mb-6">&nbsp;</div>
+
+                                    <!--begin::Input group-->
+                                    <div class="col-6 mb-6">
+                                        <label for="weight" class="form-label">Weight (kg)</label>
+                                        <input id="weight" name="weight"  type="number" step=".01" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('weight') is-invalid @enderror" placeholder="Weight" value="{{ $vitalityexamination->weight ?? "" }}"/>
+                                        @error('weight')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    <!--begin::Input group-->
+                                    <div class="col-6 mb-6">
+                                        <label for="height" class="form-label">Height (cm)</label>
+                                        <input id="height" name="height"  type="number" step=".01" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('height') is-invalid @enderror" placeholder="Height" value="{{ $vitalityexamination->height ?? "" }}"/>
+                                        @error('height')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    <!--begin::Input group-->
+                                    <div class="col-6 mb-6">
                                         <label for="body_mass_index" class="form-label">Body Mass Index</label>
                                         <input id="body_mass_index" name="body_mass_index"  type="number" step=".01" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('body_mass_index') is-invalid @enderror" placeholder="Body Mass Index" value="{{ $vitalityexamination->body_mass_index ?? "" }}"/>
                                         @error('body_mass_index')
@@ -586,50 +610,10 @@
                                     </div>
                                     <!--end::Input group-->
                                     <!--begin::Input group-->
-                                    <div class="col-12 mb-6">
+                                    <div class="col-6 mb-6">
                                         <label for="bmi_conclusion" class="form-label">BMI Conclusion</label>
                                         <input id="bmi_conclusion" name="bmi_conclusion"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('bmi_conclusion') is-invalid @enderror" placeholder="BMI Conclusion" value="{{ $vitalityexamination->bmi_conclusion ?? "" }}"/>
                                         @error('bmi_conclusion')
-                                        <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <!--end::Input group-->
-
-                                    <!--begin::Input group-->
-                                    <div class="col-6 mb-6">
-                                        <label for="breath" class="form-label">Breath</label>
-                                        <input id="breath" name="breath"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('breath') is-invalid @enderror" placeholder="Breath" value="{{ $vitalityexamination->breath ?? "" }}"/>
-                                        @error('breath')
-                                        <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <!--end::Input group-->
-
-                                    <!--begin::Input group-->
-                                    <div class="col-6 mb-6">
-                                        <label for="apex_beat" class="form-label">Apex Beat</label>
-                                        <input id="apex_beat" name="apex_beat"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('apex_beat') is-invalid @enderror" placeholder="Apex Beat" value="{{ $vitalityexamination->apex_beat ?? "" }}"/>
-                                        @error('apex_beat')
-                                        <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <!--end::Input group-->
-
-                                    <!--begin::Input group-->
-                                    <div class="col-6 mb-6">
-                                        <label for="waist_circumferennce" class="form-label">Waist Circumference</label>
-                                        <input id="waist_circumferennce" name="waist_circumferennce"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('waist_circumferennce') is-invalid @enderror" placeholder="Waist Circumference" value="{{ $vitalityexamination->waist_circumferennce ?? "" }}"/>
-                                        @error('waist_circumferennce')
-                                        <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <!--end::Input group-->
-
-                                    <!--begin::Input group-->
-                                    <div class="col-6 mb-6">
-                                        <label for="neck_circumference" class="form-label">Neck Circumference</label>
-                                        <input id="neck_circumference" name="neck_circumference"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('neck_circumference') is-invalid @enderror" placeholder="Neck Circumference" value="{{ $vitalityexamination->neck_circumference ?? "" }}"/>
-                                        @error('neck_circumference')
                                         <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>

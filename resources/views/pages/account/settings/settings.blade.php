@@ -6,7 +6,7 @@
     'info' => $info, 'countries' => $countries, 'provinces' => $provinces, 'cities' => $cities, 'districts' => $districts, 'subdistricts' => $subdistricts,
     'cards' => $cards, 'bloods' => $bloods,'religions' => $religions,'genders' => $genders,'works' => $works,'maritals' => $maritals,'educations' => $educations))
     }}
-    @if(auth()->user()->hasRole('nakes'))
+    @if(auth()->user()->hasRole('dokter'))
         {{ theme()->getView('pages/account/settings/_nakes', array('class' => 'mb-5 mb-xl-10', 'user' => $user, 'nakes' => $nakes,'specialities' => $specialities, 'types' => $types)) }}
     @endif
 

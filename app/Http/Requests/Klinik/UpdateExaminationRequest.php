@@ -43,6 +43,7 @@
                 'total'                 => 'nullable',
                 'status'                => 'nullable',
                 'resep'                 => 'nullable',
+                'saran'                 => 'nullable',
             ];
         }
     }

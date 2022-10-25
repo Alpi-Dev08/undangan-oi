@@ -69,7 +69,6 @@
                 abort(403, 'Sorry !! You are Unauthorized to create any users !');
             }
 
-
             $countries = Country::all();
             $provinces = Province::all();
 

@@ -31,6 +31,7 @@ class Examination extends Model
         'total',
         'status',
         'resep',
+        'saran',
     ];
 
     public function user()
@@ -69,6 +70,10 @@ class Examination extends Model
 
     public function physical(){
         return $this->hasOne(PhysicalExamination::class);
+    }
+
+    public function other(){
+        return $this->hasOne(OtherExamination::class);
     }
 
     public function vitality(){

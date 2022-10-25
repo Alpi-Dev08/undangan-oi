@@ -343,7 +343,6 @@
                 </div>
                 <!--end::details View-->
             </div>
-
             <div class="tab-pane" id="medicalrecord" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
@@ -629,7 +628,7 @@
                         @foreach($services as $service)
                             <li class="col-lg-4" style="list-style: none;">
                                 <div class="form-check form-check-custom form-check-solid mb-3">
-                                    <input class="form-check-input" type="checkbox" value="{{ $service->id }}" name="service_id[]" id="service_{{ $service->id }}">
+                                    <input class="form-check-input" {{ in_array($service->id,$transactionDetail) ? 'checked' : '' }} type="checkbox" value="{{ $service->id }}" name="service_id[]" id="service_{{ $service->id }}">
                                     <label class="form-check-label" for="category_{{ $service->id }}">
                                         {{ $service->name }}
                                     </label>
@@ -647,7 +646,7 @@
                                     @foreach(services($category->id) as $service)
                                         <li style="list-style: none;">
                                             <div class="form-check form-check-custom form-check-solid mb-3">
-                                                <input class="form-check-input" type="checkbox" value="{{ $service->id }}" name="service_id[]" id="service_{{ $service->id }}">
+                                                <input class="form-check-input" {{ in_array($service->id,$transactionDetail) ? 'checked' : '' }} type="checkbox" value="{{ $service->id }}" name="service_id[]" id="service_{{ $service->id }}">
                                                 <label class="form-check-label" for="type_{{ $service->id }}">
                                                     {{ $service->name }}
                                                 </label>

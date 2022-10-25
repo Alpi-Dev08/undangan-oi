@@ -3,6 +3,7 @@
     namespace App\Http\Controllers;
 
     use App\DataTables\UsersDataTable;
+    use App\Models\Klinik\HealthProfesional;
     use App\Models\User;
     use App\Http\Controllers\Controller;
     use App\Models\UserInfo;
@@ -90,6 +91,18 @@
             }
 
             if ($request->roles) {
+                if($request->roles == '4'){
+                    // save on user info
+                    $dokter = HealthProfesional::where('user_id', $user->id)->first();
+
+                    if ($dokter === null) {
+                        // create new model
+                        $dokter = new HealthProfesional();
+                    }
+                    $dokter->user_id = $user->id;
+                    $dokter->health_profesional_type_id = 1;
+                    $dokter->save();
+                }
                 $user->assignRole($request->roles);
             }
 

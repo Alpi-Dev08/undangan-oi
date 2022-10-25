@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Klinik\StoreAnamnesisExaminationRequest;
 use App\Http\Requests\Klinik\UpdateAnamnesisExaminationRequest;
 use App\Models\Klinik\AnamnesisExamination;
+use App\Models\Klinik\Examination;
 use Doctrine\DBAL\Driver\PDO\Exception;
 use Illuminate\Support\Facades\Auth;
 
@@ -65,6 +66,13 @@ class AnamnesisExaminationsController extends Controller
                 return false;
             }
 
+            if($request->selesai){
+                $examination = Examination::find($request->examination_id);
+                $examination->status = "waiting payment";
+                $examination->save();
+
+                return redirect()->route('transactions.create', ['id' => $examination->id])->with('success', 'Anamnesis Examination successfully created');
+            }
             session()->flash('success', 'Disease has been created !!');
             return redirect()->route('examinations.edit',['examination' => $request->examination_id]);
         }
@@ -118,6 +126,14 @@ class AnamnesisExaminationsController extends Controller
             }catch(Exception $e){
                 report($e);
                 return false;
+            }
+
+            if($request->selesai){
+                $examination = Examination::find($request->examination_id);
+                $examination->status = "waiting payment";
+                $examination->save();
+
+                return redirect()->route('transactions.create', ['id' => $examination->id])->with('success', 'Anamnesis Examination successfully created');
             }
 
             session()->flash('success', 'Disease has been created !!');

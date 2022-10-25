@@ -487,133 +487,287 @@
                 <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
                     <div class="timeline-label">
                         @foreach($examinations as $exam)
-                        <!--begin::Item-->
-                        <div class="timeline-item">
-                            <!--begin::Label-->
-                            <div class="timeline-label fw-bold text-gray-800 fs-6">{{ $exam->created_at->format("d F Y") }} <br>{{ $exam->created_at->format("H:i:s") }}</div>
-                            <!--end::Label-->
-                            <!--begin::Badge-->
-                            <div class="timeline-badge">
-                                @php
-                                $array = array('success', 'primary', 'warning', 'danger', 'info', 'dark');
-                                $color = array_rand($array,1);
-                                @endphp
-                                <i class="fa fa-genderless text-{{ $array[$color] }} fs-1"></i>
-                            </div>
-                            <!--end::Badge-->
-                            <!--begin::Text-->
-                            <div class="fw-mormal timeline-content text-muted ps-3">
-                                <div class="row p-2 border border-gray-200 bg-gray-100 rounded">
-                                    <div class="col-12 row">
-                                        <div class="col-2 fw-bolder">Medical Record</div>
-                                        <div class="col-10">: {{ $user->mr->medical_record_code }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-2 fw-bolder">Examination Code</div>
-                                        <div class="col-10">: {{ $exam->examination_code }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-2 fw-bolder">Full Name</div>
-                                        <div class="col-10">: {{ $user->name }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-2 fw-bolder">Doctor</div>
-                                        <div class="col-10">: {{ $exam->health_profesional->user->name }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-2 fw-bolder">Jenis Pemeriksaan</div>
-                                        <div class="col-10">: {{ $exam->service_category->name }}
-                                            <ul class="row">
-                                                @foreach(service_examination($exam->id) as $service)
-                                                    <li class="col-4">{{ $service->service->name }}</li>
+                            <!--begin::Item-->
+                            <div class="timeline-item">
+                                <!--begin::Label-->
+                                <div class="timeline-label fw-bold text-gray-800 fs-6">{{ $exam->created_at->format("d F Y") }}
+                                    <br>{{ $exam->created_at->format("H:i:s") }}</div>
+                                <!--end::Label-->
+                                <!--begin::Badge-->
+                                <div class="timeline-badge">
+                                    @php
+                                        $array = array('success', 'primary', 'warning', 'danger', 'info', 'dark');
+                                        $color = array_rand($array,1);
+                                    @endphp
+                                    <i class="fa fa-genderless text-{{ $array[$color] }} fs-1"></i>
+                                </div>
+                                <!--end::Badge-->
+                                <!--begin::Text-->
+                                <div class="fw-mormal timeline-content text-muted ps-3">
+                                    <div class="row p-2 border border-gray-200 bg-gray-100 rounded">
+                                        <div class="col-12 row">
+                                            <div class="col-2 fw-bolder">Medical Record</div>
+                                            <div class="col-10">: {{ $user->mr->medical_record_code }}</div>
+                                        </div>
+                                        <div class="col-12 row">
+                                            <div class="col-2 fw-bolder">Examination Code</div>
+                                            <div class="col-10">: {{ $exam->examination_code }}</div>
+                                        </div>
+                                        <div class="col-12 row">
+                                            <div class="col-2 fw-bolder">Full Name</div>
+                                            <div class="col-10">: {{ $user->name }}</div>
+                                        </div>
+                                        <div class="col-12 row">
+                                            <div class="col-2 fw-bolder">Doctor</div>
+                                            <div class="col-10">: {{ $exam->health_profesional->user->name }}</div>
+                                        </div>
+                                        <div class="col-12 row">
+                                            <div class="col-2 fw-bolder">Jenis Pemeriksaan</div>
+                                            <div class="col-10">: {{ $exam->service_category->name }}
+                                                <ul class="row">
+                                                    @foreach(service_examination($exam->id) as $service)
+                                                        <li class="col-4">{{ $service->service->name }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <br>
+                                        <div class="row p-2 border border-gray-200 bg-gray-100 rounded">
+                                            <h5 class="col-12">Vitality</h5>
+                                            <div class="col-4 row">
+                                                <div class="col-4 fw-bold">Weight</div>
+                                                <div class="col-8">: {{ $exam->vitality->weight ?? "-" }} Kg</div>
+                                            </div>
+                                            <div class="col-4 row">
+                                                <div class="col-4 fw-bold">Height</div>
+                                                <div class="col-8">: {{ $exam->vitality->height ?? "-" }} cm</div>
+                                            </div>
+                                            <div class="col-4 row">
+                                                <div class="col-4 fw-bold">Blood Pressure</div>
+                                                <div class="col-8">: {{ $exam->vitality->blood_pressure ?? "-" }}</div>
+                                            </div>
+                                            <div class="col-4 row">
+                                                <div class="col-4 fw-bold">Heart Rate</div>
+                                                <div class="col-8">: {{ $exam->vitality->heart_rate ?? "-" }}</div>
+                                            </div>
+                                            <div class="col-4 row">
+                                                <div class="col-4 fw-bold">Respiratory Rate</div>
+                                                <div class="col-8">: {{ $exam->vitality->respiratory_rate ?? "-" }}</div>
+                                            </div>
+                                            <div class="col-4 row">
+                                                <div class="col-4 fw-bold">Temperature</div>
+                                                <div class="col-8">: {{ $exam->vitality->temperature ?? "-" }}</div>
+                                            </div>
+                                            <div class="col-4 row">
+                                                <div class="col-4 fw-bold">Oxygen Saturation</div>
+                                                <div class="col-8">: {{ $exam->vitality->oxygen_saturation ?? "-" }}</div>
+                                            </div>
+                                            <div class="col-4 row">
+                                                <div class="col-4 fw-bold">Body Mass Index</div>
+                                                <div class="col-8">: {{ $exam->vitality->body_mass_index ?? "-" }}</div>
+                                            </div>
+                                            <div class="col-4 row">
+                                                <div class="col-4 fw-bold">Ideal Weight</div>
+                                                <div class="col-8">: {{ $exam->vitality->ideal_weight ?? "-" }} Kg</div>
+                                            </div>
+                                            <div class="col-4 row">
+                                                <div class="col-4 fw-bold">Body Fat</div>
+                                                <div class="col-8">: {{ $exam->vitality->body_fat ?? "-" }}</div>
+                                            </div>
+                                            <div class="col-4 row">
+                                                <div class="col-4 fw-bold">BMI Conclusion</div>
+                                                <div class="col-8">: {{ $exam->vitality->bmi_conclusion ?? "-" }}</div>
+                                            </div>
+                                            <hr>
+                                            @if($exam->service_category->is_mcu == 1)
+                                                <h5 class="col-12">Check up Result</h5>
+                                                <h3 class="col-12">1. Anamnesis</h3>
+                                                @php
+                                                    $anamnesis = json_decode($exam->anamnesis->anamnesis_value);
+													$header = '';
+                                                @endphp
+                                                @foreach($anamnesis as $key => $value)
+                                                    @php
+                                                        $radio = '';
+                                                        if(isset($value->radio)){
+                                                            $radio = json_decode(json_encode($value->radio),true);
+                                                            $radioKeys = array_keys($radio);
+                                                        }
+                                                        $additional = json_decode(json_encode($value->additional),true);
+                                                        $additionalKeys = array_keys($additional);
+                                                    @endphp
+
+                                                    @if($radio && $additional[$additionalKeys[0]])
+                                                        @if($header != getAnamnesis($key)->anamnesis_category_id)
+                                                            <div class="col-12" style="padding-left:35px">{{ getAnamnesisCategory(getAnamnesis($key)->anamnesis_category_id)->name }}</div>
+                                                            @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
+                                                        @endif
+                                                        <div class="col-12 row">
+                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getAnamnesis($key)->name }}</div>
+                                                            <div class="col-8">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</div>
+                                                        </div>
+                                                    @elseif($radio)
+                                                        @if($header != getAnamnesis($key)->anamnesis_category_id)
+                                                            <div class="col-12" style="padding-left:35px">{{ getAnamnesisCategory(getAnamnesis($key)->anamnesis_category_id)->name }}</div>
+                                                            @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
+                                                        @endif
+                                                        <div class="col-12 row">
+                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getAnamnesis($key)->name }}</div>
+                                                            <div class="col-8">: {{ ucwords($radio[$radioKeys[0]])}}</div>
+                                                        </div>
+                                                    @elseif($additional[$additionalKeys[0]])
+                                                        @if($header != getAnamnesis($key)->anamnesis_category_id)
+                                                            <div class="col-12" style="padding-left:35px">{{ getAnamnesisCategory(getAnamnesis($key)->anamnesis_category_id)->name }}</div>
+                                                            @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
+                                                        @endif
+                                                        <div class="col-12 row">
+                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getAnamnesis($key)->name }}</div>
+                                                            <div class="col-8">: {{$additional[$additionalKeys[0]] }}</div>
+                                                        </div>
+                                                    @endif
                                                 @endforeach
-                                            </ul>
+
+                                                <h3 class="col-12">2. Physical</h3>
+                                                @php
+                                                    $physicals = json_decode($exam->physical->physical_value);
+													$header = '';
+                                                @endphp
+                                                @foreach($physicals as $key => $value)
+                                                    @php
+                                                        $radio = '';
+                                                        if(isset($value->radio)){
+                                                            $radio = json_decode(json_encode($value->radio),true);
+                                                            $radioKeys = array_keys($radio);
+                                                        }
+                                                        $additional = json_decode(json_encode($value->additional),true);
+                                                        $additionalKeys = array_keys($additional);
+                                                    @endphp
+
+                                                    @if($radio && $additional[$additionalKeys[0]])
+                                                        @if($header != getPhysicals($key)->physical_category_id)
+                                                            <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                            @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                        @endif
+                                                        <div class="col-12 row">
+                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                            <div class="col-8">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</div>
+                                                        </div>
+                                                    @elseif($radio)
+                                                        @if($header != getPhysicals($key)->physical_category_id)
+                                                            <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                            @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                        @endif
+                                                        <div class="col-12 row">
+                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                            <div class="col-8">: {{ ucwords($radio[$radioKeys[0]])}}</div>
+                                                        </div>
+                                                    @elseif($additional[$additionalKeys[0]])
+                                                        @if($header != getPhysicals($key)->physical_category_id)
+                                                            <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                            @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                        @endif
+                                                        <div class="col-12 row">
+                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                            <div class="col-8">: {{$additional[$additionalKeys[0]] }}</div>
+                                                        </div>
+                                                    @endif
+                                                @endforeach
+
+                                                <h3 class="col-12">3. Other</h3>
+                                                @php
+                                                    $others = json_decode($exam->other->other_value);
+													$header = '';
+                                                @endphp
+                                                @foreach($others as $key => $value)
+                                                    @php
+                                                        $radio = '';
+                                                        if(isset($value->radio)){
+                                                            $radio = json_decode(json_encode($value->radio),true);
+                                                            $radioKeys = array_keys($radio);
+                                                        }
+                                                        $additional = json_decode(json_encode($value->additional),true);
+                                                        $additionalKeys = array_keys($additional);
+                                                    @endphp
+
+                                                    @if($radio && $additional[$additionalKeys[0]])
+                                                        @if($header != getPhysicals($key)->anamnesis_category_id)
+                                                            <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                            @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                        @endif
+                                                        <div class="col-12 row">
+                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                            <div class="col-8">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</div>
+                                                        </div>
+                                                    @elseif($radio)
+                                                        @if($header != getPhysicals($key)->physical_category_id)
+                                                            <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                            @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                        @endif
+                                                        <div class="col-12 row">
+                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                            <div class="col-8">: {{ ucwords($radio[$radioKeys[0]])}}</div>
+                                                        </div>
+                                                    @elseif($additional[$additionalKeys[0]])
+                                                        @if($header != getPhysicals($key)->physical_category_id)
+                                                            <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                            @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                        @endif
+                                                        <div class="col-12 row">
+                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                            <div class="col-8">: {{$additional[$additionalKeys[0]] }}</div>
+                                                        </div>
+                                                    @endif
+                                                @endforeach
+                                                <div class="col-12 row mt-5">
+                                                    <div class="col-4 fw-bold" style="padding-left:35px">Result</div>
+                                                    <div class="col-8">: {{ $exam->other->result  }}</div>
+                                                </div>
+                                                <div class="col-12 row">
+                                                    <div class="col-4 fw-bold" style="padding-left:35px">Description</div>
+                                                    <div class="col-8">: {{$exam->other->description }}</div>
+                                                </div>
+                                            @else
+                                                <h5 class="col-12">Check up Result</h5>
+                                                <div class="col-12 row">
+                                                    <div class="col-2 fw-bolder">Subjective</div>
+                                                    <div class="col-10">: {{ $exam->subjective }}</div>
+                                                </div>
+                                                <div class="col-12 row">
+                                                    <div class="col-2 fw-bolder">Objective</div>
+                                                    <div class="col-10">: {{ $exam->objective }}</div>
+                                                </div>
+                                                <div class="col-12 row">
+                                                    <div class="col-2 fw-bolder">Assessment</div>
+                                                    <div class="col-10">: {{ $exam->assessment }}</div>
+                                                </div>
+                                                <div class="col-12 row">
+                                                    <div class="col-2 fw-bolder">Plan</div>
+                                                    <div class="col-10">: {{ $exam->plan }}</div>
+                                                </div>
+                                                <div class="col-12 row">
+                                                    <div class="col-2 fw-bolder">Resep</div>
+                                                    <div class="col-10">: {{ $exam->resep }}</div>
+                                                </div>
+                                            @endif;
                                         </div>
                                     </div>
-                                    <hr>
-                                    <br>
-                                    <div class="col-6 row">
-                                        <div class="col-4 fw-bold">Weight</div>
-                                        <div class="col-8">: {{ $exam->vitality->weight ?? "-" }} Kg</div>
-                                    </div>
-                                    <div class="col-6 row">
-                                        <div class="col-4 fw-bold">Height</div>
-                                        <div class="col-8">: {{ $exam->vitality->height ?? "-" }} cm</div>
-                                    </div>
-                                    <div class="col-6 row">
-                                        <div class="col-4 fw-bold">Blood Pressure</div>
-                                        <div class="col-8">: {{ $exam->vitality->blood_pressure ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-6 row">
-                                        <div class="col-4 fw-bold">Heart Rate</div>
-                                        <div class="col-8">: {{ $exam->vitality->heart_rate ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-6 row">
-                                        <div class="col-4 fw-bold">Respiratory Rate</div>
-                                        <div class="col-8">: {{ $exam->vitality->respiratory_rate ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-6 row">
-                                        <div class="col-4 fw-bold">Temperature</div>
-                                        <div class="col-8">: {{ $exam->vitality->temperature ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-6 row">
-                                        <div class="col-4 fw-bold">Oxygen Saturation</div>
-                                        <div class="col-8">: {{ $exam->vitality->oxygen_saturation ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-6 row">
-                                        <div class="col-4 fw-bold">Body Mass Index</div>
-                                        <div class="col-8">: {{ $exam->vitality->body_mass_index ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-6 row">
-                                        <div class="col-4 fw-bold">Ideal Weight</div>
-                                        <div class="col-8">: {{ $exam->vitality->ideal_weight ?? "-" }} Kg</div>
-                                    </div>
-                                    <div class="col-6 row">
-                                        <div class="col-4 fw-bold">Body Fat</div>
-                                        <div class="col-8">: {{ $exam->vitality->body_fat ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-6 row">
-                                        <div class="col-4 fw-bold">BMI Conclusion</div>
-                                        <div class="col-8">: {{ $exam->vitality->bmi_conclusion ?? "-" }}</div>
-                                    </div>
 
-                                    <div class="col-12 row">
-                                        <div class="col-2 fw-bolder">Subjective</div>
-                                        <div class="col-10">: {{ $exam->subjective }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-2 fw-bolder">Objective</div>
-                                        <div class="col-10">: {{ $exam->objective }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-2 fw-bolder">Assessment</div>
-                                        <div class="col-10">: {{ $exam->assessment }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-2 fw-bolder">Plan</div>
-                                        <div class="col-10">: {{ $exam->plan }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-2 fw-bolder">Resep</div>
-                                        <div class="col-10">: {{ $exam->resep }}</div>
-                                    </div>
                                 </div>
-
+                                <!--end::Text-->
                             </div>
-                            <!--end::Text-->
-                        </div>
-                        <!--end::Item-->
+                            <!--end::Item-->
                         @endforeach
                     </div>
                 </div>
             </div>
             <div class="tab-pane active" id="examination" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
                 <!--begin::Alert-->
-                <div class="alert alert-dismissible bg-light-primary border border-primary d-flex flex-column flex-sm-row p-5 mb-10">
-                                      <!--begin::Wrapper-->
-                    <div class="d-flex flex-column pe-0 pe-sm-10">
+                <div class="alert alert-dismissible bg-light-primary border border-primary d-flex flex-column flex-sm-row p-5 mb-10 row">
+                    <!--begin::Wrapper-->
+                    <div class="row col-12 pe-0 pe-sm-10">
                         <!--begin::Title-->
-                        <h5 class="mb-1">Jenis Pemeriksaan</h5>
+                        <h5>Jenis Pemeriksaan</h5>
                         <!--end::Title-->
                         <div class="col-10">{{ $examination->service_category->name }}
                             <ul class="row">
@@ -624,6 +778,56 @@
                         </div>
                     </div>
                     <!--end::Wrapper-->
+
+                    <div class="row col-12 pe-0 pe-sm-10">
+                        <h5 class="mb-1">Vitality</h5>
+                        <div class="col-12 row">
+                            <div class="col-4 row">
+                                <div class="col-4">Weight</div>
+                                <div class="col-8">: {{ $exam->vitality->weight ?? "-" }} Kg</div>
+                            </div>
+                            <div class="col-4 row">
+                                <div class="col-4">Height</div>
+                                <div class="col-8">: {{ $exam->vitality->height ?? "-" }} cm</div>
+                            </div>
+                            <div class="col-4 row">
+                                <div class="col-4">Blood Pressure</div>
+                                <div class="col-8">: {{ $exam->vitality->blood_pressure ?? "-" }}</div>
+                            </div>
+                            <div class="col-4 row">
+                                <div class="col-4">Heart Rate</div>
+                                <div class="col-8">: {{ $exam->vitality->heart_rate ?? "-" }}</div>
+                            </div>
+                            <div class="col-4 row">
+                                <div class="col-4">Respiratory Rate</div>
+                                <div class="col-8">: {{ $exam->vitality->respiratory_rate ?? "-" }}</div>
+                            </div>
+                            <div class="col-4 row">
+                                <div class="col-4">Temperature</div>
+                                <div class="col-8">: {{ $exam->vitality->temperature ?? "-" }}</div>
+                            </div>
+                            <div class="col-4 row">
+                                <div class="col-4">Oxygen Saturation</div>
+                                <div class="col-8">: {{ $exam->vitality->oxygen_saturation ?? "-" }}</div>
+                            </div>
+                            <div class="col-4 row">
+                                <div class="col-4">Body Mass Index</div>
+                                <div class="col-8">: {{ $exam->vitality->body_mass_index ?? "-" }}</div>
+                            </div>
+                            <div class="col-4 row">
+                                <div class="col-4">Ideal Weight</div>
+                                <div class="col-8">: {{ $exam->vitality->ideal_weight ?? "-" }} Kg</div>
+                            </div>
+                            <div class="col-4 row">
+                                <div class="col-4">Body Fat</div>
+                                <div class="col-8">: {{ $exam->vitality->body_fat ?? "-" }}</div>
+                            </div>
+                            <div class="col-4 row">
+                                <div class="col-4">BMI Conclusion</div>
+                                <div class="col-8">: {{ $exam->vitality->bmi_conclusion ?? "-" }}</div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
                 <!--end::Alert-->
@@ -743,6 +947,22 @@
                             </div>
                             <!--end::Input-->
                         </div>
+
+                        <div class="row mb-6">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">Saran</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="col-lg-8">
+                                <div class="input-group input-group-solid has-validation mb-3">
+                                    <textarea name="saran" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('saran') is-invalid @enderror" placeholder="Saran">{{ $examination->saran }}</textarea>
+                                </div>
+                                @error('saran')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <!--end::Input-->
+                        </div>
                     </div>
                     <!--end::Scroll-->
                     <!--begin::Actions-->
@@ -776,10 +996,10 @@
 @section('styles')
     <style>
         .timeline-label .timeline-label {
-            width:200px !important
+            width: 200px !important
         }
 
-        .timeline-label:before{
+        .timeline-label:before {
             left: 201px !important;
         }
     </style>

@@ -11,6 +11,7 @@
     use App\Http\Requests\Klinik\StoreTransactionRequest;
     use App\Http\Requests\Klinik\UpdateTransactionRequest;
     use App\Models\Klinik\TransactionDetail;
+    use App\Models\User;
     use Doctrine\DBAL\Driver\PDO\Exception;
     use Illuminate\Database\Eloquent\Builder;
     use Illuminate\Http\Request;
@@ -54,8 +55,19 @@
             }
 
             $transaction = Transaction::where('examination_id', $request->id)->first();
+            if(!$transaction){
+                $transaction = new Transaction();
+                $transaction->examination_id = $request->id;
+                $transaction->save();
+            }
 
-            return view('pages.klinik.transactions.create',['transaction' => $transaction]);
+
+            $examination = Examination::find($transaction->examination_id);
+            $category = ServiceCategory::with('services')->where('id', $examination->service_category_id)->first();
+            $services = Service::whereHas('category',function(Builder $query){
+                return $query->where('is_global', 1);
+            })->get();
+            return view('pages.klinik.transactions.edit',compact('transaction','category','services','examination'));
         }
 
         /**
@@ -137,6 +149,25 @@
                 return $query->where('is_global', 1);
             })->get();
             return view('pages.klinik.transactions.edit',compact('transaction','category','services','examination'));
+        }
+
+        public function service(Request $request)
+        {
+            $id          = $request->id;
+            $transaction = Transaction::find($id);
+            $transactionDetail = TransactionDetail::where('transaction_id', $id)->pluck('service_id')->toArray();
+            $examination = Examination::find($transaction->examination_id);
+            $examinations         = Examination::where('user_id', $examination->user_id)->where('status', 'done')->orderBy('created_at','DESC')->get();
+            $user        = User::find($examination->user_id);
+            $info        = $user->info;
+
+            $services          = Service::where('service_category_id', $examination->service_category_id)->get();
+            $category = ServiceCategory::with('services')->where('id', $examination->service_category_id)->first();
+            $servicecategories = ServiceCategory::where('is_global', 1)->get();
+
+            return view('pages.klinik.transactions.services', compact([
+                'user', 'info', 'examination', 'services', 'category', 'servicecategories', 'transaction', 'transactionDetail', 'examinations'
+            ]));
         }
 
         /**

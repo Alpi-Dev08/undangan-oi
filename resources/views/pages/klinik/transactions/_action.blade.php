@@ -4,12 +4,14 @@
            class="btn btn-icon btn-bg-light  btn-active-light-primary btn-sm me-1">
             {!! theme()->getSvgIcon("icons/duotune/general/gen004.svg", "svg-icon-3") !!}
         </a>
-        @if($model->status=='waiting payment')
-            <a href="{{ route('transactions.edit',['transaction' => $model->id]) }}"
+            <a href="{{ route('transactions.service',['id' => $model->id]) }}"
                class="btn btn-icon btn-bg-light  btn-active-light-primary btn-sm me-1">
                 {!! theme()->getSvgIcon("icons/duotune/art/art005.svg", "svg-icon-3") !!}
             </a>
-        @endif
+        <a href="{{ route('transactions.edit',['transaction' => $model->id]) }}"
+           class="btn btn-icon btn-bg-light  btn-active-light-primary btn-sm me-1">
+            {!! theme()->getSvgIcon("icons/duotune/finance/fin007.svg", "svg-icon-3") !!}
+        </a>
     @endif
 
 </div>

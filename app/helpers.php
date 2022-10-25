@@ -238,6 +238,30 @@ use App\Models\Klinik\Service;
         }
     }
 
+    if (!function_exists('getAnamnesisCategory')) {
+        /**
+         * Check if the request has RTL param
+         */
+        function getAnamnesisCategory($id)
+        {
+            $category = \App\Models\Klinik\AnamnesisCategory::find($id);
+
+            return $category;
+        }
+    }
+
+    if (!function_exists('getAnamnesis')) {
+        /**
+         * Check if the request has RTL param
+         */
+        function getAnamnesis($id)
+        {
+            $anamnesis = Anamnesis::find($id);
+
+            return $anamnesis;
+        }
+    }
+
 if (!function_exists('physicals')) {
     /**
      * Check if the request has RTL param
@@ -250,17 +274,51 @@ if (!function_exists('physicals')) {
     }
 }
 
+    if (!function_exists('getPhysicalsCategory')) {
+        /**
+         * Check if the request has RTL param
+         */
+        function getPhysicalsCategory($id)
+        {
+            $category = \App\Models\Klinik\PhysicalCategory::find($id);
+
+            return $category;
+        }
+    }
+
+    if (!function_exists('getPhysicals')) {
+        /**
+         * Check if the request has RTL param
+         */
+        function getPhysicals($id)
+        {
+            $anamnesis = Physical::find($id);
+
+            return $anamnesis;
+        }
+    }
+
     if (!function_exists('service_examination')) {
         /**
          * Check if the request has RTL param
          */
         function service_examination($id)
         {
-            $transaction         = Transaction::where('examination_id', $id)->first();
-            $transaction_detail = TransactionDetail::with('service','service.category')->where('transaction_id', $transaction->id)->whereHas('service.category', function(Builder $query){
+            $transaction_detail = TransactionDetail::with('service','service.category')->where('transaction_id', $id)->whereHas('service.category', function(Builder $query){
                 $query->where('is_global', 0);
             })->get();
 
             return $transaction_detail;
+        }
+    }
+
+
+    if(!function_exists('cekVitalityExamination')){
+        function cekVitalityExamination($id){
+            $vit = \App\Models\Klinik\VitalityExamination::where('examination_id', $id)->first();
+
+            if($vit)
+                return true;
+            return false;
         }
     }
