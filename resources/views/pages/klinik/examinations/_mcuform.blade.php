@@ -641,6 +641,7 @@
                                         <hr>
                                         @if($exam->service_category->is_mcu == 1)
                                             <h5 class="col-12">Check up Result</h5>
+                                            @if($exam->anamnesis->anamnesis_value)
                                             <h3 class="col-12">1. Anamnesis</h3>
                                             @php
                                                 $anamnesis = json_decode($exam->anamnesis->anamnesis_value);
@@ -686,7 +687,8 @@
                                                     </div>
                                                 @endif
                                             @endforeach
-
+                                            @endif
+                                            @if($exam->physical->physical_value)
                                             <h3 class="col-12">2. Physical</h3>
                                             @php
                                                 $physicals = json_decode($exam->physical->physical_value);
@@ -732,7 +734,8 @@
                                                     </div>
                                                 @endif
                                             @endforeach
-
+                                            @endif
+                                            @if($exam->other->other_value)
                                             <h3 class="col-12">3. Other</h3>
                                             @php
                                                 $others = json_decode($exam->other->other_value);
@@ -786,6 +789,7 @@
                                                 <div class="col-4 fw-bold" style="padding-left:35px">Description</div>
                                                 <div class="col-8">: {{$exam->other->description }}</div>
                                             </div>
+                                                @endif
                                         @else
                                             <h5 class="col-12">Check up Result</h5>
                                             <div class="col-12 row">

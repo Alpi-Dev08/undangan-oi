@@ -443,151 +443,155 @@
                                         <hr>
                                         @if($exam->service_category->is_mcu == 1)
                                             <h5 class="col-12">Check up Result</h5>
-                                            <h3 class="col-12">1. Anamnesis</h3>
-                                            @php
-                                                $anamnesis = json_decode($exam->anamnesis->anamnesis_value);
-                                                $header = '';
-                                            @endphp
-                                            @foreach($anamnesis as $key => $value)
+                                            @if($exam->anamnesis->anamnesis_value)
+                                                <h3 class="col-12">1. Anamnesis</h3>
                                                 @php
-                                                    $radio = '';
-                                                    if(isset($value->radio)){
-                                                        $radio = json_decode(json_encode($value->radio),true);
-                                                        $radioKeys = array_keys($radio);
-                                                    }
-                                                    $additional = json_decode(json_encode($value->additional),true);
-                                                    $additionalKeys = array_keys($additional);
+                                                    $anamnesis = json_decode($exam->anamnesis->anamnesis_value);
+                                                    $header = '';
                                                 @endphp
+                                                @foreach($anamnesis as $key => $value)
+                                                    @php
+                                                        $radio = '';
+                                                        if(isset($value->radio)){
+                                                            $radio = json_decode(json_encode($value->radio),true);
+                                                            $radioKeys = array_keys($radio);
+                                                        }
+                                                        $additional = json_decode(json_encode($value->additional),true);
+                                                        $additionalKeys = array_keys($additional);
+                                                    @endphp
 
-                                                @if($radio && $additional[$additionalKeys[0]])
-                                                    @if($header != getAnamnesis($key)->anamnesis_category_id)
-                                                        <div class="col-12" style="padding-left:35px">{{ getAnamnesisCategory(getAnamnesis($key)->anamnesis_category_id)->name }}</div>
-                                                        @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
+                                                    @if($radio && $additional[$additionalKeys[0]])
+                                                        @if($header != getAnamnesis($key)->anamnesis_category_id)
+                                                            <div class="col-12" style="padding-left:35px">{{ getAnamnesisCategory(getAnamnesis($key)->anamnesis_category_id)->name }}</div>
+                                                            @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
+                                                        @endif
+                                                        <div class="col-12 row">
+                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getAnamnesis($key)->name }}</div>
+                                                            <div class="col-8">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</div>
+                                                        </div>
+                                                    @elseif($radio)
+                                                        @if($header != getAnamnesis($key)->anamnesis_category_id)
+                                                            <div class="col-12" style="padding-left:35px">{{ getAnamnesisCategory(getAnamnesis($key)->anamnesis_category_id)->name }}</div>
+                                                            @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
+                                                        @endif
+                                                        <div class="col-12 row">
+                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getAnamnesis($key)->name }}</div>
+                                                            <div class="col-8">: {{ ucwords($radio[$radioKeys[0]])}}</div>
+                                                        </div>
+                                                    @elseif($additional[$additionalKeys[0]])
+                                                        @if($header != getAnamnesis($key)->anamnesis_category_id)
+                                                            <div class="col-12" style="padding-left:35px">{{ getAnamnesisCategory(getAnamnesis($key)->anamnesis_category_id)->name }}</div>
+                                                            @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
+                                                        @endif
+                                                        <div class="col-12 row">
+                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getAnamnesis($key)->name }}</div>
+                                                            <div class="col-8">: {{$additional[$additionalKeys[0]] }}</div>
+                                                        </div>
                                                     @endif
-                                                    <div class="col-12 row">
-                                                        <div class="col-4 fw-bold" style="padding-left:50px">{{getAnamnesis($key)->name }}</div>
-                                                        <div class="col-8">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</div>
-                                                    </div>
-                                                @elseif($radio)
-                                                    @if($header != getAnamnesis($key)->anamnesis_category_id)
-                                                        <div class="col-12" style="padding-left:35px">{{ getAnamnesisCategory(getAnamnesis($key)->anamnesis_category_id)->name }}</div>
-                                                        @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
-                                                    @endif
-                                                    <div class="col-12 row">
-                                                        <div class="col-4 fw-bold" style="padding-left:50px">{{getAnamnesis($key)->name }}</div>
-                                                        <div class="col-8">: {{ ucwords($radio[$radioKeys[0]])}}</div>
-                                                    </div>
-                                                @elseif($additional[$additionalKeys[0]])
-                                                    @if($header != getAnamnesis($key)->anamnesis_category_id)
-                                                        <div class="col-12" style="padding-left:35px">{{ getAnamnesisCategory(getAnamnesis($key)->anamnesis_category_id)->name }}</div>
-                                                        @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
-                                                    @endif
-                                                    <div class="col-12 row">
-                                                        <div class="col-4 fw-bold" style="padding-left:50px">{{getAnamnesis($key)->name }}</div>
-                                                        <div class="col-8">: {{$additional[$additionalKeys[0]] }}</div>
-                                                    </div>
-                                                @endif
-                                            @endforeach
-
-                                            <h3 class="col-12">2. Physical</h3>
-                                            @php
-                                                $physicals = json_decode($exam->physical->physical_value);
-                                                $header = '';
-                                            @endphp
-                                            @foreach($physicals as $key => $value)
+                                                @endforeach
+                                            @endif
+                                            @if($exam->physical->physical_value)
+                                                <h3 class="col-12">2. Physical</h3>
                                                 @php
-                                                    $radio = '';
-                                                    if(isset($value->radio)){
-                                                        $radio = json_decode(json_encode($value->radio),true);
-                                                        $radioKeys = array_keys($radio);
-                                                    }
-                                                    $additional = json_decode(json_encode($value->additional),true);
-                                                    $additionalKeys = array_keys($additional);
+                                                    $physicals = json_decode($exam->physical->physical_value);
+                                                    $header = '';
                                                 @endphp
+                                                @foreach($physicals as $key => $value)
+                                                    @php
+                                                        $radio = '';
+                                                        if(isset($value->radio)){
+                                                            $radio = json_decode(json_encode($value->radio),true);
+                                                            $radioKeys = array_keys($radio);
+                                                        }
+                                                        $additional = json_decode(json_encode($value->additional),true);
+                                                        $additionalKeys = array_keys($additional);
+                                                    @endphp
 
-                                                @if($radio && $additional[$additionalKeys[0]])
-                                                    @if($header != getPhysicals($key)->physical_category_id)
-                                                        <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
-                                                        @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                    @if($radio && $additional[$additionalKeys[0]])
+                                                        @if($header != getPhysicals($key)->physical_category_id)
+                                                            <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                            @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                        @endif
+                                                        <div class="col-12 row">
+                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                            <div class="col-8">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</div>
+                                                        </div>
+                                                    @elseif($radio)
+                                                        @if($header != getPhysicals($key)->physical_category_id)
+                                                            <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                            @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                        @endif
+                                                        <div class="col-12 row">
+                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                            <div class="col-8">: {{ ucwords($radio[$radioKeys[0]])}}</div>
+                                                        </div>
+                                                    @elseif($additional[$additionalKeys[0]])
+                                                        @if($header != getPhysicals($key)->physical_category_id)
+                                                            <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                            @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                        @endif
+                                                        <div class="col-12 row">
+                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                            <div class="col-8">: {{$additional[$additionalKeys[0]] }}</div>
+                                                        </div>
                                                     @endif
-                                                    <div class="col-12 row">
-                                                        <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
-                                                        <div class="col-8">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</div>
-                                                    </div>
-                                                @elseif($radio)
-                                                    @if($header != getPhysicals($key)->physical_category_id)
-                                                        <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
-                                                        @php $header = getPhysicals($key)->physical_category_id; @endphp
-                                                    @endif
-                                                    <div class="col-12 row">
-                                                        <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
-                                                        <div class="col-8">: {{ ucwords($radio[$radioKeys[0]])}}</div>
-                                                    </div>
-                                                @elseif($additional[$additionalKeys[0]])
-                                                    @if($header != getPhysicals($key)->physical_category_id)
-                                                        <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
-                                                        @php $header = getPhysicals($key)->physical_category_id; @endphp
-                                                    @endif
-                                                    <div class="col-12 row">
-                                                        <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
-                                                        <div class="col-8">: {{$additional[$additionalKeys[0]] }}</div>
-                                                    </div>
-                                                @endif
-                                            @endforeach
-
-                                            <h3 class="col-12">3. Other</h3>
-                                            @php
-                                                $others = json_decode($exam->other->other_value);
-                                                $header = '';
-                                            @endphp
-                                            @foreach($others as $key => $value)
+                                                @endforeach
+                                            @endif
+                                            @if($exam->other->other_value)
+                                                <h3 class="col-12">3. Other</h3>
                                                 @php
-                                                    $radio = '';
-                                                    if(isset($value->radio)){
-                                                        $radio = json_decode(json_encode($value->radio),true);
-                                                        $radioKeys = array_keys($radio);
-                                                    }
-                                                    $additional = json_decode(json_encode($value->additional),true);
-                                                    $additionalKeys = array_keys($additional);
+                                                    $others = json_decode($exam->other->other_value);
+                                                    $header = '';
                                                 @endphp
+                                                @foreach($others as $key => $value)
+                                                    @php
+                                                        $radio = '';
+                                                        if(isset($value->radio)){
+                                                            $radio = json_decode(json_encode($value->radio),true);
+                                                            $radioKeys = array_keys($radio);
+                                                        }
+                                                        $additional = json_decode(json_encode($value->additional),true);
+                                                        $additionalKeys = array_keys($additional);
+                                                    @endphp
 
-                                                @if($radio && $additional[$additionalKeys[0]])
-                                                    @if($header != getPhysicals($key)->anamnesis_category_id)
-                                                        <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
-                                                        @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                    @if($radio && $additional[$additionalKeys[0]])
+                                                        @if($header != getPhysicals($key)->anamnesis_category_id)
+                                                            <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                            @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                        @endif
+                                                        <div class="col-12 row">
+                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                            <div class="col-8">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</div>
+                                                        </div>
+                                                    @elseif($radio)
+                                                        @if($header != getPhysicals($key)->physical_category_id)
+                                                            <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                            @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                        @endif
+                                                        <div class="col-12 row">
+                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                            <div class="col-8">: {{ ucwords($radio[$radioKeys[0]])}}</div>
+                                                        </div>
+                                                    @elseif($additional[$additionalKeys[0]])
+                                                        @if($header != getPhysicals($key)->physical_category_id)
+                                                            <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                            @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                        @endif
+                                                        <div class="col-12 row">
+                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                            <div class="col-8">: {{$additional[$additionalKeys[0]] }}</div>
+                                                        </div>
                                                     @endif
-                                                    <div class="col-12 row">
-                                                        <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
-                                                        <div class="col-8">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</div>
-                                                    </div>
-                                                @elseif($radio)
-                                                    @if($header != getPhysicals($key)->physical_category_id)
-                                                        <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
-                                                        @php $header = getPhysicals($key)->physical_category_id; @endphp
-                                                    @endif
-                                                    <div class="col-12 row">
-                                                        <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
-                                                        <div class="col-8">: {{ ucwords($radio[$radioKeys[0]])}}</div>
-                                                    </div>
-                                                @elseif($additional[$additionalKeys[0]])
-                                                    @if($header != getPhysicals($key)->physical_category_id)
-                                                        <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
-                                                        @php $header = getPhysicals($key)->physical_category_id; @endphp
-                                                    @endif
-                                                    <div class="col-12 row">
-                                                        <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
-                                                        <div class="col-8">: {{$additional[$additionalKeys[0]] }}</div>
-                                                    </div>
-                                                @endif
-                                            @endforeach
-                                            <div class="col-12 row mt-5">
-                                                <div class="col-4 fw-bold" style="padding-left:35px">Result</div>
-                                                <div class="col-8">: {{ $exam->other->result  }}</div>
-                                            </div>
-                                            <div class="col-12 row">
-                                                <div class="col-4 fw-bold" style="padding-left:35px">Description</div>
-                                                <div class="col-8">: {{$exam->other->description }}</div>
-                                            </div>
+                                                @endforeach
+                                                <div class="col-12 row mt-5">
+                                                    <div class="col-4 fw-bold" style="padding-left:35px">Result</div>
+                                                    <div class="col-8">: {{ $exam->other->result  }}</div>
+                                                </div>
+                                                <div class="col-12 row">
+                                                    <div class="col-4 fw-bold" style="padding-left:35px">Description</div>
+                                                    <div class="col-8">: {{$exam->other->description }}</div>
+                                                </div>
+                                            @endif
                                         @else
                                             <h5 class="col-12">Check up Result</h5>
                                             <div class="col-12 row">
