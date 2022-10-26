@@ -1283,9 +1283,15 @@
                                         <div class="col-lg-8">
                                             <select name="result" aria-label="{{ __('Select a Plan') }}" data-control="select2" data-placeholder="{{ __('Select a Plan...') }}" class="form-select form-select-solid form-select-lg fw-bold">
                                                 <option value="">{{ __('Select a Plan...') }}</option>
-                                                <option value="fitwork" {{ $otherexamination->result=='fitwork' ? 'selected' :'' }}>Fit to Work</option>
-                                                <option value="fit"  {{ $otherexamination->result=='fit' ? 'selected' :'' }}>Fit with Note</option>
-                                                <option value="unfit" {{ $otherexamination->result=='unfit' ? 'selected' :'' }}>Unfit</option>
+                                                @if(isset($otherexamination->result))
+                                                    <option value="fitwork" {{ $otherexamination->result=='fitwork' ? 'selected' :'' }}>Fit to Work</option>
+                                                    <option value="fit"  {{ $otherexamination->result=='fit' ? 'selected' :'' }}>Fit with Note</option>
+                                                    <option value="unfit" {{ $otherexamination->result=='unfit' ? 'selected' :'' }}>Unfit</option>
+                                                @else
+													 <option value="fitwork" {{ $otherexamination->result=='fitwork' ? 'selected' :'' }}>Fit to Work</option>
+                                                    <option value="fit"  {{ $otherexamination->result=='fit' ? 'selected' :'' }}>Fit with Note</option>
+                                                    <option value="unfit" {{ $otherexamination->result=='unfit' ? 'selected' :'' }}>Unfit</option>
+                                                @endif
                                             </select>
                                         </div>
                                         <!--end::Col-->
