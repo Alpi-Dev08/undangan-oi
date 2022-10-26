@@ -1305,7 +1305,7 @@
                                         <!--begin::Input-->
                                         <div class="col-lg-8">
                                             <div class="input-group input-group-solid has-validation mb-3">
-                                                <textarea name="description" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('description') is-invalid @enderror" placeholder="Description">{{ $otherexamination->description }}</textarea>
+                                                <textarea name="description" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('description') is-invalid @enderror" placeholder="Description">{{ $otherexamination->description ?? "" }}</textarea>
                                             </div>
                                             @error('description')
                                             <div class="text-danger">{{ $message }}</div>
