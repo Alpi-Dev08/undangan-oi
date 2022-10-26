@@ -828,7 +828,7 @@
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
                     <!--begin::Alert-->
-                    <div class="alert alert-dismissible bg-light-primary border border-primary d-flex flex-column flex-sm-row p-5 mb-10">
+                    <div class="alert alert-dismissible bg-light-primary border border-primary d-flex flex-column flex-sm-row p-5 mb-10 row">
                         <!--begin::Wrapper-->
                         <div class="row col-12 pe-0 pe-sm-10">
                             <!--begin::Title-->
@@ -1036,7 +1036,7 @@
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
                     <!--begin::Alert-->
-                    <div class="alert alert-dismissible bg-light-primary border border-primary d-flex flex-column flex-sm-row p-5 mb-10">
+                    <div class="alert alert-dismissible bg-light-primary border border-primary d-flex flex-column flex-sm-row p-5 mb-10 row">
                         <!--begin::Wrapper-->
                         <div class="row col-12 pe-0 pe-sm-10">
                             <!--begin::Title-->
@@ -1262,7 +1262,7 @@
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
                     <!--begin::Alert-->
-                    <div class="alert alert-dismissible bg-light-primary border border-primary d-flex flex-column flex-sm-row p-5 mb-10">
+                    <div class="alert alert-dismissible bg-light-primary border border-primary d-flex flex-column flex-sm-row p-5 mb-10 row">
                         <!--begin::Wrapper-->
                         <div class="row col-12 pe-0 pe-sm-10">
                             <!--begin::Title-->
