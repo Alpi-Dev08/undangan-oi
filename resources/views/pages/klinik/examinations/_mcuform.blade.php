@@ -1288,9 +1288,9 @@
                                                     <option value="fit"  {{ $otherexamination->result=='fit' ? 'selected' :'' }}>Fit with Note</option>
                                                     <option value="unfit" {{ $otherexamination->result=='unfit' ? 'selected' :'' }}>Unfit</option>
                                                 @else
-													 <option value="fitwork" {{ $otherexamination->result=='fitwork' ? 'selected' :'' }}>Fit to Work</option>
-                                                    <option value="fit"  {{ $otherexamination->result=='fit' ? 'selected' :'' }}>Fit with Note</option>
-                                                    <option value="unfit" {{ $otherexamination->result=='unfit' ? 'selected' :'' }}>Unfit</option>
+													 <option value="fitwork">Fit to Work</option>
+                                                    <option value="fit">Fit with Note</option>
+                                                    <option value="unfit">Unfit</option>
                                                 @endif
                                             </select>
                                         </div>
