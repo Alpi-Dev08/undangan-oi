@@ -771,7 +771,7 @@
                         <!--begin::Title-->
                         <h5>Jenis Pemeriksaan</h5>
                         <!--end::Title-->
-                        <div class="col-10">{{ $examination->service_category->name }}
+                        <div class="col-12">{{ $examination->service_category->name }}
                             <ul class="row">
                                 @foreach(service_examination($examination->id) as $service)
                                     <li class="col-4">{{ $service->service->name }}</li>
