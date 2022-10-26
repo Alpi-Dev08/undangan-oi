@@ -46,20 +46,20 @@
             ],
 
             [
-                'title' => 'Patients',
+                'title' => 'Registrasi', // Patients
                 'path'  => 'klinik/patients',
                 'role' => ['admin','administrator'],
                 'icon'  => theme()->getSvgIcon("demo1/media/icons/duotune/art/art002.svg", "svg-icon-2"),
             ],
             [
-                'title' => 'Vitality Examinations',
+                'title' => 'Vital Sign&BMI',
                 'path'  => 'klinik/examinations',
                 'role' => ['ners','administrator'],
                 'icon'  => theme()->getSvgIcon("demo1/media/icons/duotune/art/art002.svg", "svg-icon-2"),
             ],
 
             [
-                'title' => 'Examinations',
+                'title' => 'Anamnesis & Physical Examination',
                 'path'  => 'klinik/examinations',
                 'role' => ['dokter','administrator'],
                 'icon'  => theme()->getSvgIcon("demo1/media/icons/duotune/art/art002.svg", "svg-icon-2"),
