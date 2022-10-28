@@ -100,7 +100,7 @@ return array(
             'theme'     => 'light', // Set aside theme(dark|light)
             'menu'      => 'main', // Set aside menu(main|documentation)
             'fixed'     => true,  // Enable aside fixed mode
-            'minimized' => false, // Set aside minimized by default
+            'minimized' => true, // Set aside minimized by default
             'minimize'  => true, // Allow aside minimize toggle
             'hoverable' => true, // Allow aside hovering when minimized
             'menu-icon' => 'svg' // Menu icon type(svg|font)

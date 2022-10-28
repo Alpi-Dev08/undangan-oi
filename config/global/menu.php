@@ -52,7 +52,7 @@
                 'icon'  => theme()->getSvgIcon("demo1/media/icons/duotune/art/art002.svg", "svg-icon-2"),
             ],
             [
-                'title' => 'Vital Sign&BMI',
+                'title' => 'Vital Sign & BMI',
                 'path'  => 'klinik/examinations',
                 'role' => ['ners','administrator'],
                 'icon'  => theme()->getSvgIcon("demo1/media/icons/duotune/art/art002.svg", "svg-icon-2"),
