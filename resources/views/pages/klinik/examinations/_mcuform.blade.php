@@ -1371,9 +1371,11 @@
                                                         <div class="col-4">&nbsp;</div>
                                                         <div class="col-8">
                                                             <input type="file" accept="application/pdf" name="file[{{$others->id}}]" id="" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0">
+                                                            @if(isset($otherexamination->file))
                                                             @php $file = json_decode($otherexamination->file,true); @endphp
                                                             @if(isset($file[$others->id]))
                                                                 <a href="{{ Storage::url('examinations/'.$examination->examination_code.'/'.$file[$others->id]) }}" target="_blank">Lihat File</a>
+                                                                @endif
                                                                 @endif
                                                         </div>
                                                     </div>
