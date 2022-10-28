@@ -72,8 +72,9 @@ class OtherExaminationsController extends Controller
                             $validated['file'][$key] = $key.'.'.$file_name;
                         }
                     }
+                    $validated['file'] = json_encode($validated['file']);
                 }
-                $validated['file'] = json_encode($validated['file']);
+
                 OtherExamination::create($validated);
             }catch(Exception $e){
                 report($e);
@@ -146,8 +147,9 @@ class OtherExaminationsController extends Controller
                             $validated['file'][$key] = $key.'.'.$file_name;
                         }
                     }
+                    $validated['file'] = json_encode($validated['file']);
                 }
-                $validated['file'] = json_encode($validated['file']);
+
                 $otherexamination->update($validated);
             }catch(Exception $e){
                 report($e);
