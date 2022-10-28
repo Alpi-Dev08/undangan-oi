@@ -558,6 +558,36 @@
                                     </div>
                                     <!--end::Input group-->
 
+                                    <!--begin::Input group-->
+                                    <div class="col-6 mb-6">
+                                        <label for="arm_circumference" class="form-label">Arm Circumference</label>
+                                        <input id="arm_circumference" name="arm_circumference"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('arm_circumference') is-invalid @enderror" placeholder="Arm Circumference" value="{{ $vitalityexamination->arm_circumference ?? "" }}"/>
+                                        @error('arm_circumference')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    <!--begin::Input group-->
+                                    <div class="col-6 mb-6">
+                                        <label for="chest_size" class="form-label">Chest Size</label>
+                                        <input id="chest_size" name="chest_size"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('chest_size') is-invalid @enderror" placeholder="Chest Size" value="{{ $vitalityexamination->chest_size ?? "" }}"/>
+                                        @error('chest_size')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    <!--begin::Input group-->
+                                    <div class="col-6 mb-6">
+                                        <label for="adbdominal_circumference" class="form-label">Abdominal Circumference</label>
+                                        <input id="adbdominal_circumference" name="adbdominal_circumference"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('adbdominal_circumference') is-invalid @enderror" placeholder="Abdominal Circumference" value="{{ $vitalityexamination->adbdominal_circumference ?? "" }}"/>
+                                        @error('adbdominal_circumference')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <!--end::Input group-->
+
                                     <div class="col-6 mb-6">&nbsp;</div>
 
                                     <!--begin::Input group-->
