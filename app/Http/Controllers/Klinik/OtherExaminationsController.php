@@ -63,7 +63,6 @@ class OtherExaminationsController extends Controller
         if($validated){
             try{
                 $validated['other_value'] = json_encode($request->other);
-                $validated['file'][] = [];
                 if($request->hasFile('file')){
                     $_file      = $request->file('file');
                     foreach ($_file as $key => $file){
@@ -74,6 +73,7 @@ class OtherExaminationsController extends Controller
                         }
                     }
                 }
+                $validated['file'] = json_encode($validated['file']);
                 OtherExamination::create($validated);
             }catch(Exception $e){
                 report($e);
@@ -147,6 +147,7 @@ class OtherExaminationsController extends Controller
                         }
                     }
                 }
+                $validated['file'] = json_encode($validated['file']);
                 $otherexamination->update($validated);
             }catch(Exception $e){
                 report($e);
