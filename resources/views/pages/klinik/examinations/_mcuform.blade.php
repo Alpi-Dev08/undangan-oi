@@ -1436,12 +1436,12 @@
                     <!--end::Alert-->
 
                     @if(isset($otherexamination->id))
-                        <form id="kt_modal_add_examinations_form" method="POST" class="form"
+                        <form id="kt_modal_add_examinations_form" method="POST" class="form" enctype="multipart/form-data"
                               action="{{ route('otherexaminations.update',['otherexamination' => $otherexamination->id]) }}">
                             @method('PUT')
                             {{ csrf_field() }}
                             @else
-                                <form id="kt_modal_add_examinations_form" method="POST" class="form"
+                                <form id="kt_modal_add_examinations_form" method="POST" class="form" enctype="multipart/form-data"
                                       action="{{ route('otherexaminations.store') }}">
                                     @method('POST')
                                     {{ csrf_field() }}
@@ -1519,7 +1519,7 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-4">&nbsp;</div>
-                                                        <div class="col-8"><input type="file" name="other[]['file']" id="" ca></div>
+                                                        <div class="col-8"><input type="file" name="file[{{$others->id}}]" id="" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0"></div>
                                                     </div>
                                                 </li>
                                             @endforeach
