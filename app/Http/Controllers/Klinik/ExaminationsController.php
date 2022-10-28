@@ -32,6 +32,8 @@
     use Illuminate\Database\Eloquent\Builder;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\Storage;
+    use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
     class ExaminationsController extends Controller
     {
@@ -343,6 +345,22 @@
             $pdf = Pdf::loadView('pages.klinik.examinations.pdf', compact([
                 'user', 'info', 'examination'
             ]));
-            return $pdf->download('rekam-medis_'.$user->name.'.pdf');
+            Storage::put('public/examinations/'.$examination->examination_code.'/1.medical-record.pdf', $pdf->output());
+            //return $pdf->download('rekam-medis_'.$user->name.'.pdf');
+
+            $pdfMerge = PDFMerger::init();
+            $files = Storage::disk('public')->files('examinations/'.$examination->examination_code);
+
+            foreach ($files as $key => $value) {
+                if(file_exists(storage_path('app/public/'.$value))){
+                    $pdfMerge->addPDF(storage_path('app/public/'.$value), '1');
+                }
+            }
+
+            $fileName = $examination->examination_code.'.pdf';
+            $pdfMerge->merge();
+            $pdfMerge->save(public_path($fileName));
+
+            return response()->download(public_path($fileName));
         }
     }

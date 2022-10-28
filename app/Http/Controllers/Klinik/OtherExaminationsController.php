@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Klinik;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Klinik\StoreOtherExaminationRequest;
 use App\Http\Requests\Klinik\UpdateOtherExaminationRequest;
+use App\Models\Hms\LaboratoryExamination;
 use App\Models\Klinik\Examination;
 use App\Models\Klinik\OtherExamination;
 use Doctrine\DBAL\Driver\PDO\Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class OtherExaminationsController extends Controller
 {
@@ -55,11 +57,23 @@ class OtherExaminationsController extends Controller
         $request->other_value = json_encode($request->other);
         // Validation Data
         $validated = $request->validated();
-
+        $examination = Examination::find($request->examination_id);
         // Process Data
+
         if($validated){
             try{
                 $validated['other_value'] = json_encode($request->other);
+                $validated['file'][] = [];
+                if($request->hasFile('file')){
+                    $_file      = $request->file('file');
+                    foreach ($_file as $key => $file){
+                        $file_name  = $file->getClientOriginalName();
+                        $file->storeAs('public/examinations/'.$examination->examination_code, $file_name);
+                        if($file->isValid()){
+                            $validated['file'][$key] = $key.'.'.$file_name;
+                        }
+                    }
+                }
                 OtherExamination::create($validated);
             }catch(Exception $e){
                 report($e);
@@ -67,7 +81,7 @@ class OtherExaminationsController extends Controller
             }
 
             if($request->selesai){
-                $examination = Examination::find($request->examination_id);
+
                 $examination->status = "waiting payment";
                 $examination->save();
 
@@ -118,11 +132,21 @@ class OtherExaminationsController extends Controller
         $request->other_value = json_encode($request->other);
         // Validation Data
         $validated = $request->validated();
-
+        $examination = Examination::find($request->examination_id);
         // Process Data
         if($validated){
             try{
                 $validated['other_value'] = json_encode($request->other);
+                if($request->hasFile('file')){
+                    $_file      = $request->file('file');
+                    foreach ($_file as $key => $file){
+                        $file_name  = $file->getClientOriginalName();
+                        $file->storeAs('public/examinations/'.$examination->examination_code, $file_name);
+                        if($file->isValid()){
+                            $validated['file'][$key] = $key.'.'.$file_name;
+                        }
+                    }
+                }
                 $otherexamination->update($validated);
             }catch(Exception $e){
                 report($e);
@@ -130,7 +154,7 @@ class OtherExaminationsController extends Controller
             }
 
             if($request->selesai){
-                $examination = Examination::find($request->examination_id);
+
                 $examination->status = "waiting payment";
                 $examination->save();
 
