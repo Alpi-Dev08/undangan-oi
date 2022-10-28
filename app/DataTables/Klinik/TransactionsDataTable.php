@@ -28,7 +28,10 @@
                 ->rawColumns(['action','invoice_number'])
                 ->addIndexColumn()
                 ->addColumn('invoice_number', function (Transaction $model) {
-                    return $model->examination->user->name . '<br>' . $model->invoice_number;
+                    if(isset($model->examination->user->name)){
+                        return $model->invoice_number . '<br>' . $model->examination->user->name;
+                    }
+                    return $model->invoice_number;
                 })
                 ->addColumn('amount', function (Transaction $model) {
                     return $model->amount;
