@@ -871,81 +871,6 @@
                             </div>
                         </div>
                         <!--end::Wrapper-->
-                        <div class="row col-12 pe-0 pe-sm-10">
-                            <h5 class="mb-1">Vital Sign & BMI</h5>
-                            <div class="row col-12">
-                                <div class="row col-4">
-                                    <div class="col-12 row">
-                                        <div class="col-4">Weight</div>
-                                        <div class="col-8">: {{ $exam->vitality->weight ?? "-" }} Kg</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Height</div>
-                                        <div class="col-8">: {{ $exam->vitality->height ?? "-" }} cm</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Body Mass Index</div>
-                                        <div class="col-8">: {{ $exam->vitality->body_mass_index ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Ideal Weight</div>
-                                        <div class="col-8">: {{ $exam->vitality->ideal_weight ?? "-" }} Kg</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Body Fat</div>
-                                        <div class="col-8">: {{ $exam->vitality->body_fat ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">BMI Conclusion</div>
-                                        <div class="col-8">: {{ $exam->vitality->bmi_conclusion ?? "-" }}</div>
-                                    </div>
-                                </div>
-                                <div class="row col-4">
-                                    <div class="col-12 row">
-                                        <div class="col-4">Blood Pressure</div>
-                                        <div class="col-8">: {{ $exam->vitality->blood_pressure ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Heart Rate</div>
-                                        <div class="col-8">: {{ $exam->vitality->heart_rate ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Respiratory Rate</div>
-                                        <div class="col-8">: {{ $exam->vitality->respiratory_rate ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Temperature</div>
-                                        <div class="col-8">: {{ $exam->vitality->temperature ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Oxygen Saturation</div>
-                                        <div class="col-8">: {{ $exam->vitality->oxygen_saturation ?? "-" }}</div>
-                                    </div>
-                                </div>
-                                <div class="row col-4">
-                                    <div class="col-12 row">
-                                        <div class="col-4">Waist Circumference</div>
-                                        <div class="col-8">: {{ $exam->vitality->waist_circumferennce ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Neck Circumference</div>
-                                        <div class="col-8">: {{ $exam->vitality->neck_circumference ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Arm Circumference</div>
-                                        <div class="col-8">: {{ $exam->vitality->arm_circumference ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Chest Size</div>
-                                        <div class="col-8">: {{ $exam->vitality->chest_size ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Abdominal Circumference</div>
-                                        <div class="col-8">: {{ $exam->vitality->adbdominal_circumference ?? "-" }}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <!--end::Alert-->
 
@@ -1357,81 +1282,6 @@
                             </div>
                         </div>
                         <!--end::Wrapper-->
-                        <div class="row col-12 pe-0 pe-sm-10">
-                            <h5 class="mb-1">Vital Sign & BMI</h5>
-                            <div class="row col-12">
-                                <div class="row col-4">
-                                    <div class="col-12 row">
-                                        <div class="col-4">Weight</div>
-                                        <div class="col-8">: {{ $exam->vitality->weight ?? "-" }} Kg</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Height</div>
-                                        <div class="col-8">: {{ $exam->vitality->height ?? "-" }} cm</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Body Mass Index</div>
-                                        <div class="col-8">: {{ $exam->vitality->body_mass_index ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Ideal Weight</div>
-                                        <div class="col-8">: {{ $exam->vitality->ideal_weight ?? "-" }} Kg</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Body Fat</div>
-                                        <div class="col-8">: {{ $exam->vitality->body_fat ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">BMI Conclusion</div>
-                                        <div class="col-8">: {{ $exam->vitality->bmi_conclusion ?? "-" }}</div>
-                                    </div>
-                                </div>
-                                <div class="row col-4">
-                                    <div class="col-12 row">
-                                        <div class="col-4">Blood Pressure</div>
-                                        <div class="col-8">: {{ $exam->vitality->blood_pressure ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Heart Rate</div>
-                                        <div class="col-8">: {{ $exam->vitality->heart_rate ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Respiratory Rate</div>
-                                        <div class="col-8">: {{ $exam->vitality->respiratory_rate ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Temperature</div>
-                                        <div class="col-8">: {{ $exam->vitality->temperature ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Oxygen Saturation</div>
-                                        <div class="col-8">: {{ $exam->vitality->oxygen_saturation ?? "-" }}</div>
-                                    </div>
-                                </div>
-                                <div class="row col-4">
-                                    <div class="col-12 row">
-                                        <div class="col-4">Waist Circumference</div>
-                                        <div class="col-8">: {{ $exam->vitality->waist_circumferennce ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Neck Circumference</div>
-                                        <div class="col-8">: {{ $exam->vitality->neck_circumference ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Arm Circumference</div>
-                                        <div class="col-8">: {{ $exam->vitality->arm_circumference ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Chest Size</div>
-                                        <div class="col-8">: {{ $exam->vitality->chest_size ?? "-" }}</div>
-                                    </div>
-                                    <div class="col-12 row">
-                                        <div class="col-4">Abdominal Circumference</div>
-                                        <div class="col-8">: {{ $exam->vitality->adbdominal_circumference ?? "-" }}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <!--end::Alert-->
 
@@ -1519,7 +1369,13 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-4">&nbsp;</div>
-                                                        <div class="col-8"><input type="file" accept="application/pdf" name="file[{{$others->id}}]" id="" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0"></div>
+                                                        <div class="col-8">
+                                                            <input type="file" accept="application/pdf" name="file[{{$others->id}}]" id="" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0">
+                                                            @php $file = json_decode($otherexamination->file,true); @endphp
+                                                            @if(isset($file[$others->id]))
+                                                                <a href="{{ Storage::url('examinations/'.$examination->examination_code.'/'.$file[$others->id]) }}" target="_blank">Lihat File</a>
+                                                                @endif
+                                                        </div>
                                                     </div>
                                                 </li>
                                             @endforeach
