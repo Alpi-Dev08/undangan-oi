@@ -184,7 +184,7 @@
             if ($validated) {
                 // Process Data
                 try {
-                    $validated['status'] = 'waiting payment';
+                    $validated['status'] = 'done';
                     $examination->update($validated);
                 } catch (Exception $e) {
                     report($e);

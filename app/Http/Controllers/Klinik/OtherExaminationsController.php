@@ -158,7 +158,7 @@ class OtherExaminationsController extends Controller
 
             if($request->selesai){
 
-                $examination->status = "waiting payment";
+                $examination->status = "done";
                 $examination->save();
 
                 return redirect()->route('transactions.create', ['id' => $examination->id])->with('success', 'Other Examination successfully created');

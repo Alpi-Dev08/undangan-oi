@@ -998,7 +998,7 @@
                                         </button>
 
                                         <button type="submit" class="btn btn-info" name="continue" value="1" data-kt-examinations-modal-action="submit">
-                                            <span class="indicator-label">Continue</span>
+                                            <span class="indicator-label">Save</span>
                                             <span class="indicator-progress">Please wait...
                                                 <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                                             </span>
@@ -1249,7 +1249,7 @@
                                         </button>
 
                                         <button type="submit" class="btn btn-info" name="continue" value="1" data-kt-examinations-modal-action="submit">
-                                                            <span class="indicator-label">Continue</span>
+                                                            <span class="indicator-label">Save</span>
                                                             <span class="indicator-progress">Please wait...
                                                 <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                                             </span>
@@ -1455,7 +1455,7 @@
                                         </button>
 
                                         <button type="submit" class="btn btn-info" name="continue" value="1" data-kt-examinations-modal-action="submit">
-                                            <span class="indicator-label">Continue</span>
+                                            <span class="indicator-label">Save</span>
                                             <span class="indicator-progress">Please wait...
                                                 <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                                             </span>
