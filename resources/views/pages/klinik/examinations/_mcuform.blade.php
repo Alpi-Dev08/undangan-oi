@@ -931,9 +931,9 @@
                                                                                 <div
                                                                                     class="form-check form-check-custom form-check-solid">
                                                                                     <input class="form-check-input"
-                                                                                           type="checkbox"
+                                                                                           type="radio"
                                                                                            {{ in_array($radio->id,$r) ? 'checked' : '' }}
-                                                                                           name = "anamnesis[{{$anamnesis->id}}][radio][{{$radio->id}}]"
+                                                                                           name = "anamnesis[{{$anamnesis->id}}][radio][]"
                                                                                            value="{{$radio->id}}"
                                                                                            id="radio-{{$anamnesis->id}}"/>
                                                                                     <label class="form-check-label"
@@ -1156,9 +1156,9 @@
                                                                                 <div
                                                                                     class="form-check form-check-custom form-check-solid w-200px">
                                                                                     <input class="form-check-input"
-                                                                                           type="checkbox"
+                                                                                           type="radio"
                                                                                            {{ in_array($radio->id,$r) ? 'checked' : '' }}
-                                                                                           name = "physical[{{$physicals->id}}][radio][{{$radio->id}}]"
+                                                                                           name = "physical[{{$physicals->id}}][radio][]"
                                                                                            value="{{$radio->id}}"
                                                                                            id="radio-{{$physicals->id}}"/>
                                                                                     <label class="form-check-label"
@@ -1333,9 +1333,9 @@
                                                                         <div
                                                                             class="form-check form-check-custom form-check-solid w-200px">
                                                                             <input class="form-check-input"
-                                                                                   type="checkbox"
+                                                                                   type="radio"
                                                                                    {{ in_array($radio->id,$r) ? 'checked' : '' }}
-                                                                                   name = "other[{{$others->id}}][radio][{{$radio->id}}]"
+                                                                                   name = "other[{{$others->id}}][radio][]"
                                                                                    value="{{$radio->id}}"
                                                                                    id="radio-{{$others->id}}"/>
                                                                             <label class="form-check-label"
