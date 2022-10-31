@@ -353,7 +353,7 @@
 
             foreach ($files as $key => $value) {
                 if(file_exists(storage_path('app/public/'.$value))){
-                    $pdfMerge->addPDF(storage_path('app/public/'.$value), '1');
+                    $pdfMerge->addPDF(storage_path('app/public/'.$value), 'all');
                 }
             }
 
