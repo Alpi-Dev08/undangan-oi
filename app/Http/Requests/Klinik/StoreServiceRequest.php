@@ -25,7 +25,7 @@
         {
             return [
                 'service_category_id' => 'required|exists:service_categories,id',
-                'name'                => 'required|max:100|unique:services',
+                'name'                => 'required|max:100',
                 'price'               => 'nullable|numeric'
             ];
         }

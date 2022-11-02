@@ -720,11 +720,15 @@
                 if (bmi < 18.5) {
                     $("#bmi_conclusion").val("Underweight");
                 } else if (bmi >= 18.5 && bmi <= 24.9) {
-                    $("#bmi_conclusion").val("Normal");
+                    $("#bmi_conclusion").val("Normal Weight");
                 } else if (bmi >= 25 && bmi <= 29.9) {
                     $("#bmi_conclusion").val("Overweight");
-                } else if (bmi >= 30) {
-                    $("#bmi_conclusion").val("Obese");
+                } else if (bmi >= 30 <= 34.9) {
+                    $("#bmi_conclusion").val("Obesity class I");
+                } else if (bmi >= 35 <= 39.9) {
+                    $("#bmi_conclusion").val("Obesity class II");
+                } else if (bmi >= 40) {
+                    $("#bmi_conclusion").val("Obesity class III");
                 }
 
                 var tinggiBadan = $(this).val() - 100;
