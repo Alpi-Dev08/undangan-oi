@@ -67,7 +67,7 @@ class OtherExaminationsController extends Controller
                     $_file      = $request->file('file');
                     foreach ($_file as $key => $file){
                         $file_name  = $file->getClientOriginalName();
-                        $file->storeAs('public/examinations/'.$examination->examination_code, $file_name);
+                        $file->storeAs('public/examinations/'.$examination->examination_code, $key.'.'.$file_name);
                         if($file->isValid()){
                             $validated['file'][$key] = $key.'.'.$file_name;
                         }
@@ -142,7 +142,7 @@ class OtherExaminationsController extends Controller
                     $_file      = $request->file('file');
                     foreach ($_file as $key => $file){
                         $file_name  = $file->getClientOriginalName();
-                        $file->storeAs('public/examinations/'.$examination->examination_code, $file_name);
+                        $file->storeAs('public/examinations/'.$examination->examination_code, $key.'.'.$file_name);
                         if($file->isValid()){
                             $validated['file'][$key] = $key.'.'.$file_name;
                         }
@@ -158,7 +158,7 @@ class OtherExaminationsController extends Controller
 
             if($request->selesai){
 
-                $examination->status = "waiting payment";
+                $examination->status = "done";
                 $examination->save();
 
                 return redirect()->route('transactions.create', ['id' => $examination->id])->with('success', 'Other Examination successfully created');

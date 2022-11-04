@@ -249,7 +249,19 @@
             @endforeach
             <tr style="padding-top:10px">
                 <td style="width:40%;padding-left:15px;font-weight:bold">Result</td>
-                <td style="width:60%;">: {{ $examination->other->result  }}</td>
+                <td style="width:60%;">:
+                    @switch($examination->other->result)
+                        @case("fit")
+                            {{ "Fit with Note" }}
+                            @break
+                        @case("fitwork")
+                            {{ "Fit for Work" }}
+                            @break
+                        @case("unfit")
+                            {{ "Unfit" }}
+                            @break
+                        @endswitch
+                </td>
             </tr>
             <tr>
                 <td style="width:40%;padding-left:15px;font-weight:bold">Description</td>

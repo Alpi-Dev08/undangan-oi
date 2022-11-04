@@ -68,7 +68,7 @@ class AnamnesisExaminationsController extends Controller
 
             if($request->selesai){
                 $examination = Examination::find($request->examination_id);
-                $examination->status = "waiting payment";
+                $examination->status = "done";
                 $examination->save();
 
                 return redirect()->route('transactions.create', ['id' => $examination->id])->with('success', 'Anamnesis Examination successfully created');
