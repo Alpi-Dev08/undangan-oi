@@ -203,7 +203,7 @@
             $examination->health_profesional_id = $request->health_profesional_id;
             $examination->service_category_id   = $request->service_category_id;
             $examination->examination_date      = date('Y-m-d H:i:s');
-            $examination->appointment_date      = date('Y-m-d H:i:s');
+            $examination->appointment_date      = $request->appointment_date;
             $examination->appointment_status    = '0';
             $examination->is_appointment        = '1';
             $examination->total                 = 0;
