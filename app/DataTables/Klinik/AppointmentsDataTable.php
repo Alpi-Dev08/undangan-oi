@@ -30,8 +30,8 @@
                 ->addColumn('name', function (Examination $model) {
                     return $model->user->name;
                 })
-                ->addColumn('register_date', function (Examination $model) {
-                    return $model->created_at;
+                ->addColumn('appointment_date', function (Examination $model) {
+                    return $model->appointment_date;
                 })
                 ->addColumn('status', function (Examination $model) {
                     return $model->status;
@@ -87,7 +87,7 @@
                 Column::make('examination_code')->title(__('Examination Code'))->searchable(true),
                 Column::make('service')->title(__('Service'))->searchable(true),
                 Column::make('name')->title(__('Name'))->searchable(true),
-                Column::make('register_date')->title(__('Examination Date'))->searchable(true),
+                Column::make('appointment_date')->title(__('Appointment Date'))->searchable(true),
                 Column::make('status')->title(__('Status'))->searchable(true),
                 Column::computed('action')
                     ->exportable(false)
