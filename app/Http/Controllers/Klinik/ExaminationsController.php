@@ -285,6 +285,12 @@
             $examination = Examination::find($request->examination_id);
             $transaction = Transaction::where('examination_id', $examination->id)->first();
 
+            if($examination->is_appointment==1){
+                $examination->examination_date = date('Y-m-d H:i:s');
+                $examination->appointment_status = 1;
+                $examination->save();
+            }
+
             $total = 0;
             TransactionDetail::where('transaction_id', $transaction->id)->delete();
             foreach ($request->service_id as $service_id) {

@@ -32,6 +32,9 @@ class Examination extends Model
         'status',
         'resep',
         'saran',
+        'is_appointment',
+        'appointment_date',
+        'appointment_status',
     ];
 
     public function user()

@@ -16,16 +16,9 @@
          */
         public function dataTable($query)
         {
-            $query = $query->orderBy('created_at', 'desc');
+            $query = $query->where('appointment_status',null)->orWhere('appointment_status',1)->orderBy('created_at', 'desc');
             return datatables()
                 ->eloquent($query)
-                ->filter(function ($query) {
-                    if (request()->has('search')) {
-                        $search = request()->get('search');
-                        $query->whereRelation('user','first_name', 'like', "%" . $search['value'] . "%")
-                            ->orWhereRelation('user','last_name', 'like', "%" . $search['value'] . "%");
-                    }
-                })
                 ->rawColumns(['action'])
                 ->addIndexColumn()
                 ->addColumn('examination_code', function (Examination $model) {

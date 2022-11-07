@@ -106,13 +106,34 @@
             $id                = $request->id;
             $user              = $id != '' ? User::find($id) : auth()->user();
             $healthprofesional = HealthProfesional::all();
-            $servicecategories = ServiceCategory::where('is_global',0)->get();
+            $servicecategories = ServiceCategory::where('is_global', 0)->get();
 
-            $info     = $user->info;
+            $info = $user->info;
 
 
             // get the default inner page
             return view('pages.account.examinations.examinations', compact([
+                'user', 'info', 'healthprofesional', 'servicecategories'
+            ]));
+        }
+
+        /**
+         * Display a listing of the resource.
+         *
+         * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+         */
+        public function appointments(Request $request)
+        {
+            $id                = $request->id;
+            $user              = $id != '' ? User::find($id) : auth()->user();
+            $healthprofesional = HealthProfesional::all();
+            $servicecategories = ServiceCategory::where('is_global', 0)->get();
+
+            $info = $user->info;
+
+
+            // get the default inner page
+            return view('pages.account.examinations.appointments', compact([
                 'user', 'info', 'healthprofesional', 'servicecategories'
             ]));
         }
@@ -139,7 +160,7 @@
             $examination->medical_record_id     = $medical_record->id;
             $examination->examination_code      = $examination_code;
             $examination->health_profesional_id = $request->health_profesional_id;
-            $examination->service_category_id = $request->service_category_id;
+            $examination->service_category_id   = $request->service_category_id;
             $examination->examination_date      = date('Y-m-d H:i:s');
             $examination->total                 = 0;
             $examination->status                = 'waiting';
@@ -152,10 +173,54 @@
             $transactions->examination_id = $examination->id;
             $transactions->invoice_number = $inv;
             $transactions->amount         = $examination->total;
-            $transactions->status = 'waiting';
+            $transactions->status         = 'waiting';
             $transactions->save();
 
             return redirect()->route('examinations.services', ['id' => $examination->id]);
+        }
+
+        public function createAppointment(Request $request)
+        {
+            $user             = User::find($request->user_id);
+            $examination_code = IdGenerator::generate(['table' => 'examinations', 'field' => 'examination_code', 'length' => 12, 'prefix' => 'E' . date('Ymd')]);
+            $medical_record   = MedicalRecord::where('user_id', $request->user_id)->first();
+            if ($medical_record) {
+                $medical_record_id = $medical_record->medical_record_code;
+            } else {
+                $medical_record_id = IdGenerator::generate(['table' => 'medical_records', 'field' => 'medical_record_code', 'length' => 13, 'prefix' => 'MR' . date('Ymd')]);
+
+                $medical_record                      = new MedicalRecord();
+                $medical_record->medical_record_code = $medical_record_id;
+                $medical_record->user_id             = $user->id;
+                $medical_record->save();
+            }
+
+            $examination                        = new Examination();
+            $examination->user_id               = $user->id;
+            $examination->patient_id            = $user->patient->id;
+            $examination->medical_record_id     = $medical_record->id;
+            $examination->examination_code      = $examination_code;
+            $examination->health_profesional_id = $request->health_profesional_id;
+            $examination->service_category_id   = $request->service_category_id;
+            $examination->examination_date      = date('Y-m-d H:i:s');
+            $examination->appointment_date      = date('Y-m-d H:i:s');
+            $examination->appointment_status    = '0';
+            $examination->is_appointment        = '1';
+            $examination->total                 = 0;
+            $examination->status                = 'waiting';
+            $examination->save();
+
+            $inv = IdGenerator::generate(['table' => 'transactions', 'field' => 'invoice_number', 'length' => 14, 'prefix' => 'INV' . date('Ymd')]);
+
+
+            $transactions                 = new Transaction();
+            $transactions->examination_id = $examination->id;
+            $transactions->invoice_number = $inv;
+            $transactions->amount         = $examination->total;
+            $transactions->status         = 'waiting';
+            $transactions->save();
+
+            return redirect()->route('appointments.index');
         }
 
         /**

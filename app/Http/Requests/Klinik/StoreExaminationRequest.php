@@ -43,6 +43,9 @@
                 'status'                => 'nullable',
                 'resep'                 => 'nullable',
                 'saran'                 => 'nullable',
+                'is_appointment'        => 'nullable',
+                'appointment_date'      => 'nullable',
+                'appointment_status'    => 'nullable',
             ];
         }
     }

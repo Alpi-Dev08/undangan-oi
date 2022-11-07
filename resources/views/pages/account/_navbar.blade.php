@@ -55,6 +55,9 @@
                         <a href="{{ theme()->getPageUrl('account/examinations?id='.$user->id) }}" class="btn btn-sm btn-success me-2">
                             {{ __('Examination') }}
                         </a>
+                            <a href="{{ theme()->getPageUrl('account/appointments?id='.$user->id) }}" class="btn btn-sm btn-info me-2">
+                                {{ __('Appointment') }}
+                            </a>
                         @endif
 
                         <a href="{{ theme()->getPageUrl('account/settings?id='.$user->id) }}" class="btn btn-sm btn-primary me-3" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-trigger="hover" title="{{ __('Edit Profile') }}">{{ __('Edit Profile') }}</a>

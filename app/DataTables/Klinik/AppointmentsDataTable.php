@@ -2,11 +2,11 @@
 
     namespace App\DataTables\Klinik;
 
-    use App\Models\Klinik\Transaction;
+    use App\Models\Klinik\Examination;
     use Yajra\DataTables\Html\Column;
     use Yajra\DataTables\Services\DataTable;
 
-    class TransactionsDataTable extends DataTable
+    class AppointmentsDataTable extends DataTable
     {
         /**
          * Build DataTable class.
@@ -16,45 +16,39 @@
          */
         public function dataTable($query)
         {
-            $query = $query->whereHas(
-                'examination', function($q){
-                $q->where('appointment_status', '1')->orWhere('appointment_status',null);
-            })->orderBy('created_at', 'desc');
+            $query = $query->where(['is_appointment'=>'1','appointment_status'=>'0'])->orderBy('created_at', 'asc');
             return datatables()
                 ->eloquent($query)
-                ->filter(function ($query) {
-                    if (request()->has('search')) {
-                        $search = request()->get('search');
-                        $query->where('invoice_number', 'like', "%" . $search['value'] . "%");
-                    }
-                })
-                ->rawColumns(['action','invoice_number'])
+                ->rawColumns(['action'])
                 ->addIndexColumn()
-                ->addColumn('invoice_number', function (Transaction $model) {
-                    if(isset($model->examination->user->name)){
-                        return $model->invoice_number . '<br>' . $model->examination->user->name;
-                    }
-                    return $model->invoice_number;
+                ->addColumn('examination_code', function (Examination $model) {
+                    return $model->examination_code;
                 })
-                ->addColumn('amount', function (Transaction $model) {
-                    return $model->amount;
+                ->addColumn('service', function (Examination $model) {
+                    return $model->service_category->name ?? "-";
                 })
-                ->addColumn('status', function (Transaction $model) {
+                ->addColumn('name', function (Examination $model) {
+                    return $model->user->name;
+                })
+                ->addColumn('register_date', function (Examination $model) {
+                    return $model->created_at;
+                })
+                ->addColumn('status', function (Examination $model) {
                     return $model->status;
                 })
-                ->addColumn('action', function (Transaction $model) {
-                    return view('pages.klinik.transactions._action', compact('model'));
+                ->addColumn('action', function (Examination $model) {
+                    return view('pages.klinik.appointments._action', compact('model'));
                 });
         }
 
         /**
          * Get query source of dataTable.
          *
-         * @param \App\Models\Klinik\Transaction $model
+         * @param \App\Models\Klinik\Examination $model
          *
          * @return \Illuminate\Database\Eloquent\Builder
          */
-        public function query(Transaction $model)
+        public function query(Examination $model)
         {
             return $model->newQuery();
         }
@@ -67,9 +61,10 @@
         public function html()
         {
             return $this->builder()
-                ->setTableId('transactions-table')
+                ->setTableId('appointments-table')
                 ->columns($this->getColumns())
                 ->minifiedAjax()
+                ->orderBy(1,'asc')
                 ->stateSave(false)
                 ->responsive()
                 ->autoWidth(false)
@@ -89,8 +84,10 @@
         {
             return [
                 Column::make('DT_RowIndex')->title('No')->orderable(false)->searchable(false),
-                Column::make('invoice_number')->title(__('Invoice Number'))->searchable(true),
-                Column::make('amount')->title(__('Amount'))->searchable(true),
+                Column::make('examination_code')->title(__('Examination Code'))->searchable(true),
+                Column::make('service')->title(__('Service'))->searchable(true),
+                Column::make('name')->title(__('Name'))->searchable(true),
+                Column::make('register_date')->title(__('Examination Date'))->searchable(true),
                 Column::make('status')->title(__('Status'))->searchable(true),
                 Column::computed('action')
                     ->exportable(false)
@@ -107,6 +104,6 @@
          */
         protected function filename() : string
         {
-            return 'Transactions_' . date('YmdHis');
+            return 'Appointments_' . date('YmdHis');
         }
     }

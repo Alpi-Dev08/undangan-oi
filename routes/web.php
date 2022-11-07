@@ -96,6 +96,9 @@ Route::middleware('auth')->group(function () {
 
         Route::get('payments', [SettingsController::class, 'payments'])->name('settings.payment');
         Route::post('payments', [SettingsController::class, 'createPayment'])->name('settings.create.payment');
+
+        Route::get('appointments', [SettingsController::class, 'appointments'])->name('settings.appointments');
+        Route::post('appointments', [SettingsController::class, 'createAppointment'])->name('settings.create.appointment');
     });
 
     //User Management
@@ -156,6 +159,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('anamnesisexaminations', \App\Http\Controllers\Klinik\AnamnesisExaminationsController::class);
         Route::resource('physicalexaminations', \App\Http\Controllers\Klinik\PhysicalExaminationsController::class);
         Route::resource('otherexaminations', \App\Http\Controllers\Klinik\OtherExaminationsController::class);
+        Route::resource('appointments', \App\Http\Controllers\Klinik\AppointmentsController::class);
     });
 
 
