@@ -176,7 +176,7 @@
             <!--begin::Input group-->
             <div class="row mb-6">
                 <!--begin::Label-->
-                <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Place and Date of Birth') }}</label>
+                <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Place and Date of Birth') }}</label>
                 <!--end::Label-->
 
                 <!--begin::Col-->
@@ -185,13 +185,13 @@
                     <div class="row">
                         <!--begin::Col-->
                         <div class="col-lg-6 fv-row">
-                            <input type="text" name="place_of_birth" required class="form-control form-control-lg form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Place of Birth" value=""/>
+                            <input type="text" name="place_of_birth" class="form-control form-control-lg form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Place of Birth" value=""/>
                         </div>
                         <!--end::Col-->
 
                         <!--begin::Col-->
                         <div class="col-lg-6 fv-row">
-                            <input type="date" name="date_of_birth" required class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Date of Birth" value=""/>
+                            <input type="date" name="date_of_birth" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Date of Birth" value=""/>
                         </div>
                         <!--end::Col-->
                     </div>
@@ -204,11 +204,11 @@
             <!--begin::Input group-->
             <div class="row mb-6">
                 <!--begin::Label-->
-                <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Religion') }}</label>
+                <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Religion') }}</label>
                 <!--end::Label-->
                 <!--begin::Col-->
                 <div class="col-lg-8">
-                    <select name="religion_id" aria-label="{{ __('Religion') }}" data-control="select2" data-placeholder="{{ __('Select a Religion...') }}" required class="form-select form-select-solid form-select-lg fw-bold">
+                    <select name="religion_id" aria-label="{{ __('Religion') }}" data-control="select2" data-placeholder="{{ __('Select a Religion...') }}" class="form-select form-select-solid form-select-lg fw-bold">
                         <option value="">{{ __('Select a Religion...') }}</option>
                         @foreach($religions as $religion)
                             <option value="{{ $religion->id }}">{{  $religion->name }}</option>
@@ -220,11 +220,11 @@
             <!--begin::Input group-->
             <div class="row mb-6">
                 <!--begin::Label-->
-                <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Gender') }}</label>
+                <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Gender') }}</label>
                 <!--end::Label-->
                 <!--begin::Col-->
                 <div class="col-lg-2">
-                    <select name="gender_id" aria-label="{{ __('Gender') }}" data-control="select2" data-placeholder="{{ __('Select a Gender...') }}" required class="form-select form-select-solid form-select-lg fw-bold">
+                    <select name="gender_id" aria-label="{{ __('Gender') }}" data-control="select2" data-placeholder="{{ __('Select a Gender...') }}" class="form-select form-select-solid form-select-lg fw-bold">
                         <option value="">{{ __('Select a Gender...') }}</option>
                         @foreach($genders as $gender)
                             <option value="{{ $gender->id }}">{{  $gender->name }}</option>
@@ -233,11 +233,11 @@
                 </div>
 
                 <!--begin::Label-->
-                <label class="col-lg-1 col-form-label required fw-bold fs-6">{{ __('Marital Status') }}</label>
+                <label class="col-lg-1 col-form-label fw-bold fs-6">{{ __('Marital Status') }}</label>
                 <!--end::Label-->
                 <!--begin::Col-->
                 <div class="col-lg-2">
-                    <select name="marital_status_id" aria-label="{{ __('Marital Status') }}" data-control="select2" data-placeholder="{{ __('Select a Marital Status...') }}" required class="form-select form-select-solid form-select-lg fw-bold">
+                    <select name="marital_status_id" aria-label="{{ __('Marital Status') }}" data-control="select2" data-placeholder="{{ __('Select a Marital Status...') }}" class="form-select form-select-solid form-select-lg fw-bold">
                         <option value="">{{ __('Select a Marital Status...') }}</option>
                         @foreach($maritals as $marital)
                             <option value="{{ $marital->id }}">{{  $marital->name }}</option>
@@ -245,11 +245,11 @@
                     </select>
                 </div>
                 <!--begin::Label-->
-                <label class="col-lg-1 col-form-label required fw-bold fs-6">{{ __('Blood Type') }}</label>
+                <label class="col-lg-1 col-form-label fw-bold fs-6">{{ __('Blood Type') }}</label>
                 <!--end::Label-->
                 <!--begin::Col-->
                 <div class="col-lg-2">
-                    <select name="blood_type_id" aria-label="{{ __('Blood Type') }}" data-control="select2" data-placeholder="{{ __('Select a Blood Type...') }}" required class="form-select form-select-solid form-select-lg fw-bold">
+                    <select name="blood_type_id" aria-label="{{ __('Blood Type') }}" data-control="select2" data-placeholder="{{ __('Select a Blood Type...') }}" class="form-select form-select-solid form-select-lg fw-bold">
                         <option value="">{{ __('Select a Blood Type...') }}</option>
                         @foreach($bloods as $blood)
                             <option value="{{ $blood->id }}">{{  $blood->name }}</option>
@@ -260,11 +260,11 @@
             <!--begin::Input group-->
             <div class="row mb-6">
                 <!--begin::Label-->
-                <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Education') }}</label>
+                <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Education') }}</label>
                 <!--end::Label-->
                 <!--begin::Col-->
                 <div class="col-lg-3">
-                    <select name="education_id" aria-label="{{ __('Education') }}" data-control="select2" data-placeholder="{{ __('Select a Education...') }}" required class="form-select form-select-solid form-select-lg fw-bold">
+                    <select name="education_id" aria-label="{{ __('Education') }}" data-control="select2" data-placeholder="{{ __('Select a Education...') }}" class="form-select form-select-solid form-select-lg fw-bold">
                         <option value="">{{ __('Select a Education...') }}</option>
                         @foreach($educations as $education)
                             <option value="{{ $education->id }}">{{  $education->name }}</option>
@@ -273,11 +273,11 @@
                 </div>
 
                 <!--begin::Label-->
-                <label class="col-lg-1 col-form-label required fw-bold fs-6">{{ __('Work') }}</label>
+                <label class="col-lg-1 col-form-label fw-bold fs-6">{{ __('Work') }}</label>
                 <!--end::Label-->
                 <!--begin::Col-->
                 <div class="col-lg-4">
-                    <select name="work_id" aria-label="{{ __('Work') }}" data-control="select2" data-placeholder="{{ __('Select a Work...') }}" required class="form-select form-select-solid form-select-lg fw-bold">
+                    <select name="work_id" aria-label="{{ __('Work') }}" data-control="select2" data-placeholder="{{ __('Select a Work...') }}" class="form-select form-select-solid form-select-lg fw-bold">
                         <option value="">{{ __('Select a Work...') }}</option>
                         @foreach($works as $work)
                             <option value="{{ $work->id }}">{{  $work->name }}</option>
@@ -404,12 +404,12 @@
             <!--begin::Input group-->
             <div class="row mb-6">
                 <!--begin::Label-->
-                <label class="col-lg-4 required col-form-label fw-bold fs-6">{{ __('Address') }}</label>
+                <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Address') }}</label>
                 <!--end::Label-->
 
                 <!--begin::Col-->
                 <div class="col-lg-8 fv-row">
-                    <input type="text" name="address" required class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Address" value=""/>
+                    <input type="text" name="address" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Address" value=""/>
                 </div>
                 <!--end::Col-->
             </div>
@@ -432,12 +432,12 @@
             <!--begin::Input group-->
             <div class="row mb-6">
                 <!--begin::Label-->
-                <label class="col-lg-4 required col-form-label fw-bold fs-6">{{ __('Nama Wali  Pasien (Hubungan dengan Pasien)') }}</label>
+                <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Nama Wali  Pasien (Hubungan dengan Pasien)') }}</label>
                 <!--end::Label-->
 
                 <!--begin::Col-->
                 <div class="col-lg-8 fv-row">
-                    <input type="text" name="patient_trusetee_name" required class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Nama Wali  Pasien (Hubungan dengan Pasien)" value=""/>
+                    <input type="text" name="patient_trusetee_name" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Nama Wali  Pasien (Hubungan dengan Pasien)" value=""/>
                 </div>
                 <!--end::Col-->
             </div>
@@ -446,12 +446,12 @@
             <!--begin::Input group-->
             <div class="row mb-6">
                 <!--begin::Label-->
-                <label class="col-lg-4 required col-form-label fw-bold fs-6">{{ __('Company Name)') }}</label>
+                <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Company Name)') }}</label>
                 <!--end::Label-->
 
                 <!--begin::Col-->
                 <div class="col-lg-8 fv-row">
-                    <input type="text" name="company_name" required class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Company Name" value=""/>
+                    <input type="text" name="company_name" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Company Name" value=""/>
                 </div>
                 <!--end::Col-->
             </div>
@@ -460,12 +460,12 @@
             <!--begin::Input group-->
             <div class="row mb-6 d-none">
                 <!--begin::Label-->
-                <label class="col-lg-4 required col-form-label fw-bold fs-6">{{ __('Date of Hire') }}</label>
+                <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Date of Hire') }}</label>
                 <!--end::Label-->
 
                 <!--begin::Col-->
                 <div class="col-lg-8 fv-row">
-                    <input type="date" name="date_of_hire" required class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Date of Hire" value=""/>
+                    <input type="date" name="date_of_hire" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Date of Hire" value=""/>
                 </div>
                 <!--end::Col-->
             </div>
@@ -474,12 +474,12 @@
             <!--begin::Input group-->
             <div class="row mb-6">
                 <!--begin::Label-->
-                <label class="col-lg-4 required col-form-label fw-bold fs-6">{{ __('Job Title') }}</label>
+                <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Job Title') }}</label>
                 <!--end::Label-->
 
                 <!--begin::Col-->
                 <div class="col-lg-8 fv-row">
-                    <input type="text" name="job_title" required class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Job Title" value=""/>
+                    <input type="text" name="job_title" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Job Title" value=""/>
                 </div>
                 <!--end::Col-->
             </div>
@@ -488,12 +488,12 @@
             <!--begin::Input group-->
             <div class="row mb-6 d-none">
                 <!--begin::Label-->
-                <label class="col-lg-4 required col-form-label fw-bold fs-6">{{ __('Division)') }}</label>
+                <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Division)') }}</label>
                 <!--end::Label-->
 
                 <!--begin::Col-->
                 <div class="col-lg-8 fv-row">
-                    <input type="text" name="division" required class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Division" value=""/>
+                    <input type="text" name="division" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Division" value=""/>
                 </div>
                 <!--end::Col-->
             </div>
@@ -502,12 +502,12 @@
             <!--begin::Input group-->
             <div class="row mb-6">
                 <!--begin::Label-->
-                <label class="col-lg-4 required col-form-label fw-bold fs-6">{{ __('Department') }}</label>
+                <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Department') }}</label>
                 <!--end::Label-->
 
                 <!--begin::Col-->
                 <div class="col-lg-8 fv-row">
-                    <input type="text" name="department" required class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Department" value=""/>
+                    <input type="text" name="department" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Department" value=""/>
                 </div>
                 <!--end::Col-->
             </div>
@@ -516,12 +516,12 @@
             <!--begin::Input group-->
             <div class="row mb-6 d-none">
                 <!--begin::Label-->
-                <label class="col-lg-4 required col-form-label fw-bold fs-6">{{ __('Section') }}</label>
+                <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Section') }}</label>
                 <!--end::Label-->
 
                 <!--begin::Col-->
                 <div class="col-lg-8 fv-row">
-                    <input type="text" name="section" required class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Section" value=""/>
+                    <input type="text" name="section" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Section" value=""/>
                 </div>
                 <!--end::Col-->
             </div>
@@ -530,12 +530,12 @@
             <!--begin::Input group-->
             <div class="row mb-6">
                 <!--begin::Label-->
-                <label class="col-lg-4 required col-form-label fw-bold fs-6">{{ __('Employee ID') }}</label>
+                <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Employee ID') }}</label>
                 <!--end::Label-->
 
                 <!--begin::Col-->
                 <div class="col-lg-8 fv-row">
-                    <input type="text" name="employee_id" required class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Employee ID" value=""/>
+                    <input type="text" name="employee_id" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Employee ID" value=""/>
                 </div>
                 <!--end::Col-->
             </div>
@@ -544,12 +544,12 @@
             <!--begin::Input group-->
             <div class="row mb-6 d-none">
                 <!--begin::Label-->
-                <label class="col-lg-4 required col-form-label fw-bold fs-6">{{ __('Kind of Job') }}</label>
+                <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Kind of Job') }}</label>
                 <!--end::Label-->
 
                 <!--begin::Col-->
                 <div class="col-lg-8 fv-row">
-                    <input type="text" name="kind_of_job" required class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Kind of Job" value=""/>
+                    <input type="text" name="kind_of_job" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Kind of Job" value=""/>
                 </div>
                 <!--end::Col-->
             </div>
@@ -558,12 +558,12 @@
             <!--begin::Input group-->
             <div class="row mb-6 d-none">
                 <!--begin::Label-->
-                <label class="col-lg-4 required col-form-label fw-bold fs-6">{{ __('Shift') }}</label>
+                <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Shift') }}</label>
                 <!--end::Label-->
 
                 <!--begin::Col-->
                 <div class="col-lg-8 fv-row">
-                    <input type="text" name="shift" required class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Shift" value=""/>
+                    <input type="text" name="shift" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Shift" value=""/>
                 </div>
                 <!--end::Col-->
             </div>
