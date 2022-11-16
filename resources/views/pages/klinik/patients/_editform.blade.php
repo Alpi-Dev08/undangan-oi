@@ -100,7 +100,7 @@
                 <div class="row mb-6">
                     <!--begin::Label-->
                     <label class="col-lg-4 col-form-label fw-bold fs-6">
-                        <span class="required">{{ __('Email') }}</span>
+                        <span>{{ __('Email') }}</span>
                     </label>
                     <!--end::Label-->
 
@@ -116,7 +116,7 @@
                 <div class="row mb-6">
                     <!--begin::Label-->
                     <label class="col-lg-4 col-form-label fw-bold fs-6">
-                        <span class="required">{{ __('Contact Phone') }}</span>
+                        <span>{{ __('Contact Phone') }}</span>
                     </label>
                     <!--end::Label-->
 
@@ -159,7 +159,7 @@
                 <!--begin::Input group-->
                 <div class="row mb-6">
                     <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Religion') }}</label>
+                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Religion') }}</label>
                     <!--end::Label-->
                     <!--begin::Col-->
                     <div class="col-lg-8">
@@ -175,7 +175,7 @@
                 <!--begin::Input group-->
                 <div class="row mb-6">
                     <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Gender') }}</label>
+                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Gender') }}</label>
                     <!--end::Label-->
                     <!--begin::Col-->
                     <div class="col-lg-2">
@@ -188,7 +188,7 @@
                     </div>
 
                     <!--begin::Label-->
-                    <label class="col-lg-1 col-form-label required fw-bold fs-6">{{ __('Marital Status') }}</label>
+                    <label class="col-lg-1 col-form-label fw-bold fs-6">{{ __('Marital Status') }}</label>
                     <!--end::Label-->
                     <!--begin::Col-->
                     <div class="col-lg-2">
@@ -201,7 +201,7 @@
                     </div>
 
                     <!--begin::Label-->
-                    <label class="col-lg-1 col-form-label required fw-bold fs-6">{{ __('Blood Type') }}</label>
+                    <label class="col-lg-1 col-form-label fw-bold fs-6">{{ __('Blood Type') }}</label>
                     <!--end::Label-->
                     <!--begin::Col-->
                     <div class="col-lg-2">
@@ -217,7 +217,7 @@
                 <!--begin::Input group-->
                 <div class="row mb-6">
                     <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Education') }}</label>
+                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Education') }}</label>
                     <!--end::Label-->
                     <!--begin::Col-->
                     <div class="col-lg-3">
@@ -230,7 +230,7 @@
                     </div>
 
                     <!--begin::Label-->
-                    <label class="col-lg-1 col-form-label required fw-bold fs-6">{{ __('Work') }}</label>
+                    <label class="col-lg-1 col-form-label fw-bold fs-6">{{ __('Work') }}</label>
                     <!--end::Label-->
                     <!--begin::Col-->
                     <div class="col-lg-4">
@@ -459,12 +459,12 @@
                 <!--begin::Input group-->
                 <div class="row mb-6">
                     <!--begin::Label-->
-                    <label class="col-lg-4 required col-form-label fw-bold fs-6">{{ __('Department') }}</label>
+                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Department') }}</label>
                     <!--end::Label-->
 
                     <!--begin::Col-->
                     <div class="col-lg-8 fv-row">
-                        <input type="text" name="department" required class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Department" value="{{ old('department', $info->department ?? '') }}"/>
+                        <input type="text" name="department" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Department" value="{{ old('department', $info->department ?? '') }}"/>
                     </div>
                     <!--end::Col-->
                 </div>

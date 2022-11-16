@@ -100,7 +100,7 @@
             $validated = $request->validate([
                 'first_name' => 'required|string|max:255',
                 'last_name'  => 'required|string|max:255',
-                'email'      => 'required|email|max:255',
+                'email'      => 'email|max:255|nullable',
                 'phone'      => 'string',
                 'password'   => 'string'
             ]);
@@ -251,7 +251,7 @@
             $validated = $request->validate([
                 'first_name' => 'required|string|max:255',
                 'last_name'  => 'required|string|max:255',
-                'email'      => 'required|email|max:255',
+                'email'      => 'email|max:255|nullable',
                 'phone'      => 'string'
             ]);
             $user      = User::find($request->user);
