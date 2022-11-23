@@ -11,28 +11,28 @@
 <div class="container mx-auto">
     <table style="width:100%">
         <tr>
-            <td style="witdh:30%;font-weight:bold">Medical Record<td>
-            <td style="width:70%">: {{ $user->mr->medical_record_code }}<td>
+            <td style="width:40%;font-size:12px;font-weight:bold">Medical Record<td>
+            <td style="width:60%;font-size:12px;">: {{ $user->mr->medical_record_code }}<td>
         </tr>
         <tr>
-            <td style="witdh:30%;font-weight:bold">Examination Code<td>
-            <td style="width:70%">: {{ $examination->examination_code }}<td>
+            <td style="width:40%;font-size:12px;font-weight:bold">Examination Code<td>
+            <td style="width:60%;font-size:12px;">: {{ $examination->examination_code }}<td>
         </tr>
         <tr>
-            <td style="witdh:30%;font-weight:bold">Examination Date<td>
-            <td style="width:70%">: {{ \Carbon\Carbon::parse($examination->examination_date)->format('d-m-Y') }}<td>
+            <td style="width:40%;font-size:12px;font-weight:bold">Examination Date<td>
+            <td style="width:60%;font-size:12px;">: {{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y H:i:s') }}<td>
         </tr>
         <tr>
-            <td style="witdh:30%;font-weight:bold">Full Name<td>
-            <td style="width:70%">: {{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}<td>
+            <td style="width:40%;font-size:12px;font-weight:bold">Full Name<td>
+            <td style="width:60%;font-size:12px;">: {{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}<td>
         </tr>
         <tr>
-            <td style="witdh:30%;font-weight:bold">Doctor<td>
-            <td style="width:70%">: {{ $examination->health_profesional->user->name }}<td>
+            <td style="width:40%;font-size:12px;font-weight:bold">Doctor<td>
+            <td style="width:60%;font-size:12px;">: {{ $examination->health_profesional->user->name }}<td>
         </tr>
         <tr>
-            <td style="witdh:30%;font-weight:bold">Jenis Pemeriksaan<td>
-            <td style="width:70%">: {{ $examination->service_category->name }}
+            <td style="width:40%;font-size:12px;font-weight:bold">Jenis Pemeriksaan<td>
+            <td style="width:60%;font-size:12px;">: {{ $examination->service_category->name }}
                 <ul class="list-disc">
                     @foreach(service_examination($examination->id) as $service)
                         <li class="ml-6">{{ $service->service->name }}</li>
@@ -45,51 +45,51 @@
     <hr class="mt-10">
 
     <div class="w-full p-5 ">
-        <h1 class="w-full text-2xl font-bold mb-2">Vitality</h1>
+        <h3 class="w-full text-lg font-bold mb-2">Vital Sign & BMI</h3>
         <table style="width:100%">
             <tr>
-                <td style="witdh:30%;font-weight:bold">Weight</td>
-                <td style="width:70%">: {{ $examination->vitality->weight ?? "-" }} Kg</td>
+                <td style="font-size:12px;width:40%;font-weight:bold">Weight</td>
+                <td style="font-size:12px;width:60%">: {{ $examination->vitality->weight ?? "-" }} Kg</td>
             </tr>
             <tr>
-                <td style="witdh:30%;font-weight:bold">Height</td>
-                <td style="width:70%">: {{ $examination->vitality->height ?? "-" }} cm</td>
+                <td style="font-size:12px;width:40%;font-weight:bold">Height</td>
+                <td style="font-size:12px;width:60%">: {{ $examination->vitality->height ?? "-" }} cm</td>
             </tr>
             <tr>
-                <td style="witdh:30%;font-weight:bold">Blood Pressure</td>
-                <td style="width:70%">: {{ $examination->vitality->blood_pressure ?? "-" }}</td>
+                <td style="font-size:12px;width:40%;font-weight:bold">Blood Pressure</td>
+                <td style="font-size:12px;width:60%">: {{ $examination->vitality->blood_pressure ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="witdh:30%;font-weight:bold">Heart Rate</td>
-                <td style="width:70%">: {{ $examination->vitality->heart_rate ?? "-" }}</td>
+                <td style="font-size:12px;width:40%;font-weight:bold">Heart Rate</td>
+                <td style="font-size:12px;width:60%">: {{ $examination->vitality->heart_rate ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="witdh:30%;font-weight:bold">Respiratory Rate</td>
-                <td style="width:70%">: {{ $examination->vitality->respiratory_rate ?? "-" }}</td>
+                <td style="font-size:12px;width:40%;font-weight:bold">Respiratory Rate</td>
+                <td style="font-size:12px;width:60%">: {{ $examination->vitality->respiratory_rate ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="witdh:30%;font-weight:bold">Temperature</td>
-                <td style="width:70%">: {{ $examination->vitality->temperature ?? "-" }}</td>
+                <td style="font-size:12px;width:40%;font-weight:bold">Temperature</td>
+                <td style="font-size:12px;width:60%">: {{ $examination->vitality->temperature ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="witdh:30%;font-weight:bold">Oxygen Saturation</td>
-                <td style="width:70%">: {{ $examination->vitality->oxygen_saturation ?? "-" }}</td>
+                <td style="font-size:12px;width:40%;font-weight:bold">Oxygen Saturation</td>
+                <td style="font-size:12px;width:60%">: {{ $examination->vitality->oxygen_saturation ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="witdh:30%;font-weight:bold">Body Mass Index</td>
-                <td style="width:70%">: {{ $examination->vitality->body_mass_index ?? "-" }}</td>
+                <td style="font-size:12px;width:40%;font-weight:bold">Body Mass Index</td>
+                <td style="font-size:12px;width:60%">: {{ $examination->vitality->body_mass_index ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="witdh:30%;font-weight:bold">Ideal Weight</td>
-                <td style="width:70%">: {{ $examination->vitality->ideal_weight ?? "-" }} Kg</td>
+                <td style="font-size:12px;width:40%;font-weight:bold">Ideal Weight</td>
+                <td style="font-size:12px;width:60%">: {{ $examination->vitality->ideal_weight ?? "-" }} Kg</td>
             </tr>
             <tr>
-                <td style="witdh:30%;font-weight:bold">Body Fat</td>
-                <td style="width:70%">: {{ $examination->vitality->body_fat ?? "-" }}</td>
+                <td style="font-size:12px;width:40%;font-weight:bold">Body Fat</td>
+                <td style="font-size:12px;width:60%">: {{ $examination->vitality->body_fat ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="witdh:30%;font-weight:bold">BMI Conclusion</td>
-                <td style="width:70%">: {{ $examination->vitality->bmi_conclusion ?? "-" }}</td>
+                <td style="font-size:12px;width:40%;font-weight:bold">BMI Conclusion</td>
+                <td style="font-size:12px;width:60%">: {{ $examination->vitality->bmi_conclusion ?? "-" }}</td>
             </tr>
         </table>
 
@@ -274,27 +274,19 @@
             </table>
             @endif
         @else
-            <h5 class="col-12">Check up Result</h5>
-            <div class="col-12 row">
-                <div class="col-2 fw-bolder">Subjective</div>
-                <div class="col-10">: {{ $examination->subjective }}</div>
-            </div>
-            <div class="col-12 row">
-                <div class="col-2 fw-bolder">Objective</div>
-                <div class="col-10">: {{ $examination->objective }}</div>
-            </div>
-            <div class="col-12 row">
-                <div class="col-2 fw-bolder">Assessment</div>
-                <div class="col-10">: {{ $examination->assessment }}</div>
-            </div>
-            <div class="col-12 row">
-                <div class="col-2 fw-bolder">Plan</div>
-                <div class="col-10">: {{ $examination->plan }}</div>
-            </div>
-            <div class="col-12 row">
-                <div class="col-2 fw-bolder">Resep</div>
-                <div class="col-10">: {{ $examination->resep }}</div>
-            </div>
+            <h3 class="col-12 text-lg font-bold mb-2">Check up Result</h3>
+            <table style="width:100%">
+                <tr><td>Subjective :</td></tr>
+                <tr><td>{{ $examination->subjective }}</td></tr>
+                <tr><td>Objective :</td></tr>
+                <tr><td>{{ $examination->objective }}</td></tr>
+                <tr><td>Assessment :</td></tr>
+                <tr><td>{{ $examination->assessment }}</td></tr>
+                <tr><td>Plan :</td></tr>
+                <tr><td>{{ $examination->plan }}</td></tr>
+                <tr><td>Resep :</td></tr>
+                <tr><td>{{ $examination->resep }}</td></tr>
+            </table>
         @endif
     </div>
 
