@@ -304,7 +304,8 @@ if (!function_exists('physicals')) {
          */
         function service_examination($id)
         {
-            $transaction_detail = TransactionDetail::with('service','service.category')->where('transaction_id', $id)->whereHas('service.category', function(Builder $query){
+            $transaction = Transaction::where('examination_id', $id)->first();
+            $transaction_detail = TransactionDetail::with('service','service.category')->where('transaction_id', $transaction->id)->whereHas('service.category', function(Builder $query){
                 $query->where('is_global', 0);
             })->get();
 
