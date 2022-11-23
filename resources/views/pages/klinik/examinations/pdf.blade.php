@@ -20,11 +20,11 @@
         </tr>
         <tr>
             <td style="witdh:30%;font-weight:bold">Examination Date<td>
-            <td style="width:70%">: {{ $examination->examination_date }}<td>
+            <td style="width:70%">: {{ \Carbon\Carbon::parse($examination->examination_date)->format('d-m-Y') }}<td>
         </tr>
         <tr>
             <td style="witdh:30%;font-weight:bold">Full Name<td>
-            <td style="width:70%">:{{ ($user->info->title_prefix !='' ? $user->info->title_prefix.'. ' : '').$user->name.($user->info->title_suffix!='' ? ', '.$user->info->title_suffix : '') }}<td>
+            <td style="width:70%">: {{ ($user->info->title_prefix !='' OR $user->info->title_prefix !='-' ? $user->info->title_prefix.'. ' : '').$user->name.($user->info->title_suffix!='' OR $user->info->title_suffix!='-' ? ', '.$user->info->title_suffix : '') }}<td>
         </tr>
         <tr>
             <td style="witdh:30%;font-weight:bold">Doctor<td>
