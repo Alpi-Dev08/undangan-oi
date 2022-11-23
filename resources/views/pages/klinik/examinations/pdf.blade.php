@@ -8,7 +8,7 @@
 </head>
 <body>
 <!--begin::Text-->
-<td class="container mx-auto">
+<div class="container mx-auto">
     <table style="width:100%">
         <tr>
             <td style="width:40%;font-size:12px;font-weight:bold">Medical Record<td>
@@ -289,8 +289,8 @@
             </table>
         @endif
     </div>
-
 </div>
 <!--end::Text-->
 </body>
 </html>
+
