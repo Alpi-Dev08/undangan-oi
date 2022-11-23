@@ -8,7 +8,7 @@
 </head>
 <body>
 <!--begin::Text-->
-<div class="container mx-auto">
+<td class="container mx-auto">
     <table style="width:100%">
         <tr>
             <td style="width:40%;font-size:12px;font-weight:bold">Medical Record<td>
@@ -38,7 +38,7 @@
                         <li class="ml-6">{{ $service->service->name }}</li>
                     @endforeach
                 </ul>
-            </div>
+            </td>
         </tr>
     </table>
 
@@ -276,15 +276,15 @@
         @else
             <h3 class="col-12 text-lg font-bold mb-2">Check up Result</h3>
             <table style="width:100%">
-                <tr><td>Subjective :</td></tr>
+                <tr><td style="font-weight:bold">Subjective :</td></tr>
                 <tr><td>{{ $examination->subjective }}</td></tr>
-                <tr><td>Objective :</td></tr>
+                <tr><td style="font-weight:bold">Objective :</td></tr>
                 <tr><td>{{ $examination->objective }}</td></tr>
-                <tr><td>Assessment :</td></tr>
+                <tr><td style="font-weight:bold">Assessment :</td></tr>
                 <tr><td>{{ $examination->assessment }}</td></tr>
-                <tr><td>Plan :</td></tr>
+                <tr><td style="font-weight:bold">Plan :</td></tr>
                 <tr><td>{{ $examination->plan }}</td></tr>
-                <tr><td>Resep :</td></tr>
+                <tr><td style="font-weight:bold">Resep :</td></tr>
                 <tr><td>{{ $examination->resep }}</td></tr>
             </table>
         @endif
