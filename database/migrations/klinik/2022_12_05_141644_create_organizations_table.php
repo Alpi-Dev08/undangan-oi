@@ -1,0 +1,50 @@
+<?php
+
+    use App\Models\Master\City;
+    use App\Models\Master\Country;
+    use App\Models\Master\District;
+    use App\Models\Master\Province;
+    use App\Models\Master\SubDistrict;
+    use Illuminate\Database\Migrations\Migration;
+    use Illuminate\Database\Schema\Blueprint;
+    use Illuminate\Support\Facades\Schema;
+
+    return new class extends Migration {
+        /**
+         * Run the migrations.
+         *
+         * @return void
+         */
+        public function up()
+        {
+            Schema::create('organizations', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->string('organization_id');
+                $table->string('email')->nullable();
+                $table->string('phone')->nullable();
+                $table->string('fax')->nullable();
+                $table->string('logo')->nullable();
+                $table->foreignIdFor(Country::class)->constrained()->nullable();
+                $table->foreignIdFor(Province::class)->constrained()->nullable();
+                $table->foreignIdFor(City::class)->constrained()->nullable();
+                $table->foreignIdFor(District::class)->constrained()->nullable();
+                $table->foreignIdFor(SubDistrict::class)->constrained()->nullable();
+                $table->string('address')->nullable();
+                $table->string('postal_code')->nullable();
+                $table->timestamps();
+                $table->softDeletes();
+
+            });
+        }
+
+        /**
+         * Reverse the migrations.
+         *
+         * @return void
+         */
+        public function down()
+        {
+            Schema::dropIfExists('organizations');
+        }
+    };
