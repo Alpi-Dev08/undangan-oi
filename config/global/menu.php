@@ -325,6 +325,12 @@
                     'class' => 'menu-sub-accordion menu-active-bg',
                     'items' => [
                         [
+                            'title'      => 'Organization',
+                            'path'       => 'klinik/organization',
+                            'bullet'     => '<span class="bullet bullet-dot"></span>',
+                            'permission' => ['settings.read'],
+                        ],
+                        [
                             'title'      => 'General Setting',
                             'path'       => 'setting',
                             'bullet'     => '<span class="bullet bullet-dot"></span>',
