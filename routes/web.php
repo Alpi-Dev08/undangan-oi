@@ -2,9 +2,6 @@
 
 use App\Http\Controllers\Account\SettingsController;
 use App\Http\Controllers\Auth\SocialiteLoginController;
-use App\Http\Controllers\Documentation\ReferencesController;
-    use App\Http\Controllers\FileManagerController;
-    use App\Http\Controllers\GeneralSettingsController;
     use App\Http\Controllers\Klinik\DiseasesController;
     use App\Http\Controllers\Klinik\ExaminationsController;
     use App\Http\Controllers\Klinik\HealthcareCategoriesController;
@@ -12,16 +9,7 @@ use App\Http\Controllers\Documentation\ReferencesController;
     use App\Http\Controllers\Klinik\HealthcareTypesController;
     use App\Http\Controllers\Klinik\HealthProfesionalsController;
     use App\Http\Controllers\Klinik\HealthProfesionalTypesController;
-    use App\Http\Controllers\Klinik\LaboratoriesController;
-    use App\Http\Controllers\Klinik\LaboratoryExaminationCategoriesController;
-    use App\Http\Controllers\Klinik\LaboratoryExaminationsController;
-    use App\Http\Controllers\Klinik\LaboratoryExaminationTypesController;
-    use App\Http\Controllers\Klinik\LaboratoryUnitsController;
-    use App\Http\Controllers\Klinik\PackagesController;
     use App\Http\Controllers\Klinik\PatientsController;
-    use App\Http\Controllers\Klinik\ServiceTypesController;
-    use App\Http\Controllers\Klinik\SocialActivitiesController;
-    use App\Http\Controllers\Klinik\SocialActivityCategoriesController;
     use App\Http\Controllers\Klinik\SpecialitiesController;
     use App\Http\Controllers\Klinik\TransactionsController;
     use App\Http\Controllers\Logs\AuditLogsController;
@@ -39,16 +27,11 @@ use App\Http\Controllers\Master\RelationshipStatusesController;
 use App\Http\Controllers\Master\ReligionsController;
 use App\Http\Controllers\Master\SubDistrictsController;
 use App\Http\Controllers\Master\WorksController;
-    use App\Http\Controllers\NakesController;
     use App\Http\Controllers\PagesController;
     use App\Http\Controllers\PermissionsController;
     use App\Http\Controllers\RolesController;
     use App\Http\Controllers\UsersController;
-    use App\Models\Klinik\HealthcareType;
-    use App\Models\Klinik\HealthProfesional;
-    use App\Models\Klinik\HealthProfesionalType;
-    use App\Models\Klinik\LaboratoryExaminationCategory;
-    use App\Models\Klinik\SocialActivityCategory;
+    use App\Http\Controllers\Klinik\OrganizationController;
     use Illuminate\Support\Facades\Route;
 
 /*
@@ -160,6 +143,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('physicalexaminations', \App\Http\Controllers\Klinik\PhysicalExaminationsController::class);
         Route::resource('otherexaminations', \App\Http\Controllers\Klinik\OtherExaminationsController::class);
         Route::resource('appointments', \App\Http\Controllers\Klinik\AppointmentsController::class);
+
+        Route::resource('organization',OrganizationController::class);
     });
 
 
