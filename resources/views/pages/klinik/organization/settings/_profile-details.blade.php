@@ -30,7 +30,7 @@
                         <!--begin::Image input-->
                         <div class="image-input image-input-outline {{ isset($organization) && $organization->logo ? '' : 'image-input-empty' }}" data-kt-image-input="true" style="background-image: url({{ asset(theme()->getMediaUrlPath() . 'photos/blank.png') }})">
                             <!--begin::Preview existing avatar-->
-                            <div class="image-input-wrapper w-125px h-125px" style="background-image: {{ isset($organization) && $organization->logo ? 'url('.asset('storage/'.$organization->logo).')' : 'none' }};"></div>
+                            <div class="image-input-wrapper w-125px h-125px" style="background-image: {{ isset($organization) && $organization->logo ? 'url('.asset($organization->logo).')' : 'none' }};background-size: contain;background-position: center"></div>
                             <!--end::Preview existing avatar-->
 
                             <!--begin::Label-->
@@ -65,10 +65,7 @@
                     <!--end::Col-->
                 </div>
                 <!--end::Input group-->
-
-
-
-
+                
                 <!--begin::Input group-->
                 <div class="row mb-6">
                     <!--begin::Label-->

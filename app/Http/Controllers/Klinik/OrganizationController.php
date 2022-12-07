@@ -92,7 +92,7 @@ class OrganizationController extends Controller
      */
     public function update(UpdateOrganizationRequest $request, Organization $organization)
     {
-        //
+        dd($request->all());
     }
 
     /**
