@@ -57,8 +57,8 @@
             }
 
             $organizations = Organization::all();
-            $countries  = Country::all();
-            $provinces  = Province::all();
+            $countries     = Country::all();
+            $provinces     = Province::all();
             return view('pages.klinik.locations.create', compact('organizations', 'countries', 'provinces'));
         }
 
@@ -83,7 +83,90 @@
             if ($validated) {
                 try {
                     $validated['uuid'] = Str::uuid()->toString();
-                    Location::create($validated);
+                    $location          = Location::create($validated);
+                    //dd($location);
+                    $jsonSatuSehat = [
+                        'status'               => $location->status == '1' ? "active" : "inactive",
+                        'address'              => [
+                            'city'       => $location->city->name,
+                            'country'    => $location->country->code,
+                            'extension'  => [[
+                                                 'extension' => [
+                                                     [
+                                                         'url'       => 'province',
+                                                         'valueCode' => $location->province->area_code,
+                                                     ],
+                                                     [
+                                                         'url'       => 'city',
+                                                         'valueCode' => str_replace('.', '', $location->city->area_code)
+                                                     ],
+                                                     [
+                                                         'url'       => 'district',
+                                                         'valueCode' => str_replace('.', '', $location->district->area_code),
+                                                     ],
+                                                     [
+                                                         'url'       => 'village',
+                                                         'valueCode' => str_replace('.', '', $location->sub_district->area_code),
+                                                     ],
+                                                 ],
+                                                 'url'       => 'https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode'
+                                             ]
+                            ],
+                            'line'       => [$location->address],
+                            'postalCode' => $location->postal_code,
+                            'use'        => 'work'
+                        ],
+                        'identifier'           => [
+                            [
+                                'system' => 'http://sys-ids.kemkes.go.id/location/1000001',
+                                'value'  => $location->code,
+                            ]
+                        ],
+                        'name'                 => $location->name,
+                        'description'          => $location->description,
+                        'mode'                 => 'instance',
+                        'managingOrganization' => [
+                            'reference' => 'Organization/' . $location->organization->organization_id,
+                        ],
+                        'resourceType'         => 'Location',
+                        'telecom'              => [
+                            [
+                                'system' => 'phone',
+                                'use'    => 'work',
+                                'value'  => $location->phone,
+                            ],
+                            [
+                                'system' => 'email',
+                                'use'    => 'work',
+                                'value'  => $location->email,
+                            ],
+                            [
+                                'system' => 'fax',
+                                'use'    => 'work',
+                                'value'  => $location->fax,
+                            ],
+                        ],
+                        'physicalType'         => [
+                            'coding' => [
+                                [
+                                    'code'    => 'ro',
+                                    'display' => 'Room',
+                                    'system'  => 'http://terminology.hl7.org/CodeSystem/location-physical-type',
+                                ],
+                            ]
+                        ],
+                    ];
+
+                    $location->json_satu_sehat = json_encode($jsonSatuSehat);
+                    $location->save();
+
+                    $satusehat = satu_sehat('create', 'Location', '', $jsonSatuSehat);
+                    $data      = json_decode($satusehat);
+
+                    $location->response_satu_sehat = $satusehat;
+                    $location->location_id         = $data->id;
+                    $location->save();
+
                 } catch (Exception $e) {
                     report($e);
                     return false;
@@ -121,13 +204,13 @@
                 abort(403, 'Sorry !! You are Unauthorized to edit any master data !');
             }
 
-            $location   = Location::find($id);
-            $organizations   = Organization::all();
-            $countries    = Country::all();
-            $provinces    = Province::where('country_id', $location->country_id)->get();
-            $cities       = City::where('province_id', $location->province_id)->get();
-            $districts    = District::where('city_id', $location->city_id)->get();
-            $subdistricts = SubDistrict::where('district_id', $location->district_id)->get();
+            $location      = Location::find($id);
+            $organizations = Organization::all();
+            $countries     = Country::all();
+            $provinces     = Province::where('country_id', $location->country_id)->get();
+            $cities        = City::where('province_id', $location->province_id)->get();
+            $districts     = District::where('city_id', $location->city_id)->get();
+            $subdistricts  = SubDistrict::where('district_id', $location->district_id)->get();
 
             return view('pages.klinik.locations.edit', compact('location', 'organizations', 'countries', 'provinces', 'cities', 'districts', 'subdistricts'));
         }
@@ -154,6 +237,89 @@
                 // Process Data
                 try {
                     $location->update($validated);
+
+                    $jsonSatuSehat = [
+                        'status'               => $location->status == '1' ? "active" : "inactive",
+                        'address'              => [
+                            'city'       => $location->city->name,
+                            'country'    => $location->country->code,
+                            'extension'  => [[
+                                                 'extension' => [
+                                                     [
+                                                         'url'       => 'province',
+                                                         'valueCode' => $location->province->area_code,
+                                                     ],
+                                                     [
+                                                         'url'       => 'city',
+                                                         'valueCode' => str_replace('.', '', $location->city->area_code)
+                                                     ],
+                                                     [
+                                                         'url'       => 'district',
+                                                         'valueCode' => str_replace('.', '', $location->district->area_code),
+                                                     ],
+                                                     [
+                                                         'url'       => 'village',
+                                                         'valueCode' => str_replace('.', '', $location->sub_district->area_code),
+                                                     ],
+                                                 ],
+                                                 'url'       => 'https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode'
+                                             ]
+                            ],
+                            'line'       => [$location->address],
+                            'postalCode' => $location->postal_code,
+                            'use'        => 'work'
+                        ],
+                        'identifier'           => [
+                            [
+                                'system' => 'http://sys-ids.kemkes.go.id/location/1000001',
+                                'value'  => $location->code,
+                            ]
+                        ],
+                        'id'                   => $location->location_id,
+                        'name'                 => $location->name,
+                        'description'          => $location->description,
+                        'mode'                 => 'instance',
+                        'managingOrganization' => [
+                            'reference' => 'Organization/' . $location->organization->organization_id,
+                        ],
+                        'resourceType'         => 'Location',
+                        'telecom'              => [
+                            [
+                                'system' => 'phone',
+                                'use'    => 'work',
+                                'value'  => $location->phone,
+                            ],
+                            [
+                                'system' => 'email',
+                                'use'    => 'work',
+                                'value'  => $location->email,
+                            ],
+                            [
+                                'system' => 'fax',
+                                'use'    => 'work',
+                                'value'  => $location->fax,
+                            ],
+                        ],
+                        'physicalType'         => [
+                            'coding' => [
+                                [
+                                    'code'    => 'ro',
+                                    'display' => 'Room',
+                                    'system'  => 'http://terminology.hl7.org/CodeSystem/location-physical-type',
+                                ],
+                            ]
+                        ],
+                    ];
+
+                    $location->json_satu_sehat = json_encode($jsonSatuSehat);
+                    $location->update();
+
+                    $satusehat = satu_sehat('update', 'Location', $location->location_id, $jsonSatuSehat);
+
+
+                    $location->response_satu_sehat = $satusehat;
+                    $location->update();
+
                 } catch (Exception $e) {
                     report($e);
                     return false;

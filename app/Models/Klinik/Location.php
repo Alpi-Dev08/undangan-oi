@@ -33,6 +33,8 @@ class Location extends Model
         'address',
         'postal_code',
         'json_satu_sehat',
+        'response_satu_sehat',
+        'location_id',
         'status'
     ];
 

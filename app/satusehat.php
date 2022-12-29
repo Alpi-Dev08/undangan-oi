@@ -22,19 +22,36 @@
         return $response;
     }
 
-    function satu_sehat($type,$service,$id,$data)
+    function satu_sehat($type,$service,$id='',$data)
     {
         $token    = generateToken();
         $token    = json_decode($token->content());
         $token    = $token->data->access_token;
         $url      = env('SATU_SEHAT_URL');
-        $url      = $url . '/' . $service . '/' . $id;
-        $request  = Http::withToken($token)->put($url, $data);
+
+        if($id){
+            $url      = $url . '/' . $service . '/' . $id;
+        } else {
+            $url      = $url . '/' . $service;
+        }
+
+        if($type == 'create'){
+            $request = Http::withToken($token)->post($url, $data);
+        }elseif($type == 'update'){
+            $request = Http::withToken($token)->put($url, $data);
+        }elseif($type == 'delete'){
+            $request = Http::withToken($token)->delete($url);
+        }else{
+            $request = Http::withToken($token)->get($url);
+        }
+
         $response = response()->json([
             "success" => $request->ok(),
             'data'    => $request->object()
         ], $request->status());
         Log::info($response);
+        return json_encode($request->object());
+
     }
 
 
