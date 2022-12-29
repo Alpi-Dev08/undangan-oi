@@ -136,6 +136,18 @@
                     'class' => 'menu-sub-accordion menu-active-bg',
                     'items' => [
                         [
+                            'title'      => 'Organization',
+                            'path'       => 'klinik/organization',
+                            'bullet'     => '<span class="bullet bullet-dot"></span>',
+                            'permission' => ['settings.read'],
+                        ],
+                        [
+                            'title'      => 'Locations',
+                            'path'       => 'klinik/locations',
+                            'bullet'     => '<span class="bullet bullet-dot"></span>',
+                            'permission' => ['settings.read'],
+                        ],
+                        [
                             'title'      => 'Healthcare Category',
                             'path'       => 'klinik/healthcarecategories',
                             'bullet'     => '<span class="bullet bullet-dot"></span>',
@@ -324,12 +336,6 @@
                 'sub'        => [
                     'class' => 'menu-sub-accordion menu-active-bg',
                     'items' => [
-                        [
-                            'title'      => 'Organization',
-                            'path'       => 'klinik/organization',
-                            'bullet'     => '<span class="bullet bullet-dot"></span>',
-                            'permission' => ['settings.read'],
-                        ],
                         [
                             'title'      => 'General Setting',
                             'path'       => 'setting',

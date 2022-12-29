@@ -25,7 +25,6 @@ class Location extends Model
         'email',
         'phone',
         'fax',
-        'logo',
         'country_id',
         'province_id',
         'city_id',

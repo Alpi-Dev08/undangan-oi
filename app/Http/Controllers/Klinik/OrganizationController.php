@@ -32,7 +32,7 @@ class OrganizationController extends Controller
         $districts    = $organization->city_id != null ? District::where('city_id', $organization->city_id)->get() : null;
         $subdistricts = $organization->district_id != null ? SubDistrict::where('district_id', $organization->district_id)->get() : null;
         //generateToken();
-        return view('pages.klinik.organization.overview.overview', compact('organization','user','info','countries', 'provinces', 'cities', 'districts', 'subdistricts'));
+        return view('pages.klinik.organization.overview', compact('organization','user','info','countries', 'provinces', 'cities', 'districts', 'subdistricts'));
     }
 
     /**
@@ -74,15 +74,7 @@ class OrganizationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Organization $organization)
-    {
-        $countries = $organization->country;
-        $provinces    = $organization->country_id != null ? Province::where('country_id', $organization->country_id)->get() : Province::all();
-        $cities       = $organization->province_id != null ? City::where('province_id', $organization->province_id)->get() : null;
-        $districts    = $organization->city_id != null ? District::where('city_id', $organization->city_id)->get() : null;
-        $subdistricts = $organization->district_id != null ? SubDistrict::where('district_id', $organization->district_id)->get() : null;
-
-        return view('klinik.organization.settings.settings', compact('organization', 'countries', 'provinces', 'cities', 'districts', 'subdistricts'));
-    }
+    {}
 
     /**
      * Update the specified resource in storage.

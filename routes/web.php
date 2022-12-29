@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\SocialiteLoginController;
     use App\Http\Controllers\Klinik\HealthcareTypesController;
     use App\Http\Controllers\Klinik\HealthProfesionalsController;
     use App\Http\Controllers\Klinik\HealthProfesionalTypesController;
+    use App\Http\Controllers\Klinik\LocationsController;
     use App\Http\Controllers\Klinik\PatientsController;
     use App\Http\Controllers\Klinik\SpecialitiesController;
     use App\Http\Controllers\Klinik\TransactionsController;
@@ -145,6 +146,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('appointments', \App\Http\Controllers\Klinik\AppointmentsController::class);
 
         Route::resource('organization',OrganizationController::class);
+        Route::resource('locations', LocationsController::class);
     });
 
 

@@ -24,7 +24,7 @@ class UpdateLocationRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'            => 'required',
+            'uuid'            => 'nullable',
             'code'            => 'required',
             'name'            => 'required',
             'description'     => 'nullable',
@@ -32,7 +32,6 @@ class UpdateLocationRequest extends FormRequest
             'email'           => 'required|email',
             'phone'           => 'required',
             'fax'             => 'nullable',
-            'logo'            => 'nullable |image',
             'country_id'      => 'required',
             'province_id'     => 'required',
             'city_id'         => 'required',
