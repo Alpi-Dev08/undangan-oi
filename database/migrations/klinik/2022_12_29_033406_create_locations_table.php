@@ -21,6 +21,7 @@ return new class extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
+            $table->uuid('location_id')->nullable();
             $table->uuid('uuid');
             $table->string('code')->nullable();
             $table->foreignIdFor(Organization::class)->constrained();
@@ -38,6 +39,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('postal_code')->nullable();
             $table->string('json_satu_sehat')->nullable();
+            $table->string('response_satu_sehat')->nullable();
             $table->char('status',1)->default('1');
             $table->timestamps();
             $table->softDeletes();
