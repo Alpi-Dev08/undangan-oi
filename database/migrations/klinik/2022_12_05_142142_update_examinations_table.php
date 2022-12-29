@@ -19,8 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('patient_id')->nullable()->change();
             $table->unsignedBigInteger('medical_record_id')->nullable()->change();
             $table->unsignedBigInteger('health_profesional_id')->nullable()->change();
-            $table->foreignIdFor(ServiceCategory::class)->after('medical_record_id')->nullable();
-            $table->foreignIdFor(Plan::class)->after('service_category_id')->nullable();
+            //$table->foreignIdFor(ServiceCategory::class)->after('medical_record_id')->nullable();
+            //$table->foreignIdFor(Plan::class)->after('service_category_id')->nullable();
             $table->dropColumn('symtomp_area');
             $table->dropColumn('symtomp');
             $table->dropColumn('symtomp_date');
