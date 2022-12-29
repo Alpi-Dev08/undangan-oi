@@ -30,6 +30,7 @@ class Organization extends Model
         'sub_district_id',
         'address',
         'postal_code',
+        'json_satu_sehat',
     ];
 
     public function country()
@@ -52,7 +53,7 @@ class Organization extends Model
         return $this->belongsTo(District::class);
     }
 
-    public function subdistrict()
+    public function sub_district()
     {
         return $this->belongsTo(SubDistrict::class);
     }

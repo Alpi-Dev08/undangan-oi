@@ -6,7 +6,7 @@
             <!--begin: Pic-->
             <div class="me-7 mb-4">
                 <div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
-                    <img src="{{ $organization->logo }}" alt="image"/>
+                    <img style="object-fit:contain" src="{{ asset('storage/'.$organization->logo) }}" alt="image"/>
                     <div class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-white h-20px w-20px"></div>
                 </div>
             </div>
@@ -27,7 +27,7 @@
                         <!--begin::Info-->
                         <div class="d-flex flex-wrap fw-bold fs-6 mb-4 pe-2">
                             <span>{{ $organization->email }} {{ $organization->phone }}, {{ $organization->fax }}</span>
-                            <span>{{ $organization->address }}{{ isset($organization->subdistrict) ? ', '.$organization->subdistrict->name : '' }}{{ isset($organization->district) ? ', '.$organization->district->name : '' }}{{ isset($organization->city) ? ', '.$organization->city->name : '' }}{{ isset($organization->province) ? ', '.$organization->province->name : '' }}{{ isset($organization->country) ? ', '.$organization->country->name : '' }}{{ $organization->postal_code!='' ? $organization->postal_code : (isset($organization->subdistrict) ? ' - '.$organization->subdistrict->postal_code : '') }}</span>
+                            <span>{{ $organization->address }}{{ isset($organization->subdistrict) ? ', '.$organization->subdistrict->name : '' }}{{ isset($organization->district) ? ', '.$organization->district->name : '' }}{{ isset($organization->city) ? ', '.$organization->city->name : '' }}{{ isset($organization->province) ? ', '.$organization->province->name : '' }}{{ isset($organization->country) ? ', '.$organization->country->name : '' }}{{ $organization->postal_code!='' ? ' - '.$organization->postal_code : (isset($organization->subdistrict) ? ' - '.$organization->subdistrict->postal_code : '') }}</span>
                         </div>
                         <!--end::Info-->
 

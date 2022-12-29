@@ -61,7 +61,8 @@
     },
     "autoload": {
         "files": [
-            "app/helpers.php"
+            "app/helpers.php",
+            "app/satusehat.php"
         ],
         "psr-4": {
             "App\\": "app/",

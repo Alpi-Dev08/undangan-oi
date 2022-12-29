@@ -22,6 +22,7 @@
                 <div class="row mb-6">
                     <!--begin::Label-->
                     <input type="hidden" name="id" value="{{$organization->id}}">
+                    <input type="hidden" name="organization_id" value="{{$organization->organization_id}}">
                     <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Logo') }}</label>
                     <!--end::Label-->
 
@@ -30,7 +31,7 @@
                         <!--begin::Image input-->
                         <div class="image-input image-input-outline {{ isset($organization) && $organization->logo ? '' : 'image-input-empty' }}" data-kt-image-input="true" style="background-image: url({{ asset(theme()->getMediaUrlPath() . 'photos/blank.png') }})">
                             <!--begin::Preview existing avatar-->
-                            <div class="image-input-wrapper w-125px h-125px" style="background-image: {{ isset($organization) && $organization->logo ? 'url('.asset('storage/'.$organization->logo).')' : 'none' }};"></div>
+                            <div class="image-input-wrapper w-125px h-125px" style="background-image: {{ isset($organization) && $organization->logo ? 'url('.asset('storage/'.$organization->logo).')' : 'none' }};background-size:contain;background-position:center;"></div>
                             <!--end::Preview existing avatar-->
 
                             <!--begin::Label-->
@@ -38,7 +39,7 @@
                                 <i class="bi bi-pencil-fill fs-7"></i>
 
                                 <!--begin::Inputs-->
-                                <input type="file" name="photo" accept=".png, .jpg, .jpeg"/>
+                                <input type="file" name="logo" accept=".png, .jpg, .jpeg"/>
                                 <input type="hidden" name="avatar_remove"/>
                                 <!--end::Inputs-->
                             </label>

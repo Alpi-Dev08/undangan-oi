@@ -32,6 +32,7 @@
                 $table->foreignIdFor(SubDistrict::class)->constrained()->nullable();
                 $table->string('address')->nullable();
                 $table->string('postal_code')->nullable();
+                $table->string('json_satu_sehat')->nullable();
                 $table->timestamps();
                 $table->softDeletes();
 

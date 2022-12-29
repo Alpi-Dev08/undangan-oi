@@ -5,6 +5,7 @@ namespace App\Models\Master;
 use App\Core\Traits\SpatieLogsActivity;
 use App\Models\Klinik\Healthcare;
 use App\Models\Klinik\Laboratory;
+use App\Models\Klinik\Organization;
 use App\Models\UserInfo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -72,6 +73,11 @@ class SubDistrict extends Model
     public function laboratory()
     {
         return $this->HasMany(Laboratory::class);
+    }
+
+    public function organization()
+    {
+        return $this->HasMany(Organization::class);
     }
 
 }

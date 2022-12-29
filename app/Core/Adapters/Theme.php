@@ -383,7 +383,7 @@ class Theme extends \App\Core\Theme
      */
     public static function getMediaUrlPath()
     {
-        return theme()->getDemo().'/media/';
+        return 'assets/media/';
     }
 
     public static function getImageUrl($folder, $file, $dark = true)

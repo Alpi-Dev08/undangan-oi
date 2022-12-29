@@ -173,20 +173,21 @@ use App\Models\Klinik\Service;
         function assetCustom($path)
         {
             // Include rtl css file
+            $assetsPath = 'assets';
             if (isRTL()) {
-                return asset(theme()->getDemo() . '/' . dirname($path) . '/' . basename($path, '.css') . '.rtl.css');
+                return asset($assetsPath . '/' . dirname($path) . '/' . basename($path, '.css') . '.rtl.css');
             }
 
             // Include dark style css file
             if (theme()->isDarkModeEnabled() && theme()->getCurrentMode() !== 'light') {
                 $darkPath = str_replace('.bundle', '.' . theme()->getCurrentMode() . '.bundle', $path);
-                if (file_exists(public_path(theme()->getDemo() . '/' . $darkPath))) {
-                    return asset(theme()->getDemo() . '/' . $darkPath);
+                if (file_exists(public_path($assetsPath . '/' . $darkPath))) {
+                    return asset($assetsPath . '/' . $darkPath);
                 }
             }
 
             // Include default css file
-            return asset(theme()->getDemo() . '/' . $path);
+            return asset($assetsPath . '/' . $path);
         }
     }
 

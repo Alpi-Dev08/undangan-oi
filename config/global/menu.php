@@ -8,14 +8,14 @@
             [
                 'title' => 'Dashboard',
                 'path'  => '',
-                'icon'  => theme()->getSvgIcon("demo1/media/icons/duotune/art/art002.svg", "svg-icon-2"),
+                'icon'  => theme()->getSvgIcon("assets/media/icons/duotune/art/art002.svg", "svg-icon-2"),
             ],
 
             // Account
             [
                 'title'      => 'Account',
                 'icon'       => [
-                    'svg'  => theme()->getSvgIcon("demo1/media/icons/duotune/communication/com006.svg", "svg-icon-2"),
+                    'svg'  => theme()->getSvgIcon("assets/media/icons/duotune/communication/com006.svg", "svg-icon-2"),
                     'font' => '<i class="bi bi-person fs-2"></i>',
                 ],
                 'classes'    => ['item' => 'menu-accordion'],
@@ -49,38 +49,38 @@
                 'title' => 'Registrasi', // Patients
                 'path'  => 'klinik/patients',
                 'role' => ['admin','administrator'],
-                'icon'  => theme()->getSvgIcon("demo1/media/icons/duotune/communication/com014.svg", "svg-icon-2"),
+                'icon'  => theme()->getSvgIcon("assets/media/icons/duotune/communication/com014.svg", "svg-icon-2"),
             ],
             [
                 'title' => 'Appointment', // Patients
                 'path'  => 'klinik/appointments',
                 'role' => ['admin','administrator'],
-                'icon'  => theme()->getSvgIcon("demo1/media/icons/duotune/general/gen014.svg", "svg-icon-2"),
+                'icon'  => theme()->getSvgIcon("assets/media/icons/duotune/general/gen014.svg", "svg-icon-2"),
             ],
             [
                 'title' => 'Vital Sign & BMI',
                 'path'  => 'klinik/examinations',
                 'role' => ['ners','administrator'],
-                'icon'  => theme()->getSvgIcon("demo1/media/icons/duotune/medicine/med001.svg", "svg-icon-2"),
+                'icon'  => theme()->getSvgIcon("assets/media/icons/duotune/medicine/med001.svg", "svg-icon-2"),
             ],
             [
                 'title' => 'Anamnesis & Physical Examination',
                 'path'  => 'klinik/examinations',
                 'role' => ['dokter','administrator'],
-                'icon'  => theme()->getSvgIcon("demo1/media/icons/duotune/general/gen005.svg", "svg-icon-2"),
+                'icon'  => theme()->getSvgIcon("assets/media/icons/duotune/general/gen005.svg", "svg-icon-2"),
             ],
             [
                 'title' => 'Transactions',
                 'path'  => 'klinik/transactions',
                 'role' => ['admin','administrator'],
-                'icon'  => theme()->getSvgIcon("demo1/media/icons/duotune/finance/fin007.svg", "svg-icon-2"),
+                'icon'  => theme()->getSvgIcon("assets/media/icons/duotune/finance/fin007.svg", "svg-icon-2"),
             ],
 
             //// User Management
             [
                 'title'      => 'User Management',
                 'icon'       => [
-                    'svg'  => theme()->getSvgIcon("demo1/media/icons/duotune/general/gen051.svg", "svg-icon-2"),
+                    'svg'  => theme()->getSvgIcon("assets/media/icons/duotune/general/gen051.svg", "svg-icon-2"),
                     'font' => '<i class="bi bi-layers fs-3"></i>',
                 ],
                 'classes'    => ['item' => 'menu-accordion'],
@@ -123,7 +123,7 @@
             [
                 'title'      => 'Klinik',
                 'icon'       => [
-                    'svg'  => theme()->getSvgIcon("demo1/media/icons/duotune/general/gen010.svg", "svg-icon-2"),
+                    'svg'  => theme()->getSvgIcon("assets/media/icons/duotune/general/gen010.svg", "svg-icon-2"),
                     'font' => '<i class="bi bi-layers fs-3"></i>',
                 ],
                 'classes'    => ['item' => 'menu-accordion'],
@@ -216,7 +216,7 @@
             [
                 'title'      => 'Master Data',
                 'icon'       => [
-                    'svg'  => theme()->getSvgIcon("demo1/media/icons/duotune/abstract/abs029.svg", "svg-icon-2"),
+                    'svg'  => theme()->getSvgIcon("assets/media/icons/duotune/abstract/abs029.svg", "svg-icon-2"),
                     'font' => '<i class="bi bi-layers fs-3"></i>',
                 ],
                 'classes'    => ['item' => 'menu-accordion'],
@@ -313,7 +313,7 @@
             [
                 'title'      => 'System',
                 'icon'       => [
-                    'svg'  => theme()->getSvgIcon("demo1/media/icons/duotune/coding/cod001.svg", "svg-icon-2"),
+                    'svg'  => theme()->getSvgIcon("assets/media/icons/duotune/coding/cod001.svg", "svg-icon-2"),
                     'font' => '<i class="bi bi-layers fs-3"></i>',
                 ],
                 'classes'    => ['item' => 'menu-accordion'],
