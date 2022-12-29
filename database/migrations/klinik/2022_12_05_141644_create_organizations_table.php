@@ -35,7 +35,6 @@
                 $table->string('json_satu_sehat')->nullable();
                 $table->timestamps();
                 $table->softDeletes();
-
             });
         }
 
