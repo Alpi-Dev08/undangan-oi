@@ -1385,7 +1385,7 @@
                                     @endforeach
 
                                     <!--begin::Input group-->
-                                    <div class="row mb-6">
+                                    <div class="row mb-6 d-none">
                                         <!--begin::Label-->
                                         <label class="col-lg-4 col-form-label fw-bold fs-6">
                                             <span>{{ __('Result') }}</span>
@@ -1412,7 +1412,7 @@
                                     </div>
                                     <!--end::Input group-->
 
-                                    <div class="row mb-6">
+                                    <div class="row mb-6 d-none">
                                         <!--begin::Label-->
                                         <label class="col-lg-4 col-form-label fw-bold fs-6">Description</label>
                                         <!--end::Label-->

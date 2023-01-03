@@ -131,7 +131,7 @@
 
                         <!--begin::Col-->
                         <div class="col-lg-6 fv-row">
-                            <input type="text" name="last_name" required class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Last name" value=""/>
+                            <input type="text" name="last_name" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Last name" value=""/>
                         </div>
                         <!--end::Col-->
                     </div>
@@ -176,7 +176,7 @@
             <!--begin::Input group-->
             <div class="row mb-6">
                 <!--begin::Label-->
-                <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Place and Date of Birth') }}</label>
+                <label class="col-lg-4 col-form-label fw-bold fs-6 required">{{ __('Place and Date of Birth') }}</label>
                 <!--end::Label-->
 
                 <!--begin::Col-->
@@ -185,13 +185,13 @@
                     <div class="row">
                         <!--begin::Col-->
                         <div class="col-lg-6 fv-row">
-                            <input type="text" name="place_of_birth" class="form-control form-control-lg form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Place of Birth" value=""/>
+                            <input type="text" required name="place_of_birth" class="form-control form-control-lg form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Place of Birth" value=""/>
                         </div>
                         <!--end::Col-->
 
                         <!--begin::Col-->
                         <div class="col-lg-6 fv-row">
-                            <input type="date" name="date_of_birth" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Date of Birth" value=""/>
+                            <input type="date" required name="date_of_birth" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Date of Birth" value=""/>
                         </div>
                         <!--end::Col-->
                     </div>
