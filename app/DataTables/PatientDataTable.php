@@ -36,6 +36,9 @@
                 ->editColumn('patient_id', function (User $model) {
                     return $model->patient->patient_code;
                 })
+                ->editColumn('his_number', function (User $model) {
+                    return $model->patient->his_number ?? "";
+                })
                 ->editColumn('first_name', function (User $model) {
                     return $model->name;
                 })
@@ -93,6 +96,7 @@
             return [
                 Column::make('DT_RowIndex')->title('No')->orderable(false)->searchable(false),
                 Column::make('patient_id')->title(__('Patient ID')),
+                Column::make('his_number')->title(__('HIS Number')),
                 Column::make('first_name')->title(__('Name')),
                 Column::make('phone'),
                 Column::make('birthday')->title(__('Birthday')),

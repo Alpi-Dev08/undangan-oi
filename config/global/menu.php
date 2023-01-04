@@ -98,7 +98,7 @@
                             'bullet'     => '<span class="bullet bullet-dot"></span>'
                         ],
                         [
-                            'title'      => 'Health Profesional',
+                            'title'      => 'Practitioners',
                             'path'       => 'klinik/healthprofesionals',
                             'permission' => 'user.read',
                             'bullet'     => '<span class="bullet bullet-dot"></span>'

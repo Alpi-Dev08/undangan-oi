@@ -770,11 +770,11 @@
                                             </div>
                                             <div class="col-12 row">
                                                 <div class="col-2 fw-bolder">Assessment</div>
-                                                <div class="col-10">: {{ $exam->assessment }}</div>
+                                                <div class="col-10">: {{$exam->assessment }}</div>
                                             </div>
                                             <div class="col-12 row">
                                                 <div class="col-2 fw-bolder">Plan</div>
-                                                <div class="col-10">: {{ $exam->plan }}</div>
+                                                <div class="col-10">: {{ $exam->plan ? $exam->plan->name : '' }}</div>
                                             </div>
                                             <div class="col-12 row">
                                                 <div class="col-2 fw-bolder">Resep</div>
@@ -953,7 +953,7 @@
                                 <select id="icdtens" aria-label="{{ __('Select a Diagnosa') }}" data-control="select2" data-placeholder="{{ __('Select a Diagnosa...') }}" class="form-select form-select-solid form-select-lg fw-bold">
                                     <option value="">{{ __('Select a Diagnosa...') }}</option>
                                     @foreach($icdtens as $icdten)
-                                        <option value="{{ $icdten->id }}">{{  $icdten->code.' '.$icdten->name }}</option>
+                                        <option value="{{ $icdten->id }}">{{  $icdten->code.' - '.$icdten->name }}</option>
                                     @endforeach
                                 </select>
                                 <div class="input-group input-group-solid has-validation mb-3 mt-3">
@@ -1066,7 +1066,7 @@
         $(function () {
             $assesment = $("#assessment").html();
             $("#icdtens").change(function () {
-                $("#assessment").append($(this).find("option:selected").text() + '\n');
+                $("#assessment").append($(this).find("option:selected").text() + ' | ');
             });
         })
     </script>

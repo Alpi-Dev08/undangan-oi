@@ -53,6 +53,22 @@
                     </div>
                 </div>
 
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Locations') }}</label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-8">
+                        <select name="location_id" aria-label="{{ __('Location') }}" data-control="select2" data-placeholder="{{ __('Select a Location...') }}" class="form-select form-select-solid form-select-lg fw-bold">
+                            <option value="">{{ __('Select a Location...') }}</option>
+                            @foreach($locations as $location)
+                                <option value="{{ $location->id }}">{{ $location->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
 
             <!--begin::Actions-->
             <div class="card-footer d-flex justify-content-end py-6 px-9">

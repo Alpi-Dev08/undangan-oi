@@ -10,6 +10,7 @@
     use App\Models\Klinik\Examination;
     use App\Models\Klinik\HealthProfesional;
     use App\Models\Klinik\HealthProfesionalType;
+    use App\Models\Klinik\Location;
     use App\Models\Klinik\MedicalRecord;
     use App\Models\Klinik\Package;
     use App\Models\Klinik\ServiceCategory;
@@ -107,13 +108,14 @@
             $user              = $id != '' ? User::find($id) : auth()->user();
             $healthprofesional = HealthProfesional::all();
             $servicecategories = ServiceCategory::where('is_global', 0)->get();
+            $locations         = Location::all();
 
             $info = $user->info;
 
 
             // get the default inner page
             return view('pages.account.examinations.examinations', compact([
-                'user', 'info', 'healthprofesional', 'servicecategories'
+                'user', 'info', 'healthprofesional', 'servicecategories', 'locations'
             ]));
         }
 
@@ -161,6 +163,7 @@
             $examination->examination_code      = $examination_code;
             $examination->health_profesional_id = $request->health_profesional_id;
             $examination->service_category_id   = $request->service_category_id;
+            $examination->location_id           = $request->location_id;
             $examination->examination_date      = date('Y-m-d H:i:s');
             $examination->total                 = 0;
             $examination->status                = 'waiting';
@@ -202,6 +205,7 @@
             $examination->examination_code      = $examination_code;
             $examination->health_profesional_id = $request->health_profesional_id;
             $examination->service_category_id   = $request->service_category_id;
+            $examination->location_id           = $request->location_id;
             $examination->examination_date      = date('Y-m-d H:i:s');
             $examination->appointment_date      = $request->appointment_date;
             $examination->appointment_status    = '0';

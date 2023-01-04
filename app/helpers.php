@@ -3,8 +3,8 @@
     use App\Core\Adapters\Theme;
     use App\Core\Adapters\Util;
     use App\Models\Klinik\Anamnesis;
-use App\Models\Klinik\Physical;
-use App\Models\Klinik\Service;
+    use App\Models\Klinik\Physical;
+    use App\Models\Klinik\Service;
     use App\Models\Klinik\Transaction;
     use App\Models\Klinik\TransactionDetail;
     use App\Models\User;
@@ -263,17 +263,17 @@ use App\Models\Klinik\Service;
         }
     }
 
-if (!function_exists('physicals')) {
-    /**
-     * Check if the request has RTL param
-     */
-    function physicals($id)
-    {
-        $physicals = Physical::where('physical_category_id', $id)->get();
+    if (!function_exists('physicals')) {
+        /**
+         * Check if the request has RTL param
+         */
+        function physicals($id)
+        {
+            $physicals = Physical::where('physical_category_id', $id)->get();
 
-        return $physicals;
+            return $physicals;
+        }
     }
-}
 
     if (!function_exists('getPhysicalsCategory')) {
         /**
@@ -306,20 +306,25 @@ if (!function_exists('physicals')) {
         function service_examination($id)
         {
             $transaction = Transaction::where('examination_id', $id)->first();
-            $transaction_detail = TransactionDetail::with('service','service.category')->where('transaction_id', $transaction->id)->whereHas('service.category', function(Builder $query){
-                $query->where('is_global', 0);
-            })->get();
+            if (isset($transaction->id)) {
+                $transaction_detail = TransactionDetail::with('service', 'service.category')->where('transaction_id', $transaction->id)->whereHas('service.category', function (Builder $query) {
+                    $query->where('is_global', 0);
+                })->get();
+            } else {
+                $transaction_detail = [];
+            }
 
             return $transaction_detail;
         }
     }
 
 
-    if(!function_exists('cekVitalityExamination')){
-        function cekVitalityExamination($id){
+    if (!function_exists('cekVitalityExamination')) {
+        function cekVitalityExamination($id)
+        {
             $vit = \App\Models\Klinik\VitalityExamination::where('examination_id', $id)->first();
 
-            if($vit)
+            if ($vit)
                 return true;
             return false;
         }

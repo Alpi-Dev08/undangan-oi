@@ -3,6 +3,7 @@
     namespace App\Models;
 
     use App\Core\Traits\SpatieLogsActivity;
+    use App\Models\Klinik\HealthProfesional;
     use App\Models\Klinik\MedicalRecord;
     use App\Models\Klinik\Patient;
     use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -135,6 +136,17 @@
         {
             return $this->hasOne(Patient::class);
         }
+
+        /**
+         * User relation to info model
+         *
+         * @return \Illuminate\Database\Eloquent\Relations\HasOne
+         */
+        public function health_profesional()
+        {
+            return $this->hasOne(HealthProfesional::class);
+        }
+
 
         public function mr()
         {

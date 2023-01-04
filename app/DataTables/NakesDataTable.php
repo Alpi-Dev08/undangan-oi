@@ -27,6 +27,9 @@
                 ->editColumn('first_name', function (User $model) {
                     return view('pages.users._avatar', compact('model'));
                 })
+                ->editColumn('his_number', function (User $model) {
+                    return $model->health_profesional->his_number ?? "";
+                })
                 ->editColumn('email', function (User $model) {
                     return $model->email;
                 })
@@ -60,7 +63,7 @@
                 ->setTableId('users-table')
                 ->columns($this->getColumns())
                 ->minifiedAjax()
-                ->orderBy(1,'asc')
+                ->orderBy(0,'asc')
                 ->stateSave(false)
                 ->responsive()
                 ->autoWidth(false)
@@ -80,6 +83,7 @@
         {
             return [
                 Column::make('DT_RowIndex')->title('No')->orderable(false)->searchable(false),
+                Column::make('his_number')->title(__('HIS Number')),
                 Column::make('first_name')->title(__('Name')),
                 Column::make('email'),
                 Column::make('phone'),

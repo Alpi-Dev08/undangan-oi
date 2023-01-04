@@ -17,6 +17,7 @@ class Examination extends Model
         'patient_id',
         'plan_id',
         'medical_record_id',
+        'location_id',
         'health_profesional_id',
         'service_category_id',
         'examination_code',
@@ -81,6 +82,10 @@ class Examination extends Model
 
     public function vitality(){
         return $this->hasOne(VitalityExamination::class);
+    }
+
+    public function location(){
+        return $this->belongsTo(Location::class);
     }
 
 }
