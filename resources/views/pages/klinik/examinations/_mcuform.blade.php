@@ -932,7 +932,14 @@
                                                                                     class="form-check form-check-custom form-check-solid">
                                                                                     <input class="form-check-input"
                                                                                            type="radio"
-                                                                                           {{ in_array($radio->id,$r) ? 'checked' : '' }}
+                                                                                           @if(in_array($radio->id,$r))
+                                                                                               {{ 'checked' }}
+                                                                                           @elseif($anamnesis->id=="no")
+                                                                                               {{ 'checked' }}
+                                                                                           @else
+                                                                                               {{ '' }}
+                                                                                           @endif
+
                                                                                            name = "anamnesis[{{$anamnesis->id}}][radio][]"
                                                                                            value="{{$radio->id}}"
                                                                                            id="radio-{{$anamnesis->id}}"/>
@@ -1157,7 +1164,15 @@
                                                                                     class="form-check form-check-custom form-check-solid w-200px">
                                                                                     <input class="form-check-input"
                                                                                            type="radio"
-                                                                                           {{ in_array($radio->id,$r) ? 'checked' : '' }}
+                                                                                           @if(in_array($radio->id,$r))
+                                                                                               {{ 'checked' }}
+                                                                                           @elseif($physicals->id=="normal")
+                                                                                               {{ 'checked' }}
+                                                                                           @else
+                                                                                               {{ '' }}
+                                                                                           @endif
+
+
                                                                                            name = "physical[{{$physicals->id}}][radio][]"
                                                                                            value="{{$radio->id}}"
                                                                                            id="radio-{{$physicals->id}}"/>
