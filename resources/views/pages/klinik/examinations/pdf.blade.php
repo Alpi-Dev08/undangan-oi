@@ -4,45 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        @font-face {
+            font-family: 'Roboto Condensed';
+            src: public_path('assets/fonts/Roboto_Condensed/RobotoCondensed-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Roboto';
+            src: public_path('assets/fonts/Roboto/Roboto-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Nunito Sans';
+            src: public_path('assets/fonts/Nunito_Sans/NunitoSans-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+    </style>
+
+   {{-- <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans&family=Roboto&family=Roboto+Condensed&display=swap');
+    </style>--}}
+
     <title>Rekam Medis {{ $user->name }}</title>
 </head>
 <body>
 <!--begin::Text-->
-<div class="container mx-auto">
-    <table style="width:100%">
-        <tr>
-            <td style="width:40%;font-size:12px;font-weight:bold">Medical Record<td>
-            <td style="width:60%;font-size:12px;">: {{ $user->mr->medical_record_code }}<td>
-        </tr>
-        <tr>
-            <td style="width:40%;font-size:12px;font-weight:bold">Examination Code<td>
-            <td style="width:60%;font-size:12px;">: {{ $examination->examination_code }}<td>
-        </tr>
-        <tr>
-            <td style="width:40%;font-size:12px;font-weight:bold">Examination Date<td>
-            <td style="width:60%;font-size:12px;">: {{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y H:i:s') }}<td>
-        </tr>
-        <tr>
-            <td style="width:40%;font-size:12px;font-weight:bold">Full Name<td>
-            <td style="width:60%;font-size:12px;">: {{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}<td>
-        </tr>
-        <tr>
-            <td style="width:40%;font-size:12px;font-weight:bold">Doctor<td>
-            <td style="width:60%;font-size:12px;">: {{ $examination->health_profesional->user->name }}<td>
-        </tr>
-        <tr>
-            <td style="width:40%;font-size:12px;font-weight:bold">Jenis Pemeriksaan<td>
-            <td style="width:60%;font-size:12px;">: {{ $examination->service_category->name }}
-                <ul class="list-disc">
-                    @foreach(service_examination($examination->id) as $service)
-                        <li class="ml-6">{{ $service->service->name }}</li>
-                    @endforeach
-                </ul>
+<div class="container mx-auto" style="font-family: 'Nunito Sans', sans-serif;">
+    <table style="width:100%;border-bottom-width:5px;border-bottom-style:double">
+        <tr style="vertical-align:baseline">
+            <td style="width: 50%;vertical-align:top">
+               {{-- <img src="{{ asset(theme()->getMediaUrlPath() . 'logos/logo-klinik.png') }}" alt="" style="height:50px;">--}}
+                <img src="{{ public_path(theme()->getMediaUrlPath() . 'logos/logo-klinik.png') }}"  style="height:50px;">
+            </td>
+            <td style="width: 50%; vertical-align:top">
+                <p style="margin:0px; margin-top:10px; font-size:12px;text-align: right;color:#000;">
+                    Ruko C17, Pasar Intermoda BSD<br>
+                    Sampora, Cisauk, Kab. Tangerang, Banten - 15414<br>
+                    +62 21 5020 8805 - klinik@dharma.or.id<br>
+                    https://klinik.dharma.or.id
+                </p>
             </td>
         </tr>
     </table>
-
-    <hr class="mt-10">
+    <table style="width:100%;border-bottom-width:2px;border-bottom-style:solid">
+        <tr style="vertical-align:baseline">
+            <td colspan="2" style="width: 100%;text-align:center">
+                <p style="margin:0px;font-size:22px;text-align:center;color:gray;font-weight:bolder;text-transform:uppercase;font-family: 'Roboto Condensed', sans-serif;">Medical Record</p>
+            </td>
+        </tr>
+    </table>
+    <table style="width:100%;font-size:10px;border-bottom-width:2px;border-bottom-style:solid">
+        <tr>
+            <td style="width:20%;font-size:12px;font-weight:bold">Full Name<td>
+            <td style="width:30%;font-size:12px;">: {{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}<td>
+            <td style="width:20%;font-size:12px;font-weight:bold">MR No<td>
+            <td style="width:30%;font-size:12px;">: {{ $user->mr->medical_record_code }}<td>
+        </tr>
+        <tr>
+            <td style="width:20%;font-size:12px;font-weight:bold">Gender<td>
+            <td style="width:30%;font-size:12px;">: {{ $user->info->gender->name }}<td>
+            <td style="width:20%;font-size:12px;font-weight:bold">Examination Date<td>
+            <td style="width:30%;font-size:12px;">: {{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y H:i:s') }}<td>
+        </tr>
+        <tr>
+            <td style="width:20%;font-size:12px;font-weight:bold">Birth Date/Age<td>
+            <td style="width:30%;font-size:12px;">: {{ \Carbon\Carbon::parse($user->info->date_of_birth)->locale('id')->format('d F Y') }} / {{ \Carbon\Carbon::parse($user->info->date_of_birth)->age }}<td>
+            <td style="width:20%;font-size:12px;font-weight:bold">Doctor<td>
+            <td style="width:30%;font-size:12px;">: {{ $examination->health_profesional->user->name }}<td>
+        </tr>
+        <tr>
+            <td style="width:20%;font-size:12px;vertical-align:top;font-weight:bold">Phone<td>
+            <td style="width:30%;font-size:12px;vertical-align:top">: {{ $user->phone }}<td>
+            <td style="width:20%;font-size:12px;font-weight:bold;vertical-align:top">Service Type<td>
+            <td style="width:30%;font-size:12px;">: {{ $examination->service_category->name }} </td>
+        </tr>{{--
+        <tr>
+            <td style="width:20%;font-size:12px;font-weight:bold;vertical-align:top">Address<td>
+            <td style="width:30%;font-size:12px;vertical-align:top">: {{ $user->info->address }}{{ isset($user->info->subdistrict) ? ', '.$user->info->subdistrict->name : '' }}{{ isset($user->info->district) ? ', '.$user->info->district->name : '' }}{{ isset($user->info->city) ? ', '.$user->info->city->name : '' }}{{ isset($user->info->province) ? ', '.$user->info->province->name : '' }}{{ isset($user->info->country) ? ', '.$user->info->country->name : '' }}{{ $user->info->postal_code!='' ? $user->info->postal_code : (isset($user->info->subdistrict) ? ' - '.$user->info->subdistrict->postal_code : '') }}<td>
+            <td style="width:20%;font-size:12px;font-weight:bold;vertical-align:top"><td>
+            <td style="width:30%;font-size:12px;vertical-align:top">
+                <ul class="list-disc" style="margin:0px; padding-left:20px;">
+                    @foreach(service_examination($examination->id) as $service)
+                        <li style="margin:0px;">{{ $service->service->name }}</li>
+                    @endforeach
+                </ul>
+            </td>
+        </tr>--}}
+    </table>
 
     <div class="w-full p-5 ">
         <h3 class="w-full text-lg font-bold mb-2">Vital Sign & BMI</h3>
