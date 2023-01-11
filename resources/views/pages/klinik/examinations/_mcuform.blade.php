@@ -934,7 +934,7 @@
                                                                                            type="radio"
                                                                                            @if(in_array($radio->id,$r))
                                                                                                {{ 'checked' }}
-                                                                                           @elseif($anamnesis->id=="no")
+                                                                                           @elseif($radio->id=="no" || $radio->id=="good" || $radio->id=="never")
                                                                                                {{ 'checked' }}
                                                                                            @else
                                                                                                {{ '' }}
@@ -1166,7 +1166,7 @@
                                                                                            type="radio"
                                                                                            @if(in_array($radio->id,$r))
                                                                                                {{ 'checked' }}
-                                                                                           @elseif($physicals->id=="normal")
+                                                                                           @elseif($radio->id=="normal" || $radio->id=="good" || $radio->id=="no")
                                                                                                {{ 'checked' }}
                                                                                            @else
                                                                                                {{ '' }}
@@ -1349,7 +1349,15 @@
                                                                             class="form-check form-check-custom form-check-solid w-200px">
                                                                             <input class="form-check-input"
                                                                                    type="radio"
-                                                                                   {{ in_array($radio->id,$r) ? 'checked' : '' }}
+                                                                                   @if(in_array($radio->id,$r))
+                                                                                       {{ 'checked' }}
+                                                                                   @elseif($radio->id=="normal" || $radio->id=="good" || $radio->id=="no")
+                                                                                       {{ 'checked' }}
+                                                                                   @else
+                                                                                       {{ '' }}
+                                                                                   @endif
+
+
                                                                                    name = "other[{{$others->id}}][radio][]"
                                                                                    value="{{$radio->id}}"
                                                                                    id="radio-{{$others->id}}"/>
