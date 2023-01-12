@@ -344,7 +344,7 @@
             $info = $user->info;
 
             // get the default inner page
-           /*return view('pages.klinik.examinations.pdf', compact([
+           /* return view('pages.klinik.examinations.pdf', compact([
                 'user', 'info', 'examination'
             ]));*/
 

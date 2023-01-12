@@ -25,21 +25,51 @@
             font-weight: normal;
             font-style: normal;
         }
+
+        /**
+                Set the margins of the page to 0, so the footer and the header
+                can be of the full height and width !
+             **/
+        @page {
+            margin: 0.5cm 0.5cm;
+        }
+
+        /** Define the header rules **/
+        header {
+            position: fixed;
+            top: 0cm;
+            left: 0cm;
+            right: 0cm;
+            height: 6cm;
+
+        }
+
+        /** Define the footer rules **/
+        footer {
+            position: fixed;
+            bottom: 0cm;
+            left: 0cm;
+            right: 0cm;
+        }
+
+        main{
+            margin-top: 5.3cm;
+
+        }
+
     </style>
 
-   {{-- <style>
-        @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans&family=Roboto&family=Roboto+Condensed&display=swap');
-    </style>--}}
+
 
     <title>Rekam Medis {{ $user->name }}</title>
 </head>
-<body>
+<body  style="font-family: 'Nunito Sans', sans-serif;">
 <!--begin::Text-->
-<div class="container mx-auto" style="font-family: 'Nunito Sans', sans-serif;">
+<header>
     <table style="width:100%;border-bottom-width:5px;border-bottom-style:double">
         <tr style="vertical-align:baseline">
             <td style="width: 50%;vertical-align:top">
-               {{-- <img src="{{ asset(theme()->getMediaUrlPath() . 'logos/logo-klinik.png') }}" alt="" style="height:50px;">--}}
+
                 <img src="{{ public_path(theme()->getMediaUrlPath() . 'logos/logo-klinik.png') }}"  style="height:50px;">
             </td>
             <td style="width: 50%; vertical-align:top">
@@ -59,7 +89,7 @@
             </td>
         </tr>
     </table>
-    <table style="width:100%;font-size:10px;border-bottom-width:2px;border-bottom-style:solid">
+    <table style="width:100%;font-size:10px;">
         <tr>
             <td style="width:20%;font-size:12px;font-weight:bold">Full Name<td>
             <td style="width:30%;font-size:12px;">: {{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}<td>
@@ -70,10 +100,10 @@
             <td style="width:20%;font-size:12px;font-weight:bold">Gender<td>
             <td style="width:30%;font-size:12px;">: {{ $user->info->gender->name }}<td>
             <td style="width:20%;font-size:12px;font-weight:bold">Examination Date<td>
-            <td style="width:30%;font-size:12px;">: {{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y H:i:s') }}<td>
+            <td style="width:30%;font-size:12px;">: {{ \Carbon\Carbon::parse($examination->created_at)->locale('id')->format('d F Y H:i:s') }}<td>
         </tr>
         <tr>
-            <td style="width:20%;font-size:12px;font-weight:bold">Birth Date/Age<td>
+            <td style="width:20%;font-size:12px;font-weight:bold">Birth Date / Age<td>
             <td style="width:30%;font-size:12px;">: {{ \Carbon\Carbon::parse($user->info->date_of_birth)->locale('id')->format('d F Y') }} / {{ \Carbon\Carbon::parse($user->info->date_of_birth)->age }}<td>
             <td style="width:20%;font-size:12px;font-weight:bold">Doctor<td>
             <td style="width:30%;font-size:12px;">: {{ $examination->health_profesional->user->name }}<td>
@@ -97,53 +127,73 @@
             </td>
         </tr>--}}
     </table>
-
-    <div class="w-full p-5 ">
-        <h3 class="w-full text-lg font-bold mb-2">Vital Sign & BMI</h3>
-        <table style="width:100%">
+</header>
+<footer>
+    <table style="width:100%;border-top-width: 1px;border-top-style: solid">
+        <tr>
+            <td style="width:50%;text-align: left;vertical-align: top;height:100px">
+                <h2 style="margin:0px;text-transform: uppercase;font-size: 16px;font-weight: bold">WISHING YOU GOOD HEALTH AND HAPPINESS</h2>
+                <p style="margin:0px;text-transform: uppercase;font-size: 14px;">SEMOGA SEHAT DAN BAHAGIA SELALU</p>
+            </td>
+            <td style="width:50%;text-align: right;vertical-align: bottom;float: right;height:100px">
+                <img src="{{ public_path(theme()->getMediaUrlPath() . 'logos/qr.jpeg') }}"  style="height:85px;margin-right:5px;"><img src="{{ public_path(theme()->getMediaUrlPath() . 'logos/logo-yayasan.png') }}"  style="height:75px;">
+            </td>
+        </tr>
+    </table>
+</footer>
+<main>
+    <table style="width:100%;font-size:12px;border-bottom-style: double;border-top-style: double;border-top-width: 3px;border-bottom-width: 3px;">
+        <tr>
+            <td style="font-weight:bolder;width:25%">Jenis Pemeriksaan</td>
+            <td style="font-weight:bolder;width:75%">Hasil</td>
+        </tr>
+    </table>
+    <div>
+        <h4 style="font-weight: bolder;color:#436ba4;font-size:12px;margin:0px;margin-top:10px;text-transform: uppercase">Vital Sign & BMI</h4>
+        <table style="width:100%;font-size:12px;">
             <tr>
-                <td style="font-size:12px;width:40%;font-weight:bold">Weight</td>
-                <td style="font-size:12px;width:60%">: {{ $examination->vitality->weight ?? "-" }} Kg</td>
+                <td style="font-size:12px;width:25%;padding-left:10px">Weight</td>
+                <td style="font-size:12px;width:75%">{{ $examination->vitality->weight ?? "-" }} Kg</td>
             </tr>
             <tr>
-                <td style="font-size:12px;width:40%;font-weight:bold">Height</td>
-                <td style="font-size:12px;width:60%">: {{ $examination->vitality->height ?? "-" }} cm</td>
+                <td style="font-size:12px;width:25%;padding-left:10px">Height</td>
+                <td style="font-size:12px;width:75%">{{ $examination->vitality->height ?? "-" }} cm</td>
             </tr>
             <tr>
-                <td style="font-size:12px;width:40%;font-weight:bold">Blood Pressure</td>
-                <td style="font-size:12px;width:60%">: {{ $examination->vitality->blood_pressure ?? "-" }}</td>
+                <td style="font-size:12px;width:25%;padding-left:10px">Blood Pressure</td>
+                <td style="font-size:12px;width:75%">{{ $examination->vitality->blood_pressure ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="font-size:12px;width:40%;font-weight:bold">Heart Rate</td>
-                <td style="font-size:12px;width:60%">: {{ $examination->vitality->heart_rate ?? "-" }}</td>
+                <td style="font-size:12px;width:25%;padding-left:10px">Heart Rate</td>
+                <td style="font-size:12px;width:75%">{{ $examination->vitality->heart_rate ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="font-size:12px;width:40%;font-weight:bold">Respiratory Rate</td>
-                <td style="font-size:12px;width:60%">: {{ $examination->vitality->respiratory_rate ?? "-" }}</td>
+                <td style="font-size:12px;width:25%;padding-left:10px">Respiratory Rate</td>
+                <td style="font-size:12px;width:75%">{{ $examination->vitality->respiratory_rate ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="font-size:12px;width:40%;font-weight:bold">Temperature</td>
-                <td style="font-size:12px;width:60%">: {{ $examination->vitality->temperature ?? "-" }}</td>
+                <td style="font-size:12px;width:25%;padding-left:10px">Temperature</td>
+                <td style="font-size:12px;width:75%">{{ $examination->vitality->temperature ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="font-size:12px;width:40%;font-weight:bold">Oxygen Saturation</td>
-                <td style="font-size:12px;width:60%">: {{ $examination->vitality->oxygen_saturation ?? "-" }}</td>
+                <td style="font-size:12px;width:25%;padding-left:10px">Oxygen Saturation</td>
+                <td style="font-size:12px;width:75%">{{ $examination->vitality->oxygen_saturation ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="font-size:12px;width:40%;font-weight:bold">Body Mass Index</td>
-                <td style="font-size:12px;width:60%">: {{ $examination->vitality->body_mass_index ?? "-" }}</td>
+                <td style="font-size:12px;width:25%;padding-left:10px">Body Mass Index</td>
+                <td style="font-size:12px;width:75%">{{ $examination->vitality->body_mass_index ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="font-size:12px;width:40%;font-weight:bold">Ideal Weight</td>
-                <td style="font-size:12px;width:60%">: {{ $examination->vitality->ideal_weight ?? "-" }} Kg</td>
+                <td style="font-size:12px;width:25%;padding-left:10px">Ideal Weight</td>
+                <td style="font-size:12px;width:75%">{{ $examination->vitality->ideal_weight ?? "-" }} Kg</td>
             </tr>
             <tr>
-                <td style="font-size:12px;width:40%;font-weight:bold">Body Fat</td>
-                <td style="font-size:12px;width:60%">: {{ $examination->vitality->body_fat ?? "-" }}</td>
+                <td style="font-size:12px;width:25%;padding-left:10px">Body Fat</td>
+                <td style="font-size:12px;width:75%">{{ $examination->vitality->body_fat ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="font-size:12px;width:40%;font-weight:bold">BMI Conclusion</td>
-                <td style="font-size:12px;width:60%">: {{ $examination->vitality->bmi_conclusion ?? "-" }}</td>
+                <td style="font-size:12px;width:25%;padding-left:10px">BMI Conclusion</td>
+                <td style="font-size:12px;width:75%">{{ $examination->vitality->bmi_conclusion ?? "-" }}</td>
             </tr>
         </table>
 
@@ -328,22 +378,23 @@
             </table>
             @endif
         @else
-            <h3 class="col-12 text-lg font-bold mb-2">Check up Result</h3>
-            <table style="width:100%">
-                <tr><td style="font-weight:bold">Subjective :</td></tr>
+            <h4 style="font-weight: bolder;color:#436ba4;font-size:12px;margin:0px;margin-top:10px;text-transform: uppercase">Result</h4>
+            <table style="width:100%;font-size: 12px;padding-left:10px">
+                <tr><td style="font-weight:bold">Subjective</td></tr>
                 <tr><td>{{ $examination->subjective }}</td></tr>
-                <tr><td style="font-weight:bold">Objective :</td></tr>
+                <tr><td style="font-weight:bold">Objective</td></tr>
                 <tr><td>{{ $examination->objective }}</td></tr>
-                <tr><td style="font-weight:bold">Assessment :</td></tr>
+                <tr><td style="font-weight:bold">Assessment</td></tr>
                 <tr><td>{{ $examination->assessment }}</td></tr>
-                <tr><td style="font-weight:bold">Plan :</td></tr>
+                <tr><td style="font-weight:bold">Plan</td></tr>
                 <tr><td>{{ $examination->plan }}</td></tr>
-                <tr><td style="font-weight:bold">Resep :</td></tr>
+                <tr><td style="font-weight:bold">Resep</td></tr>
                 <tr><td>{{ $examination->resep }}</td></tr>
             </table>
         @endif
     </div>
-</div>
+</main>
+
 <!--end::Text-->
 </body>
 </html>
