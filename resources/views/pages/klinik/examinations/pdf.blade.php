@@ -40,7 +40,7 @@
             top: 0cm;
             left: 0cm;
             right: 0cm;
-            height: 6cm;
+            height: 6.5cm;
 
         }
 
@@ -52,9 +52,9 @@
             right: 0cm;
         }
 
-        main{
-            margin-top: 5.3cm;
-
+        body{
+            margin-top: 6cm;
+            margin-bottom: 120px;
         }
 
     </style>
@@ -127,6 +127,12 @@
             </td>
         </tr>--}}
     </table>
+    <table style="margin-top:10px;width:100%;font-size:12px;border-bottom-style: double;border-top-style: double;border-top-width: 3px;border-bottom-width: 3px;">
+        <tr>
+            <td style="font-weight:bolder;width:35%">Jenis Pemeriksaan</td>
+            <td style="font-weight:bolder;width:65%">Hasil</td>
+        </tr>
+    </table>
 </header>
 <footer>
     <table style="width:100%;border-top-width: 1px;border-top-style: solid">
@@ -142,72 +148,66 @@
     </table>
 </footer>
 <main>
-    <table style="width:100%;font-size:12px;border-bottom-style: double;border-top-style: double;border-top-width: 3px;border-bottom-width: 3px;">
-        <tr>
-            <td style="font-weight:bolder;width:25%">Jenis Pemeriksaan</td>
-            <td style="font-weight:bolder;width:75%">Hasil</td>
-        </tr>
-    </table>
     <div>
         <h4 style="font-weight: bolder;color:#436ba4;font-size:12px;margin:0px;margin-top:10px;text-transform: uppercase">Vital Sign & BMI</h4>
         <table style="width:100%;font-size:12px;">
             <tr>
-                <td style="font-size:12px;width:25%;padding-left:10px">Weight</td>
-                <td style="font-size:12px;width:75%">{{ $examination->vitality->weight ?? "-" }} Kg</td>
+                <td style="font-size:12px;width:35%;padding-left:10px">Weight</td>
+                <td style="font-size:12px;width:65%">{{ $examination->vitality->weight ?? "-" }} Kg</td>
             </tr>
             <tr>
-                <td style="font-size:12px;width:25%;padding-left:10px">Height</td>
-                <td style="font-size:12px;width:75%">{{ $examination->vitality->height ?? "-" }} cm</td>
+                <td style="font-size:12px;width:35%;padding-left:10px">Height</td>
+                <td style="font-size:12px;width:65%">{{ $examination->vitality->height ?? "-" }} cm</td>
             </tr>
             <tr>
-                <td style="font-size:12px;width:25%;padding-left:10px">Blood Pressure</td>
-                <td style="font-size:12px;width:75%">{{ $examination->vitality->blood_pressure ?? "-" }}</td>
+                <td style="font-size:12px;width:35%;padding-left:10px">Blood Pressure</td>
+                <td style="font-size:12px;width:65%">{{ $examination->vitality->blood_pressure ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="font-size:12px;width:25%;padding-left:10px">Heart Rate</td>
-                <td style="font-size:12px;width:75%">{{ $examination->vitality->heart_rate ?? "-" }}</td>
+                <td style="font-size:12px;width:35%;padding-left:10px">Heart Rate</td>
+                <td style="font-size:12px;width:65%">{{ $examination->vitality->heart_rate ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="font-size:12px;width:25%;padding-left:10px">Respiratory Rate</td>
-                <td style="font-size:12px;width:75%">{{ $examination->vitality->respiratory_rate ?? "-" }}</td>
+                <td style="font-size:12px;width:35%;padding-left:10px">Respiratory Rate</td>
+                <td style="font-size:12px;width:65%">{{ $examination->vitality->respiratory_rate ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="font-size:12px;width:25%;padding-left:10px">Temperature</td>
-                <td style="font-size:12px;width:75%">{{ $examination->vitality->temperature ?? "-" }}</td>
+                <td style="font-size:12px;width:35%;padding-left:10px">Temperature</td>
+                <td style="font-size:12px;width:65%">{{ $examination->vitality->temperature ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="font-size:12px;width:25%;padding-left:10px">Oxygen Saturation</td>
-                <td style="font-size:12px;width:75%">{{ $examination->vitality->oxygen_saturation ?? "-" }}</td>
+                <td style="font-size:12px;width:35%;padding-left:10px">Oxygen Saturation</td>
+                <td style="font-size:12px;width:65%">{{ $examination->vitality->oxygen_saturation ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="font-size:12px;width:25%;padding-left:10px">Body Mass Index</td>
-                <td style="font-size:12px;width:75%">{{ $examination->vitality->body_mass_index ?? "-" }}</td>
+                <td style="font-size:12px;width:35%;padding-left:10px">Body Mass Index</td>
+                <td style="font-size:12px;width:65%">{{ $examination->vitality->body_mass_index ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="font-size:12px;width:25%;padding-left:10px">Ideal Weight</td>
-                <td style="font-size:12px;width:75%">{{ $examination->vitality->ideal_weight ?? "-" }} Kg</td>
+                <td style="font-size:12px;width:35%;padding-left:10px">Ideal Weight</td>
+                <td style="font-size:12px;width:65%">{{ $examination->vitality->ideal_weight ?? "-" }} Kg</td>
             </tr>
             <tr>
-                <td style="font-size:12px;width:25%;padding-left:10px">Body Fat</td>
-                <td style="font-size:12px;width:75%">{{ $examination->vitality->body_fat ?? "-" }}</td>
+                <td style="font-size:12px;width:35%;padding-left:10px">Body Fat</td>
+                <td style="font-size:12px;width:65%">{{ $examination->vitality->body_fat ?? "-" }}</td>
             </tr>
             <tr>
-                <td style="font-size:12px;width:25%;padding-left:10px">BMI Conclusion</td>
-                <td style="font-size:12px;width:75%">{{ $examination->vitality->bmi_conclusion ?? "-" }}</td>
+                <td style="font-size:12px;width:35%;padding-left:10px">BMI Conclusion</td>
+                <td style="font-size:12px;width:65%">{{ $examination->vitality->bmi_conclusion ?? "-" }}</td>
             </tr>
         </table>
 
         <hr class="mt-10">
         @if($examination->service_category->is_mcu == 1)
 
-                <h1  class="w-full text-2xl font-bold mb-2 mt-10">Check up Result</h1>
+            <h4 style="margin-bottom:0px;font-weight: bolder;color:#436ba4;font-size:12px;margin:0px;margin-top:10px;text-transform: uppercase">Check up Result</h4>
         @if(isset($examination->anamnesis->anamnesis_value))
-            <h3 class="text-xl font-bold">1. Anamnesis</h3>
+            <h3 style="margin-bottom:0px;font-weight: bold;font-size:12px;">1. Anamnesis</h3>
             @php
                 $anamnesis = json_decode($examination->anamnesis->anamnesis_value);
                 $header = '';
             @endphp
-        <table style="width:100%">
+        <table style="width:100%;font-size:12px;">
             @foreach($anamnesis as $key => $value)
 
                 @php
@@ -227,8 +227,8 @@
                         @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
                     @endif
                         <tr>
-                    <td style="width:40%;padding-left:30px;">{{getAnamnesis($key)->name }}</td>
-                    <td style="width:60%;">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</td>
+                    <td style="width:35%;padding-left:15px;">{{getAnamnesis($key)->name }}</td>
+                    <td style="width:65%;">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</td>
                         </tr>
                 @elseif($radio)
                     @if($header != getAnamnesis($key)->anamnesis_category_id)
@@ -236,8 +236,8 @@
                         @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
                     @endif
                 <tr>
-                    <td style="width:40%;padding-left:30px;">{{getAnamnesis($key)->name }}</td>
-                    <td style="width:60%;">: {{ ucwords($radio[$radioKeys[0]])}}</td>
+                    <td style="width:35%;padding-left:15px;">{{getAnamnesis($key)->name }}</td>
+                    <td style="width:65%;">: {{ ucwords($radio[$radioKeys[0]])}}</td>
                 </tr>
                 @elseif($additional[$additionalKeys[0]])
                     @if($header != getAnamnesis($key)->anamnesis_category_id)
@@ -245,8 +245,8 @@
                         @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
                     @endif
                 <tr>
-                    <td style="width:40%;padding-left:30px;">{{getAnamnesis($key)->name }}</td>
-                        <td style="width:60%;">: {{$additional[$additionalKeys[0]] }}</td>
+                    <td style="width:35%;padding-left:15px;">{{getAnamnesis($key)->name }}</td>
+                        <td style="width:65%;">: {{$additional[$additionalKeys[0]] }}</td>
                 </tr>
                 @endif
 
@@ -254,8 +254,8 @@
         </table>
             @endif
         @if(isset($examination->physical->physical_value))
-            <h3 class="text-xl font-bold">2. Physical</h3>
-            <table style="width:100%">
+                <h3 style="margin-bottom:0px;font-weight: bold;font-size:12px;">2. Physical</h3>
+            <table style="width:100%;font-size:12px;">
             @php
                 $physicals = json_decode($examination->physical->physical_value);
                 $header = '';
@@ -278,8 +278,8 @@
                         @php $header = getPhysicals($key)->physical_category_id; @endphp
                     @endif
                        <tr>
-                    <td style="width:40%;padding-left:30px;">{{getPhysicals($key)->name }}</td>
-                        <td style="width:60%;">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</td>
+                    <td style="width:35%;padding-left:15px;">{{getPhysicals($key)->name }}</td>
+                        <td style="width:65%;">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</td>
                         </tr>
                 @elseif($radio)
                     @if($header != getPhysicals($key)->physical_category_id)
@@ -288,8 +288,8 @@
                         @php $header = getPhysicals($key)->physical_category_id; @endphp
                     @endif
                   <tr>
-                    <td style="width:40%;padding-left:30px;">{{getPhysicals($key)->name }}</td>
-                        <td style="width:60%;">: {{ ucwords($radio[$radioKeys[0]])}}</td>
+                    <td style="width:35%;padding-left:15px;">{{getPhysicals($key)->name }}</td>
+                        <td style="width:65%;">: {{ ucwords($radio[$radioKeys[0]])}}</td>
                         </tr>
                 @elseif($additional[$additionalKeys[0]])
                     @if($header != getPhysicals($key)->physical_category_id)
@@ -298,17 +298,17 @@
                         @php $header = getPhysicals($key)->physical_category_id; @endphp
                     @endif
                   <tr>
-                    <td style="width:40%;padding-left:30px;">{{getPhysicals($key)->name }}</td>
-                        <td style="width:60%;">: {{$additional[$additionalKeys[0]] }}</td>
+                    <td style="width:35%;padding-left:15px;">{{getPhysicals($key)->name }}</td>
+                        <td style="width:65%;">: {{$additional[$additionalKeys[0]] }}</td>
                         </tr>
                 @endif
             @endforeach
             </table>
             @endif
-            <table style="width:100%">
+            <table style="width:100%;font-size:12px;">
 
                 @if(isset($examination->other->other_value))
-            <h3 class="text-xl font-bold">3. Other</h3>
+                    <h3 style="margin-bottom:0px;font-weight: bold;font-size:12px;">3. Other</h3>
             @php
                 $others = json_decode($examination->other->other_value);
                 $header = '';
@@ -325,56 +325,25 @@
                 @endphp
 
                 @if($radio && $additional[$additionalKeys[0]])
-                    @if($header != getPhysicals($key)->anamnesis_category_id)
-                        <tr>
-                        <td colspan="2" style="padding-left:15px;font-weight:bold">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</td></tr>
-                        @php $header = getPhysicals($key)->physical_category_id; @endphp
-                    @endif
+
                        <tr>
-                    <td style="width:40%;padding-left:30px;">{{getPhysicals($key)->name }}</td>
-                        <td style="width:60%;">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</td>
+                    <td style="width:35%;padding-left:15px;">{{getPhysicals($key)->name }}</td>
+                        <td style="width:65%;">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</td>
                         </tr>
                 @elseif($radio)
-                    @if($header != getPhysicals($key)->physical_category_id)
-                        <td class="col-12 font-bold " style="padding-left:15px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</td></tr>
-                        @php $header = getPhysicals($key)->physical_category_id; @endphp
-                    @endif
+
                        <tr>
-                    <td style="width:40%;padding-left:30px;">{{getPhysicals($key)->name }}</td>
-                            <td style="width:60%;">: {{ ucwords($radio[$radioKeys[0]])}}</td>
+                    <td style="width:35%;padding-left:15px;">{{getPhysicals($key)->name }}</td>
+                            <td style="width:65%;">: {{ ucwords($radio[$radioKeys[0]])}}</td>
                         </tr>
                 @elseif($additional[$additionalKeys[0]])
-                    @if($header != getPhysicals($key)->physical_category_id)
-                        <tr>
-                        <td colspan="2" style="padding-left:15px;font-weight:bold">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</td></tr>
-                        @php $header = getPhysicals($key)->physical_category_id; @endphp
-                    @endif
+
                        <tr>
-                    <td style="width:40%;padding-left:30px;">{{getPhysicals($key)->name }}</td>
-                            <td style="width:60%;">: {{$additional[$additionalKeys[0]] }}</td>
+                    <td style="width:35%;padding-left:15px;">{{getPhysicals($key)->name }}</td>
+                            <td style="width:65%;">: {{$additional[$additionalKeys[0]] }}</td>
                         </tr>
                 @endif
             @endforeach
-            <tr style="padding-top:10px">
-                <td style="width:40%;padding-left:15px;font-weight:bold">Result</td>
-                <td style="width:60%;">:
-                    @switch($examination->other->result)
-                        @case("fit")
-                            {{ "Fit with Note" }}
-                            @break
-                        @case("fitwork")
-                            {{ "Fit for Work" }}
-                            @break
-                        @case("unfit")
-                            {{ "Unfit" }}
-                            @break
-                        @endswitch
-                </td>
-            </tr>
-            <tr>
-                <td style="width:40%;padding-left:15px;font-weight:bold">Description</td>
-                <td style="width:60%;">: {{$examination->other->description }}</td>
-            </tr>
             </table>
             @endif
         @else
