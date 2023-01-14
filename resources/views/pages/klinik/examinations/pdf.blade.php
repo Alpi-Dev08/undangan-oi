@@ -354,9 +354,18 @@
                 <tr><td style="font-weight:bold">Objective</td></tr>
                 <tr><td>{{ $examination->objective }}</td></tr>
                 <tr><td style="font-weight:bold">Assessment</td></tr>
-                <tr><td>{{ $examination->assessment }}</td></tr>
+                <tr><td>
+                        @php
+                            $assessments = explode('|',$examination->assessment);
+                        @endphp
+                        @foreach($assessments as $assessment)
+                            @if(!empty($assessment))
+                            <p style="margin:0px;">{{ $assessment }}</p>
+                            @endif
+                        @endforeach
+                </td></tr>
                 <tr><td style="font-weight:bold">Plan</td></tr>
-                <tr><td>{{ $examination->plan }}</td></tr>
+                <tr><td>{{ $examination->plan->name }}</td></tr>
                 <tr><td style="font-weight:bold">Resep</td></tr>
                 <tr><td>{{ $examination->resep }}</td></tr>
             </table>
