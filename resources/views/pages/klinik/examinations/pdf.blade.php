@@ -106,7 +106,7 @@
             <td style="width:20%;font-size:12px;font-weight:bold">Birth Date / Age<td>
             <td style="width:30%;font-size:12px;">: {{ \Carbon\Carbon::parse($user->info->date_of_birth)->locale('id')->format('d F Y') }} / {{ \Carbon\Carbon::parse($user->info->date_of_birth)->age }}<td>
             <td style="width:20%;font-size:12px;font-weight:bold">Doctor<td>
-            <td style="width:30%;font-size:12px;">: {{ $examination->health_profesional->user->name }}<td>
+            <td style="width:30%;font-size:12px;">: {{ (!in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.(!in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}<td>
         </tr>
         <tr>
             <td style="width:20%;font-size:12px;vertical-align:top;font-weight:bold">Phone<td>
@@ -367,7 +367,16 @@
                 <tr><td style="font-weight:bold">Plan</td></tr>
                 <tr><td>{{ $examination->plan->name }}</td></tr>
                 <tr><td style="font-weight:bold">Resep</td></tr>
-                <tr><td>{{ $examination->resep }}</td></tr>
+                <tr><td>
+                        @php
+                            $reseps = explode(',',$examination->resep);
+                        @endphp
+                        @foreach($reseps as $resep)
+                            @if(!empty($resep))
+                                <p style="margin:0px;">{{ $resep }}</p>
+                            @endif
+                        @endforeach
+                    </td></tr>
             </table>
         @endif
     </div>
