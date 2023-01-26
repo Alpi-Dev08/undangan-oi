@@ -292,21 +292,37 @@
             }
 
             $total = 0;
-            TransactionDetail::where('transaction_id', $transaction->id)->delete();
-            foreach ($request->service_id as $service_id) {
-                $service = Service::find($service_id);
 
+            if($examination->package_id != null){
+                $package = Package::find($examination->package_id);
                 TransactionDetail::create([
                     'transaction_id' => $transaction->id,
                     'status'         => 'waiting payment',
-                    'service_id'     => $service->id,
-                    'name'           => $service->name,
-                    'price'          => $service->price,
-                    'total'          => $service->price
+                    'service_id'     => $package->id,
+                    'name'           => $package->name,
+                    'price'          => $package->price,
+                    'total'          => $package->price
                 ]);
 
-                $total = $total + $service->price;
+                $total = $package->price;
+            } else {
+                TransactionDetail::where('transaction_id', $transaction->id)->delete();
+                foreach ($request->service_id as $service_id) {
+                    $service = Service::find($service_id);
+
+                    TransactionDetail::create([
+                        'transaction_id' => $transaction->id,
+                        'status'         => 'waiting payment',
+                        'service_id'     => $service->id,
+                        'name'           => $service->name,
+                        'price'          => $service->price,
+                        'total'          => $service->price
+                    ]);
+
+                    $total = $total + $service->price;
+                }
             }
+
 
             $transaction->amount = $total;
             $transaction->save();
@@ -344,9 +360,9 @@
             $info = $user->info;
 
             // get the default inner page
-           /* return view('pages.klinik.examinations.pdf', compact([
+            return view('pages.klinik.examinations.pdf', compact([
                 'user', 'info', 'examination'
-            ]));*/
+            ]));
 
             $pdf = Pdf::loadView('pages.klinik.examinations.pdf', compact([
                 'user', 'info', 'examination'

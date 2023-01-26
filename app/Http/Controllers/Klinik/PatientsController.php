@@ -2,14 +2,10 @@
 
     namespace App\Http\Controllers\Klinik;
 
-    use App\DataTables\NakesDataTable;
     use App\DataTables\PatientDataTable;
     use App\Http\Controllers\Controller;
     use App\Http\Requests\Account\SettingsInfoRequest;
-    use App\Models\Klinik\HealthProfesional;
     use App\Models\Klinik\Patient;
-    use App\Http\Requests\StorePatientRequest;
-    use App\Http\Requests\UpdatePatientRequest;
     use App\Models\Master\BloodType;
     use App\Models\Master\CardType;
     use App\Models\Master\City;

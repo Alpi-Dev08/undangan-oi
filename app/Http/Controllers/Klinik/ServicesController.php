@@ -173,19 +173,4 @@
             return redirect()->route('services.index');
         }
 
-        public function getServiceByCountryId(Request $request){
-
-            $services =  Service::select('id','name')->where('country_id',$request->country_id)->get();
-
-            $data = [];
-            foreach ($services as $service){
-                $result = [
-                    $service->id => $service->name
-                ];
-
-                $data[] = $result;
-            }
-
-            return response()->json($data);
-        }
     }

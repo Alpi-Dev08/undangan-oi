@@ -40,7 +40,23 @@
                 <!--begin::Input group-->
                 <div class="row mb-6">
                     <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Service Category') }}</label>
+                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Package') }}</label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-8">
+                        <select name="service_category_id" aria-label="{{ __('Package') }}" data-control="select2" data-placeholder="{{ __('Select a Package...') }}" class="form-select form-select-solid form-select-lg fw-bold">
+                            <option value="">{{ __('Select a Package...') }}</option>
+                            @foreach($packages as $package)
+                                <option value="{{ $package->id }}">{{ $package->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Service Category') }}</label>
                     <!--end::Label-->
                     <!--begin::Col-->
                     <div class="col-lg-8">

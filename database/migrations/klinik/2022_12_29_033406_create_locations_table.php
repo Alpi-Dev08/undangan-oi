@@ -38,8 +38,8 @@ return new class extends Migration
             $table->foreignIdFor(SubDistrict::class)->constrained()->nullable();
             $table->string('address')->nullable();
             $table->string('postal_code')->nullable();
-            $table->string('json_satu_sehat')->nullable();
-            $table->string('response_satu_sehat')->nullable();
+            $table->json('json_satu_sehat')->nullable();
+            $table->json('response_satu_sehat')->nullable();
             $table->char('status',1)->default('1');
             $table->timestamps();
             $table->softDeletes();
