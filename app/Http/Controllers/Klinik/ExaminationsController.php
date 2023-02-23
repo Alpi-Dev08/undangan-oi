@@ -385,4 +385,20 @@
 
             return response()->download(public_path($fileName));
         }
+
+        public function sehat(Request $request){
+            $examination         = Examination::find($request->id);
+            $user = User::find($examination->user_id);
+            $info = $user->info;
+
+            // get the default inner page
+            /*return view('pages.klinik.examinations.sehat', compact([
+                'user', 'info', 'examination'
+            ]));*/
+
+            $pdf = Pdf::loadView('pages.klinik.examinations.sehat', compact([
+                'user', 'info', 'examination'
+            ]));
+            return $pdf->download('surat_keterangan_sehat_'.$user->name.'.pdf');
+        }
     }

@@ -44,6 +44,18 @@
                 </a>
             </li>
             <!--end::Nav item-->
+            <!--begin::Nav item-->
+            <li class="nav-item p-0 ms-0">
+                <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#suratketerangan">
+                    <!--begin::Title-->
+                    <span class="nav-text fw-semibold fs-4 mb-3">Surat Keterangan</span>
+                    <!--end::Title-->
+                    <!--begin::Bullet-->
+                    <span class="bullet-custom position-absolute z-index-2 w-100 h-1px top-100 bottom-n100 bg-primary rounded"></span>
+                    <!--end::Bullet-->
+                </a>
+            </li>
+            <!--end::Nav item-->
         </ul>
         <!--end::Tabs-->
     </div>
@@ -815,71 +827,71 @@
                             <div class="row col-6">
                                 <div class="col-12 row">
                                     <div class="col-4">Weight</div>
-                                    <div class="col-8">: {{ $exam->vitality->weight ?? "-" }} Kg</div>
+                                    <div class="col-8">: {{ $examination->vitality->weight ?? "-" }} Kg</div>
                                 </div>
                                 <div class="col-12 row">
                                     <div class="col-4">Height</div>
-                                    <div class="col-8">: {{ $exam->vitality->height ?? "-" }} cm</div>
+                                    <div class="col-8">: {{ $examination->vitality->height ?? "-" }} cm</div>
                                 </div>
                                 <div class="col-12 row">
                                     <div class="col-4">Body Mass Index</div>
-                                    <div class="col-8">: {{ $exam->vitality->body_mass_index ?? "-" }}</div>
+                                    <div class="col-8">: {{ $examination->vitality->body_mass_index ?? "-" }}</div>
                                 </div>
                                 <div class="col-12 row">
                                     <div class="col-4">Ideal Weight</div>
-                                    <div class="col-8">: {{ $exam->vitality->ideal_weight ?? "-" }} Kg</div>
+                                    <div class="col-8">: {{ $examination->vitality->ideal_weight ?? "-" }} Kg</div>
                                 </div>
                                 <div class="col-12 row">
                                     <div class="col-4">Body Fat</div>
-                                    <div class="col-8">: {{ $exam->vitality->body_fat ?? "-" }}</div>
+                                    <div class="col-8">: {{ $examination->vitality->body_fat ?? "-" }}</div>
                                 </div>
                                 <div class="col-12 row">
                                     <div class="col-4">BMI Conclusion</div>
-                                    <div class="col-8">: {{ $exam->vitality->bmi_conclusion ?? "-" }}</div>
+                                    <div class="col-8">: {{ $examination->vitality->bmi_conclusion ?? "-" }}</div>
                                 </div>
                                 <div class="col-12">&nbsp;</div>
                                 <div class="col-12 row">
                                     <div class="col-4">Arm Circumference</div>
-                                    <div class="col-8">: {{ $exam->vitality->arm_circumference ?? "-" }}</div>
+                                    <div class="col-8">: {{ $examination->vitality->arm_circumference ?? "-" }}</div>
                                 </div>
                                 <div class="col-12 row">
                                     <div class="col-4">Abdominal Circumference</div>
-                                    <div class="col-8">: {{ $exam->vitality->adbdominal_circumference ?? "-" }}</div>
+                                    <div class="col-8">: {{ $examination->vitality->adbdominal_circumference ?? "-" }}</div>
                                 </div>
                             </div>
                             <div class="row col-6">
                                 <div class="col-12 row">
                                     <div class="col-4">Blood Pressure</div>
-                                    <div class="col-8">: {{ $exam->vitality->blood_pressure ?? "-" }}</div>
+                                    <div class="col-8">: {{ $examination->vitality->blood_pressure ?? "-" }}</div>
                                 </div>
                                 <div class="col-12 row">
                                     <div class="col-4">Heart Rate</div>
-                                    <div class="col-8">: {{ $exam->vitality->heart_rate ?? "-" }}</div>
+                                    <div class="col-8">: {{ $examination->vitality->heart_rate ?? "-" }}</div>
                                 </div>
                                 <div class="col-12 row">
                                     <div class="col-4">Respiratory Rate</div>
-                                    <div class="col-8">: {{ $exam->vitality->respiratory_rate ?? "-" }}</div>
+                                    <div class="col-8">: {{ $examination->vitality->respiratory_rate ?? "-" }}</div>
                                 </div>
                                 <div class="col-12 row">
                                     <div class="col-4">Temperature</div>
-                                    <div class="col-8">: {{ $exam->vitality->temperature ?? "-" }}</div>
+                                    <div class="col-8">: {{ $examination->vitality->temperature ?? "-" }}</div>
                                 </div>
                                 <div class="col-12 row">
                                     <div class="col-4">Oxygen Saturation</div>
-                                    <div class="col-8">: {{ $exam->vitality->oxygen_saturation ?? "-" }}</div>
+                                    <div class="col-8">: {{ $examination->vitality->oxygen_saturation ?? "-" }}</div>
                                 </div>
                                 <div class="col-12 row">
                                     <div class="col-4">Waist Circumference</div>
-                                    <div class="col-8">: {{ $exam->vitality->waist_circumferennce ?? "-" }}</div>
+                                    <div class="col-8">: {{ $examination->vitality->waist_circumferennce ?? "-" }}</div>
                                 </div>
                                 <div class="col-12">&nbsp;</div>
                                 <div class="col-12 row">
                                     <div class="col-4">Neck Circumference</div>
-                                    <div class="col-8">: {{ $exam->vitality->neck_circumference ?? "-" }}</div>
+                                    <div class="col-8">: {{ $examination->vitality->neck_circumference ?? "-" }}</div>
                                 </div>
                                 <div class="col-12 row">
                                     <div class="col-4">Chest Size</div>
-                                    <div class="col-8">: {{ $exam->vitality->chest_size ?? "-" }}</div>
+                                    <div class="col-8">: {{ $examination->vitality->chest_size ?? "-" }}</div>
                                 </div>
                             </div>
                         </div>
@@ -1044,6 +1056,94 @@
                     <!--end::Actions-->
                 </form>
 
+            </div>
+            <div class="tab-pane" id="suratketerangan" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
+                <div class="d-flex flex-column flex-md-row rounded border p-10">
+                    <ul class="nav nav-tabs nav-pills flex-row border-0 flex-md-column me-5 mb-3 mb-md-0 fs-6 min-w-lg-200px">
+                        <li class="nav-item w-100 me-0 mb-md-2">
+                            <a class="nav-link active w-100 active btn btn-flex btn-active-light-success" data-bs-toggle="tab"
+                               href="#suratsehat">
+                                <span class="d-flex flex-column align-items-start">
+                                    <span class="fs-7 fw-bold">Surat Keterangan Sehat</span>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item w-100 me-0 mb-md-2">
+                            <a class="nav-link w-100 btn btn-flex btn-active-light-info" data-bs-toggle="tab"
+                               href="#suratsakit">
+                                <span class="d-flex flex-column align-items-start">
+                                    <span class="fs-7 fw-bold">Surat Keterangan Sakit</span>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade active show" id="suratsehat" role="tabpanel">
+                            <h3 class="fs-3 fw-bold">Informasi Kesehatan</h3>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td>Tinggi Badan</td>
+                                            <td>: {{ $examination->vitality->height ?? "-" }} cm</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Berat Badan</td>
+                                            <td>: {{ $examination->vitality->weight ?? "-" }} kg</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tekanan Darah</td>
+                                            <td>: {{ $examination->vitality->blood_pressure ?? "-" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nadi</td>
+                                            <td>: {{ $examination->vitality->heart_rate ?? "-" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Suhu Tubuh</td>
+                                            <td>: {{ $examination->vitality->temperature ?? "-" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Gigi</td>
+                                            <td>: Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Keadaan Umum</td>
+                                            <td>: Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Mata</td>
+                                            <td>: Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>THT</td>
+                                            <td>: Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Mulut</td>
+                                            <td>: Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Dada (Paru & Jantung)</td>
+                                            <td>: Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Perut</td>
+                                            <td>: Normal</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Extremitas</td>
+                                            <td>: Normal</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <a href="{{ route('suket.sehat',$examination->id) }}" class="btn btn-bg-dark text-white">Download PDF</a>
+                        </div>
+
+                        <div class="tab-pane fade" id="suratsakit" role="tabpanel"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

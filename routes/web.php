@@ -133,6 +133,9 @@ Route::middleware('auth')->group(function () {
         Route::POST('examinations-service-store', [ExaminationsController::class, 'storeservices'])->name('examinations.storeservices');
         Route::get('transactions-service', [TransactionsController::class, 'service'])->name('transactions.service');
 
+        Route::get('suket-sehat/{id}', [ExaminationsController::class, 'sehat'])->name('suket.sehat');
+        Route::get('suket-sakit/{id}', [ExaminationsController::class, 'sakit'])->name('suket.sakit');
+
         Route::resource('servicecategories', \App\Http\Controllers\Klinik\ServiceCategoriesController::class);
         Route::resource('services', \App\Http\Controllers\Klinik\ServicesController::class);
         Route::resource('packages', \App\Http\Controllers\Klinik\PackagesController::class);
