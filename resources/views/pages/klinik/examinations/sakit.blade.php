@@ -94,86 +94,75 @@
         </tr>
     </table>
 </footer>
-<main style="font-size:12px!important;">
-    <p style="color:#000;margin:0px;font-size:22px;text-align:center;font-weight:bolder;text-transform:uppercase;font-family: 'Roboto Condensed', sans-serif;margin-bottom:50px;margin-top:20px;        text-decoration:underline;">Surat Keterangan Sehat</p>
+<main style="font-size:13px!important;">
+    <p style="color:#000;margin:0px;font-size:16px;text-align:center;font-weight:bolder;text-transform:uppercase;font-family: 'Roboto Condensed', sans-serif;margin-top:20px;text-decoration:underline;">Surat Keterangan Berobat/Sakit</p>
+    <p style="color:#000;margin:0px;font-size:16px;text-align:center;font-weight:bolder;text-transform:uppercase;font-family: 'Roboto Condensed', sans-serif;margin-bottom:50px;text-decoration:underline;">ATTENDANCE / ILLNESS CERTIFICATE</p>
+
+    <p>Yang bertanda tangan dibawah ini menerangkan bahwa:<br><em>This is to certify that:</em></p>
     <table class="table"  style="width:100%;">
         <tbody>
             <tr>
-                <td style="width:20%;">Nama</td>
-                <td style="width:80%;">: <b>{{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</b></td>
+                <td style="width:25%;">Nama / Name</td>
+                <td style="width:75%;">: <b>{{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }} </b></td>
             </tr>
             <tr>
-                <td style="width:20%;">Tanggal Lahir</td>
-                <td style="width:80%;">: <b>{{ \Carbon\Carbon::parse($user->info->date_of_birth)->locale('id')->format('d F Y') }}</b></td>
+                <td style="width:25%;">Jenis Kelamin / Sex</td>
+                <td style="width:75%;">: <b>{{ $info->gender->name }} </b></td>
             </tr>
             <tr>
-                <td style="width:20%;vertical-align:top">Alamat</td>
-                <td style="width:80%;">: <b>{{ $info->address }}{{ isset($info->subdistrict) ? ', '.$info->subdistrict->name : '' }}{{ isset($info->district) ? ', '.$info->district->name : '' }}{{ isset($info->city) ? ', '.$info->city->name : '' }}{{ isset($info->province) ? ', '.$info->province->name : '' }}{{ isset($info->country) ? ', '.$info->country->name : '' }}{{ $info->postal_code!='' ? $info->postal_code : (isset($info->subdistrict) ? ' - '.$info->subdistrict->postal_code : '') }}</b></td>
+                <td style="width:25%;">Umur / Age</td>
+                <td style="width:75%;">: <b>{{ \Carbon\Carbon::parse($user->info->date_of_birth)->age }} </b></td>
+            </tr>
+            <tr>
+                <td style="width:25%;vertical-align:top">Pekerjaan / Occupation</td>
+                <td style="width:75%;">: <b>{{ $data->pekerjaan ?? "-" }} </b></td>
+            </tr>
+            <tr>
+                <td style="width:25%;vertical-align:top">Perusahaan / Company</td>
+                <td style="width:75%;">: <b>{{ $data->perusahaan ?? "-" }} </b></td>
             </tr>
         </tbody>
     </table>
-
-    <br>
-    <p>Telah melakukan pemeriksaan kesehatan pada Tanggal : <b>{{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }}</b> di Klinik Satriabudi Dharma Medika, Sampora, Cisauk, Kab. Tangerang.</p>
-    <p>Berikut ini hasil pemeriksaan tersebut:</p>
+    <p>Telah datang ke klinik pada Tanggal : <b style="text-decoration: underline;">{{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }}</b> dan yang bersangkutan :</p>
+    <p><em>Has attended to the clinic on : <b style="text-decoration: underline;">{{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }}</b> and the patient :</em></p>
     <table class="table" style="margin-left:10px;width:100%">
         <tbody>
         <tr>
-            <td style="width:25%;">- Tinggi Badan</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">{{ $examination->vitality->height ?? "-" }} cm</b></td>
+            <td style="vertical-align:top"><input type="checkbox" {{ $data->keterangan==1 ? "checked" : "" }}></td>
+            <td style="padding-bottom: 15px">Dapat kembali bekerja <br><em>May return to work</em></td>
         </tr>
         <tr>
-            <td style="width:25%;">- Berat Badan</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">{{ $examination->vitality->weight ?? "-" }} kg</b></td>
+            <td style="vertical-align:top"><input type="checkbox" {{ $data->keterangan==2 ? "checked" : "" }}></td>
+            @if($data->keterangan==2)
+                <td style="padding-bottom: 15px">
+                    Disarankan untuk beristirahat selama : <b>{{ $data->hari ?? "0" }}</b> hari, dari <b>{{ $data->start_date ? \Carbon\Carbon::parse($data->start_date)->locale('id')->format('d F Y') : "-" }}</b> s.d <b>{{ $data->end_date ? \Carbon\Carbon::parse($data->end_date)->locale('id')->format('d F Y') : "-" }}</b><br>
+                        <em>Should have a complete rest for : <b>{{ $data->hari ?? "0" }}</b> day (s), from <b>{{ $data->start_date ? \Carbon\Carbon::parse($data->start_date)->locale('id')->format('d F Y') : "-" }}</b> to <b>{{ $data->end_date ? \Carbon\Carbon::parse($data->end_date)->locale('id')->format('d F Y') : "-" }}</b></em>
+                </td>
+            @else
+                <td style="padding-bottom: 15px">
+                    Disarankan untuk beristirahat selama : <b>0</b> hari, dari <b>-</b> s.d <b>-</b><br>
+                    <em>Should have a complete rest for : <b>0</b> day (s), from <b>-</b> to <b>-</b></em>
+                </td>
+            @endif
         </tr>
         <tr>
-            <td style="width:25%;">- Tekanan Darah</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">{{ $examination->vitality->blood_pressure ?? "-" }}</b></td>
+            <td style="vertical-align:top"><input type="checkbox" {{ $data->keterangan==3 ? "checked" : "" }}></td>
+            @if($data->keterangan==3)
+            <td style="padding-bottom: 15px">Perlu datang kembali ke klinik pada : <b>{{ $data->back_date ? \Carbon\Carbon::parse($data->back_date)->locale('id')->format('d F Y') : "-" }}</b><br>
+                <em>Need to be seen again at clinic on : <b>{{ $data->back_date ? \Carbon\Carbon::parse($data->back_date)->locale('id')->format('d F Y') : "-" }}</b></em></td>
+            @else
+                <td style="padding-bottom: 15px">Perlu datang kembali ke klinik pada : <b>-</b><br>
+                    <em>Need to be seen again at clinic on : <b>-</b></em></td>
+            @endif
         </tr>
         <tr>
-            <td style="width:25%;">- Nadi</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">{{ $examination->vitality->heart_rate ?? "-" }}</b></td>
-        </tr>
-        <tr>
-            <td style="width:25%;">- Suhu Tubuh</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">{{ $examination->vitality->temperature ?? "-" }}</b></td>
-        </tr>
-        <tr>
-            <td style="width:25%;">- Gigi</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">Normal</b></td>
-        </tr>
-        <tr>
-            <td style="width:25%;">- Keadaan Umum</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">Normal</b></td>
-        </tr>
-        <tr>
-            <td style="width:25%;">- Mata</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">Normal</b></td>
-        </tr>
-        <tr>
-            <td style="width:25%;">- THT</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">Normal</b></td>
-        </tr>
-        <tr>
-            <td style="width:25%;">- Mulut</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">Normal</b></td>
-        </tr>
-        <tr>
-            <td style="width:25%;">- Dada (Paru & Jantung)</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">Normal</b></td>
-        </tr>
-        <tr>
-            <td style="width:25%;">- Perut</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">Normal</b></td>
-        </tr>
-        <tr>
-            <td>- Extremitas</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">Normal</b></td>
+            <td style="vertical-align:top"><input type="checkbox" {{ $data->keterangan==4 ? "checked" : "" }}></td>
+            <td style="padding-bottom: 15px">Perlu dirujuk ke Rumah Sakit untuk mendapatkan pemeriksaan lebih lanjut<br><em>Need to be referred to hospital for further treatment</em></td>
         </tr>
         </tbody>
     </table>
     <p>Keterangan / Comments :</p>
-    <p style="margin-bottom:20px;">Saat ini pasien dalam keadaan <b style="padding-left:10px;">SEHAT</b>.</p>
+    <p style="margin-bottom:20px;">{{ $data->description ?? "-" }}</p>
 
     <div style="width:300px;float:right;text-align:center">
 

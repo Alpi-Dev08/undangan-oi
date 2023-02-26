@@ -359,10 +359,12 @@
             $user = User::find($examination->user_id);
             $info = $user->info;
 
+            $data = $request->all();
+
             // get the default inner page
-            return view('pages.klinik.examinations.pdf', compact([
+            /*return view('pages.klinik.examinations.pdf', compact([
                 'user', 'info', 'examination'
-            ]));
+            ]));*/
 
             $pdf = Pdf::loadView('pages.klinik.examinations.pdf', compact([
                 'user', 'info', 'examination'
@@ -400,5 +402,23 @@
                 'user', 'info', 'examination'
             ]));
             return $pdf->download('surat_keterangan_sehat_'.$user->name.'.pdf');
+        }
+
+        public function sakit(Request $request){
+            $examination         = Examination::find($request->id);
+            $user = User::find($examination->user_id);
+            $info = $user->info;
+
+            $data = json_decode(json_encode($request->all()));
+
+            // get the default inner page
+            /*return view('pages.klinik.examinations.sakit', compact([
+                'user', 'info', 'examination', 'data'
+            ]));*/
+
+            $pdf = Pdf::loadView('pages.klinik.examinations.sakit', compact([
+                'user', 'info', 'examination', 'data'
+            ]));
+            return $pdf->download('surat_keterangan_sakit_'.$user->name.'.pdf');
         }
     }
