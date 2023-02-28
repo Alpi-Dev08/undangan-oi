@@ -397,9 +397,10 @@
             /*return view('pages.klinik.examinations.sehat', compact([
                 'user', 'info', 'examination'
             ]));*/
+            $data = json_decode(json_encode($request->all()));
 
             $pdf = Pdf::loadView('pages.klinik.examinations.sehat', compact([
-                'user', 'info', 'examination'
+                'user', 'info', 'examination', 'data'
             ]));
             return $pdf->download('surat_keterangan_sehat_'.$user->name.'.pdf');
         }
