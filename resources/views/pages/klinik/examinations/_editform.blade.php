@@ -1138,7 +1138,16 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <a href="{{ route('suket.sehat',$examination->id) }}" class="btn btn-bg-dark text-white">Download PDF</a>
+                            <form method="post" action="{{ route('suket.sehat',$examination->id) }}">
+                                @csrf
+                                <div class="row">
+                                    <div class="mb-10">
+                                        <label for="exampleFormControlInput1" class="form-label">Keterangan</label>
+                                        <textarea rows="3" class="form-control form-control-solid" placeholder="Keterangan" name="description"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-bg-dark text-white">Download PDF</button>
+                                </div>
+                            </form>
                         </div>
                         <div class="tab-pane fade" id="suratsakit" role="tabpanel">
                             <form action="{{ route('suket.sakit',$examination->id) }}" method="POST">

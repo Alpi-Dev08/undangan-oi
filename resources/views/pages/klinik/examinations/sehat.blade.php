@@ -173,7 +173,7 @@
         </tbody>
     </table>
     <p>Keterangan / Comments :</p>
-    <p style="margin-bottom:20px;">Saat ini pasien dalam keadaan <b style="padding-left:10px;">SEHAT</b>.</p>
+    <p style="margin-bottom:20px;">{{ $data->description ?? "-" }}</p>
 
     <div style="width:300px;float:right;text-align:center">
 
