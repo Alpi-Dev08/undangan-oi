@@ -112,7 +112,7 @@ Route::middleware('auth')->group(function () {
     });
 
     //Masters Data
-    Route::prefix('klinik')->group(function () {
+    Route::prefix('klinik')->group(callback: function () {
         Route::resource('healthcarecategories', HealthcareCategoriesController::class);
         Route::resource('healthcaretypes', HealthcareTypesController::class);
         Route::resource('healthcares', HealthcaresController::class);
@@ -147,6 +147,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('anamnesisexaminations', \App\Http\Controllers\Klinik\AnamnesisExaminationsController::class);
         Route::resource('physicalexaminations', \App\Http\Controllers\Klinik\PhysicalExaminationsController::class);
         Route::resource('otherexaminations', \App\Http\Controllers\Klinik\OtherExaminationsController::class);
+        Route::resource('additionalexaminations', \App\Http\Controllers\Klinik\AdditionalExaminationsController::class);
         Route::resource('appointments', \App\Http\Controllers\Klinik\AppointmentsController::class);
 
         Route::resource('organization',OrganizationController::class);

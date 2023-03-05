@@ -1,425 +1,408 @@
 <?php
 
-    namespace App\Http\Controllers\Klinik;
+namespace App\Http\Controllers\Klinik;
 
-    use App\DataTables\Klinik\ExaminationsDataTable;
-    use App\Http\Controllers\Controller;
-    use App\Http\Requests\Klinik\StoreExaminationRequest;
-    use App\Http\Requests\Klinik\UpdateExaminationRequest;
-    use App\Models\Klinik\AnamnesisCategory;
-    use App\Models\Klinik\AnamnesisExamination;
-    use App\Models\Klinik\Examination;
-    use App\Models\Klinik\HealthProfesional;
-    use App\Models\Klinik\Icdten;
-    use App\Models\Klinik\Laboratory;
-    use App\Models\Klinik\LaboratoryExamination;
-    use App\Models\Klinik\LaboratoryExaminationCategory;
-    use App\Models\Klinik\LaboratoryUnit;
-    use App\Models\Klinik\OtherExamination;
-    use App\Models\Klinik\Package;
-    use App\Models\Klinik\PhysicalCategory;
-    use App\Models\Klinik\PhysicalExamination;
-    use App\Models\Klinik\Plan;
-    use App\Models\Klinik\Service;
-    use App\Models\Klinik\ServiceCategory;
-    use App\Models\Klinik\ServiceType;
-    use App\Models\Klinik\Transaction;
-    use App\Models\Klinik\TransactionDetail;
-    use App\Models\Klinik\VitalityExamination;
-    use App\Models\User;
-    use Barryvdh\DomPDF\Facade\Pdf;
-    use Doctrine\DBAL\Driver\PDO\Exception;
-    use Illuminate\Database\Eloquent\Builder;
-    use Illuminate\Http\Request;
-    use Illuminate\Support\Facades\Auth;
-    use Illuminate\Support\Facades\Storage;
-    use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
+use App\DataTables\Klinik\ExaminationsDataTable;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Klinik\StoreExaminationRequest;
+use App\Http\Requests\Klinik\UpdateExaminationRequest;
+use App\Models\Klinik\AdditionalCategory;
+use App\Models\Klinik\AdditionalExamination;
+use App\Models\Klinik\AnamnesisCategory;
+use App\Models\Klinik\AnamnesisExamination;
+use App\Models\Klinik\Examination;
+use App\Models\Klinik\HealthProfesional;
+use App\Models\Klinik\Icdten;
+use App\Models\Klinik\LaboratoryExamination;
+use App\Models\Klinik\OtherExamination;
+use App\Models\Klinik\Package;
+use App\Models\Klinik\PhysicalCategory;
+use App\Models\Klinik\PhysicalExamination;
+use App\Models\Klinik\Plan;
+use App\Models\Klinik\Service;
+use App\Models\Klinik\ServiceCategory;
+use App\Models\Klinik\Transaction;
+use App\Models\Klinik\TransactionDetail;
+use App\Models\Klinik\VitalityExamination;
+use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Doctrine\DBAL\Driver\PDO\Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
-    class ExaminationsController extends Controller
+class ExaminationsController extends Controller
+{
+    public $user;
+
+    public function __construct()
     {
-        public $user;
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::guard('web')->user();
 
-        public function __construct()
-        {
-            $this->middleware(function ($request, $next) {
-                $this->user = Auth::guard('web')->user();
-                return $next($request);
-            });
+            return $next($request);
+        });
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(ExaminationsDataTable $dataTable)
+    {
+        if (is_null($this->user) || ! $this->user->can('klinik.read')) {
+            abort(403, 'Sorry !! You are Unauthorized to view any master data !');
         }
 
-        /**
-         * Display a listing of the resource.
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function index(ExaminationsDataTable $dataTable)
-        {
-            if (is_null($this->user) || !$this->user->can('klinik.read')) {
-                abort(403, 'Sorry !! You are Unauthorized to view any master data !');
-            }
+        return $dataTable->render('pages.klinik.examinations.index');
+    }
 
-            return $dataTable->render('pages.klinik.examinations.index');
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        if (is_null($this->user) || ! $this->user->can('klinik.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any master data !');
         }
 
-        /**
-         * Show the form for creating a new resource.
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function create()
-        {
-            if (is_null($this->user) || !$this->user->can('klinik.create')) {
-                abort(403, 'Sorry !! You are Unauthorized to create any master data !');
-            }
-            return view('pages.klinik.examinations.create');
+        return view('pages.klinik.examinations.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function store(StoreExaminationRequest $request)
+    {
+        if (is_null($this->user) || ! $this->user->can('klinik.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any master data !');
         }
 
-        /**
-         * Store a newly created resource in storage.
-         *
-         * @param \App\Http\Requests\Klinik\StoreExaminationRequest $request
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function store(StoreExaminationRequest $request)
-        {
-            if (is_null($this->user) || !$this->user->can('klinik.create')) {
-                abort(403, 'Sorry !! You are Unauthorized to create any master data !');
+        // Validation Data
+        $validated = $request->validated();
+
+        // Process Data
+        if ($validated) {
+            try {
+                Examination::create(['name' => $request->name]);
+            } catch (Exception $e) {
+                report($e);
+
+                return false;
             }
 
-            // Validation Data
-            $validated = $request->validated();
+            session()->flash('success', 'Examination has been created !!');
 
-            // Process Data
-            if ($validated) {
-                try {
-                    Examination::create(['name' => $request->name]);
-                } catch (Exception $e) {
-                    report($e);
-                    return false;
-                }
-
-                session()->flash('success', 'Examination has been created !!');
-                return redirect()->route('examinations.index');
-            }
-
-            return false;
-        }
-
-        /**
-         * Display the specified resource.
-         *
-         * @param \App\Models\Klinik\Examination $examination
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function show(Examination $examination)
-        {
-            //
-        }
-
-        /**
-         * Show the form for editing the specified resource.
-         *
-         * @param  $id
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function edit($id)
-        {
-            if (is_null($this->user) || !$this->user->can('klinik.update')) {
-                abort(403, 'Sorry !! You are Unauthorized to edit any master data !');
-            }
-
-
-            $examination         = Examination::find($id);
-            if($examination->status!=="done"){
-                $examination->status = 'processing';
-                $examination->save();
-            }
-
-            $user                = User::find($examination->user_id);
-            $healthprofesionals  = HealthProfesional::all();
-            $plans               = Plan::all();
-            $icdtens             = Icdten::all();
-            $anamnesiscategories = [];
-            $physicalscategories = [];
-            $otherscategories    = [];
-            if ($examination->service_category->is_mcu == 1) {
-                $anamnesiscategories = AnamnesisCategory::all();
-                $physicalscategories = PhysicalCategory::where('id', '<>', 15)->get();
-                $otherscategories    = PhysicalCategory::where('id', 15)->get();
-            }
-
-            $examinations         = Examination::where('user_id', $examination->user_id)->where('status', 'done')->orderBy('created_at','DESC')->get();
-            $anamnesisexamination = AnamnesisExamination::where('examination_id', $examination->id)->first();
-            $physicalexamination  = PhysicalExamination::where('examination_id', $examination->id)->first();
-            $otherexamination     = OtherExamination::where('examination_id', $examination->id)->first();
-            //$vitalityexaminations = VitalityExamination::where('user_id', $examination->user_id)->orderBy('created_at', 'desc')->get();
-
-
-            $info = $user->info;
-            return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories', 'anamnesisexamination', 'examinations', 'physicalscategories', 'physicalexamination', 'otherscategories', 'otherexamination'));
-        }
-
-        /**
-         * Update the specified resource in storage.
-         *
-         * @param \App\Http\Requests\Klinik\UpdateExaminationRequest $request
-         * @param \App\Models\Klinik\Examination                     $examination
-         * @param \App\Models\Klinik\Examination                     $examination
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function update(UpdateExaminationRequest $request, Examination $examination)
-        {
-            if (is_null($this->user) || !$this->user->can('klinik.update')) {
-                abort(403, 'Sorry !! You are Unauthorized to edit any master date !');
-            }
-
-            // Validation Data
-            $validated = $request->validated();
-
-            // Process Data
-            if ($validated) {
-                // Process Data
-                try {
-                    $validated['status'] = 'done';
-                    $examination->update($validated);
-                } catch (Exception $e) {
-                    report($e);
-                    return false;
-                }
-
-                session()->flash('success', 'Examination has been updated !!');
-
-                if ($examination->status == 'waiting payment') {
-                    return redirect()->route('transactions.create', ['id' => $examination->id]);
-                }
-                return redirect()->route('examinations.index');
-            }
-
-            return false;
-        }
-
-        /**
-         * Remove the specified resource from storage.
-         *
-         * @param \App\Models\Klinik\Examination $examination
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function destroy(Examination $examination)
-        {
-            if (is_null($this->user) || !$this->user->can('klinik.delete')) {
-                abort(403, 'Sorry !! You are Unauthorized to delete any master date !');
-            }
-
-            $examination->delete();
-
-            session()->flash('success', 'Examination has been deleted !!');
             return redirect()->route('examinations.index');
         }
 
-        public function invoice(Request $request)
-        {
-            $id                 = $request->id;
-            $examination        = Examination::find($id);
-            $user               = User::find($examination->user_id);
-            $info               = $user->info;
-            $transaction        = Transaction::where('examination_id', $examination->id)->first();
-            $transaction_detail = TransactionDetail::where('transaction_id', $transaction->id)->get();
+        return false;
+    }
 
-            // get the default inner page
-            return view('pages.klinik.examinations.invoice', compact([
-                'user', 'info', 'examination', 'transaction', 'transaction_detail'
-            ]));
+    /**
+     * Display the specified resource.
+     *
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Examination $examination)
+    {
+            //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        if (is_null($this->user) || ! $this->user->can('klinik.update')) {
+            abort(403, 'Sorry !! You are Unauthorized to edit any master data !');
         }
 
-        public function payments(Request $request)
-        {
-            $id          = $request->id;
-            $user        = $id != '' ? User::find($id) : auth()->user();
-            $examination = LaboratoryExamination::find($request->examination);
-            $info        = $user->info;
-
-            // get the default inner page
-            return view('pages.klinik.examinations.payments', compact([
-                'user', 'info', 'examination'
-            ]));
-        }
-
-        public function createPayment(Request $request)
-        {
-            $id                  = $request->id;
-            $transaction         = Transaction::find($id);
-            $transaction->status = 'paid';
-            $transaction->save();
-
-            $examination         = Examination::find($transaction->examination_id);
-            $examination->status = 'done';
+        $examination = Examination::find($id);
+        if ($examination->status !== 'done') {
+            $examination->status = 'processing';
             $examination->save();
-
-            return redirect()->route('transactions.index');
         }
 
-        public function services(Request $request)
-        {
-            $id          = $request->id;
-            $examination = Examination::find($id);
-            $examinations         = Examination::where('user_id', $examination->user_id)->where('status', 'done')->orderBy('created_at','DESC')->get();
-            $user        = User::find($examination->user_id);
-            $info        = $user->info;
-
-            $services          = Service::where('service_category_id', $examination->service_category_id)->get();
-            $servicecategories = ServiceCategory::where('is_global', 1)->get();
-
-
-            return view('pages.klinik.examinations.services', compact([
-                'user', 'info', 'examination', 'services', 'servicecategories', 'examinations'
-            ]));
+        $user = User::find($examination->user_id);
+        $healthprofesionals = HealthProfesional::all();
+        $plans = Plan::all();
+        $icdtens = Icdten::all();
+        $anamnesiscategories = [];
+        $physicalscategories = [];
+        $otherscategories = [];
+        $additionalsscategories = [];
+        if ($examination->service_category->is_mcu == 1) {
+            $anamnesiscategories = AnamnesisCategory::all();
+            $physicalscategories = PhysicalCategory::where('id', '<>', 15)->get();
+            $otherscategories =  PhysicalCategory::where('id', 15)->get();
+            $additionalsscategories = AdditionalCategory::all();
         }
 
-        public function storeservices(Request $request)
-        {
-            $examination = Examination::find($request->examination_id);
-            $transaction = Transaction::where('examination_id', $examination->id)->first();
+        $examinations = Examination::where('user_id', $examination->user_id)->where('status', 'done')->orderBy('created_at', 'DESC')->get();
+        $anamnesisexamination = AnamnesisExamination::where('examination_id', $examination->id)->first();
+        $physicalexamination = PhysicalExamination::where('examination_id', $examination->id)->first();
+        $otherexamination = OtherExamination::where('examination_id', $examination->id)->first();
+        $additionalexamination = AdditionalExamination::where('examination_id', $examination->id)->first();
+        //$vitalityexaminations = VitalityExamination::where('user_id', $examination->user_id)->orderBy('created_at', 'desc')->get();
 
-            if($examination->is_appointment==1){
-                $examination->examination_date = date('Y-m-d H:i:s');
-                $examination->appointment_status = 1;
-                $examination->save();
+        $info = $user->info;
+
+        return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories', 'anamnesisexamination', 'examinations', 'physicalscategories', 'physicalexamination', 'otherscategories', 'otherexamination', 'additionalsscategories', 'additionalexamination'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function update(UpdateExaminationRequest $request, Examination $examination)
+    {
+        if (is_null($this->user) || ! $this->user->can('klinik.update')) {
+            abort(403, 'Sorry !! You are Unauthorized to edit any master date !');
+        }
+
+        // Validation Data
+        $validated = $request->validated();
+
+        // Process Data
+        if ($validated) {
+            // Process Data
+            try {
+                $validated['status'] = 'done';
+                $examination->update($validated);
+            } catch (Exception $e) {
+                report($e);
+
+                return false;
             }
 
-            $total = 0;
+            session()->flash('success', 'Examination has been updated !!');
 
-            if($examination->package_id != null){
-                $package = Package::find($examination->package_id);
-                TransactionDetail::create([
-                    'transaction_id' => $transaction->id,
-                    'status'         => 'waiting payment',
-                    'service_id'     => $package->id,
-                    'name'           => $package->name,
-                    'price'          => $package->price,
-                    'total'          => $package->price
+            if ($examination->status == 'waiting payment') {
+                return redirect()->route('transactions.create', ['id' => $examination->id]);
+            }
+
+            return redirect()->route('examinations.index');
+        }
+
+        return false;
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Examination $examination)
+    {
+        if (is_null($this->user) || ! $this->user->can('klinik.delete')) {
+            abort(403, 'Sorry !! You are Unauthorized to delete any master date !');
+        }
+
+        $examination->delete();
+
+        session()->flash('success', 'Examination has been deleted !!');
+
+        return redirect()->route('examinations.index');
+    }
+
+    public function invoice(Request $request)
+    {
+        $id = $request->id;
+        $examination = Examination::find($id);
+        $user = User::find($examination->user_id);
+        $info = $user->info;
+        $transaction = Transaction::where('examination_id', $examination->id)->first();
+        $transaction_detail = TransactionDetail::where('transaction_id', $transaction->id)->get();
+
+        // get the default inner page
+        return view('pages.klinik.examinations.invoice', compact(['user', 'info', 'examination', 'transaction', 'transaction_detail',
+        ]));
+    }
+
+    public function payments(Request $request)
+    {
+        $id = $request->id;
+        $user = $id != '' ? User::find($id) : auth()->user();
+        $examination = LaboratoryExamination::find($request->examination);
+        $info = $user->info;
+
+        // get the default inner page
+        return view('pages.klinik.examinations.payments', compact(['user', 'info', 'examination',
+        ]));
+    }
+
+    public function createPayment(Request $request)
+    {
+        $id = $request->id;
+        $transaction = Transaction::find($id);
+        $transaction->status = 'paid';
+        $transaction->save();
+
+        $examination = Examination::find($transaction->examination_id);
+        $examination->status = 'done';
+        $examination->save();
+
+        return redirect()->route('transactions.index');
+    }
+
+    public function services(Request $request)
+    {
+        $id = $request->id;
+        $examination = Examination::find($id);
+        $examinations = Examination::where('user_id', $examination->user_id)->where('status', 'done')->orderBy('created_at', 'DESC')->get();
+        $user = User::find($examination->user_id);
+        $info = $user->info;
+
+        $services = Service::where('service_category_id', $examination->service_category_id)->get();
+        $servicecategories = ServiceCategory::where('is_global', 1)->get();
+
+        return view('pages.klinik.examinations.services', compact(['user', 'info', 'examination', 'services', 'servicecategories', 'examinations',
+        ]));
+    }
+
+    public function storeservices(Request $request)
+    {
+        $examination = Examination::find($request->examination_id);
+        $transaction = Transaction::where('examination_id', $examination->id)->first();
+
+        if ($examination->is_appointment == 1) {
+            $examination->examination_date = date('Y-m-d H:i:s');
+            $examination->appointment_status = 1;
+            $examination->save();
+        }
+
+        $total = 0;
+
+        if ($examination->package_id != null) {
+            $package = Package::find($examination->package_id);
+            TransactionDetail::create(['transaction_id' => $transaction->id, 'status' => 'waiting payment', 'service_id' => $package->id, 'name' => $package->name, 'price' => $package->price, 'total' => $package->price,
+            ]);
+
+            $total = $package->price;
+        } else {
+            TransactionDetail::where('transaction_id', $transaction->id)->delete();
+            foreach ($request->service_id as $service_id) {
+                $service = Service::find($service_id);
+
+                TransactionDetail::create(['transaction_id' => $transaction->id, 'status' => 'waiting payment', 'service_id' => $service->id, 'name' => $service->name, 'price' => $service->price, 'total' => $service->price,
                 ]);
 
-                $total = $package->price;
-            } else {
-                TransactionDetail::where('transaction_id', $transaction->id)->delete();
-                foreach ($request->service_id as $service_id) {
-                    $service = Service::find($service_id);
-
-                    TransactionDetail::create([
-                        'transaction_id' => $transaction->id,
-                        'status'         => 'waiting payment',
-                        'service_id'     => $service->id,
-                        'name'           => $service->name,
-                        'price'          => $service->price,
-                        'total'          => $service->price
-                    ]);
-
-                    $total = $total + $service->price;
-                }
-            }
-
-
-            $transaction->amount = $total;
-            $transaction->save();
-
-            if ($request->payment == 1) {
-                return redirect()->route('transactions.edit', ['transaction' => $transaction->id]);
-            } else {
-                // get the default inner page
-                if (Auth()->user()->hasRole('admin')) {
-                    return redirect()->route('patients.index');
-                }
-
-                return redirect()->route('examinations.vitality', ['id' => $examination->id]);
+                $total = $total + $service->price;
             }
         }
 
-        public function vitality(Request $request)
-        {
-            $id                  = $request->id;
-            $examination         = Examination::find($id);
-            $vitalityexamination = VitalityExamination::where('examination_id', $examination->id)->first();
+        $transaction->amount = $total;
+        $transaction->save();
 
-            $user = User::find($examination->user_id);
-            $info = $user->info;
-
+        if ($request->payment == 1) {
+            return redirect()->route('transactions.edit', ['transaction' => $transaction->id]);
+        } else {
             // get the default inner page
-            return view('pages.klinik.examinations.vitality', compact([
-                'user', 'info', 'examination', 'vitalityexamination'
-            ]));
-        }
-
-        public function pdf(Request $request){
-            $examination         = Examination::find($request->id);
-            $user = User::find($examination->user_id);
-            $info = $user->info;
-
-            $data = $request->all();
-
-            // get the default inner page
-            /*return view('pages.klinik.examinations.pdf', compact([
-                'user', 'info', 'examination'
-            ]));*/
-
-            $pdf = Pdf::loadView('pages.klinik.examinations.pdf', compact([
-                'user', 'info', 'examination'
-            ]));
-            Storage::put('public/examinations/'.$examination->examination_code.'/1.medical-record.pdf', $pdf->output());
-            //return $pdf->download('rekam-medis_'.$user->name.'.pdf');
-
-            $pdfMerge = PDFMerger::init();
-            $files = Storage::disk('public')->files('examinations/'.$examination->examination_code);
-
-            foreach ($files as $key => $value) {
-                if(file_exists(storage_path('app/public/'.$value))){
-                    $pdfMerge->addPDF(storage_path('app/public/'.$value), 'all');
-                }
+            if (Auth()->user()->hasRole('admin')) {
+                return redirect()->route('patients.index');
             }
 
-            $fileName = $examination->examination_code.'.pdf';
-            $pdfMerge->merge();
-            $pdfMerge->save(public_path($fileName));
-
-            return response()->download(public_path($fileName));
-        }
-
-        public function sehat(Request $request){
-            $examination         = Examination::find($request->id);
-            $user = User::find($examination->user_id);
-            $info = $user->info;
-
-            // get the default inner page
-            /*return view('pages.klinik.examinations.sehat', compact([
-                'user', 'info', 'examination'
-            ]));*/
-            $data = json_decode(json_encode($request->all()));
-
-            $pdf = Pdf::loadView('pages.klinik.examinations.sehat', compact([
-                'user', 'info', 'examination', 'data'
-            ]));
-            return $pdf->download('surat_keterangan_sehat_'.$user->name.'.pdf');
-        }
-
-        public function sakit(Request $request){
-            $examination         = Examination::find($request->id);
-            $user = User::find($examination->user_id);
-            $info = $user->info;
-
-            $data = json_decode(json_encode($request->all()));
-
-            // get the default inner page
-            /*return view('pages.klinik.examinations.sakit', compact([
-                'user', 'info', 'examination', 'data'
-            ]));*/
-
-            $pdf = Pdf::loadView('pages.klinik.examinations.sakit', compact([
-                'user', 'info', 'examination', 'data'
-            ]));
-            return $pdf->download('surat_keterangan_sakit_'.$user->name.'.pdf');
+            return redirect()->route('examinations.vitality', ['id' => $examination->id]);
         }
     }
+
+    public function vitality(Request $request)
+    {
+        $id = $request->id;
+        $examination = Examination::find($id);
+        $vitalityexamination = VitalityExamination::where('examination_id', $examination->id)->first();
+
+        $user = User::find($examination->user_id);
+        $info = $user->info;
+
+        // get the default inner page
+        return view('pages.klinik.examinations.vitality', compact(['user', 'info', 'examination', 'vitalityexamination',
+        ]));
+    }
+
+    public function pdf(Request $request)
+    {
+        $examination = Examination::find($request->id);
+        $user = User::find($examination->user_id);
+        $info = $user->info;
+
+        $data = $request->all();
+
+        // get the default inner page
+        /*return view('pages.klinik.examinations.pdf', compact([
+            'user', 'info', 'examination'
+        ]));*/
+
+        $pdf = Pdf::loadView('pages.klinik.examinations.pdf', compact(['user', 'info', 'examination',
+        ]));
+        Storage::put('public/examinations/'.$examination->examination_code.'/1.medical-record.pdf', $pdf->output());
+        //return $pdf->download('rekam-medis_'.$user->name.'.pdf');
+
+        $pdfMerge = PDFMerger::init();
+        $files = Storage::disk('public')->files('examinations/'.$examination->examination_code);
+
+        foreach ($files as $key => $value) {
+            if (file_exists(storage_path('app/public/'.$value))) {
+                $pdfMerge->addPDF(storage_path('app/public/'.$value), 'all');
+            }
+        }
+
+        $fileName = $examination->examination_code.'.pdf';
+        $pdfMerge->merge();
+        $pdfMerge->save(public_path($fileName));
+
+        return response()->download(public_path($fileName));
+    }
+
+    public function sehat(Request $request)
+    {
+        $examination = Examination::find($request->id);
+        $user = User::find($examination->user_id);
+        $info = $user->info;
+
+        // get the default inner page
+        /*return view('pages.klinik.examinations.sehat', compact([
+            'user', 'info', 'examination'
+        ]));*/
+        $data = json_decode(json_encode($request->all()));
+
+        $pdf = Pdf::loadView('pages.klinik.examinations.sehat', compact(['user', 'info', 'examination', 'data',
+        ]));
+
+        return $pdf->download('surat_keterangan_sehat_'.$user->name.'.pdf');
+    }
+
+    public function sakit(Request $request)
+    {
+        $examination = Examination::find($request->id);
+        $user = User::find($examination->user_id);
+        $info = $user->info;
+
+        $data = json_decode(json_encode($request->all()));
+
+        // get the default inner page
+        /*return view('pages.klinik.examinations.sakit', compact([
+            'user', 'info', 'examination', 'data'
+        ]));*/
+
+        $pdf = Pdf::loadView('pages.klinik.examinations.sakit', compact(['user', 'info', 'examination', 'data',
+        ]));
+
+        return $pdf->download('surat_keterangan_sakit_'.$user->name.'.pdf');
+    }
+}
