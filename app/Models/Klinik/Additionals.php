@@ -7,19 +7,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Anamnesis extends Model
+class Additionals extends Model
 {
     use SpatieLogsActivity, HasFactory, SoftDeletes;
 
-    protected $table = 'anamnesis';
+    protected $table = 'additionals';
+
     protected $fillable = [
-        'anamnesis_category_id',
+        'additionals_category_id',
         'name',
         'options',
     ];
 
     public function category()
     {
-        return $this->belongsTo(AnamnesisCategory::class, 'anamnesis_category_id', 'id');
+        return $this->belongsTo(AdditionalCategory::class, 'additionals_category_id', 'id');
     }
 }
