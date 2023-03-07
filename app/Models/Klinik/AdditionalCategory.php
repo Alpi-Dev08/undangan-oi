@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class AnamnesisCategory extends Model
+class AdditionalCategory extends Model
 {
     use SpatieLogsActivity, HasFactory, SoftDeletes;
 
@@ -15,8 +15,8 @@ class AnamnesisCategory extends Model
         'name',
     ];
 
-    public function anamnesis()
+    public function additionals()
     {
-        return $this->HasMany(Anamnesis::class);
+        return $this->HasMany(Additionals::class);
     }
 }
