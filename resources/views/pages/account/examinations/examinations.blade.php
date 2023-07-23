@@ -4,5 +4,4 @@
 
     {{ theme()->getView('pages/account/examinations/_examination', array('class' => 'mb-5 mb-xl-10',
     'user' => $user, 'info' => $info, 'healthprofesionals' => $healthprofesional, 'servicecategories' => $servicecategories,'locations' => $locations,'packages' => $packages)) }}
-    }}
 </x-base-layout>

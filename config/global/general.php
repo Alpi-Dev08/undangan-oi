@@ -1,113 +1,114 @@
 <?php
-return array(
+
+return [
     // Product
-    'product' => array(
-        'name'        => 'Klinik Satriadharama Medika',
+    'product' => [
+        'name' => 'Klinik Satriadharama Medika',
         'description' => 'Klinik Satriadharama Medika',
-        'preview'     => 'https://putrakuningan.com',
-        'home'        => 'https://putrakuningan.com',
-        'purchase'    => 'https://putrakuningan.com',
-        'licenses'    => array(
+        'preview' => 'https://putrakuningan.com',
+        'home' => 'https://putrakuningan.com',
+        'purchase' => 'https://putrakuningan.com',
+        'licenses' => [
             'terms' => 'https://themeforest.net/licenses/standard',
-            'types' => array(
-                array(
-                    'title'       => 'Regular License',
+            'types' => [
+                [
+                    'title' => 'Regular License',
                     'description' => 'For single end product used by you or one client',
-                    'tooltip'     => 'Use, by you or one client in a single end product which end users are not charged for',
-                    'price'       => '39',
-                ),
-                array(
-                    'title'       => 'Extended License',
+                    'tooltip' => 'Use, by you or one client in a single end product which end users are not charged for',
+                    'price' => '39',
+                ],
+                [
+                    'title' => 'Extended License',
                     'description' => 'For single SaaS app with paying users',
-                    'tooltip'     => 'Use, by you or one client, in a single end product which end users can be charged for.',
-                    'price'       => '939',
-                ),
-            ),
-        ),
-        'demos'       => array(
-            'demo1' => array(
-                'title'       => 'Demo 1',
+                    'tooltip' => 'Use, by you or one client, in a single end product which end users can be charged for.',
+                    'price' => '939',
+                ],
+            ],
+        ],
+        'demos' => [
+            'demo1' => [
+                'title' => 'Demo 1',
                 'description' => 'Default Dashboard',
-                'published'   => true,
-                'thumbnail'   => 'demos/demo1.png',
-            ),
-        ),
-    ),
+                'published' => true,
+                'thumbnail' => 'demos/demo1.png',
+            ],
+        ],
+    ],
 
     // Meta
-    'meta'    => array(
-        'title'       => 'Klinik Satriadharama Medika',
+    'meta' => [
+        'title' => 'Klinik Satriadharama Medika',
         'description' => '',
-        'keywords'    => '',
-        'canonical'   => '',
-    ),
+        'keywords' => '',
+        'canonical' => '',
+    ],
 
     // General
-    'general' => array(
-        'website'             => 'https://putrakuningan.com',
-        'copyright'             => 'https://putrakuningan.com',
-        'about'               => 'https://putrakuningan.com',
-        'contact'             => 'mailto:support@putrakuningan.com',
-        'support'             => 'https://putrakuningan.com/support',
+    'general' => [
+        'website' => 'https://putrakuningan.com',
+        'copyright' => 'https://putrakuningan.com',
+        'about' => 'https://putrakuningan.com',
+        'contact' => 'mailto:support@putrakuningan.com',
+        'support' => 'https://putrakuningan.com/support',
         'bootstrap-docs-link' => 'https://getbootstrap.com/docs/5.0',
-        'licenses'            => 'https://putrakuningan.com',
-        'social-accounts'     => array(
-            array(
-                'name' => 'Youtube', 'url' => '#', 'logo' => 'svg/social-logos/youtube.svg', "class" => "h-20px",
-            ),
-            array(
-                'name' => 'Github', 'url' => '#', 'logo' => 'svg/social-logos/github.svg', "class" => "h-20px",
-            ),
-            array(
-                'name' => 'Twitter', 'url' => '#', 'logo' => 'svg/social-logos/twitter.svg', "class" => "h-20px",
-            ),
-            array(
-                'name' => 'Instagram', 'url' => '#', 'logo' => 'svg/social-logos/instagram.svg', "class" => "h-20px",
-            ),
+        'licenses' => 'https://putrakuningan.com',
+        'social-accounts' => [
+            [
+                'name' => 'Youtube', 'url' => '#', 'logo' => 'svg/social-logos/youtube.svg', 'class' => 'h-20px',
+            ],
+            [
+                'name' => 'Github', 'url' => '#', 'logo' => 'svg/social-logos/github.svg', 'class' => 'h-20px',
+            ],
+            [
+                'name' => 'Twitter', 'url' => '#', 'logo' => 'svg/social-logos/twitter.svg', 'class' => 'h-20px',
+            ],
+            [
+                'name' => 'Instagram', 'url' => '#', 'logo' => 'svg/social-logos/instagram.svg', 'class' => 'h-20px',
+            ],
 
-            array(
-                'name' => 'Facebook', 'url' => '#', 'logo' => 'svg/social-logos/facebook.svg', "class" => "h-20px",
-            ),
-            array(
-                'name' => 'Dribbble', 'url' => '#', 'logo' => 'svg/social-logos/dribbble.svg', "class" => "h-20px",
-            ),
-        ),
-    ),
+            [
+                'name' => 'Facebook', 'url' => '#', 'logo' => 'svg/social-logos/facebook.svg', 'class' => 'h-20px',
+            ],
+            [
+                'name' => 'Dribbble', 'url' => '#', 'logo' => 'svg/social-logos/dribbble.svg', 'class' => 'h-20px',
+            ],
+        ],
+    ],
 
     // Layout
-    'layout'  => array(
+    'layout' => [
         // Docs
-        'docs'          => array(
-            'logo-path'  => array(
+        'docs' => [
+            'logo-path' => [
                 'default' => 'logos/logo-klinik.png',
-                'dark'    => 'logos/logo-klinik.png',
-            ),
+                'dark' => 'logos/logo-klinik.png',
+            ],
             'logo-class' => 'h-25px',
-        ),
+        ],
 
         // Illustration
-        'illustrations' => array(
+        'illustrations' => [
             'set' => 'sketchy-1',
-        ),
+        ],
 
         // Engage
-        'engage'        => array(
-            'demos'    => array(
-                'enabled'   => true,
-                'direction' => 'end',
-            ),
-            'explore'  => array(
-                'enabled'   => true,
-                'direction' => 'end',
-            ),
-            'help'     => array(
-                'enabled'   => true,
-                'direction' => 'end',
-            ),
-            'purchase' => array(
+        'engage' => [
+            'demos' => [
                 'enabled' => true,
-            ),
-        ),
-    ),
+                'direction' => 'end',
+            ],
+            'explore' => [
+                'enabled' => true,
+                'direction' => 'end',
+            ],
+            'help' => [
+                'enabled' => true,
+                'direction' => 'end',
+            ],
+            'purchase' => [
+                'enabled' => true,
+            ],
+        ],
+    ],
 
-);
+];

@@ -1,5 +1,5 @@
 <div class="d-flex flex-row flex-center">
-    @if($model->status!="waiting")
+    @if($model->status!='waiting payment')
     <a href="{{ route('examinations.pdf',['id' => $model->id]) }}"
        class="btn btn-icon btn-bg-light  btn-active-light-primary btn-sm me-1">
         {!! theme()->getSvgIcon("icons/duotune/files/fil008.svg", "svg-icon-3 text-primary") !!}
@@ -16,14 +16,13 @@
         </a>
     @endif
 
-
     @if(Auth::user()->hasRole(['dokter','administrator']))
         <a href="{{ route('examinations.edit',['examination' => $model->id]) }}"
            class="btn btn-icon btn-bg-light  btn-active-light-primary btn-sm me-1">
             {!! theme()->getSvgIcon("icons/duotune/art/art005.svg", "svg-icon-3 text-primary") !!}
         </a>
     @endif
-    @if(Auth::user()->hasRole('administrator') && $model->status=='waiting')
+    @if(Auth::user()->hasRole('administrator') && $model->status=='waiting payment')
         {!! Form::open(['method' => 'DELETE','route' => ['examinations.destroy', $model->id],'class'=>'']) !!}
         {{ Form::button(theme()->getSvgIcon("icons/duotune/general/gen027.svg", "svg-icon-3 text-danger"), ['type' => 'submit', 'class' => 'delete btn btn-icon btn-bg-light btn-active-light-danger btn-sm'] )  }}
         {!! Form::close() !!}

@@ -1,4 +1,10 @@
 <div class="d-flex flex-row flex-center">
+    <a href="{{ route('laboratoryexaminations.lab',['id' => $model->id]) }}"
+       class="btn btn-icon btn-bg-light  btn-active-light-primary btn-sm me-1">
+        {{--icons/duotune/ecommerce/ecm010.svg--}}
+        {!! theme()->getSvgIcon("icons/duotune/medicine/med004.svg", "svg-icon-3 svg-icon-info") !!}
+    </a>
+
     <a href="{{ '/account/overview?id='.$model->id}}"
        class="btn btn-icon btn-bg-light  btn-active-light-primary btn-sm me-1">
         {{--icons/duotune/ecommerce/ecm010.svg--}}

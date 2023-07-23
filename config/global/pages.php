@@ -1,673 +1,687 @@
 <?php
-return array(
-    '' => array(
-        'title'       => 'Dashboard',
+
+return [
+    '' => [
+        'title' => 'Dashboard',
         'description' => '',
-        'view'        => 'index',
-        'layout'      => array(
-            'page-title' => array(
+        'view' => 'index',
+        'layout' => [
+            'page-title' => [
                 'description' => true,
-                'breadcrumb'  => false,
-            ),
-        ),
-        'assets'      => array(
-            'custom' => array(
-                'js' => array(),
-            ),
-        ),
-    ),
+                'breadcrumb' => false,
+            ],
+        ],
+        'assets' => [
+            'custom' => [
+                'js' => [],
+            ],
+        ],
+    ],
 
-    'login'           => array(
-        'title'  => 'Login',
-        'assets' => array(
-            'custom' => array(
-                'js' => array(
+    'login' => [
+        'title' => 'Login',
+        'assets' => [
+            'custom' => [
+                'js' => [
                     'js/custom/authentication/sign-in/general.js',
-                ),
-            ),
-        ),
-        'layout' => array(
-            'main' => array(
+                ],
+            ],
+        ],
+        'layout' => [
+            'main' => [
                 'type' => 'blank', // Set blank layout
-                'body' => array(
+                'body' => [
                     'class' => theme()->isDarkMode() ? '' : 'bg-body',
-                ),
-            ),
-        ),
-    ),
-    'register'        => array(
-        'title'  => 'Register',
-        'assets' => array(
-            'custom' => array(
-                'js' => array(
+                ],
+            ],
+        ],
+    ],
+    'register' => [
+        'title' => 'Register',
+        'assets' => [
+            'custom' => [
+                'js' => [
                     'js/custom/authentication/sign-up/general.js',
-                ),
-            ),
-        ),
-        'layout' => array(
-            'main' => array(
+                ],
+            ],
+        ],
+        'layout' => [
+            'main' => [
                 'type' => 'blank', // Set blank layout
-                'body' => array(
+                'body' => [
                     'class' => theme()->isDarkMode() ? '' : 'bg-body',
-                ),
-            ),
-        ),
-    ),
-    'forgot-password' => array(
-        'title'  => 'Forgot Password',
-        'assets' => array(
-            'custom' => array(
-                'js' => array(
+                ],
+            ],
+        ],
+    ],
+    'forgot-password' => [
+        'title' => 'Forgot Password',
+        'assets' => [
+            'custom' => [
+                'js' => [
                     'js/custom/authentication/password-reset/password-reset.js',
-                ),
-            ),
-        ),
-        'layout' => array(
-            'main' => array(
+                ],
+            ],
+        ],
+        'layout' => [
+            'main' => [
                 'type' => 'blank', // Set blank layout
-                'body' => array(
+                'body' => [
                     'class' => theme()->isDarkMode() ? '' : 'bg-body',
-                ),
-            ),
-        ),
-    ),
+                ],
+            ],
+        ],
+    ],
 
-    'log' => array(
-        'audit'  => array(
-            'title'  => 'Audit Log',
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+    'log' => [
+        'audit' => [
+            'title' => 'Audit Log',
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'system' => array(
-            'title'  => 'System Log',
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+                    ],
+                ],
+            ],
+        ],
+        'system' => [
+            'title' => 'System Log',
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-    ),
+                    ],
+                ],
+            ],
+        ],
+    ],
 
-    'account' => array(
-        'overview' => array(
-            'title'  => 'Account Overview',
-            'view'   => 'account/overview/overview',
-            'assets' => array(
-                'custom' => array(
-                    'js' => array(
+    'account' => [
+        'overview' => [
+            'title' => 'Account Overview',
+            'view' => 'account/overview/overview',
+            'assets' => [
+                'custom' => [
+                    'js' => [
                         'js/custom/widgets.js',
-                    ),
-                ),
-            ),
-        ),
+                    ],
+                ],
+            ],
+        ],
 
-        'settings' => array(
-            'title'  => 'Account Settings',
-            'assets' => array(
-                'custom' => array(
-                    'js' => array(
+        'settings' => [
+            'title' => 'Account Settings',
+            'assets' => [
+                'custom' => [
+                    'js' => [
                         'js/custom/account/settings/profile-details.js',
                         'js/custom/account/settings/signin-methods.js',
                         'js/custom/modals/two-factor-authentication.js',
-                    ),
-                ),
-            ),
-        ),
-    ),
+                    ],
+                ],
+            ],
+        ],
+    ],
 
-    'users'         => array(
+    'users' => [
         'title' => 'Users',
-        'assets' => array(
-            'custom' => array(
-                'css' => array(
+        'assets' => [
+            'custom' => [
+                'css' => [
                     'plugins/custom/datatables/datatables.bundle.css',
-                ),
-                'js'  => array(
+                ],
+                'js' => [
                     'plugins/custom/datatables/datatables.bundle.js',
-                ),
-            ),
-        ),
-    ),
+                ],
+            ],
+        ],
+    ],
 
-
-
-    'roles'         => array(
+    'roles' => [
         'title' => 'Roles',
-        'assets' => array(
-            'custom' => array(
-                'css' => array(
+        'assets' => [
+            'custom' => [
+                'css' => [
                     'plugins/custom/datatables/datatables.bundle.css',
-                ),
-                'js'  => array(
+                ],
+                'js' => [
                     'plugins/custom/datatables/datatables.bundle.js',
-                ),
-            ),
-        ),
-    ),
+                ],
+            ],
+        ],
+    ],
 
-    'permissions'         => array(
+    'permissions' => [
         'title' => 'Permissions',
-        'assets' => array(
-            'custom' => array(
-                'css' => array(
+        'assets' => [
+            'custom' => [
+                'css' => [
                     'plugins/custom/datatables/datatables.bundle.css',
-                ),
-                'js'  => array(
+                ],
+                'js' => [
                     'plugins/custom/datatables/datatables.bundle.js',
-                ),
-            ),
-        ),
-    ),
+                ],
+            ],
+        ],
+    ],
 
-    'masters'         => array(
-        'religions'         => array(
+    'masters' => [
+        'religions' => [
             '*' => [
                 'title' => 'Religions',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'genders'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'genders' => [
             '*' => [
                 'title' => 'Gender',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'works'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'works' => [
             '*' => [
                 'title' => 'Work',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'educations'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'educations' => [
             '*' => [
                 'title' => 'Education',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'bloodtypes'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'bloodtypes' => [
             '*' => [
                 'title' => 'Blood Type',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'maritalstatuses'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'maritalstatuses' => [
             '*' => [
                 'title' => 'Marital Status',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'relationshipstatuses'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'relationshipstatuses' => [
             '*' => [
                 'title' => 'Relationship Status',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'cardtypes'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'cardtypes' => [
             '*' => [
                 'title' => 'Card Types',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'countries'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'countries' => [
             '*' => [
                 'title' => 'Country',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
+                    ],
+                ],
+            ],
+        ],
 
-        'provinces'         => array(
+        'provinces' => [
             '*' => [
                 'title' => 'Province',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'cities'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'cities' => [
             '*' => [
                 'title' => 'City',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'districts'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'districts' => [
             '*' => [
                 'title' => 'District',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'subdistricts'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'subdistricts' => [
             '*' => [
                 'title' => 'Sub District',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-    ),
+                    ],
+                ],
+            ],
+        ],
+    ],
 
-    'klinik'         => array(
-        'healthprofesionals'         => array(
+    'klinik' => [
+        'healthprofesionals' => [
             'title' => 'Health Profesional',
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'patients'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'patients' => [
             'title' => 'Patient',
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'healthcarecategories'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'healthcarecategories' => [
             '*' => [
                 'title' => 'Healthcare Category',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'healthcaretypes'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'healthcaretypes' => [
             '*' => [
                 'title' => 'Healthcare Type',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'healthcares'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'healthcares' => [
             '*' => [
                 'title' => 'Healthcare',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'locations'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'locations' => [
             '*' => [
                 'title' => 'Location',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'healthprofesionaltypes'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'healthprofesionaltypes' => [
             '*' => [
                 'title' => 'Health Profesional Type',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'specialities'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'specialities' => [
             '*' => [
                 'title' => 'Speciality',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'diseases'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'diseases' => [
             '*' => [
                 'title' => 'Disease',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'examinations'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'examinations' => [
             '*' => [
                 'title' => 'Examinations',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'appointments'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'laboratoryexaminations' => [
+            '*' => [
+                'title' => 'Examinations',
+            ],
+            'assets' => [
+                'custom' => [
+                    'css' => [
+                        'plugins/custom/datatables/datatables.bundle.css',
+                    ],
+                    'js' => [
+                        'plugins/custom/datatables/datatables.bundle.js',
+                    ],
+                ],
+            ],
+        ],
+        'appointments' => [
             '*' => [
                 'title' => 'Appointments',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'transactions'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'transactions' => [
             '*' => [
                 'title' => 'Transactions',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-            'create' => array(
+                    ],
+                ],
+            ],
+            'create' => [
                 'title' => 'Create Transaction',
-                'assets' => array(
-                    'custom' => array(
-                        'js'  => array(
+                'assets' => [
+                    'custom' => [
+                        'js' => [
                             'js/custom/apps/invoices/create.js',
-                        ),
-                    ),
-                ),
-            )
-        ),
-        'servicecategories'         => array(
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        'servicecategories' => [
             '*' => [
                 'title' => 'Service Category',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
+                    ],
+                ],
+            ],
+        ],
 
-        'services'         => array(
+        'services' => [
             '*' => [
                 'title' => 'Service',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
+                    ],
+                ],
+            ],
+        ],
 
-        'packages'         => array(
+        'packages' => [
             '*' => [
                 'title' => 'Package',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
+                    ],
+                ],
+            ],
+        ],
 
-        'anamnesiscategories'         => array(
+        'anamnesiscategories' => [
             '*' => [
                 'title' => 'Service Category',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
+                    ],
+                ],
+            ],
+        ],
 
-        'anamnesis'         => array(
+        'anamnesis' => [
             '*' => [
                 'title' => 'Service',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-        'phyisicalcategories'         => array(
+                    ],
+                ],
+            ],
+        ],
+        'phyisicalcategories' => [
             '*' => [
                 'title' => 'Service Category',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
+                    ],
+                ],
+            ],
+        ],
 
-        'phyisicals'         => array(
+        'phyisicals' => [
             '*' => [
                 'title' => 'Service',
             ],
-            'assets' => array(
-                'custom' => array(
-                    'css' => array(
+            'assets' => [
+                'custom' => [
+                    'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
-                    ),
-                    'js'  => array(
+                    ],
+                    'js' => [
                         'plugins/custom/datatables/datatables.bundle.js',
-                    ),
-                ),
-            ),
-        ),
-    ),
+                    ],
+                ],
+            ],
+        ],
+    ],
 
-);
+];

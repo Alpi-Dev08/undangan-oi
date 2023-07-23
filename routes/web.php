@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\SocialiteLoginController;
     use App\Http\Controllers\Klinik\HealthcareTypesController;
     use App\Http\Controllers\Klinik\HealthProfesionalsController;
     use App\Http\Controllers\Klinik\HealthProfesionalTypesController;
+    use App\Http\Controllers\Klinik\LaboratoryExaminationsController;
     use App\Http\Controllers\Klinik\LocationsController;
     use App\Http\Controllers\Klinik\PatientsController;
     use App\Http\Controllers\Klinik\SpecialitiesController;
@@ -149,6 +150,13 @@ Route::middleware('auth')->group(function () {
         Route::resource('otherexaminations', \App\Http\Controllers\Klinik\OtherExaminationsController::class);
         Route::resource('additionalexaminations', \App\Http\Controllers\Klinik\AdditionalExaminationsController::class);
         Route::resource('appointments', \App\Http\Controllers\Klinik\AppointmentsController::class);
+
+        Route::get('laboratoryexamination-lab', [LaboratoryExaminationsController::class, 'lab'])->name('laboratoryexaminations.lab');
+        Route::get('laboratoryexamination-result', [LaboratoryExaminationsController::class, 'result'])->name('laboratoryexaminations.result');
+        Route::get('laboratoryexamination-download', [LaboratoryExaminationsController::class, 'download'])->name('laboratoryexaminations.download');
+        Route::put('laboratoryexamination-result', [LaboratoryExaminationsController::class, 'resultUpdate'])->name('result.update');
+        Route::resource('laboratoryexaminations', LaboratoryExaminationsController::class);
+
 
         Route::resource('organization',OrganizationController::class);
         Route::resource('locations', LocationsController::class);

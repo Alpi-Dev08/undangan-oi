@@ -6,7 +6,7 @@
         </a>
     @endif
 
-    @if(Auth::user()->hasRole('administrator') && $model->status=='waiting')
+    @if(Auth::user()->hasRole('administrator') && $model->status=='waiting payment')
         {!! Form::open(['method' => 'DELETE','route' => ['appointments.destroy', $model->id],'class'=>'']) !!}
         {{ Form::button(theme()->getSvgIcon("icons/duotune/general/gen027.svg", "svg-icon-3 text-danger"), ['type' => 'submit', 'class' => 'delete btn btn-icon btn-bg-light btn-active-light-danger btn-sm'] )  }}
         {!! Form::close() !!}
