@@ -272,7 +272,7 @@
             $type                   = LaboratoryExaminationType::all();
             $result                 = [];
             if ($laboratoryexaminations->hasil) {
-                $result = json_encode(array_merge($result, json_decode($laboratoryexaminations->manual_input, true)));
+                $result = json_encode(array_merge($result, json_decode($laboratoryexaminations->hasil, true)));
                 $result = json_decode($result);
             }
 
@@ -283,38 +283,32 @@
         {
             $laboratoryexamination = LaboratoryExamination::find($request->laboratoryexaminations);
             $result                = [];
-            if ($request->ItemID[0]) {
+            if ($request->id[0]) {
                 $jumlah = 0;
-                foreach ($request->ItemID as $key => $value) {
-                    if ($request->ItemID[$key] != null) {
+                foreach ($request->id as $key => $value) {
+                    if ($request->id[$key] != null) {
                         $jumlah++;
                     }
                 }
                 for ($i = 0; $i < $jumlah; $i++) {
-                    $item     = LaboratoryExaminationType::find($request->ItemID[$i]);
+                    $item     = LaboratoryExaminationType::find($request->id[$i]);
                     $itemName = $item->name;
                     $data_    = [
-                        "manual_input"  => $request->manual_input[$i],
-                        "ItemID"        => $request->ItemID[$i],
+                        "id"            => $request->id[$i],
                         "ItemName"      => $itemName,
-                        "TestResult"    => $request->TestResult[$i],
-                        "satuan"        => $request->satuan[$i],
-                        "nilai_rujukan" => $request->nilai_rujukan[$i],
-                        "keterangan"    => $request->keterangan[$i],
+                        "hasil"         => $request->hasil[$i],
+                        "nilai_rujukan" => $item->nilai_rujukan,
                     ];
 
                     $result[] = $data_;
                 }
 
-                $laboratoryexamination->manual_input = json_encode($result);
+                $laboratoryexamination->hasil = json_encode($result);
             } else {
-                $laboratoryexamination->manual_input = null;
+                $laboratoryexamination->hasil = null;
 
             }
-            if ($request->otorisasi == 1) {
-                $laboratoryexamination->approved_by = Auth()->user()->id;
-            }
-            $laboratoryexamination->keterangan = $request->description;
+
             $laboratoryexamination->save();
             return redirect()->route('laboratoryexaminations.result', ["id" => $laboratoryexamination->id]);
         }

@@ -93,17 +93,31 @@
             </tr>
             </thead>
             <tbody class="py-5">
-            @foreach($type as $key => $value)
-                <tr>
-                    <td class="px-5">{{ $value['name'] }}</td>
-                    <td>
-                        <input type="hidden" class="form-control w-50 text-end" name="id[]" value="{{ $value['id'] }}"/>
-                        <input type="text" class="form-control w-50 text-end" name="hasil[]"/>
-                    </td>
-                    <td>{{ $value['nilai_rujukan'] }}</td>
-                </tr>
+            @if(!empty($result))
+                @foreach($result as $key => $value)
+                    <tr>
+                        <td class="px-5">{{ $value->ItemName }}</td>
+                        <td>
+                            <input type="hidden" class="form-control w-50 text-end" name="id[]" value="{{ $value->id }}"/>
+                            <input type="text" class="form-control w-50 text-end" name="hasil[]" value="{{ $value->hasil }}"/>
+                        </td>
+                        <td>{{ $value->nilai_rujukan }}</td>
+                    </tr>
 
-            @endforeach
+                @endforeach
+            @else
+                @foreach($type as $key => $value)
+                    <tr>
+                        <td class="px-5">{{ $value['name'] }}</td>
+                        <td>
+                            <input type="hidden" class="form-control w-50 text-end" name="id[]" value="{{ $value['id'] }}"/>
+                            <input type="text" class="form-control w-50 text-end" name="hasil[]" value=""/>
+                        </td>
+                        <td>{{ $value['nilai_rujukan'] }}</td>
+                    </tr>
+
+                @endforeach
+            @endif
             </tbody>
         </table>
 
