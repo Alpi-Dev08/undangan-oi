@@ -32,6 +32,21 @@
                 </a>
             </li>
             <!--end::Nav item-->
+
+            @if($examination->is_lab)
+                <li class="nav-item p-0 ms-0">
+                    <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#lab">
+                        <!--begin::Title-->
+                        <span class="nav-text fw-semibold fs-4 mb-3">Hasil Lab</span>
+                        <!--end::Title-->
+                        <!--begin::Bullet-->
+                        <span class="bullet-custom position-absolute z-index-2 w-100 h-1px top-100 bottom-n100 bg-primary rounded"></span>
+                        <!--end::Bullet-->
+                    </a>
+                </li>
+                <!--end::Nav item-->
+            @endif
+
             <!--begin::Nav item-->
             <li class="nav-item p-0 ms-0">
                 <a class="nav-link btn btn-color-gray-400 flex-center px-3 active" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#examination">
@@ -502,7 +517,8 @@
                             <!--begin::Item-->
                             <div class="timeline-item">
                                 <!--begin::Label-->
-                                <div class="timeline-label fw-bold text-gray-800 fs-6">{{ $exam->created_at->format("d F Y") }} <br>{{ $exam->created_at->format("H:i:s") }}</div>
+                                <div class="timeline-label fw-bold text-gray-800 fs-6">{{ $exam->created_at->format("d F Y") }}
+                                    <br>{{ $exam->created_at->format("H:i:s") }}</div>
                                 <!--end::Label-->
                                 <!--begin::Badge-->
                                 <div class="timeline-badge">
@@ -803,6 +819,44 @@
                     </div>
                 </div>
             </div>
+            @if($examination->is_lab)
+                <div class="tab-pane" id="lab" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
+                    <!--begin::details View-->
+                    <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal Pemeriksaan</th>
+                                    <th>: {{ $laboratoryexamination->updated_at->format('d M Y H:i:s') }}</th>
+                                    <th>Laboratory Name</th>
+                                    <th>: {{ $laboratoryexamination->laboratory_name }}</th>
+                                </tr>
+                                <tr>
+                                    <td>No</td>
+                                    <td>Jenis Pemeriksaan</td>
+                                    <td>Hasil</td>
+                                    <td>Nilai Rujukan</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php $no=1; @endphp
+                                @foreach(json_decode($laboratoryexamination->hasil) as $row)
+                                    @if($row->ItemName!='Hematologi')
+                                    <tr>
+                                        <td>{{ $no }}</td>
+                                        <td>{{ $row->ItemName }}</td>
+                                        <td>{{ $row->hasil }}</td>
+                                        <td>{{ $row->nilai_rujukan }}</td>
+                                    </tr>
+                                    @php $no++; @endphp
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            @endif
             <div class="tab-pane active" id="examination" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
                 <!--begin::Alert-->
                 <div class="alert alert-dismissible bg-light-primary border border-primary d-flex flex-column flex-sm-row p-5 mb-10 row">
@@ -1083,58 +1137,58 @@
                             <div class="table-responsive">
                                 <table class="table" style="width:35%">
                                     <tbody>
-                                        <tr>
-                                            <td>Tinggi Badan</td>
-                                            <td>: {{ $examination->vitality->height ?? "-" }} cm</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Berat Badan</td>
-                                            <td>: {{ $examination->vitality->weight ?? "-" }} kg</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Tekanan Darah</td>
-                                            <td>: {{ $examination->vitality->blood_pressure ?? "-" }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Nadi</td>
-                                            <td>: {{ $examination->vitality->heart_rate ?? "-" }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Suhu Tubuh</td>
-                                            <td>: {{ $examination->vitality->temperature ?? "-" }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Gigi</td>
-                                            <td>: Normal</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Keadaan Umum</td>
-                                            <td>: Normal</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Mata</td>
-                                            <td>: Normal</td>
-                                        </tr>
-                                        <tr>
-                                            <td>THT</td>
-                                            <td>: Normal</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Mulut</td>
-                                            <td>: Normal</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Dada (Paru & Jantung)</td>
-                                            <td>: Normal</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Perut</td>
-                                            <td>: Normal</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Extremitas</td>
-                                            <td>: Normal</td>
-                                        </tr>
+                                    <tr>
+                                        <td>Tinggi Badan</td>
+                                        <td>: {{ $examination->vitality->height ?? "-" }} cm</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Berat Badan</td>
+                                        <td>: {{ $examination->vitality->weight ?? "-" }} kg</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tekanan Darah</td>
+                                        <td>: {{ $examination->vitality->blood_pressure ?? "-" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Nadi</td>
+                                        <td>: {{ $examination->vitality->heart_rate ?? "-" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Suhu Tubuh</td>
+                                        <td>: {{ $examination->vitality->temperature ?? "-" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Gigi</td>
+                                        <td>: Normal</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Keadaan Umum</td>
+                                        <td>: Normal</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mata</td>
+                                        <td>: Normal</td>
+                                    </tr>
+                                    <tr>
+                                        <td>THT</td>
+                                        <td>: Normal</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mulut</td>
+                                        <td>: Normal</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dada (Paru & Jantung)</td>
+                                        <td>: Normal</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Perut</td>
+                                        <td>: Normal</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Extremitas</td>
+                                        <td>: Normal</td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -1155,18 +1209,18 @@
                                 <div class="row">
                                     <div class="mb-10">
                                         <label for="exampleFormControlInput1" class="required form-label">Pekerjaan</label>
-                                        <input type="text" class="form-control form-control-solid" placeholder="Pekerjaan" name="pekerjaan" value="{{ $info->job_title ?? "" }}" />
+                                        <input type="text" class="form-control form-control-solid" placeholder="Pekerjaan" name="pekerjaan" value="{{ $info->job_title ?? "" }}"/>
                                     </div>
                                     <div class="mb-10">
                                         <label for="exampleFormControlInput1" class="required form-label">Perusahaan</label>
-                                        <input type="text" class="form-control form-control-solid" placeholder="Perusahaan" name="perusahaan" value="{{ $info->company_name ?? "" }}" />
+                                        <input type="text" class="form-control form-control-solid" placeholder="Perusahaan" name="perusahaan" value="{{ $info->company_name ?? "" }}"/>
                                     </div>
                                     <hr>
                                     <p class="col-lg-4 col-form-label fw-bold fs-6">Keterangan Informasi</p>
                                     <!--begin::Switch-->
                                     <div class="mb-10">
                                         <label class="form-check form-switch form-check-custom form-check-solid">
-                                            <input class="form-check-input" type="radio" name="keterangan" value="1" />
+                                            <input class="form-check-input" type="radio" name="keterangan" value="1"/>
                                             <span class="form-check-label fw-semibold text-muted">
                                                 Dapat Kembali Bekerja
                                             </span>
@@ -1186,7 +1240,7 @@
                                         <label class="form-check form-switch form-check-custom form-check-solid">
                                             <input class="form-check-input" type="radio" name="keterangan" value="3"/>
                                             <span class="form-check-label fw-semibold text-muted d-flex flex-row" style="align-items: center;align-content: space-between;">
-                                                Perlu datang kembali ke klinik pada : <input name="back_date" class="form-control form-control-solid w-300px"  type="date">
+                                                Perlu datang kembali ke klinik pada : <input name="back_date" class="form-control form-control-solid w-300px" type="date">
                                             </span>
                                         </label>
                                     </div>

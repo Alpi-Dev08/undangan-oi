@@ -143,11 +143,16 @@ class ExaminationsController extends Controller
         $physicalscategories = [];
         $otherscategories = [];
         $additionalsscategories = [];
+        $laboratoryexamination= null;
         if ($examination->service_category->is_mcu == 1) {
             $anamnesiscategories = AnamnesisCategory::all();
             $physicalscategories = PhysicalCategory::where('id', '<>', 15)->get();
             $otherscategories =  PhysicalCategory::where('id', 15)->get();
             $additionalsscategories = AdditionalCategory::all();
+        }
+
+        if($examination->is_lab){
+            $laboratoryexamination = LaboratoryExamination::where('examination_id', $examination->id)->first();
         }
 
         $examinations = Examination::where('user_id', $examination->user_id)->where('status', 'done')->orderBy('created_at', 'DESC')->get();
@@ -159,7 +164,7 @@ class ExaminationsController extends Controller
 
         $info = $user->info;
 
-        return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories', 'anamnesisexamination', 'examinations', 'physicalscategories', 'physicalexamination', 'otherscategories', 'otherexamination', 'additionalsscategories', 'additionalexamination'));
+        return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories', 'anamnesisexamination', 'examinations', 'physicalscategories', 'physicalexamination', 'otherscategories', 'otherexamination', 'additionalsscategories', 'additionalexamination','laboratoryexamination'));
     }
 
     /**
