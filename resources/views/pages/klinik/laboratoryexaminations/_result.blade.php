@@ -1,19 +1,32 @@
 @php use Carbon\Carbon; @endphp
     <!-- begin::Wrapper-->
-<div class="mw-lg-950px mx-auto w-100 border border-3 border-primary" id="printableArea">
+<style>
+    .border-klinik{
+        --bs-border-opacity: 1;
+        border-color: #4874ac !important;
+    }
+    .text-klinik{
+        color:#4874ac;
+    }
+
+    .bg-klinik{
+        background-color:#4874ac;
+    }
+</style>
+<div class="mw-lg-950px mx-auto w-100 border border-3 border-klinik">
     <!-- begin::Header-->
-    <div class="border-bottom border-5 border-primary px-5">
+    <div class="border-bottom border-3 border-klinik px-5">
         <div class="col-12 row py-5">
             <div class="col-4">
                 <img src="{{ asset('assets/media/logos/logo-klinik.png') }}" alt="Klinik Satriabudi Dharma Medika" class="h-70px logo">
             </div>
-            <div class="col-8 border-start border-5 border-primary" style="text-align: left">
-                <p style="font-size: 16px;font-weight: bold">Alamat : Ruko C-17, Pasar Modern Intermoda - BSD, Jl. Raya Cisauk Lapan, Sampora, Cisauk, Tangerang, Banten.</p>
+            <div class="col-8 border-start border-3 border-klinik p-3" style="text-align:left">
+                <p style="font-size: 16px;font-weight: bold">Ruko C-17, Pasar Modern Intermoda - BSD<br>Jl. Raya Cisauk Lapan, Sampora, Cisauk, Tangerang, Banten.</p>
                 <p style="font-size: 14px">
-                    <i class="fa-brands fa-whatsapp fa-lg"></i> 0896 5886 8769
-                    <i class="fa-solid fa-square-phone fa-lg"></i> 021 5569 8265
-                    <i class="fa-brands fa-chrome fa-lg"></i> kliniksatriabudi.com
-                    <i class="fa-brands fa-instagram fa-lg"></i> klinik.satriabudi</p>
+                    <i class="text-klinik fa-brands fa-whatsapp-square fa-lg"></i> 0896 5886 8769
+                    <i class="text-klinik fa-solid fa-square-phone fa-lg"></i> 021 5569 8265
+                    <i class="text-klinik fa-brands fa-chrome fa-lg"></i> kliniksatriabudi.com
+                    <i class="text-klinik fa-brands fa-instagram-square fa-lg"></i> klinik.satriabudi</p>
             </div>
         </div>
     </div>
@@ -29,63 +42,58 @@
                     <span class="fs-5">: {{ $user->name }}</span>
                 </div>
             </div>
-            <div class="row col-3 flex-root d-flex flex-row">
-                <div class="col-3">
-                    <span class="fs-5">RM</span>
-                </div>
-                <div class="col-9">
-                    <span class="fs-5">: {{ $user->mr->medical_record_code }}</span>
-                </div>
-            </div>
-            <div class="row col-3 flex-root d-flex flex-row">
+            <div class="row col-6 flex-root d-flex flex-row">
                 <div class="col-4">
-                    <span class="fs-5">T. Kunj</span>
+                    <span class="fs-5">Spesimen Diterima</span>
                 </div>
                 <div class="col-8">
-                    <span class="fs-5">: {{ $laboratoryexaminations->created_at->format('d M Y') }}</span>
-                </div>
-            </div>
-            <div class="row col-3 flex-root d-flex flex-row">
-                <div class="col-4">
-                    <span class="fs-5">Lab</span>
-                </div>
-                <div class="col-8">
-                    <span class="fs-5">: {{ $laboratoryexaminations->laboratory_name }}</span>
+                    <span class="fs-5">: {{ $laboratoryexaminations->created_at->format('d M Y H:i:s') }}</span>
                 </div>
             </div>
         </div>
         <div class="row gap-7 gap-md-10">
             <div class="row col-6 flex-root d-flex flex-row">
                 <div class="col-4">
-                    <span class="fs-5">Alamat </span>
+                    <span class="fs-5">Alamat</span>
                 </div>
                 <div class="col-8">
                     <span class="fs-5">: {{ $user->info->address }}</span>
                 </div>
             </div>
-            <div class="row col-3 flex-root d-flex flex-row">
+            <div class="row col-6 flex-root d-flex flex-row">
                 <div class="col-4">
-                    <span class="fs-5">JK</span>
+                    <span class="fs-5">Pelaporan Hasil</span>
                 </div>
                 <div class="col-8">
-                    <span class="fs-5">:{{ $user->info->gender->name }}</span>
+                    <span class="fs-5">: {{ $laboratoryexaminations->updated_at->format('d F Y H:i:s') }}</span>
                 </div>
             </div>
-            <div class="row col-3 flex-root d-flex flex-row">
+        </div>
+        <div class="row gap-7 gap-md-10">
+            <div class="row col-6 flex-root d-flex flex-row">
                 <div class="col-4">
-                    <span class="fs-5">T.Lahir</span>
+                    <span class="fs-5">Tanggal Lahir </span>
                 </div>
                 <div class="col-8">
-                    <span class="fs-5">:{{ $user->info->date_of_birth }}</span>
+                    <span class="fs-5">: {{ $user->info->date_of_birth }}</span>
+                </div>
+            </div>
+            <div class="row col-6 flex-root d-flex flex-row">
+                <div class="col-4">
+                    <span class="fs-5">Dokter Pengirim</span>
+                </div>
+                <div class="col-8">
+                    <span class="fs-5">: {{ $laboratoryexaminations->laboratory_name }}</span>
                 </div>
             </div>
         </div>
     </div>
+
     <form id="kt_invoice_form" method="POST" class="form" action="{{ route('result.update',['laboratoryexaminations' => $laboratoryexaminations->id]) }}">
         @csrf
         @method("PUT")
         <table class="w-100 py-5" data-kt-element="items">
-            <thead class="bg-primary border-bottom-1 border-top-1 border-primary text-white text-capitalize py-5">
+            <thead class="bg-klinik border-bottom-1 border-top-1 border-klinik text-white text-capitalize py-5">
             <tr>
                 <th class="px-5">Jenis Pemeriksaan</th>
                 <th>Hasil Pemeriksaan</th>
@@ -129,11 +137,6 @@
                     <span class="indicator-progress">Please wait...
                 <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
             </span>
-                </button>
-
-                <!-- begin::Pint-->
-                <button type="button" class="btn btn-success my-1 me-12" onclick="printDiv('printableArea');">Print Result</button>
-                <!-- end::Pint-->
             </div>
             <!-- end::Actions-->
         </div>
@@ -141,18 +144,3 @@
     </form>
 </div>
 <!-- end::Wrapper-->
-
-@push('customscript')
-    <script>
-        function printDiv(divName) {
-            var printContents = document.getElementById(divName).innerHTML;
-            var originalContents = document.body.innerHTML;
-
-            document.body.innerHTML = printContents;
-
-            window.print();
-
-            document.body.innerHTML = originalContents;
-        }
-    </script>
-@endpush
