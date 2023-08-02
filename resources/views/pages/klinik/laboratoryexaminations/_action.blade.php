@@ -1,6 +1,4 @@
-@if($model->approved_by==null)
 <div class="d-flex flex-row flex-center">
-
     @if($model->hasil!=='')
         <a href="{{ route('laboratoryexaminations.download',['id' => $model->id]) }}"
            class="btn btn-icon btn-bg-light  btn-active-light-primary btn-sm me-1">
@@ -8,4 +6,3 @@
         </a>
     @endif
 </div>
-@endif

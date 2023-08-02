@@ -208,9 +208,7 @@
             <tr>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td style="text-align: center"> <img src="{{ public_path(theme()->getMediaUrlPath() . 'logos/stampel.png') }}" alt="" style="height:100px;"></td>
+                <td colspan="3" style="text-align: center"> <img src="{{ public_path(theme()->getMediaUrlPath() . 'logos/stampel.png') }}" alt="" style="height:100px;"></td>
             </tr>
             <tr>
                 <td>&nbsp;</td>
@@ -222,9 +220,7 @@
             <tr>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td style="text-align: center"> <img src="{{ public_path(theme()->getMediaUrlPath() . 'logos/stampel-name.png') }}" alt="" style="height:35px;"></td>
+                <td colspan="3" style="text-align: center"> <img src="{{ public_path(theme()->getMediaUrlPath() . 'logos/stampel-name.png') }}" alt="" style="height:35px;"></td>
             </tr>
             <tr>
                 <td>&nbsp;</td>
