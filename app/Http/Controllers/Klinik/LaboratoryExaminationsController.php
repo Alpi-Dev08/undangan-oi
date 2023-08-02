@@ -28,6 +28,8 @@
     use Illuminate\Support\Facades\Http;
     use Illuminate\Support\Facades\Storage;
     use Log;
+    use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
+    use Barryvdh\DomPDF\Facade\Pdf;
 
 
     class LaboratoryExaminationsController extends Controller
@@ -258,8 +260,23 @@
 
         public function download(Request $request)
         {
-            $laboratoryexaminations = LaboratoryExamination::find($request->laboratoryexaminations);
-            return Storage::disk('public')->download($laboratoryexaminations->file);
+            $laboratoryexaminations = LaboratoryExamination::find($request->id);
+
+            $examination           = Examination::find($laboratoryexaminations->examination_id);
+            $patient                = Patient::find($examination->patient_id);
+            $user                   = User::find($patient->user_id);
+            $result                 = [];
+            if ($laboratoryexaminations->hasil) {
+                $result = json_encode(array_merge($result, json_decode($laboratoryexaminations->hasil, true)));
+                $result = json_decode($result);
+            }
+               /* return view('pages.klinik.laboratoryexaminations.pdf', compact([
+                    'laboratoryexaminations','examination','patient','user','result'
+                ]));*/
+
+            $pdf = Pdf::loadView('pages.klinik.laboratoryexaminations.pdf', compact(['laboratoryexaminations','examination','patient','user','result']));
+            //Storage::put('public/laboratoryexaminations/'.$laboratoryexaminations->examination_code.'/99.laboratory-examination.pdf', $pdf->output());
+            return $pdf->download('laboratory-examination.pdf');
         }
 
         public function result(Request $request)
@@ -297,6 +314,8 @@
                         "id"            => $request->id[$i],
                         "ItemName"      => $itemName,
                         "hasil"         => $request->hasil[$i],
+                        "satuan"         => $request->satuan[$i],
+                        "keterangan"         => $request->keterangan[$i],
                         "nilai_rujukan" => $item->nilai_rujukan,
                     ];
 

@@ -17,6 +17,8 @@ class LaboratoryExamination extends Model
         'examination_id',
         'laboratory_name',
         'hasil',
+        'satuan',
+        'keterangan',
     ];
 
     public function unit()

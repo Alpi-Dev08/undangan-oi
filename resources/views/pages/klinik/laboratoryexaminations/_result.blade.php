@@ -34,6 +34,11 @@
     <!--begin::Body-->
     <div class="p-5">
         <div class="row gap-7 gap-md-10">
+            <div class="row col-12 flex-root d-flex flex-row text-center">
+                <h5 class="fw-bold" >HASIL LABORATORIUM</h5>
+            </div>
+        </div>
+        <div class="row gap-7 gap-md-10">
             <div class="row col-6 flex-root d-flex flex-row">
                 <div class="col-4">
                     <span class="fs-5">Nama</span>
@@ -47,7 +52,7 @@
                     <span class="fs-5">Spesimen Diterima</span>
                 </div>
                 <div class="col-8">
-                    <span class="fs-5">: {{ $laboratoryexaminations->created_at->format('d M Y H:i:s') }}</span>
+                    <span class="fs-5">: {{ $laboratoryexaminations->created_at->locale('id')->translatedFormat('d F Y H:i:s') }}</span>
                 </div>
             </div>
         </div>
@@ -65,7 +70,7 @@
                     <span class="fs-5">Pelaporan Hasil</span>
                 </div>
                 <div class="col-8">
-                    <span class="fs-5">: {{ $laboratoryexaminations->updated_at->format('d F Y H:i:s') }}</span>
+                    <span class="fs-5">: {{ $laboratoryexaminations->updated_at->locale('id')->translatedFormat('d F Y H:i:s') }}</span>
                 </div>
             </div>
         </div>
@@ -95,35 +100,51 @@
         <table class="w-100 py-5" data-kt-element="items">
             <thead class="bg-klinik border-bottom-1 border-top-1 border-klinik text-white text-capitalize py-5">
             <tr>
-                <th class="px-5">Jenis Pemeriksaan</th>
-                <th>Hasil Pemeriksaan</th>
-                <th>Nilai Rujukan</th>
+                <th width="20" class="px-5">Jenis Pemeriksaan</th>
+                <th width="25">Hasil Pemeriksaan</th>
+                <th width="25">Nilai Rujukan</th>
+                <th width="10">Satuan</th>
+                <th width="30">Keterangan</th>
             </tr>
             </thead>
             <tbody class="py-5">
             @if(!empty($result))
                 @foreach($result as $key => $value)
-                    <tr>
-                        <td class="px-5">{{ $value->ItemName }}</td>
-                        <td>
-                            <input type="hidden" class="form-control w-50 text-end" name="id[]" value="{{ $value->id }}"/>
-                            <input type="text" class="form-control w-50 text-end" name="hasil[]" value="{{ $value->hasil }}"/>
-                        </td>
-                        <td>{{ $value->nilai_rujukan }}</td>
-                    </tr>
-
+                    @if($value->ItemName!='Hematologi')
+                        <tr>
+                            <td class="px-5">{{ $value->ItemName }}</td>
+                            <td>
+                                <input type="hidden" class="form-control text-end" name="id[]" value="{{ $value->id }}"/>
+                                <input type="text" class="form-control w-75 text-end" name="hasil[]" value="{{ $value->hasil }}"/>
+                            </td>
+                            <td>{{ $value->nilai_rujukan }}</td>
+                            <td>
+                                <input type="text" class="form-control w-75  text-end" name="satuan[]" value="{{ $value->satuan ?? '' }}"/>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control w-75  text-end" name="keterangan[]" value="{{ $value->keterangan ?? '' }}"/>
+                            </td>
+                        </tr>
+                    @endif
                 @endforeach
             @else
                 @foreach($type as $key => $value)
-                    <tr>
-                        <td class="px-5">{{ $value['name'] }}</td>
-                        <td>
-                            <input type="hidden" class="form-control w-50 text-end" name="id[]" value="{{ $value['id'] }}"/>
-                            <input type="text" class="form-control w-50 text-end" name="hasil[]" value=""/>
-                        </td>
-                        <td>{{ $value['nilai_rujukan'] }}</td>
-                    </tr>
-
+                    @if($value->ItemName!='Hematologi')
+                        <tr>
+                            <td class="px-5">{{ $value['name'] }}</td>
+                            <td>
+                                <input type="hidden" class="form-control text-end" name="id[]" value="{{ $value['id'] }}"/>
+                                <input type="text" class="form-control w-75  text-end" name="hasil[]" value=""/>
+                            </td>
+                            <td>{{ $value['nilai_rujukan'] }}</td>
+                            <td>
+                                <input type="text" class="form-control w-75  text-end" name="satuan[]" value=""/>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control w-75  text-end" name="keterangan[]" value=""/>
+                            </td>
+                        </tr>
+                    @endif
                 @endforeach
             @endif
             </tbody>
