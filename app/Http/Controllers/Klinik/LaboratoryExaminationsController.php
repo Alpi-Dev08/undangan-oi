@@ -270,12 +270,9 @@
                 $result = json_encode(array_merge($result, json_decode($laboratoryexaminations->hasil, true)));
                 $result = json_decode($result);
             }
-               /* return view('pages.klinik.laboratoryexaminations.pdf', compact([
-                    'laboratoryexaminations','examination','patient','user','result'
-                ]));*/
 
             $pdf = Pdf::loadView('pages.klinik.laboratoryexaminations.pdf', compact(['laboratoryexaminations','examination','patient','user','result']));
-            //Storage::put('public/laboratoryexaminations/'.$laboratoryexaminations->examination_code.'/99.laboratory-examination.pdf', $pdf->output());
+            Storage::put('public/examinations/'.$examination->examination_code.'/2.lab-result.pdf', $pdf->output());
             return $pdf->download('laboratory-examination.pdf');
         }
 

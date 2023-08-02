@@ -399,7 +399,7 @@
                         @endforeach
                 </td></tr>
                 <tr><td style="font-weight:bold">Plan</td></tr>
-                <tr><td>{{ $examination->plan->name }}</td></tr>
+                <tr><td>{{ $examination->plan->name ?? '' }}</td></tr>
                 <tr><td style="font-weight:bold">Resep</td></tr>
                 <tr><td>
                         @php
