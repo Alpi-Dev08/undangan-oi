@@ -161,6 +161,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('locations', LocationsController::class);
 
         Route::resource('units', \App\Http\Controllers\Klinik\UnitController::class);
+        Route::resource('drugs', \App\Http\Controllers\Klinik\DrugsController::class);
     });
 
 
