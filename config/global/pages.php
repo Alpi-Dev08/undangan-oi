@@ -651,9 +651,9 @@ return [
                 ],
             ],
         ],
-        'phyisicalcategories' => [
+        'physicalcategories' => [
             '*' => [
-                'title' => 'Service Category',
+                'title' => 'Physical Category',
             ],
             'assets' => [
                 'custom' => [
@@ -667,9 +667,9 @@ return [
             ],
         ],
 
-        'phyisicals' => [
+        'physicals' => [
             '*' => [
-                'title' => 'Service',
+                'title' => 'Physical',
             ],
             'assets' => [
                 'custom' => [
