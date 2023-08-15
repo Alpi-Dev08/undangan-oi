@@ -157,9 +157,10 @@ Route::middleware('auth')->group(function () {
         Route::put('laboratoryexamination-result', [LaboratoryExaminationsController::class, 'resultUpdate'])->name('result.update');
         Route::resource('laboratoryexaminations', LaboratoryExaminationsController::class);
 
-
         Route::resource('organization',OrganizationController::class);
         Route::resource('locations', LocationsController::class);
+
+        Route::resource('units', \App\Http\Controllers\Klinik\UnitController::class);
     });
 
 

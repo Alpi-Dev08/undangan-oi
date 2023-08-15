@@ -232,6 +232,13 @@
                             'permission' => ['klinik.read'],
                         ],
 
+                        [
+                            'title' => 'Drug Units',
+                            'path' => 'klinik/units',
+                            'bullet' => '<span class="bullet bullet-dot"></span>',
+                            'permission' => ['klinik.read'],
+                        ],
+
                     ],
                 ],
             ],
