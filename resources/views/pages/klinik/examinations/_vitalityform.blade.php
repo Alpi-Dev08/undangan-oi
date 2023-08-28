@@ -501,7 +501,7 @@
                                     <!--begin::Input group-->
                                     <div class="col-6 mb-6">
                                         <label for="pulse" class="form-label">Heart Rate</label>
-                                        <input id="heart_rate" name="heart_rate"  type="number" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('heart_rate') is-invalid @enderror" placeholder="Heart Rate" value="{{ $vitalityexamination->heart_rate ?? "" }}"/>
+                                        <input id="heart_rate" name="heart_rate"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('heart_rate') is-invalid @enderror" placeholder="Heart Rate" value="{{ $vitalityexamination->heart_rate ?? "" }}"/>
                                         @error('heart_rate')
                                         <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -511,7 +511,7 @@
                                     <!--begin::Input group-->
                                     <div class="col-6 mb-6">
                                         <label for="respiratory_rate" class="form-label">Respiratory Rate</label>
-                                        <input id="respiratory_rate" name="respiratory_rate"  type="number" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('respiratory_rate') is-invalid @enderror" placeholder="Respiratory Rate" value="{{ $vitalityexamination->respiratory_rate ?? "" }}"/>
+                                        <input id="respiratory_rate" name="respiratory_rate"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('respiratory_rate') is-invalid @enderror" placeholder="Respiratory Rate" value="{{ $vitalityexamination->respiratory_rate ?? "" }}"/>
                                         @error('respiratory_rate')
                                         <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -521,7 +521,7 @@
                                     <!--begin::Input group-->
                                     <div class="col-6 mb-6">
                                         <label for="temperature" class="form-label">Temperature</label>
-                                        <input id="temperature" name="temperature"  type="number" step=".01" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('temperature') is-invalid @enderror" placeholder="Temperature" value="{{ $vitalityexamination->temperature ?? "" }}"/>
+                                        <input id="temperature" name="temperature"  type="text"  class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('temperature') is-invalid @enderror" placeholder="Temperature" value="{{ $vitalityexamination->temperature ?? "" }}"/>
                                         @error('temperature')
                                         <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -531,7 +531,7 @@
                                     <!--begin::Input group-->
                                     <div class="col-6 mb-6">
                                         <label for="oxygen_saturation" class="form-label">Oxygen Saturation</label>
-                                        <input id="oxygen_saturation" name="oxygen_saturation"  type="number" step=".01" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('oxygen_saturation') is-invalid @enderror" placeholder="Oxygen Saturation" value="{{ $vitalityexamination->oxygen_saturation ?? "" }}"/>
+                                        <input id="oxygen_saturation" name="oxygen_saturation"  type="text"  class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('oxygen_saturation') is-invalid @enderror" placeholder="Oxygen Saturation" value="{{ $vitalityexamination->oxygen_saturation ?? "" }}"/>
                                         @error('oxygen_saturation')
                                         <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -541,7 +541,7 @@
                                     <!--begin::Input group-->
                                     <div class="col-6 mb-6">
                                         <label for="waist_circumferennce" class="form-label">Waist Circumference</label>
-                                        <input id="waist_circumferennce" name="waist_circumferennce"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('waist_circumferennce') is-invalid @enderror" placeholder="Waist Circumference" value="{{ $vitalityexamination->waist_circumferennce ?? "" }}"/>
+                                        <input id="waist_circumferennce" name="waist_circumferennce"  type="number" step=".01" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('waist_circumferennce') is-invalid @enderror" placeholder="Waist Circumference" value="{{ $vitalityexamination->waist_circumferennce ?? "" }}"/>
                                         @error('waist_circumferennce')
                                         <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -561,7 +561,7 @@
                                     <!--begin::Input group-->
                                     <div class="col-6 mb-6">
                                         <label for="arm_circumference" class="form-label">Arm Circumference</label>
-                                        <input id="arm_circumference" name="arm_circumference"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('arm_circumference') is-invalid @enderror" placeholder="Arm Circumference" value="{{ $vitalityexamination->arm_circumference ?? "" }}"/>
+                                        <input id="arm_circumference" name="arm_circumference"   type="number" step=".01" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('arm_circumference') is-invalid @enderror" placeholder="Arm Circumference" value="{{ $vitalityexamination->arm_circumference ?? "" }}"/>
                                         @error('arm_circumference')
                                         <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -571,7 +571,7 @@
                                     <!--begin::Input group-->
                                     <div class="col-6 mb-6">
                                         <label for="chest_size" class="form-label">Chest Size</label>
-                                        <input id="chest_size" name="chest_size"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('chest_size') is-invalid @enderror" placeholder="Chest Size" value="{{ $vitalityexamination->chest_size ?? "" }}"/>
+                                        <input id="chest_size" name="chest_size"   type="number" step=".01" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('chest_size') is-invalid @enderror" placeholder="Chest Size" value="{{ $vitalityexamination->chest_size ?? "" }}"/>
                                         @error('chest_size')
                                         <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -581,7 +581,7 @@
                                     <!--begin::Input group-->
                                     <div class="col-6 mb-6">
                                         <label for="adbdominal_circumference" class="form-label">Abdominal Circumference</label>
-                                        <input id="adbdominal_circumference" name="adbdominal_circumference"  type="text" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('adbdominal_circumference') is-invalid @enderror" placeholder="Abdominal Circumference" value="{{ $vitalityexamination->adbdominal_circumference ?? "" }}"/>
+                                        <input id="adbdominal_circumference" name="adbdominal_circumference"  type="number" step=".01" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('adbdominal_circumference') is-invalid @enderror" placeholder="Abdominal Circumference" value="{{ $vitalityexamination->adbdominal_circumference ?? "" }}"/>
                                         @error('adbdominal_circumference')
                                         <div class="text-danger">{{ $message }}</div>
                                         @enderror
