@@ -411,6 +411,7 @@
                             @endif
                         @endforeach
                     </td></tr>
+                <tr><td style="font-weight:bold">{{ $examination->saran }}</td></tr>
             </table>
         @endif
     </div>
