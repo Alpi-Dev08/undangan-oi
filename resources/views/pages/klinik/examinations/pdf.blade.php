@@ -208,6 +208,15 @@
                     $header = '';
                 @endphp
             <table style="width:100%;font-size:12px;">
+                <tr>
+                    <td colspan="2" style="padding-left:15px;font-weight:bold">Present Complaint / Keluhan Saat Ini</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding-left:15px;">{{ $examination->anamnesis->request }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding-left:15px;font-weight:bold">&nbsp;</td>
+                </tr>
                 @foreach($anamnesis as $key => $value)
 
                     @php
