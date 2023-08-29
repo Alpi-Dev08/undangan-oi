@@ -381,10 +381,12 @@ class ExaminationsController extends Controller
         $info = $user->info;
 
         // get the default inner page
-        /*return view('pages.klinik.examinations.sehat', compact([
-            'user', 'info', 'examination'
-        ]));*/
         $data = json_decode(json_encode($request->all()));
+        /*echo json_encode($data);exit;
+        return view('pages.klinik.examinations.sehat', compact([
+            'user', 'info', 'examination', 'data'
+        ]));*/
+
 
         $pdf = Pdf::loadView('pages.klinik.examinations.sehat', compact(['user', 'info', 'examination', 'data',
         ]));

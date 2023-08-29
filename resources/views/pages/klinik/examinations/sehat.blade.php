@@ -140,35 +140,35 @@
         </tr>
         <tr>
             <td style="width:25%;">- Gigi</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">Normal</b></td>
+            <td style="width:75%;">: <b style="padding-left:10px;">{{ $data->gigi ?? "-"}}{{ $data->keterangan_gigi ? ', '.$data->keterangan_gigi : '' }}</b></td>
         </tr>
         <tr>
             <td style="width:25%;">- Keadaan Umum</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">Normal</b></td>
+            <td style="width:75%;">: <b style="padding-left:10px;">{{ $data->keadaan_umum ?? "-"}}{{ $data->keterangan_keadaan_umum ? ', '.$data->keterangan_keadaan_umum : '' }}</b></td>
         </tr>
         <tr>
             <td style="width:25%;">- Mata</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">Normal</b></td>
+            <td style="width:75%;">: <b style="padding-left:10px;">{{ $data->mata ?? "-"}}{{ $data->keterangan_mata ? ', '.$data->keterangan_mata : '' }}</b></td>
         </tr>
         <tr>
             <td style="width:25%;">- THT</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">Normal</b></td>
+            <td style="width:75%;">: <b style="padding-left:10px;">{{ $data->tht ?? "-"}}{{ $data->keterangan_tht ? ', '.$data->keterangan_tht : '' }}</b></td>
         </tr>
         <tr>
             <td style="width:25%;">- Mulut</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">Normal</b></td>
+            <td style="width:75%;">: <b style="padding-left:10px;">{{ $data->mulut ?? "-"}}{{ $data->keterangan_mulut ? ', '.$data->keterangan_mulut : '' }}</b></td>
         </tr>
         <tr>
             <td style="width:25%;">- Dada (Paru & Jantung)</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">Normal</b></td>
+            <td style="width:75%;">: <b style="padding-left:10px;">{{ $data->dada ?? "-"}}{{ $data->keterangan_dada ? ', '.$data->keterangan_dada : '' }}</b></td>
         </tr>
         <tr>
             <td style="width:25%;">- Perut</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">Normal</b></td>
+            <td style="width:75%;">: <b style="padding-left:10px;">{{ $data->perut ?? "-"}}{{ $data->keterangan_perut ? ', '.$data->keterangan_perut : '' }}</b></td>
         </tr>
         <tr>
             <td>- Extremitas</td>
-            <td style="width:75%;">: <b style="padding-left:10px;">Normal</b></td>
+            <td style="width:75%;">: <b style="padding-left:10px;">{{ $data->extremitas ?? "-"}}{{ $data->keterangan_extremitas ? ', '.$data->keterangan_extremitas : '' }}</b></td>
         </tr>
         </tbody>
     </table>

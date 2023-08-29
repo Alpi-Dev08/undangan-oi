@@ -1142,7 +1142,8 @@
                         <div class="tab-pane fade active show" id="suratsehat" role="tabpanel">
                             <h3 class="fs-3 fw-bold">Informasi Kesehatan</h3>
                             <div class="table-responsive">
-                                <table class="table" style="width:35%">
+                                <form method="post" action="{{ route('suket.sehat',$examination->id) }}">
+                                <table class="table" style="width:100%">
                                     <tbody>
                                     <tr>
                                         <td>Tinggi Badan</td>
@@ -1165,41 +1166,105 @@
                                         <td>: {{ $examination->vitality->temperature ?? "-" }}</td>
                                     </tr>
                                     <tr>
-                                        <td>Gigi</td>
-                                        <td>: Normal</td>
+                                        <td><label for="gigi">Gigi</label></td>
+                                        <td class="d-flex">:&nbsp;
+                                            <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                <select class="form-select form-select-solid form-select-lg fw-bold" name="gigi" id="gigi">
+                                                    <option value="Normal">Normal</option>
+                                                    <option value="Tidak Normal">Tidak Normal</option>
+                                                </select>
+                                                <input type="text" name="keterangan_gigi" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Keterangan">
+                                            </div>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td>Keadaan Umum</td>
-                                        <td>: Normal</td>
+                                        <td><label for="keadaan_umum">Keadaan Umum</label></td>
+                                        <td class="d-flex">:&nbsp;
+                                            <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                <select class="form-select form-select-solid form-select-lg fw-bold" name="keadaan_umum" id="keadaan_umum">
+                                                    <option value="Normal">Normal</option>
+                                                    <option value="Tidak Normal">Tidak Normal</option>
+                                                </select>
+                                                <input type="text" name="keterangan_keadaan_umum" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Keterangan">
+                                            </div>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td>Mata</td>
-                                        <td>: Normal</td>
+                                        <td><label for="mata">Mata</label></td>
+                                        <td class="d-flex">:&nbsp;
+                                            <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                <select class="form-select form-select-solid form-select-lg fw-bold" name="mata" id="mata">
+                                                    <option value="Normal">Normal</option>
+                                                    <option value="Tidak Normal">Tidak Normal</option>
+                                                </select>
+                                                <input type="text" name="keterangan_mata" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Keterangan">
+                                            </div>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td>THT</td>
-                                        <td>: Normal</td>
+                                        <td><label for="tht">THT</label></td>
+                                        <td class="d-flex">:&nbsp;
+                                            <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                <select class="form-select form-select-solid form-select-lg fw-bold" name="tht" id="tht">
+                                                    <option value="Normal">Normal</option>
+                                                    <option value="Tidak Normal">Tidak Normal</option>
+                                                </select>
+                                                <input type="text" name="keterangan_tht" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Keterangan">
+                                            </div>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td>Mulut</td>
-                                        <td>: Normal</td>
+                                        <td><label for="mulut">Mulut</label></td>
+                                        <td class="d-flex">:&nbsp;
+                                            <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                <select class="form-select form-select-solid form-select-lg fw-bold" name="mulut" id="mulut">
+                                                    <option value="Normal">Normal</option>
+                                                    <option value="Tidak Normal">Tidak Normal</option>
+                                                </select>
+                                                <input type="text" name="keterangan_mulut" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Keterangan">
+                                            </div>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td>Dada (Paru & Jantung)</td>
-                                        <td>: Normal</td>
+                                        <td><label for="dada">Dada (Paru & Jantung)</label></td>
+                                        <td class="d-flex">:&nbsp;
+                                            <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                <select class="form-select form-select-solid form-select-lg fw-bold" name="dada" id="dada">
+                                                    <option value="Normal">Normal</option>
+                                                    <option value="Tidak Normal">Tidak Normal</option>
+                                                </select>
+                                                <input type="text" name="keterangan_dada" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Keterangan">
+                                            </div>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td>Perut</td>
-                                        <td>: Normal</td>
+                                        <td><label for="perut">Perut</label></td>
+                                        <td class="d-flex">:&nbsp;
+                                            <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                <select class="form-select form-select-solid form-select-lg fw-bold" name="perut" id="perut">
+                                                    <option value="Normal">Normal</option>
+                                                    <option value="Tidak Normal">Tidak Normal</option>
+                                                </select>
+                                                <input type="text" name="keterangan_perut" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Keterangan">
+                                            </div>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td>Extremitas</td>
-                                        <td>: Normal</td>
+                                        <td><label for="extremitas">Extremitas</label></td>
+                                        <td class="d-flex">:&nbsp;
+                                            <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                <select class="form-select form-select-solid form-select-lg fw-bold" name="extremitas" id="extremitas">
+                                                    <option value="Normal">Normal</option>
+                                                    <option value="Tidak Normal">Tidak Normal</option>
+                                                </select>
+                                                <input type="text" name="keterangan_extremitas" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Keterangan">
+                                            </div>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <form method="post" action="{{ route('suket.sehat',$examination->id) }}">
+
                                 @csrf
                                 <div class="row">
                                     <div class="mb-10">
