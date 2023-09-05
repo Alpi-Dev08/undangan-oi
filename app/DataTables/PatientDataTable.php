@@ -34,7 +34,7 @@
                 ->rawColumns(['first_name','action'])
                 ->addIndexColumn()
                 ->editColumn('patient_id', function (User $model) {
-                    return $model->patient->patient_code;
+                    return $model->patient->patient_code ?? "-";
                 })
                 ->editColumn('his_number', function (User $model) {
                     return $model->patient->his_number ?? "";

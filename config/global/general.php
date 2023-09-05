@@ -3,8 +3,8 @@
 return [
     // Product
     'product' => [
-        'name' => 'Klinik Satriadharama Medika',
-        'description' => 'Klinik Satriadharama Medika',
+        'name' => 'Klinik Satriabudi Dharma Medika',
+        'description' => 'Klinik Satriabudi Dharma Medika',
         'preview' => 'https://putrakuningan.com',
         'home' => 'https://putrakuningan.com',
         'purchase' => 'https://putrakuningan.com',
@@ -37,7 +37,7 @@ return [
 
     // Meta
     'meta' => [
-        'title' => 'Klinik Satriadharama Medika',
+        'title' => 'Klinik Satriabudi Dharma Medika',
         'description' => '',
         'keywords' => '',
         'canonical' => '',

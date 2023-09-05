@@ -16,7 +16,8 @@
          */
         public function dataTable($query)
         {
-            $query = $query->whereHas(
+            $query = $query->whereRelation('examination', 'deleted_at', '=', null);
+	    $query = $query->whereHas(
                 'examination', function($q){
                 $q->where('appointment_status', '1')->orWhere('appointment_status',null);
             })->orderBy('created_at', 'desc');

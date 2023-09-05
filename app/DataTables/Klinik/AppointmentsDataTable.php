@@ -28,7 +28,7 @@
                     return $model->service_category->name ?? "-";
                 })
                 ->addColumn('name', function (Examination $model) {
-                    return $model->user->name;
+                    return $model->user->name ?? "-";
                 })
                 ->addColumn('appointment_date', function (Examination $model) {
                     return $model->appointment_date;

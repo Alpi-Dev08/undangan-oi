@@ -118,10 +118,10 @@
                     $transaction_detail                 = new TransactionDetail();
                     $transaction_detail->transaction_id = $transactions->id;
                     $transaction_detail->service_id     = 147;
-                    $transaction_detail->name           = $service->name;
+                    $transaction_detail->name           = $service->name ?? "-";
                     $transaction_detail->quantity       = 1;
-                    $transaction_detail->price          = $service->price;
-                    $transaction_detail->total          = $service->price * 1;
+                    $transaction_detail->price          = $service->price ?? 0;
+                    $transaction_detail->total          = ($service->price ?? 0) * 1;
                     $transaction_detail->save();
 
                     $transaction->amount = $transaction->amount + $transaction_detail->total;
