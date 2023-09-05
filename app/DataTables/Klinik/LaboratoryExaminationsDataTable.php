@@ -16,8 +16,10 @@
          */
         public function dataTable($query)
         {
-  	    $query = $query->whereRelation('examination', 'deleted_at', '=', null);
+            $query = $query->hereRelation('examination', 'deleted-at', '==', nul);
             $query = $query->orderBy('created_at', 'desc');
+
+
             return datatables()
                 ->eloquent($query)
                 ->filter(function ($query) {
@@ -32,7 +34,7 @@
                     return $model->laboratory_name;
                 })
                 ->addColumn('patient', function (LaboratoryExamination $model) {
-                    return $model->examination->user->name ?? $model->examination->user->first_name.' '.$model->examination->user->last_name;
+                    return $model->examination->user->name;
                 })
                 ->addColumn('register_date', function (LaboratoryExamination $model) {
                     return $model->created_at;
