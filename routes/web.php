@@ -120,7 +120,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('healthprofesionaltypes', HealthProfesionalTypesController::class);
         Route::resource('healthprofesionals', HealthProfesionalsController::class);
         Route::resource('patients', PatientsController::class);
-        Route::post('patients/generate-barcode', [PatientsController::class, 'barcode'])->name('patients.barcode');
+        Route::get('patients/print/{id}', [PatientsController::class, 'print'])->name('patients.print');
+
         Route::resource('specialities', SpecialitiesController::class);
         Route::resource('diseases', DiseasesController::class);
         Route::resource('examinations', ExaminationsController::class);
@@ -139,6 +140,7 @@ Route::middleware('auth')->group(function () {
 
         Route::resource('servicecategories', \App\Http\Controllers\Klinik\ServiceCategoriesController::class);
         Route::resource('services', \App\Http\Controllers\Klinik\ServicesController::class);
+        Route::resource('packages', \App\Http\Controllers\Klinik\PackagesController::class);
         Route::resource('packages', \App\Http\Controllers\Klinik\PackagesController::class);
         Route::resource('vitalityexaminations', \App\Http\Controllers\Klinik\VitalityExaminationsController::class);
         Route::resource('anamnesiscategories', \App\Http\Controllers\Klinik\AnamnesisCategoriesController::class);

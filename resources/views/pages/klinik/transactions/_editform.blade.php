@@ -172,7 +172,7 @@
     <!--end::Form-->
 
 @push('customscript')
-    <script src="{{ asset(theme()->getDemo().'/js/custom/apps/invoices/create.js') }}"></script>
+    <script src="{{ asset('/assets/js/custom/apps/invoices/create.js') }}"></script>
     <script>
         $(".services > .form-select").change(function(){
             alert("The text has been changed.");

@@ -5,6 +5,7 @@
     use App\DataTables\PatientDataTable;
     use App\Http\Controllers\Controller;
     use App\Http\Requests\Account\SettingsInfoRequest;
+    use App\Models\Klinik\Examination;
     use App\Models\Klinik\Patient;
     use App\Models\Master\BloodType;
     use App\Models\Master\CardType;
@@ -35,6 +36,7 @@
         {
             $this->middleware(function ($request, $next) {
                 $this->user = Auth::guard('web')->user();
+
                 return $next($request);
             });
         }
@@ -44,7 +46,6 @@
          *
          * @return \Illuminate\Http\Response
          */
-
         public function index(PatientDataTable $dataTable)
         {
             if (is_null($this->user) || !$this->user->can('user.read')) {
@@ -52,33 +53,6 @@
             }
 
             return $dataTable->render('pages.klinik.patients.index');
-        }
-
-        /**
-         * Show the form for creating a new resource.
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function create()
-        {
-            if (is_null($this->user) || !$this->user->can('user.create')) {
-                abort(403, 'Sorry !! You are Unauthorized to create any users !');
-            }
-
-            $countries = Country::all();
-            $provinces = Province::all();
-
-            $cards      = CardType::all();
-            $bloods     = BloodType::all();
-            $religions  = Religion::all();
-            $genders    = Gender::all();
-            $works      = Work::all();
-            $maritals   = MaritalStatus::all();
-            $educations = Education::all();
-
-            return view('pages.klinik.patients.create', compact([
-                'countries', 'provinces', 'cards', 'bloods', 'religions', 'genders', 'works', 'maritals', 'educations'
-            ]));
         }
 
         /**
@@ -98,14 +72,13 @@
                 'last_name'  => 'nullable|string|max:255',
                 'email'      => 'email|max:255|nullable',
                 'phone'      => 'string',
-                'password'   => 'string'
+                'password'   => 'string',
             ]);
 
             $user = User::create($validated);
 
             $roles = Role::where('name', 'patient')->first();
             $user->assignRole($roles);
-
 
             // save on user info
             $info = UserInfo::where('user_id', $user->id)->first();
@@ -140,9 +113,9 @@
             // save on user info
 
             // save on user info
-            $patient_id = IdGenerator::generate(['table' => 'patients', 'field' => 'patient_code', 'length' => 12, 'prefix' => 'P'.date('Ymd')]);
+            $patient_id = IdGenerator::generate(['table' => 'patients', 'field' => 'patient_code', 'length' => 12, 'prefix' => 'P' . date('Ymd')]);
 
-            $patient = Patient::where(['user_id' =>$user->id,])->first();
+            $patient = Patient::where(['user_id' => $user->id])->first();
             /*$latest  = Patient::where('patient_code', 'like', "%P" . date('Ymd') . "%")->latest()->first();
 
             if ($latest) {
@@ -163,7 +136,54 @@
             $patient->save();
 
             return redirect()->intended('klinik/patients');
+        }
 
+        /**
+         * Show the form for creating a new resource.
+         *
+         * @return \Illuminate\Http\Response
+         */
+        public function create()
+        {
+            if (is_null($this->user) || !$this->user->can('user.create')) {
+                abort(403, 'Sorry !! You are Unauthorized to create any users !');
+            }
+
+            $countries = Country::all();
+            $provinces = Province::all();
+
+            $cards      = CardType::all();
+            $bloods     = BloodType::all();
+            $religions  = Religion::all();
+            $genders    = Gender::all();
+            $works      = Work::all();
+            $maritals   = MaritalStatus::all();
+            $educations = Education::all();
+
+            return view('pages.klinik.patients.create', compact([
+                'countries', 'provinces', 'cards', 'bloods', 'religions', 'genders', 'works', 'maritals', 'educations',
+            ]));
+        }
+
+        /**
+         * Function for upload avatar image
+         *
+         * @param string $folder
+         * @param string $key
+         * @param string $validation
+         *
+         * @return false|string|null
+         */
+        public function upload($folder = 'images', $key = 'photo', $validation = 'image|mimes:jpeg,png,jpg,gif,svg|max:2048|sometimes')
+        {
+            request()->validate([$key => $validation]);
+
+            $file = null;
+            if (request()->hasFile($key)) {
+                $file = Storage::disk('public')->putFile($folder, request()->file($key), 'public');
+            }
+
+            return $file;
         }
 
         /**
@@ -175,8 +195,8 @@
          */
         public function show($id)
         {
-            $patient = Patient::where('user_id',$id)->first();
-            return view('pages.klinik.patients.barcode', compact(['patient']));
+            $examination = Examination::find($id);
+            return view('pages.klinik.patients.print', compact(['examination']));
         }
 
         /**
@@ -186,14 +206,13 @@
          *
          * @return \Illuminate\Http\Response
          */
-        public function barcode(Request $request)
+        public function print($id)
         {
-            $barcode = $request->all();
-            $patient = Patient::where("patient_code",$barcode['barcode'])->first();
-            $user = User::find($patient->user_id);
-            return view('pages.klinik.patients._barcode', compact(['barcode','user']));
+            $examination = Examination::find($id);
+            $dokter      = $examination->health_profesional;
+            $dokter      = ($dokter->user->info->title_prefix != '' ? $dokter->user->info->title_prefix . '. ' : '') . $dokter->user->name . ($dokter->user->info->title_suffix != '' ? ', ' . $dokter->user->info->title_suffix : '');
+            return view('pages.klinik.patients.print', compact(['examination', 'dokter']));
         }
-
 
         /**
          * Show the form for editing the specified resource.
@@ -228,9 +247,8 @@
 
             return view('pages.klinik.patients.edit', compact([
                 'user', 'countries', 'provinces', 'cards', 'bloods', 'religions', 'genders', 'works', 'maritals', 'educations', 'info',
-                'cities', 'districts', 'subdistricts'
+                'cities', 'districts', 'subdistricts',
             ]));
-
         }
 
         /**
@@ -248,7 +266,7 @@
                 'first_name' => 'required|string|max:255',
                 'last_name'  => 'nullable|string|max:255',
                 'email'      => 'email|max:255|nullable',
-                'phone'      => 'string'
+                'phone'      => 'string',
             ]);
             $user      = User::find($request->user);
 
@@ -285,11 +303,9 @@
                 $info->photo = null;
             }
 
-
             $info->save();
 
             return redirect()->intended('klinik/patients');
-
         }
 
         /**
@@ -315,28 +331,7 @@
             }
 
             session()->flash('success', 'User has been deleted !!');
+
             return redirect()->route('users.index');
-        }
-
-
-        /**
-         * Function for upload avatar image
-         *
-         * @param string $folder
-         * @param string $key
-         * @param string $validation
-         *
-         * @return false|string|null
-         */
-        public function upload($folder = 'images', $key = 'photo', $validation = 'image|mimes:jpeg,png,jpg,gif,svg|max:2048|sometimes')
-        {
-            request()->validate([$key => $validation]);
-
-            $file = null;
-            if (request()->hasFile($key)) {
-                $file = Storage::disk('public')->putFile($folder, request()->file($key), 'public');
-            }
-
-            return $file;
         }
     }
