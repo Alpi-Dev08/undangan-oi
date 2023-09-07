@@ -250,10 +250,10 @@ class SettingsController extends Controller
             'phone' => 'string',
         ]);
         $user = User::find($request->user_id);
-        $user()->update($validated);
+        $user->update($validated);
 
         // save on user info
-        $info = UserInfo::where('user_id', $user()->id)->first();
+        $info = UserInfo::where('user_id', $user->id)->first();
 
         if ($info === null) {
             // create new model
@@ -261,7 +261,7 @@ class SettingsController extends Controller
         }
 
         // attach this info to the current user
-        $info->user()->associate($user());
+        $info->user->associate($user);
 
         foreach ($request->only(array_keys($request->rules())) as $key => $value) {
             if (is_array($value)) {
