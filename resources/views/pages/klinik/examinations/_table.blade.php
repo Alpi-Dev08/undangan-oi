@@ -35,8 +35,29 @@
                         )
                     }
                 })
+            });
+
+            LaravelDataTables["examinations-table"].on('click','.print',function(event){
+                var form =  $(this);
+                event.preventDefault();
+                Swal.fire({
+                    title: 'Jumlah Label yang akan dicetak',
+                    input: 'number',
+                    inputAttributes: {
+                        autocapitalize: 'off',
+                        min: 1
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: 'Print',
+                    showLoaderOnConfirm: true,
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = form.attr('href')+"?jumlah="+result.value;
+                    }
+                })
             })
-        })
+        });
     </script>
 @endpush
 
