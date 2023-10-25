@@ -206,12 +206,14 @@
          *
          * @return \Illuminate\Http\Response
          */
-        public function print($id)
+        public function print(Request $request, $id)
         {
             $examination = Examination::find($id);
             $dokter      = $examination->health_profesional;
             $dokter      = ($dokter->user->info->title_prefix != '' ? $dokter->user->info->title_prefix . '. ' : '') . $dokter->user->name . ($dokter->user->info->title_suffix != '' ? ', ' . $dokter->user->info->title_suffix : '');
-            return view('pages.klinik.patients.print', compact(['examination', 'dokter']));
+            $jumlah = $request->jumlah;
+
+            return view('pages.klinik.patients.print', compact(['examination', 'dokter','jumlah']));
         }
 
         /**
