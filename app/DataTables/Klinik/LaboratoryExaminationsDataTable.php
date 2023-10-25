@@ -16,7 +16,7 @@
          */
         public function dataTable($query)
         {
-            $query = $query->hereRelation('examination', 'deleted-at', '==', nul);
+            $query = $query->whereRelation('examination', 'deleted_at', '=', null);
             $query = $query->orderBy('created_at', 'desc');
 
 
