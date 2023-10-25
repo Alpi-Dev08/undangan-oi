@@ -37,7 +37,7 @@
                 })
             });
 
-            LaravelDataTables["examinations-table"].on('click','.print',function(event){
+            LaravelDataTables["laboratoryexaminations-table"].on('click','.print',function(event){
                 var form =  $(this);
                 event.preventDefault();
                 Swal.fire({
