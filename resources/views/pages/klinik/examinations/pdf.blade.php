@@ -98,7 +98,7 @@
         </tr>
         <tr>
             <td style="width:17%;font-size:12px;font-weight:bold">Gender<td>
-            <td style="width:35%;font-size:12px;">: {{ $user->info->gender->name }}<td>
+            <td style="width:35%;font-size:12px;">: {{ $user->info->gender->name ?? "-" }}<td>
             <td style="width:18%;font-size:12px;font-weight:bold">Examination Date<td>
             <td style="width:30%;font-size:12px;">: {{ \Carbon\Carbon::parse($examination->created_at)->locale('id')->format('d F Y H:i:s') }}<td>
         </tr>
