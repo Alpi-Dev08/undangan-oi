@@ -91,27 +91,27 @@
     </table>
     <table style="width:100%;font-size:10px;">
         <tr>
-            <td style="width:20%;font-size:12px;font-weight:bold">Full Name<td>
-            <td style="width:30%;font-size:12px;">: {{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}<td>
-            <td style="width:20%;font-size:12px;font-weight:bold">MR No<td>
+            <td style="width:17%;font-size:12px;font-weight:bold">Full Name<td>
+            <td style="width:35%;font-size:12px;">: {{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}<td>
+            <td style="width:18%;font-size:12px;font-weight:bold">MR No<td>
             <td style="width:30%;font-size:12px;">: {{ $user->mr->medical_record_code }}<td>
         </tr>
         <tr>
-            <td style="width:20%;font-size:12px;font-weight:bold">Gender<td>
-            <td style="width:30%;font-size:12px;">: {{ $user->info->gender->name }}<td>
-            <td style="width:20%;font-size:12px;font-weight:bold">Examination Date<td>
+            <td style="width:17%;font-size:12px;font-weight:bold">Gender<td>
+            <td style="width:35%;font-size:12px;">: {{ $user->info->gender->name }}<td>
+            <td style="width:18%;font-size:12px;font-weight:bold">Examination Date<td>
             <td style="width:30%;font-size:12px;">: {{ \Carbon\Carbon::parse($examination->created_at)->locale('id')->format('d F Y H:i:s') }}<td>
         </tr>
         <tr>
-            <td style="width:20%;font-size:12px;font-weight:bold">Birth Date / Age<td>
-            <td style="width:30%;font-size:12px;">: {{ \Carbon\Carbon::parse($user->info->date_of_birth)->locale('id')->format('d F Y') }} / {{ \Carbon\Carbon::parse($user->info->date_of_birth)->age }}<td>
-            <td style="width:20%;font-size:12px;font-weight:bold">Doctor<td>
+            <td style="width:17%;font-size:12px;font-weight:bold">Birth Date / Age<td>
+            <td style="width:35%;font-size:12px;">: {{ \Carbon\Carbon::parse($user->info->date_of_birth)->locale('id')->format('d F Y') }} / {{ \Carbon\Carbon::createFromDate($user->info->date_of_birth)->diff(\Carbon\Carbon::now())->format('%y Tahun %m Bulan %d Hari') }}<td>
+            <td style="width:18%;font-size:12px;font-weight:bold">Doctor<td>
             <td style="width:30%;font-size:12px;">: {{ (!in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.(!in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}<td>
         </tr>
         <tr>
-            <td style="width:20%;font-size:12px;vertical-align:top;font-weight:bold">Phone<td>
-            <td style="width:30%;font-size:12px;vertical-align:top">: {{ $user->phone }}<td>
-            <td style="width:20%;font-size:12px;font-weight:bold;vertical-align:top">Service Type<td>
+            <td style="width:17%;font-size:12px;vertical-align:top;font-weight:bold">Phone<td>
+            <td style="width:35%;font-size:12px;vertical-align:top">: {{ $user->phone }}<td>
+            <td style="width:18%;font-size:12px;font-weight:bold;vertical-align:top">Service Type<td>
             <td style="width:30%;font-size:12px;">: {{ $examination->service_category->name }} </td>
         </tr>{{--
         <tr>
