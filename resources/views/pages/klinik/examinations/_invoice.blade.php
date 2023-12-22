@@ -89,6 +89,12 @@
                             <td class="text-dark fs-3 fw-bolder text-end">Rp</span>{{number_format($transaction->amount,0,',','.')}}</td>
                         </tr>
                         <!--end::Grand total-->
+                        <tr>
+                  			    <td colspan="2">Notes : </td>
+                  			</tr>
+                  			<tr>
+                  			    <td colspan="2"><pre>{{ $transaction->notes }}</pre></td>
+                  			</tr>
                         </tbody>
                     </table>
                 </div>
@@ -100,7 +106,7 @@
     </div>
     <!--end::Body-->
     <!-- begin::Footer-->
-    <div class="d-flex flex-stack flex-wrap mt-lg-20 pt-13">
+    <div class="d-flex flex-stack flex-wrap mt-lg-20 pt-13 noprint">
         <!-- begin::Actions-->
         <div class="my-1 me-5">
             <!-- begin::Pint-->
@@ -130,7 +136,15 @@
     <!-- end::Footer-->
 </div>
 <!-- end::Wrapper-->
-
+@section('styles')
+<style>
+ @media print {
+  .noprint{ 
+    display:none !important;
+  }
+ }
+</style>
+@endsection
 @push('customscript')
     <script>
         function printDiv(divName) {

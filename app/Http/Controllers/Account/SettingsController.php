@@ -261,7 +261,7 @@ class SettingsController extends Controller
         }
 
         // attach this info to the current user
-        $info->user->associate($user);
+        $info->user()->associate($user);
 
         foreach ($request->only(array_keys($request->rules())) as $key => $value) {
             if (is_array($value)) {

@@ -26,16 +26,22 @@ class PatientDataTable extends DataTable
             ->filter(function ($query) {
                 if (request()->has('search')) {
                     $search = request()->get('search');
-                    $query->where('first_name', 'like', '%'.$search['value'].'%')
+		    $query->where(function($q) use ($search){
+		    	$q->where('first_name', 'like', '%'.$search['value'].'%')
+                    		->orWhere('last_name', 'like', '%'.$search['value'].'%')
+                    		->orWhere('phone', 'like', '%'.$search['value'].'%')
+                    		->orWhereRelation('patient', 'patient_code', 'like', '%'.$search['value'].'%');
+		    });
+                    /*$query->where('first_name', 'like', '%'.$search['value'].'%')
                     ->where('last_name', 'like', '%'.$search['value'].'%')
                     ->where('phone', 'like', '%'.$search['value'].'%')
-                    ->orWhereRelation('patient', 'patient_code', 'like', '%'.$search['value'].'%');
+                    ->orWhereRelation('patient', 'patient_code', 'like', '%'.$search['value'].'%');*/
                 }
             })
             ->rawColumns(['first_name', 'action'])
             ->addIndexColumn()
             ->editColumn('patient_id', function (User $model) {
-                return $model->patient->patient_code;
+                return $model->patient->patient_code ?? "";
             })
             ->editColumn('his_number', function (User $model) {
                 return $model->patient->his_number ?? '';
@@ -47,7 +53,7 @@ class PatientDataTable extends DataTable
                 return $model->phone;
             })
             ->addColumn('birthday', function (User $model) {
-                return $model->info->date_of_birth;
+                return $model->info->date_of_birth ?? "";
             })
             ->addColumn('action', function (User $model) {
                 return view('pages.klinik.patients._action', compact('model'));

@@ -107,7 +107,7 @@
             </tr>
             <tr>
                 <td style="width:25%;">Jenis Kelamin / Sex</td>
-                <td style="width:75%;">: <b>{{ $info->gender->name }} </b></td>
+                <td style="width:75%;">: <b>{{ $info->gender->name ?? "-" }} </b></td>
             </tr>
             <tr>
                 <td style="width:25%;">Umur / Age</td>
@@ -125,6 +125,7 @@
     </table>
     <p>Telah datang ke klinik pada Tanggal : <b style="text-decoration: underline;">{{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }}</b> dan yang bersangkutan :</p>
     <p><em>Has attended to the clinic on : <b style="text-decoration: underline;">{{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }}</b> and the patient :</em></p>
+    @if(isset($data->keterangan))
     <table class="table" style="margin-left:10px;width:100%">
         <tbody>
         <tr>
@@ -161,6 +162,7 @@
         </tr>
         </tbody>
     </table>
+   @endif
     <p>Keterangan / Comments :</p>
     <p style="margin-bottom:20px;">{{ $data->description ?? "-" }}</p>
 
@@ -169,8 +171,8 @@
 
     Kab. Tangerang, {{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }}<br><br><br><br><br><br>
 
-    <b>{{ (!in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.(!in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}</b>
-    <b>{{ $examination->health_profesional->sip_number ? '<br>SIP.'.$examination->health_profesional->sip_number : '' }}</b>
+    <b>{{ (!in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.(!in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}</b><br>
+    <b>{{ $examination->health_profesional->sip_number ? 'SIP.'.$examination->health_profesional->sip_number : '' }}</b>
     </div>
 </main>
 

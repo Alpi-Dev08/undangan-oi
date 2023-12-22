@@ -28,7 +28,7 @@
                 ->rawColumns(['action'])
                 ->addIndexColumn()
                 ->addColumn('category', function (Service $model) {
-                    return $model->category->name;
+                    return $model->category->name ?? "";
                 })
                 ->addColumn('name', function (Service $model) {
                     return $model->name;
