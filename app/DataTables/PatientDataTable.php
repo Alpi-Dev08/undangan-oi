@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Models\Klinik\Patient;
 use App\Models\User;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
@@ -44,7 +45,19 @@ class PatientDataTable extends DataTable
                 return $model->patient->patient_code ?? "";
             })
             ->editColumn('his_number', function (User $model) {
-                return $model->patient->his_number ?? '';
+                if($model->patient->his_number){
+                    return $model->patient->his_number;
+                } else {
+                    $ktp = $model->info->card_number ?? '';
+                    $patient = Patient::where('patient_code', $model->patient->patient_code)->first();
+                    if($ktp){
+                        $satusehat = satu_sehat('get','Patient?identifier=https://fhir.kemkes.go.id/id/nik|'.$ktp,'');
+                        $his =  json_decode($satusehat)->entry[0]->resource->identifier[0]->value ?? "";
+                        $patient->his_number = $his;
+                        $patient->save();
+                    }
+                    return $patient->his_number ?? "-";
+                }
             })
             ->editColumn('first_name', function (User $model) {
                 return $model->name;

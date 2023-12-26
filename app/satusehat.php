@@ -22,7 +22,7 @@
         return $response;
     }
 
-    function satu_sehat($type,$service,$id='',$data)
+    function satu_sehat($type,$service,$data,$id='')
     {
         $token    = generateToken();
         $token    = json_decode($token->content());
@@ -51,7 +51,6 @@
         ], $request->status());
         Log::info($response);
         return json_encode($request->object());
-
     }
 
 
