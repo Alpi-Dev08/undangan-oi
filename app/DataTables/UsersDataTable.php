@@ -21,6 +21,7 @@ class UsersDataTable extends DataTable
             $q->Where('name', 'administrator');
             $q->orWhere('name', 'admin');
             $q->orWhere('name', 'ners');
+            $q->orWhere('name', 'dokter');
         });
         return datatables()
             ->eloquent($query)
