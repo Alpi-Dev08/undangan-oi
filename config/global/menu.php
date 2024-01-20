@@ -48,19 +48,19 @@
             [
                 'title' => 'Registrasi', // Patients
                 'path' => 'klinik/patients',
-                'role' => ['admin', 'administrator'],
+                'role' => ['admin', 'administrator','admin-perawat'],
                 'icon' => theme()->getSvgIcon('assets/media/icons/duotune/communication/com014.svg', 'svg-icon-2'),
             ],
             [
                 'title' => 'Appointment', // Patients
                 'path' => 'klinik/appointments',
-                'role' => ['admin', 'administrator'],
+                'role' => ['admin', 'administrator','admin-perawat'],
                 'icon' => theme()->getSvgIcon('assets/media/icons/duotune/general/gen014.svg', 'svg-icon-2'),
             ],
             [
                 'title' => 'Vital Sign & BMI',
                 'path' => 'klinik/examinations',
-                'role' => ['ners', 'administrator'],
+                'role' => ['ners', 'administrator','admin-perawat'],
                 'icon' => theme()->getSvgIcon('assets/media/icons/duotune/medicine/med001.svg', 'svg-icon-2'),
             ],
             [
@@ -78,7 +78,7 @@
             [
                 'title' => 'Transactions',
                 'path' => 'klinik/transactions',
-                'role' => ['admin', 'administrator'],
+                'role' => ['admin', 'administrator','admin-perawat'],
                 'icon' => theme()->getSvgIcon('assets/media/icons/duotune/finance/fin007.svg', 'svg-icon-2'),
             ],
 
@@ -93,32 +93,28 @@
                 'attributes' => [
                     'data-kt-menu-trigger' => 'click',
                 ],
-                'permission' => ['user.read', 'role.read', 'permission.read'],
+                'role' => ['administrator'],
                 'sub' => [
                     'class' => 'menu-sub-accordion menu-active-bg',
                     'items' => [
                         [
                             'title' => 'Users',
                             'path' => 'users',
-                            'permission' => 'user.read',
                             'bullet' => '<span class="bullet bullet-dot"></span>',
                         ],
                         [
                             'title' => 'Practitioners',
                             'path' => 'klinik/healthprofesionals',
-                            'permission' => 'user.read',
                             'bullet' => '<span class="bullet bullet-dot"></span>',
                         ],
                         [
                             'title' => 'Roles',
                             'path' => 'roles',
-                            'permission' => 'role.read',
                             'bullet' => '<span class="bullet bullet-dot"></span>',
                         ],
                         [
                             'title' => 'Permissions',
                             'path' => 'permissions',
-                            'permission' => 'permission.read',
                             'bullet' => '<span class="bullet bullet-dot"></span>',
                         ],
                     ],
@@ -137,7 +133,7 @@
                     'data-kt-menu-trigger' => 'click',
                 ],
                 //'permission' => ['klinik.read'],
-                'role' => ['administrator', 'admin'],
+                'role' => ['administrator', 'admin','admin-perawat'],
                 'sub' => [
                     'class' => 'menu-sub-accordion menu-active-bg',
                     'items' => [
@@ -260,6 +256,7 @@
                 'attributes' => [
                     'data-kt-menu-trigger' => 'click',
                 ],
+                'role' => ['administrator', 'admin','admin-perawat'],
                 'permission' => ['masters.read'],
                 'sub' => [
                     'class' => 'menu-sub-accordion menu-active-bg',
