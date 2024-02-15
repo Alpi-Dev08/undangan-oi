@@ -365,3 +365,10 @@
             return false;
         }
     }
+
+    if(!function_exists('getObat')){
+        function getObat($id){
+            $obat = \App\Models\Klinik\Drug::find($id);
+            return $obat;
+        }
+    }

@@ -81,12 +81,40 @@
                                 </td>
                             </tr>
                         @endforeach
+                        @if($examination->resep)
+                        <tr class="border-bottom fs-6 fw-bold text-muted">
+                            <th class="min-w-175px pb-2">Obat</th>
+                            <th class="min-w-100px text-end pb-2"></th>
+                        </tr>
+                        @php
+                            $resep = json_decode($examination->resep);
+                            $obat = $resep->obat;
+                            $qty = $resep->qty;
+                            $total_resep = 0;
+                        @endphp
+                        @foreach($obat as $key => $value)
+                            <tr>
+                                <td class="d-flex align-items-center">
+                                    <div class="d-flex flex-column">
+                                        <a href="#" class="text-gray-800 text-hover-primary mb-1">{{getObat($value)->name}}</a>
+                                    </div>
+                                </td>
+                                <td class="text-end text-gray-800">
+                                    <span class="text-gray-600 me-2">Rp </span>{{number_format($qty[$key]*getObat($value)->price,0,',','.')}}
+                                </td>
+                            </tr>
+                            @php
+                                $total_resep += $qty[$key]*getObat($value)->price;
+                            @endphp
+                        @endforeach
+                        @endif
+
                         <!--end::Products-->
 
                         <!--begin::Grand total-->
                         <tr>
                             <td class="fs-3 text-dark fw-bold text-end">Grand Total</td>
-                            <td class="text-dark fs-3 fw-bolder text-end">Rp</span>{{number_format($transaction->amount,0,',','.')}}</td>
+                            <td class="text-dark fs-3 fw-bolder text-end">Rp</span>{{number_format($transaction->amount+$total_resep,0,',','.')}}</td>
                         </tr>
                         <!--end::Grand total-->
                         <tr>
@@ -139,7 +167,7 @@
 @section('styles')
 <style>
  @media print {
-  .noprint{ 
+  .noprint{
     display:none !important;
   }
  }

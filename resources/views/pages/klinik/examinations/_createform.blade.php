@@ -1,3 +1,24 @@
+@if($pemeriksaan_awal->kriteria_satu=='ya' && $pemeriksaan_awal->kriteria_dua=='ya')
+    <div class="alert alert-danger d-flex align-items-center p-5">
+        @elseif($pemeriksaan_awal->kriteria_satu=='ya' || $pemeriksaan_awal->kriteria_dua=='ya')
+            <div class="alert alert-warning d-flex align-items-center p-5">
+                @else
+                    <div class="alert alert-success d-flex align-items-center p-5">
+                        @endif
+                        <!--begin::Wrapper-->
+                        <div class="d-flex flex-column">
+                            <!--begin::Title-->
+                            <h4 class="mb-1 text-dark">{{ $pemeriksaan_awal->interpretasi  }}</h4>
+                            <!--end::Title-->
+
+                            <!--begin::Content-->
+                            <span>{{ ucwords($pemeriksaan_awal->tindakan)  }}</span>
+                            <!--end::Content-->
+                        </div>
+                        <!--end::Wrapper-->
+                    </div>
+                    <!--end::Alert-->
+
 <!--begin::Card-->
 <div class="card card-xxl-stretch mb-5 mb-xl-8">
     <!--begin::Card body-->

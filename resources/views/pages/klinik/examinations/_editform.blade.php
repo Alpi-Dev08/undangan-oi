@@ -1,3 +1,24 @@
+@if($pemeriksaan_awal->kriteria_satu=='ya' && $pemeriksaan_awal->kriteria_dua=='ya')
+    <div class="alert alert-danger d-flex align-items-center p-5">
+        @elseif($pemeriksaan_awal->kriteria_satu=='ya' || $pemeriksaan_awal->kriteria_dua=='ya')
+            <div class="alert alert-warning d-flex align-items-center p-5">
+                @else
+                    <div class="alert alert-success d-flex align-items-center p-5">
+                        @endif
+                        <!--begin::Wrapper-->
+                        <div class="d-flex flex-column">
+                            <!--begin::Title-->
+                            <h4 class="mb-1 text-dark">{{ $pemeriksaan_awal->interpretasi  }}</h4>
+                            <!--end::Title-->
+
+                            <!--begin::Content-->
+                            <span>{{ ucwords($pemeriksaan_awal->tindakan)  }}</span>
+                            <!--end::Content-->
+                        </div>
+                        <!--end::Wrapper-->
+                    </div>
+                    <!--end::Alert-->
+
 <!--begin::Card-->
 <div class="card card-xxl-stretch mb-5 mb-xl-8">
     <!--begin::Card body-->
@@ -546,7 +567,7 @@
                                         </div>
                                         <div class="col-12 row">
                                             <div class="col-2 fw-bolder">Doctor</div>
-                                            <div class="col-10">: {{ $exam->health_profesional->user->name }}</div>
+                                            <div class="col-10">: {{ $exam->health_profesional->user->name ?? "-" }}</div>
                                         </div>
                                         <div class="col-12 row">
                                             <div class="col-2 fw-bolder">Jenis Pemeriksaan</div>
@@ -1067,9 +1088,29 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <div class="col-lg-8">
-                                <div class="input-group input-group-solid has-validation mb-3">
-                                    <textarea name="resep" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('resep') is-invalid @enderror" placeholder="Resep">{{ $examination->resep }}</textarea>
+                                <div class="d-flex flex-row" id="inputFromRow">
+                                    <select name="resep[obat][]" aria-label="{{ __('Pilih Obat') }}" data-placeholder="{{ __('Pilih Obat...') }}" class="mb-2 form-select form-select-solid form-select-lg fw-bold me-5">
+                                        <option value="">{{ __('Pilih Obat...') }}</option>
+                                        @foreach($drugs as $drug)
+                                            <option value="{{ $drug->id }}">{{  $drug->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <input placeholder="Qty" name="resep[qty][]"  class="w-100px me-5 form-control form-control-solid" type="number" min="1">
+                                    <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" id="remove-item">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
+                                        <span class="svg-icon svg-icon-3">
+																						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+																							<path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor" />
+																							<path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="currentColor" />
+																							<path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="currentColor" />
+																						</svg>
+																					</span>
+                                        <!--end::Svg Icon-->
+                                    </button>
                                 </div>
+
+                                <div class="d-flex flex-column" id="newRow"></div>
+                                <i class="btn btn-primary" id="tambah_obat">Tambah</i>
                                 @error('resep')
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -1134,6 +1175,22 @@
                                href="#suratsakit">
                                 <span class="d-flex flex-column align-items-start">
                                     <span class="fs-7 fw-bold">Surat Keterangan Sakit</span>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item w-100 me-0 mb-md-2">
+                            <a class="nav-link w-100 btn btn-flex btn-active-light-info" data-bs-toggle="tab"
+                               href="#hakkewajiban">
+                                <span class="d-flex flex-column align-items-start" style="text-align:left">
+                                    <span class="fs-7 fw-bold">Bukti Penyampaian Informasi</span>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item w-100 me-0 mb-md-2">
+                            <a class="nav-link w-100 btn btn-flex btn-active-light-info" data-bs-toggle="tab"
+                               href="#persetujuan">
+                                <span class="d-flex flex-column align-items-start" style="text-align:left">
+                                    <span class="fs-7 fw-bold">Persetujuan Tindakan Medis</span>
                                 </span>
                             </a>
                         </li>
@@ -1333,12 +1390,279 @@
                                 <button type="submit" class="btn btn-bg-dark text-white">Download PDF</button>
                             </form>
                         </div>
+
+                        <div class="tab-pane fade" id="hakkewajiban" role="tabpanel">
+                            <h3 class="fs-3 fw-bold">Bukti Penyampaian Hak dan Kewajiban</h3>
+                            <form method="post" action="{{ route('suket.hakkewajiban',$examination->id) }}">
+
+                            @csrf
+                            <div class="row">
+                                <button type="submit" class="btn btn-bg-dark text-white">Download PDF</button>
+                            </div>
+                            </form>
+                        </div>
+
+                        <div class="tab-pane fade" id="persetujuan" role="tabpanel">
+                            <h3 class="fs-3 fw-bold">Persetujuan Tindakan Medis</h3>
+                            <div class="table-responsive">
+                                <form method="post" action="{{ route('suket.persetujuan',$examination->id) }}">
+                                    <table class="table" style="width:100%">
+                                        <tbody>
+                                        <tr>
+                                            <td>Dkter Pelaksana Tindakan</td>
+                                            <td>: {{ (!in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.(!in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}</b><br>
+                                                <b>{{ $examination->health_profesional->sip_number ? 'SIP.'.$examination->health_profesional->sip_number : '' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Pemberi Informasi</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="pemberi_informasi" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Pemberi Informasi"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Penerima Informasi/pemberi persetujuan</td>
+                                            <td>: {{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Diagnosis (WD & DD)</td>
+                                            <td class="d-flex">:&nbsp;
+                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                   <input type="text" name="diagnosis" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
+                                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                                        <input class="form-check-input" type="checkbox" name="diagnosis_check" value="1"/>
+                                                        <span class="form-check-label fw-semibold text-muted">
+                                                            Check
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Dasar Diagnosis</td>
+                                            <td class="d-flex">:&nbsp;
+                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                    <input type="text" name="dasar_diagnosis" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
+                                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                                        <input class="form-check-input" type="checkbox" name="dasar_diagnosis_check" value="1"/>
+                                                        <span class="form-check-label fw-semibold text-muted">
+                                                            Check
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Tindakan Kedokteran</td>
+                                            <td class="d-flex">:&nbsp;
+                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                    <input type="text" name="tindakan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
+                                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                                        <input class="form-check-input" type="checkbox" name="tindakan_check" value="1"/>
+                                                        <span class="form-check-label fw-semibold text-muted">
+                                                            Check
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Indikasi Tindakan</td>
+                                            <td class="d-flex">:&nbsp;
+                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                    <input type="text" name="indikasi" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
+                                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                                        <input class="form-check-input" type="checkbox" name="indikasi_check" value="1"/>
+                                                        <span class="form-check-label fw-semibold text-muted">
+                                                            Check
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Tata Cara</td>
+                                            <td class="d-flex">:&nbsp;
+                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                    <input type="text" name="tatacara" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
+                                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                                        <input class="form-check-input" type="checkbox" name="tatacara_check" value="1"/>
+                                                        <span class="form-check-label fw-semibold text-muted">
+                                                            Check
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Tujuan</td>
+                                            <td class="d-flex">:&nbsp;
+                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                    <input type="text" name="tujuan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
+                                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                                        <input class="form-check-input" type="checkbox" name="tujuan_check" value="1"/>
+                                                        <span class="form-check-label fw-semibold text-muted">
+                                                            Check
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Resiko</td>
+                                            <td class="d-flex">:&nbsp;
+                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                    <input type="text" name="resiko" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
+                                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                                        <input class="form-check-input" type="checkbox" name="resiko_check" value="1"/>
+                                                        <span class="form-check-label fw-semibold text-muted">
+                                                            Check
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Komplikasi</td>
+                                            <td class="d-flex">:&nbsp;
+                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                    <input type="text" name="komplikasi" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
+                                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                                        <input class="form-check-input" type="checkbox" name="komplikasi_check" value="1"/>
+                                                        <span class="form-check-label fw-semibold text-muted">
+                                                            Check
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Prognosis</td>
+                                            <td class="d-flex">:&nbsp;
+                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                    <input type="text" name="prognosis" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
+                                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                                        <input class="form-check-input" type="checkbox" name="prognosis_check" value="1"/>
+                                                        <span class="form-check-label fw-semibold text-muted">
+                                                            Check
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Alternatif dan Resiko</td>
+                                            <td class="d-flex">:&nbsp;
+                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                    <input type="text" name="alternatif" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
+                                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                                        <input class="form-check-input" type="checkbox" name="alternatif_check" value="1"/>
+                                                        <span class="form-check-label fw-semibold text-muted">
+                                                            Check
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Lain-lain</td>
+                                            <td class="d-flex">:&nbsp;
+                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                    <input type="text" name="lain" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
+                                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                                        <input class="form-check-input" type="checkbox" name="lain_check" value="1"/>
+                                                        <span class="form-check-label fw-semibold text-muted">
+                                                            Check
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Yang Bertandatangan</td>
+                                            <td class="d-flex">:&nbsp;
+                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                    <input type="text" value="{{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}" name="nama" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nama">
+                                                    <input type="text"  name="umur" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Umur">
+                                                    <input type="text"  name="jenis_kelamin" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jenis Kelamin">
+                                                    <input type="text"  name="alamat" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alamat">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tindakan Terhadap</td>
+                                            <td class="d-flex">:&nbsp;
+                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                    <input type="text" value="Saya"  name="terhadap" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Saya">
+                                                    <input type="text"  name="jenis_tindakan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jenis Tindakan">
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Pemberi Persetujuan</td>
+                                            <td class="d-flex">:&nbsp;
+                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                    <input type="text" value="{{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}" name="nama_tindak" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nama">
+                                                    <input type="text"  name="umur_tindak" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Umur">
+                                                    <input type="text"  name="jenis_kelamin_tindak" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jenis Kelamin">
+                                                    <input type="text"  name="alamat_tindak" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alamat">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+
+                            @csrf
+                            <div class="row">
+                                <div class="mb-10">
+                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                        <input class="form-check-input" type="checkbox" name="setuju" value="1"/>
+                                        <span class="form-check-label fw-semibold text-muted">
+                                                            Setuju/Tidak Setuju
+                                                        </span>
+                                    </label>
+                                </div>
+                                <button type="submit" class="btn btn-bg-dark text-white">Download PDF</button>
+                            </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+                    <div id="resep" style="display: none">
+                        <div class="d-flex flex-row" id="inputFromRow">
+                            <select name="resep[obat][]" aria-label="{{ __('Pilih Obat') }}" data-placeholder="{{ __('Pilih Obat...') }}" class="mb-2 form-select form-select-solid form-select-lg fw-bold me-5">
+                                <option value="">{{ __('Pilih Obat...') }}</option>
+                                @foreach($drugs as $drug)
+                                    <option value="{{ $drug->id }}">{{  $drug->name }}</option>
+                                @endforeach
+                            </select>
+                            <input placeholder="Qty" name="resep[qty][]"  class="w-100px me-5 form-control form-control-solid" type="number" min="1">
+                            <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" id="remove-item">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
+                                <span class="svg-icon svg-icon-3">
+																						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+																							<path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor" />
+																							<path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="currentColor" />
+																							<path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="currentColor" />
+																						</svg>
+																					</span>
+                                <!--end::Svg Icon-->
+                            </button>
+                        </div>
+                    </div>
 
 @section('styles')
     <style>
@@ -1358,6 +1682,14 @@
             $assesment = $("#assessment").html();
             $("#icdtens").change(function () {
                 $("#assessment").append($(this).find("option:selected").text() + ' | ');
+            });
+
+            $("#tambah_obat").click(function () {
+                $('#newRow').append($('#resep').html());
+            });
+
+            $(document).on('click', '#remove-item', function () {
+                $(this).closest('#inputFromRow').remove();
             });
         })
     </script>

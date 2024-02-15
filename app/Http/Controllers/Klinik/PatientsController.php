@@ -7,6 +7,7 @@
     use App\Http\Requests\Account\SettingsInfoRequest;
     use App\Models\Klinik\Examination;
     use App\Models\Klinik\Patient;
+    use App\Models\Klinik\PemeriksaanAwal;
     use App\Models\Master\BloodType;
     use App\Models\Master\CardType;
     use App\Models\Master\City;
@@ -432,5 +433,10 @@
             session()->flash('success', 'User has been deleted !!');
 
             return redirect()->route('users.index');
+        }
+
+        public function pretest(Request $request){
+            PemeriksaanAwal::create($request->all());
+            return redirect()->intended('klinik/patients');
         }
     }

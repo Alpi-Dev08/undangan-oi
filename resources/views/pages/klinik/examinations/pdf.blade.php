@@ -412,12 +412,12 @@
                 <tr><td style="font-weight:bold">Resep</td></tr>
                 <tr><td>
                         @php
-                            $reseps = explode(',',$examination->resep);
+                            $resep = json_decode($examination->resep);
+                            $obat = $resep->obat;
+                            $qty = $resep->qty;
                         @endphp
-                        @foreach($reseps as $resep)
-                            @if(!empty($resep))
-                                <p style="margin:0px;">{{ $resep }}</p>
-                            @endif
+                        @foreach($obat as $key => $value)
+                           <p style="margin:0px;">{{ getObat($value)->name }} x {{$qty[$key]}}</p>
                         @endforeach
                     </td></tr>
                 <tr><td style="font-weight:bold">{{ $examination->saran }}</td></tr>

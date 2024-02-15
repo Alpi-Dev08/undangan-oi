@@ -1,4 +1,25 @@
 <!--begin::Card-->
+@if($pemeriksaan_awal->kriteria_satu=='ya' && $pemeriksaan_awal->kriteria_dua=='ya')
+    <div class="alert alert-danger d-flex align-items-center p-5">
+        @elseif($pemeriksaan_awal->kriteria_satu=='ya' || $pemeriksaan_awal->kriteria_dua=='ya')
+            <div class="alert alert-warning d-flex align-items-center p-5">
+                @else
+                    <div class="alert alert-success d-flex align-items-center p-5">
+                        @endif
+                        <!--begin::Wrapper-->
+                        <div class="d-flex flex-column">
+                            <!--begin::Title-->
+                            <h4 class="mb-1 text-dark">{{ $pemeriksaan_awal->interpretasi  }}</h4>
+                            <!--end::Title-->
+
+                            <!--begin::Content-->
+                            <span>{{ ucwords($pemeriksaan_awal->tindakan)  }}</span>
+                            <!--end::Content-->
+                        </div>
+                        <!--end::Wrapper-->
+                    </div>
+                    <!--end::Alert-->
+
 <div class="card card-xxl-stretch mb-5 mb-xl-8">
     <!--begin::Card body-->
     <!--begin::Card header-->
@@ -380,7 +401,7 @@
                                         </div>
                                         <div class="col-12 row">
                                             <div class="col-2 fw-bolder">Doctor</div>
-                                            <div class="col-10">: {{ $exam->health_profesional->user->name }}</div>
+                                            <div class="col-10">: {{ $exam->health_profesional->user->name ?? ""}}</div>
                                         </div>
                                         <div class="col-12 row">
                                             <div class="col-2 fw-bolder">Jenis Pemeriksaan</div>

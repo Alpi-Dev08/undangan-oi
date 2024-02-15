@@ -14,6 +14,7 @@ use App\Models\Klinik\Location;
 use App\Models\Klinik\MedicalRecord;
 use App\Models\Klinik\Package;
 use App\Models\Klinik\PackageDetail;
+use App\Models\Klinik\PemeriksaanAwal;
 use App\Models\Klinik\ServiceCategory;
 use App\Models\Klinik\Speciality;
 use App\Models\Klinik\Transaction;
@@ -108,6 +109,7 @@ class SettingsController extends Controller
         $user = $id != '' ? User::find($id) : auth()->user();
         $healthprofesional = HealthProfesional::all();
         $servicecategories = ServiceCategory::where('is_global', 0)->get();
+        $pemeriksaan_awal = PemeriksaanAwal::where(['user_id'=>null,'patient_id'=>null])->latest()->first();
         $packages = Package::all();
         $locations = Location::all();
 
@@ -115,7 +117,7 @@ class SettingsController extends Controller
 
         // get the default inner page
         return view('pages.account.examinations.examinations', compact([
-            'user', 'info', 'healthprofesional', 'servicecategories', 'locations', 'packages',
+            'user', 'info', 'healthprofesional', 'servicecategories', 'locations', 'packages','pemeriksaan_awal'
         ]));
     }
 
@@ -142,6 +144,14 @@ class SettingsController extends Controller
     public function createExamination(Request $request)
     {
         $user = User::find($request->user_id);
+
+        if($request->pemeriksaan_awal){
+            $pemeriksaan_awal = PemeriksaanAwal::find($request->pemeriksaan_awal);
+            $pemeriksaan_awal->user_id = $request->user_id;
+            $pemeriksaan_awal->patient_id = $user->patient->id;
+            $pemeriksaan_awal->save();
+        }
+
         $examination_code = IdGenerator::generate(['table' => 'examinations', 'field' => 'examination_code', 'length' => 12, 'prefix' => 'E'.date('Ymd')]);
         $medical_record = MedicalRecord::where('user_id', $request->user_id)->first();
         if ($medical_record) {

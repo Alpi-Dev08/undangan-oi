@@ -10,7 +10,8 @@
             <div class="table-responsive mb-10">
                 <!--begin::Table-->
                 <table class="table g-5 gs-0 mb-0 fw-bold text-gray-700" data-kt-element="items">
-                    <!--begin::Table head-->
+
+
                     <thead>
                     <tr class="border-bottom fs-7 fw-bold text-gray-700 text-uppercase">
                         <th class="min-w-300px w-475px">Service</th>
@@ -69,29 +70,68 @@
                         </td>
                     </tr>
                         @endforeach
+
                     </tbody>
                     <!--end::Table body-->
                     <!--begin::Table foot-->
                     <tfoot>
+                    <!--begin::Table head-->
+                    <tr class="border-bottom border-bottom-dashed">
+                        <td class="pe-7" colspan="5">
+                            <button type="button" class="btn btn-link py-1" data-kt-element="add-item">Add item</button>
+                        </td>
+                    </tr>
+                    <tr class="border-bottom border-bottom-dashed">
+                        <td class="pe-7" colspan="5">
+                            RESEP OBAT
+                        </td>
+                    </tr>
+                    @php
+                        $resep = json_decode($examination->resep);
+                        $obat = $resep->obat;
+                        $qty = $resep->qty;
+                        $totalobat = 0;
+                    @endphp
+                    @for($i=0;$i<count($resep->obat);$i++)
+                        @php $_obat = getObat($obat[$i]); @endphp
+                        <tr class="border-bottom border-bottom-dashed">
+                            <td class="pe-7">{{ $_obat->name }}</td>
+                            <td class="pe-7">{{ $qty[$i] }}</td>
+                            <td class="pe-7" style="text-align: right">Rp {{ number_format($_obat->price,2,'.',',') }}</td>
+                            <td class="pe-7" style="text-align: right">Rp {{ number_format($_obat->price*$qty[$i],2,'.',',') }}</td>
+                            <td class="pe-7"></td>
+                        </tr>
+                        @php $totalobat += $_obat->price*$qty[$i]; @endphp
+                    @endfor
                     <tr class="border-top border-top-dashed align-top fs-6 fw-bold text-gray-700">
                         <th class="text-primary">
-                            <button type="button" class="btn btn-link py-1" data-kt-element="add-item">Add item</button>
+                           &nbsp;
                         </th>
                         <th colspan="2" class="border-bottom border-bottom-dashed ps-0">
                             <div class="d-flex flex-column align-items-start">
                                 <div class="fs-5">Subtotal</div>
-                                <button class="btn btn-link py-1" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Coming soon">Add tax</button>
-                                <button class="btn btn-link py-1" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Coming soon">Add discount</button>
                             </div>
                         </th>
                         <th colspan="2" class="border-bottom border-bottom-dashed text-end">Rp
                             <span data-kt-element="sub-total">{{ number_format($transaction->amount,2,'.',',') }}</span></th>
                     </tr>
+                    <tr class="border-top border-top-dashed align-top fs-6 fw-bold text-gray-700">
+                        <th class="text-primary">
+                            &nbsp;
+                        </th>
+                        <th colspan="2" class="border-bottom border-bottom-dashed ps-0">
+                            <div class="d-flex flex-column align-items-start">
+                                <div class="fs-5">Subtotal Obat</div>
+                            </div>
+                        </th>
+                        <th colspan="2" class="border-bottom border-bottom-dashed text-end">Rp
+                            <span data-kt-element="sub-total">{{ number_format($totalobat,2,'.',',') }}</span></th>
+                    </tr>
                     <tr class="align-top fw-bold text-gray-700">
                         <th></th>
                         <th colspan="2" class="fs-4 ps-0">Total</th>
                         <th colspan="2" class="text-end fs-4 text-nowrap">Rp
-                            <span data-kt-element="grand-total">{{ number_format($transaction->amount,2,'.',',') }}</span></th>
+                            <span data-kt-element="grand-total">{{ number_format($transaction->amount+$totalobat,2,'.',',') }}</span></th>
                     </tr>
                     </tfoot>
                     <!--end::Table foot-->

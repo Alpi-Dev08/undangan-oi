@@ -378,7 +378,7 @@
                                         </div>
                                         <div class="col-12 row">
                                             <div class="col-2 fw-bolder">Doctor</div>
-                                            <div class="col-10">: {{ $exam->health_profesional->user->name }}</div>
+                                            <div class="col-10">: {{ $exam->health_profesional->user->name ?? "-" }}</div>
                                         </div>
                                         <div class="col-12 row">
                                             <div class="col-2 fw-bolder">Jenis Pemeriksaan</div>

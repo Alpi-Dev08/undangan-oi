@@ -10,12 +10,14 @@ use App\Models\Klinik\AdditionalCategory;
 use App\Models\Klinik\AdditionalExamination;
 use App\Models\Klinik\AnamnesisCategory;
 use App\Models\Klinik\AnamnesisExamination;
+use App\Models\Klinik\Drug;
 use App\Models\Klinik\Examination;
 use App\Models\Klinik\HealthProfesional;
 use App\Models\Klinik\Icdten;
 use App\Models\Klinik\LaboratoryExamination;
 use App\Models\Klinik\OtherExamination;
 use App\Models\Klinik\Package;
+use App\Models\Klinik\PemeriksaanAwal;
 use App\Models\Klinik\PhysicalCategory;
 use App\Models\Klinik\PhysicalExamination;
 use App\Models\Klinik\Plan;
@@ -138,6 +140,7 @@ class ExaminationsController extends Controller
         $user = User::find($examination->user_id);
         $healthprofesionals = HealthProfesional::all();
         $plans = Plan::all();
+        $drugs = Drug::all();
         $icdtens = Icdten::all();
         $anamnesiscategories = [];
         $physicalscategories = [];
@@ -163,8 +166,9 @@ class ExaminationsController extends Controller
         //$vitalityexaminations = VitalityExamination::where('user_id', $examination->user_id)->orderBy('created_at', 'desc')->get();
 
         $info = $user->info;
+        $pemeriksaan_awal = PemeriksaanAwal::where('user_id', $examination->user_id)->first();
 
-        return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories', 'anamnesisexamination', 'examinations', 'physicalscategories', 'physicalexamination', 'otherscategories', 'otherexamination', 'additionalsscategories', 'additionalexamination','laboratoryexamination'));
+        return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories', 'anamnesisexamination', 'examinations', 'physicalscategories', 'physicalexamination', 'otherscategories', 'otherexamination', 'additionalsscategories', 'additionalexamination','laboratoryexamination','pemeriksaan_awal','drugs'));
     }
 
     /**
@@ -182,11 +186,14 @@ class ExaminationsController extends Controller
         // Validation Data
         $validated = $request->validated();
 
+
+
         // Process Data
         if ($validated) {
             // Process Data
             try {
                 $validated['status'] = 'done';
+                $validated['resep'] = json_encode($request->resep);
                 $examination->update($validated);
             } catch (Exception $e) {
                 report($e);
@@ -273,10 +280,12 @@ class ExaminationsController extends Controller
         $user = User::find($examination->user_id);
         $info = $user->info;
 
+        $pemeriksaan_awal = PemeriksaanAwal::where('user_id', $examination->user_id)->first();
+
         $services = Service::where('service_category_id', $examination->service_category_id)->get();
         $servicecategories = ServiceCategory::where('is_global', 1)->get();
 
-        return view('pages.klinik.examinations.services', compact(['user', 'info', 'examination', 'services', 'servicecategories', 'examinations',
+        return view('pages.klinik.examinations.services', compact(['user', 'info', 'examination', 'services', 'servicecategories', 'examinations','pemeriksaan_awal'
         ]));
     }
 
@@ -334,10 +343,10 @@ class ExaminationsController extends Controller
 
         $user = User::find($examination->user_id);
         $info = $user->info;
+        $pemeriksaan_awal = PemeriksaanAwal::where('user_id', $examination->user_id)->first();
 
         // get the default inner page
-        return view('pages.klinik.examinations.vitality', compact(['user', 'info', 'examination', 'vitalityexamination',
-        ]));
+        return view('pages.klinik.examinations.vitality', compact(['user', 'info', 'examination', 'vitalityexamination','pemeriksaan_awal']));
     }
 
     public function pdf(Request $request)
@@ -411,5 +420,45 @@ class ExaminationsController extends Controller
         ]));
 
         return $pdf->download('surat_keterangan_sakit_'.$user->name.'.pdf');
+    }
+
+    public function hakkewajiban(Request $request)
+    {
+        $examination = Examination::find($request->id);
+        $user = User::find($examination->user_id);
+        $info = $user->info;
+
+        // get the default inner page
+        $data = json_decode(json_encode($request->all()));
+        //echo json_encode($data);exit;
+        /*return view('pages.klinik.examinations.hakkewajiban', compact([
+            'user', 'info', 'examination', 'data'
+        ]));*/
+
+
+        $pdf = Pdf::loadView('pages.klinik.examinations.hakkewajiban', compact(['user', 'info', 'examination', 'data',
+        ]));
+
+        return $pdf->download('bukti_penyampaian_informasi_'.$user->name.'.pdf');
+    }
+
+    public function persetujuan(Request $request)
+    {
+        $examination = Examination::find($request->id);
+        $user = User::find($examination->user_id);
+        $info = $user->info;
+
+        // get the default inner page
+        $data = json_decode(json_encode($request->all()));
+        //echo json_encode($data);exit;
+       /* return view('pages.klinik.examinations.persetujuan', compact([
+            'user', 'info', 'examination', 'data'
+        ]));*/
+
+
+        $pdf = Pdf::loadView('pages.klinik.examinations.persetujuan', compact(['user', 'info', 'examination', 'data',
+        ]));
+
+        return $pdf->download('surat_keterangan_persetujuan_'.$user->name.'.pdf');
     }
 }

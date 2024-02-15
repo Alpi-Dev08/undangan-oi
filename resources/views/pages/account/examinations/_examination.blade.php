@@ -14,87 +14,131 @@
     <div id="kt_account_profile_details" class="collapse show">
         <!--begin::Form-->
         <form id="kt_account_profile_details_form" class="form" method="POST" action="{{ route('settings.create.examination') }}" enctype="multipart/form-data">
-        @csrf
-        <!--begin::Card body-->
+            @csrf
+            <!--begin::Card body-->
             <div class="card-body border-top p-9">
+                <!--begin::Alert-->
+                @if($pemeriksaan_awal->user_id == null)
+                    @if($pemeriksaan_awal->kriteria_satu=='ya' && $pemeriksaan_awal->kriteria_dua=='ya')
+                        <div class="alert alert-danger d-flex align-items-center p-5">
+                    @elseif($pemeriksaan_awal->kriteria_satu=='ya' || $pemeriksaan_awal->kriteria_dua=='ya')
+                        <div class="alert alert-warning d-flex align-items-center p-5">
+                    @else
+                        <div class="alert alert-success d-flex align-items-center p-5">
+                    @endif
+                                            <!--begin::Wrapper-->
+                                            <div class="d-flex flex-column">
+                                                <!--begin::Title-->
+                                                <h4 class="mb-1 text-dark">{{ $pemeriksaan_awal->interpretasi  }}</h4>
+                                                <!--end::Title-->
 
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Health Profesional') }}</label>
-                    <!--end::Label-->
-                    <!--begin::Col-->
-                    <div class="col-lg-8">
-                        <input type="hidden" name="user_id" value="{{$user->id}}">
-                        <select name="health_profesional_id" aria-label="{{ __('Health Profesional') }}" data-control="select2" data-placeholder="{{ __('Select a Health Profesional...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                            <option value="">{{ __('Select a Health Profesional...') }}</option>
-                            @foreach($healthprofesionals as $healthprofesional)
-                                <option value="{{ $healthprofesional->id }}" >
-                                    {{ ($healthprofesional->user->info->title_prefix !='' ? $healthprofesional->user->info->title_prefix.'. ' : '').$healthprofesional->user->name.($healthprofesional->user->info->title_suffix!='' ? ', '.$healthprofesional->user->info->title_suffix : '') }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
+                                                <!--begin::Content-->
+                                                <span>{{ ucwords($pemeriksaan_awal->tindakan)  }}</span>
+                                                <!--end::Content-->
+                                                <div class="form-check form-switch form-check-custom form-check-solid">
+                                                    <input value="{{ $pemeriksaan_awal->id }}" class="form-check-input h-20px w-30px me-5" checked="checked" type="checkbox" name="pemeriksaan_awal" id="pemeriksaan_awal"/>
+                                                    <label class="form-check-label" for="kriteria_dua">
+                                                        Tambahkan kedalam informasi Pasien
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <!--end::Wrapper-->
+                                        </div>
+                                        <!--end::Alert-->
+                                    @endif
 
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Package') }}</label>
-                    <!--end::Label-->
-                    <!--begin::Col-->
-                    <div class="col-lg-8">
-                        <select name="service_category_id" aria-label="{{ __('Package') }}" data-control="select2" data-placeholder="{{ __('Select a Package...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                            <option value="">{{ __('Select a Package...') }}</option>
-                            @foreach($packages as $package)
-                                <option value="{{ $package->id }}">{{ $package->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
+                                    <!--begin::Input group-->
+                                    <div class="row mb-6">
+                                        <!--begin::Label-->
+                                        <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Health Profesional') }}</label>
+                                        <!--end::Label-->
+                                        <!--begin::Col-->
+                                        <div class="col-lg-8">
+                                            <input type="hidden" name="user_id" value="{{$user->id}}">
+                                            <select name="health_profesional_id" aria-label="{{ __('Health Profesional') }}" data-control="select2" data-placeholder="{{ __('Select a Health Profesional...') }}" class="form-select form-select-solid form-select-lg fw-bold">
+                                                <option value="">{{ __('Select a Health Profesional...') }}</option>
+                                                @foreach($healthprofesionals as $healthprofesional)
+                                                    <option value="{{ $healthprofesional->id }}">
+                                                        {{ ($healthprofesional->user->info->title_prefix !='' ? $healthprofesional->user->info->title_prefix.'. ' : '').$healthprofesional->user->name.($healthprofesional->user->info->title_suffix!='' ? ', '.$healthprofesional->user->info->title_suffix : '') }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
 
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Service Category') }}</label>
-                    <!--end::Label-->
-                    <!--begin::Col-->
-                    <div class="col-lg-8">
-                        <select name="service_category_id" aria-label="{{ __('Service Category') }}" data-control="select2" data-placeholder="{{ __('Select a Service Category...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                            <option value="">{{ __('Select a Service Category...') }}</option>
-                            @foreach($servicecategories as $servicecategory)
-                                <option value="{{ $servicecategory->id }}">{{ $servicecategory->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
+                                    <!--begin::Input group-->
+                                    <div class="row mb-6">
+                                        <!--begin::Label-->
+                                        <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Package') }}</label>
+                                        <!--end::Label-->
+                                        <!--begin::Col-->
+                                        <div class="col-lg-8">
+                                            <select name="service_category_id" aria-label="{{ __('Package') }}" data-control="select2" data-placeholder="{{ __('Select a Package...') }}" class="form-select form-select-solid form-select-lg fw-bold">
+                                                <option value="">{{ __('Select a Package...') }}</option>
+                                                @foreach($packages as $package)
+                                                    <option value="{{ $package->id }}">{{ $package->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
 
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Locations') }}</label>
-                    <!--end::Label-->
-                    <!--begin::Col-->
-                    <div class="col-lg-8">
-                        <select name="location_id" aria-label="{{ __('Location') }}" data-control="select2" data-placeholder="{{ __('Select a Location...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                            <option value="">{{ __('Select a Location...') }}</option>
-                            @foreach($locations as $location)
-                                <option value="{{ $location->id }}">{{ $location->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
+                                    <!--begin::Input group-->
+                                    <div class="row mb-6">
+                                        <!--begin::Label-->
+                                        <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Service Category') }}</label>
+                                        <!--end::Label-->
+                                        <!--begin::Col-->
+                                        <div class="col-lg-8">
+                                            <select name="service_category_id" aria-label="{{ __('Service Category') }}" data-control="select2" data-placeholder="{{ __('Select a Service Category...') }}" class="form-select form-select-solid form-select-lg fw-bold">
+                                                <option value="">{{ __('Select a Service Category...') }}</option>
+                                                @foreach($servicecategories as $servicecategory)
+                                                    <option value="{{ $servicecategory->id }}">{{ $servicecategory->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!--begin::Input group-->
+                                    <div class="row mb-6">
+                                        <!--begin::Label-->
+                                        <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Locations') }}</label>
+                                        <!--end::Label-->
+                                        <!--begin::Col-->
+                                        <div class="col-lg-8">
+                                            <select name="location_id" aria-label="{{ __('Location') }}" data-control="select2" data-placeholder="{{ __('Select a Location...') }}" class="form-select form-select-solid form-select-lg fw-bold">
+                                                <option value="">{{ __('Select a Location...') }}</option>
+                                                @foreach($locations as $location)
+                                                    <option value="{{ $location->id }}">{{ $location->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-6">
+                                        <!--begin::Label-->
+                                        <label class="col-lg-4 col-form-label required fw-bold fs-6">&nbsp;</label>
+                                        <!--end::Label-->
+                                        <!--begin::Col-->
+                                        <div class="col-lg-8">
+                                            <div class="form-check form-switch form-check-custom form-check-solid">
+                                                <input value="ya" class="form-check-input h-20px w-30px me-5" type="checkbox" name="satusehat" id="satusehat"/>
+                                                <label class="form-check-label" for="kriteria_dua">
+                                                    Telah Mendandatangni Inform Consent SATU SEHAT
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
 
 
-            <!--begin::Actions-->
-            <div class="card-footer d-flex justify-content-end py-6 px-9">
-                <button type="reset" class="btn btn-white btn-active-light-primary me-2">{{ __('Discard') }}</button>
+                                    <!--begin::Actions-->
+                                    <div class="card-footer d-flex justify-content-end py-6 px-9">
+                                        <button type="reset" class="btn btn-white btn-active-light-primary me-2">{{ __('Discard') }}</button>
 
-                <button type="submit" class="btn btn-primary" id="kt_account_profile_details_submit">
-                    @include('partials.general._button-indicator', ['label' => __('Register')])
-                </button>
-            </div>
-            <!--end::Actions-->
+                                        <button type="submit" class="btn btn-primary" id="kt_account_profile_details_submit">
+                                            @include('partials.general._button-indicator', ['label' => __('Register')])
+                                        </button>
+                                    </div>
+                                    <!--end::Actions-->
         </form>
         <!--end::Form-->
     </div>

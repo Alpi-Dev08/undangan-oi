@@ -45,11 +45,11 @@ return [
 
     // General
     'general' => [
-        'website' => 'https://putrakuningan.com',
-        'copyright' => 'https://putrakuningan.com',
-        'about' => 'https://putrakuningan.com',
-        'contact' => 'mailto:support@putrakuningan.com',
-        'support' => 'https://putrakuningan.com/support',
+            'website' => 'https://kliniksatriabudi.com',
+        'copyright' => 'https://kliniksatriabudi.com',
+        'about' => 'https://kliniksatriabudi.com',
+        'contact' => 'mailto:support@kliniksatriabudi.com',
+        'support' => 'https://kliniksatriabudi.com/support',
         'bootstrap-docs-link' => 'https://getbootstrap.com/docs/5.0',
         'licenses' => 'https://putrakuningan.com',
         'social-accounts' => [

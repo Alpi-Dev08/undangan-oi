@@ -121,6 +121,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('healthprofesionals', HealthProfesionalsController::class);
         Route::resource('patients', PatientsController::class);
         Route::get('patients/print/{id}', [PatientsController::class, 'print'])->name('patients.print');
+        Route::post('patients/pretest', [PatientsController::class, 'pretest'])->name('patients.pretest');
 
         Route::resource('specialities', SpecialitiesController::class);
         Route::resource('diseases', DiseasesController::class);
@@ -137,6 +138,8 @@ Route::middleware('auth')->group(function () {
 
         Route::post('suket-sehat/{id}', [ExaminationsController::class, 'sehat'])->name('suket.sehat');
         Route::post('suket-sakit/{id}', [ExaminationsController::class, 'sakit'])->name('suket.sakit');
+        Route::post('suket-hak-dan-kewajiban/{id}', [ExaminationsController::class, 'hakkewajiban'])->name('suket.hakkewajiban');
+        Route::post('suket-persetujuan/{id}', [ExaminationsController::class, 'persetujuan'])->name('suket.persetujuan');
 
         Route::resource('servicecategories', \App\Http\Controllers\Klinik\ServiceCategoriesController::class);
         Route::resource('services', \App\Http\Controllers\Klinik\ServicesController::class);

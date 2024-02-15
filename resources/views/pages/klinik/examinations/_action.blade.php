@@ -10,7 +10,7 @@
         {!! theme()->getSvgIcon("icons/duotune/files/fil008.svg", "svg-icon-3 text-primary") !!}
     </a>
 @endif
-    @if(Auth::user()->hasRole(['ners','administrator']))
+    @if(Auth::user()->hasRole(['ners','administrator','admin-perawat','dokter']))
         <a href="{{ route('examinations.vitality',['id' => $model->id]) }}"
            class="btn btn-icon btn-bg-light btn-active-light-success btn-sm me-1">
             @if(cekVitalityExamination($model->id))
