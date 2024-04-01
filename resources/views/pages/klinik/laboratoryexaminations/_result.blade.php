@@ -1,16 +1,17 @@
 @php use Carbon\Carbon; @endphp
     <!-- begin::Wrapper-->
 <style>
-    .border-klinik{
+    .border-klinik {
         --bs-border-opacity: 1;
         border-color: #4874ac !important;
     }
-    .text-klinik{
-        color:#4874ac;
+
+    .text-klinik {
+        color: #4874ac;
     }
 
-    .bg-klinik{
-        background-color:#4874ac;
+    .bg-klinik {
+        background-color: #4874ac;
     }
 </style>
 <div class="mw-lg-950px mx-auto w-100 border border-3 border-klinik">
@@ -18,10 +19,12 @@
     <div class="border-bottom border-3 border-klinik px-5">
         <div class="col-12 row py-5">
             <div class="col-4">
-                <img src="{{ asset('assets/media/logos/logo-klinik.png') }}" alt="Klinik Satriabudi Dharma Medika" class="h-70px logo">
+                <img src="{{ asset('assets/media/logos/logo-klinik.png') }}" alt="Klinik Satriabudi Dharma Medika"
+                     class="h-70px logo">
             </div>
             <div class="col-8 border-start border-3 border-klinik p-3" style="text-align:left">
-                <p style="font-size: 16px;font-weight: bold">Ruko C-17, Pasar Modern Intermoda - BSD<br>Jl. Raya Cisauk Lapan, Sampora, Cisauk, Tangerang, Banten.</p>
+                <p style="font-size: 16px;font-weight: bold">Ruko C-17, Pasar Modern Intermoda - BSD<br>Jl. Raya Cisauk
+                    Lapan, Sampora, Cisauk, Tangerang, Banten.</p>
                 <p style="font-size: 14px">
                     <i class="text-klinik fa-brands fa-whatsapp-square fa-lg"></i> 0896 5886 8769
                     <i class="text-klinik fa-solid fa-square-phone fa-lg"></i> 021 5569 8265
@@ -35,7 +38,7 @@
     <div class="p-5">
         <div class="row gap-7 gap-md-10">
             <div class="row col-12 flex-root d-flex flex-row text-center">
-                <h5 class="fw-bold" >HASIL LABORATORIUM</h5>
+                <h5 class="fw-bold">HASIL LABORATORIUM</h5>
             </div>
         </div>
         <div class="row gap-7 gap-md-10">
@@ -52,7 +55,8 @@
                     <span class="fs-5">Spesimen Diterima</span>
                 </div>
                 <div class="col-8">
-                    <span class="fs-5">: {{ $laboratoryexaminations->created_at->locale('id')->translatedFormat('d F Y H:i:s') }}</span>
+                    <span
+                        class="fs-5">: {{ $laboratoryexaminations->created_at->locale('id')->translatedFormat('d F Y H:i:s') }}</span>
                 </div>
             </div>
         </div>
@@ -70,7 +74,8 @@
                     <span class="fs-5">Pelaporan Hasil</span>
                 </div>
                 <div class="col-8">
-                    <span class="fs-5">: {{ $laboratoryexaminations->updated_at->locale('id')->translatedFormat('d F Y H:i:s') }}</span>
+                    <span
+                        class="fs-5">: {{ $laboratoryexaminations->updated_at->locale('id')->translatedFormat('d F Y H:i:s') }}</span>
                 </div>
             </div>
         </div>
@@ -94,7 +99,8 @@
         </div>
     </div>
 
-    <form id="kt_invoice_form" method="POST" class="form" action="{{ route('result.update',['laboratoryexaminations' => $laboratoryexaminations->id]) }}">
+    <form id="kt_invoice_form" method="POST" class="form"
+          action="{{ route('result.update',['laboratoryexaminations' => $laboratoryexaminations->id]) }}">
         @csrf
         @method("PUT")
         <table class="w-100 py-5" data-kt-element="items">
@@ -110,41 +116,40 @@
             <tbody class="py-5">
             @if(!empty($result))
                 @foreach($result as $key => $value)
-                    @if($value->ItemName!='Hematologi')
-                        <tr>
-                            <td class="px-5">{{ $value->ItemName }}</td>
-                            <td>
-                                <input type="hidden" class="form-control text-end" name="id[]" value="{{ $value->id }}"/>
-                                <input type="text" class="form-control w-75 text-end" name="hasil[]" value="{{ $value->hasil }}"/>
-                            </td>
-                            <td>{{ $value->nilai_rujukan }}</td>
-                            <td>
-                                <input type="text" class="form-control w-75  text-end" name="satuan[]" value="{{ $value->satuan ?? '' }}"/>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control w-75  text-end" name="keterangan[]" value="{{ $value->keterangan ?? '' }}"/>
-                            </td>
-                        </tr>
-                    @endif
+                    <tr>
+                        <td class="px-5">{{ $value->ItemName }}</td>
+                        <td>
+                            <input type="hidden" class="form-control text-end" name="id[]" value="{{ $value->id }}"/>
+                            <input type="text" class="form-control w-75 text-end" name="hasil[]"
+                                   value="{{ $value->hasil }}"/>
+                        </td>
+                        <td>{{ $value->nilai_rujukan }}</td>
+                        <td>
+                            <input type="text" class="form-control w-75  text-end" name="satuan[]"
+                                   value="{{ $value->satuan ?? '' }}"/>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control w-75  text-end" name="keterangan[]"
+                                   value="{{ $value->keterangan ?? '' }}"/>
+                        </td>
+                    </tr>
                 @endforeach
             @else
                 @foreach($type as $key => $value)
-                    @if($value->ItemName!='Hematologi')
-                        <tr>
-                            <td class="px-5">{{ $value['name'] }}</td>
-                            <td>
-                                <input type="hidden" class="form-control text-end" name="id[]" value="{{ $value['id'] }}"/>
-                                <input type="text" class="form-control w-75  text-end" name="hasil[]" value=""/>
-                            </td>
-                            <td>{{ $value['nilai_rujukan'] }}</td>
-                            <td>
-                                <input type="text" class="form-control w-75  text-end" name="satuan[]" value=""/>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control w-75  text-end" name="keterangan[]" value=""/>
-                            </td>
-                        </tr>
-                    @endif
+                    <tr>
+                        <td class="px-5">{{ $value['name'] }}</td>
+                        <td>
+                            <input type="hidden" class="form-control text-end" name="id[]" value="{{ $value['id'] }}"/>
+                            <input type="text" class="form-control w-75  text-end" name="hasil[]" value=""/>
+                        </td>
+                        <td>{{ $value['nilai_rujukan'] }}</td>
+                        <td>
+                            <input type="text" class="form-control w-75  text-end" name="satuan[]" value=""/>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control w-75  text-end" name="keterangan[]" value=""/>
+                        </td>
+                    </tr>
                 @endforeach
             @endif
             </tbody>

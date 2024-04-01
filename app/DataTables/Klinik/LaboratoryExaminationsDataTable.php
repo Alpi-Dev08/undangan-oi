@@ -40,11 +40,7 @@
                     return $model->created_at;
                 })
                 ->addColumn('file', function (LaboratoryExamination $model) {
-                    if($model->file){
-                        return view('pages.klinik.laboratoryexaminations._download', compact('model'));
-                    } else {
-                        return view('pages.klinik.laboratoryexaminations._download', compact('model'));
-                    }
+                    return view('pages.klinik.laboratoryexaminations._download', compact('model'));
                 })
                 ->addColumn('action', function (LaboratoryExamination $model) {
                     return view('pages.klinik.laboratoryexaminations._action', compact('model'));
