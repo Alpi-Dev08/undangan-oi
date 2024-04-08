@@ -486,7 +486,9 @@
                         @endphp
                         @if($obat)
                             @foreach($obat as $key => $value)
+                                @if(isset(getObat($value)->name))
                                 <p style="margin:0px;">{{ getObat($value)->name }} x {{$qty[$key]}}</p>
+                                @endif
                             @endforeach
                         @endif
                     </td>
