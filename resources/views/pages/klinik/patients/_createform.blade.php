@@ -55,7 +55,7 @@
             <!--begin::Input group-->
             <div class="row mb-6">
                 <!--begin::Label-->
-                <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('ID Card') }}</label>
+                <label class="col-lg-4 required col-form-label fw-bold fs-6">{{ __('ID Card') }}</label>
                 <!--end::Label-->
 
                 <!--begin::Col-->
@@ -64,8 +64,7 @@
                     <div class="row">
                         <!--begin::Col-->
                         <div class="col-lg-4 fv-row">
-                            <select name="card_type_id" aria-label="{{ __('Select a Card Type') }}" data-control="select2" data-placeholder="{{ __('Select a Card...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                                <option value="">{{ __('Select a Card Type...') }}</option>
+                            <select id="card_type_id" name="card_type_id" aria-label="{{ __('Select a Card Type') }}" data-control="select2" data-placeholder="{{ __('Select a Card...') }}" class="form-select form-select-solid form-select-lg fw-bold">
                                 @foreach($cards as $card)
                                     <option value="{{ $card->id }}">{{  $card->name }}</option>
                                 @endforeach
@@ -75,7 +74,7 @@
 
                         <!--begin::Col-->
                         <div class="col-lg-8 fv-row">
-                            <input type="text" name="card_number" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Card Number" value=""/>
+                            <input type="text" required name="card_number" id="card_number" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Card Number" value=""/>
                         </div>
                         <!--end::Col-->
                     </div>
@@ -606,6 +605,46 @@
             parents : "#district",
             url : "/masters/district-sub"
         });
+
+        $(() => {
+            $("#card_number").on("input", function(){
+                var card_number = $(this).val();
+                var card_type = $("#card_type_id").val();
+                if(card_type == 1){
+                    if(card_number.length == 16){
+                        $.ajax({
+                            url: "/klinik/patients/check-nik",
+                            type: "POST",
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                card_number: card_number
+                            },
+                            success: function(response){
+                                if(response.status == "success"){
+                                    $("#card_number").removeClass("is-invalid");
+                                    $("#card_number").addClass("is-valid");
+                                }else{
+                                    swal.fire({
+                                        title: "IHS Number Tidak Ditemukan",
+                                        text: "IHS Number tidak ditemukan, Apakah Akan Tetap Melanjutkan Registrasi?",
+                                        icon: "warning",
+                                        showCancelButton: true,
+                                    }).then((result) => {
+                                        if(result.isConfirmed){
+                                            console.log("Continue");
+                                            $("#card_number").removeClass("is-invalid");
+                                            $("#card_number").addClass("is-valid");
+                                        }else{
+                                            window.location.href = "{{ route('patients.index') }}";
+                                        }
+                                    })
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        })
 
     </script>
 @endpush

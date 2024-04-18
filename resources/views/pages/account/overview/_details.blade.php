@@ -40,6 +40,20 @@
         </div>
         <!--end::Input group-->
 
+        <!--begin::Input group-->
+        <div class="row mb-7">
+            <!--begin::Label-->
+            <label class="col-lg-4 fw-bold text-muted">{{ __('IHS Number') }}</label>
+            <!--end::Label-->
+
+            <!--begin::Col-->
+            <div class="col-lg-8 fv-row">
+                <span class="fw-bold fs-6">{{ $user->patient->his_number ?? "-" }}</span>
+            </div>
+            <!--end::Col-->
+        </div>
+        <!--end::Input group-->
+
         <!--begin::Row-->
         <div class="row mb-7">
             <!--begin::Label-->

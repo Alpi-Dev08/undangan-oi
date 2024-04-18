@@ -439,4 +439,12 @@
             PemeriksaanAwal::create($request->all());
             return redirect()->intended('klinik/patients');
         }
+
+
+        public function check_nik(Request $request){
+            $nik = $request->nik;
+            $satusehat = satu_sehat('get','Patient?identifier=https://fhir.kemkes.go.id/id/nik|'.$nik,'');
+            $his =  json_decode($satusehat)->entry[0]->resource->id ?? "";
+            return response()->json(['success' => true, 'data' => $his]);
+        }
     }

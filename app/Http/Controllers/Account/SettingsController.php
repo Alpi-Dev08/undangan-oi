@@ -165,6 +165,13 @@ class SettingsController extends Controller
             $medical_record->save();
         }
 
+        $data = [
+            'patient_id' => $user->patient->his_number,
+            'action' => $request->isConsent=="ya" ? "OPTIN" : "OPTOUT",
+            'agent' => auth()->user()->name,
+        ];
+        $consent = satu_sehat_consent($data);
+
         $examination = new Examination();
         $examination->user_id = $user->id;
         $examination->patient_id = $user->patient->id;
@@ -177,6 +184,8 @@ class SettingsController extends Controller
         $examination->examination_date = date('Y-m-d H:i:s');
         $examination->total = 0;
         $examination->status = 'waiting payment';
+        $examination->is_consent = $request->isConsent == "ya" ? 1 : 0;
+        $examination->consent_data = $consent;
         $examination->save();
 
         $inv = IdGenerator::generate(['table' => 'transactions', 'field' => 'invoice_number', 'length' => 14, 'prefix' => 'INV'.date('Ymd')]);

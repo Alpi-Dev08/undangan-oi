@@ -36,6 +36,8 @@ class Examination extends Model
         'is_appointment',
         'appointment_date',
         'appointment_status',
+        'is_consent',
+        'consent_data',
     ];
 
     public function user()

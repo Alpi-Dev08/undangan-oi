@@ -41,8 +41,13 @@
                         <!--end::Name-->
 
                         <!--begin::Info-->
-                        <div class="d-flex flex-wrap fw-bold fs-6 mb-4 pe-2">
-                            <span>{!! $user->hasRole('patient') ? $user->patient->patient_code : ''  !!}</span>
+                        <div class="d-flex flex-column fw-bold fs-6 mb-4 pe-2">
+                            @if($user->hasRole('patient'))
+                                <span>{!! $user->patient->patient_code ?? ""  !!}</span>
+                                <span>IHS Number : {!! $user->patient->his_number ?? '-'   !!}</span>
+                            @endif
+
+
                         </div>
                         <!--end::Info-->
 

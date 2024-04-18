@@ -18,6 +18,7 @@
             <!--begin::Card body-->
             <div class="card-body border-top p-9">
                 <!--begin::Alert-->
+                @if(isset($pemeriksaan_awal))
                 @if($pemeriksaan_awal->user_id == null)
                     @if($pemeriksaan_awal->kriteria_satu=='ya' && $pemeriksaan_awal->kriteria_dua=='ya')
                         <div class="alert alert-danger d-flex align-items-center p-5">
@@ -46,6 +47,7 @@
                                         </div>
                                         <!--end::Alert-->
                                     @endif
+                        @endif
 
                                     <!--begin::Input group-->
                                     <div class="row mb-6">
@@ -121,7 +123,7 @@
                                         <!--begin::Col-->
                                         <div class="col-lg-8">
                                             <div class="form-check form-switch form-check-custom form-check-solid">
-                                                <input value="ya" class="form-check-input h-20px w-30px me-5" type="checkbox" name="satusehat" id="satusehat"/>
+                                                <input value="ya" class="form-check-input h-20px w-30px me-5" type="checkbox" name="isConsent" id="satusehat"/>
                                                 <label class="form-check-label" for="kriteria_dua">
                                                     Telah Mendandatangni Inform Consent SATU SEHAT
                                                 </label>
@@ -145,3 +147,22 @@
     <!--end::Content-->
 </div>
 <!--end::Basic info-->
+
+@push('customscript')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            swal.fire({
+                title: "Informasi",
+                text: "Pastikan pasien telah mendapatkan inform consent SATU SEHAT",
+                icon: "info",
+                showCancelButton: true,
+                confirmButtonText: "Sudah",
+                cancelButtonText: "Belum",
+            }).then(function(result) {
+                if (result.isConfirmed) {
+                    $('#satusehat').prop('checked', true);
+                }
+            });
+        });
+    </script>
+@endpush

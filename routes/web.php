@@ -122,6 +122,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('patients', PatientsController::class);
         Route::get('patients/print/{id}', [PatientsController::class, 'print'])->name('patients.print');
         Route::post('patients/pretest', [PatientsController::class, 'pretest'])->name('patients.pretest');
+        Route::post('patients/check-nik', [PatientsController::class, 'check_nik'])->name('patients.ceknik');
 
         Route::resource('specialities', SpecialitiesController::class);
         Route::resource('diseases', DiseasesController::class);

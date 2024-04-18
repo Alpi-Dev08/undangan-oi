@@ -22,6 +22,23 @@
         return $response;
     }
 
+    function satu_sehat_consent($data): bool|string
+    {
+        $token    = generateToken();
+        $token    = json_decode($token->content());
+        $token    = $token->data->access_token;
+        $url      = env('SATU_SEHAT_CONSENT_URL').'/Consent';
+
+        $request = Http::withToken($token)->post($url, $data);
+
+        $response = response()->json([
+            "success" => $request->ok(),
+            'data'    => $request->object()
+        ], $request->status());
+        Log::info($response);
+        return json_encode($request->object());
+    }
+
     function satu_sehat($type,$service,$data,$id='')
     {
         $token    = generateToken();
