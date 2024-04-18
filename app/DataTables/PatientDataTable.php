@@ -22,6 +22,8 @@ class PatientDataTable extends DataTable
                 $q->where('name', 'patient');
             });
 
+        $query = $query->orderBy('created_at','desc');
+
         return datatables()
             ->eloquent($query)
             ->filter(function ($query) {
@@ -115,7 +117,7 @@ class PatientDataTable extends DataTable
         return [
             Column::make('DT_RowIndex')->title('No')->orderable(false)->searchable(false),
             Column::make('patient_id')->title(__('Patient ID')),
-            Column::make('his_number')->title(__('HIS Number')),
+            Column::make('his_number')->title(__('IHS Number')),
             Column::make('first_name')->title(__('Name')),
             Column::make('phone'),
             Column::make('birthday')->title(__('Birthday')),
