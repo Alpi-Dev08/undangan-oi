@@ -24,6 +24,7 @@ class HealthProfesional extends Model
         'sip_file',
         'kkj_registration_card',
         'health_profesional_status',
+        'his_number'
     ];
 
     public function user()
