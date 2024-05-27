@@ -828,7 +828,22 @@
                                             </div>
                                             <div class="col-12 row">
                                                 <div class="col-2 fw-bolder">Resep</div>
-                                                <div class="col-10">: {{ $exam->resep }}</div>
+                                                <div class="col-10">:
+                                                    @php
+                                                        $resep = json_decode($exam->resep);
+                                                        $obat = $resep->obat ?? "";
+                                                        $qty = $resep->qty ?? "";
+                                                    @endphp
+                                                    @if($obat)
+                                                        <ul style="margin-top:-20px"">
+                                                        @foreach($obat as $key => $value)
+                                                            @if(isset(getObat($value)->name))
+                                                                <li>{{ getObat($value)->name }} x {{$qty[$key]}}</li>
+                                                            @endif
+                                                        @endforeach
+                                                        </ul>
+                                                    @endif
+                                                </div>
                                             </div>
                                         @endif;
                                     </div>
