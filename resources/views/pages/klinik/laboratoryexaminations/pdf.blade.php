@@ -171,6 +171,7 @@
         </thead>
         <tbody style="font-size: 12px">
         @foreach($result as $key => $value)
+			@if($value->hasil)
             <tr>
                 <td style="padding:3px 0px;padding-left: 5px">{{ $value->ItemName }}</td>
                 <td style="padding:3px 0px;padding-left: 5px">{{ $value->hasil }}</td>
@@ -178,6 +179,7 @@
                 <td style="padding:3px 0px;padding-left: 5px">{{ $value->satuan ?? '' }}</td>
                 <td style="padding:3px 0px;padding-left: 5px">{{ $value->keterangan ?? '' }}</td>
             </tr>
+			@endif
         @endforeach
         <tr>
             <td>&nbsp;</td>

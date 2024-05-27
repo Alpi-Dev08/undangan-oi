@@ -1,4 +1,5 @@
 <x-base-layout>
+   @if(Auth::user()->hasRole(['admin']))
     <!--begin::Card-->
     <div class="card card-lg-stretch mb-5 mb-xl-8">
         <form id="gotest" method="POST" class="form" action="{{ route('patients.pretest') }}">
@@ -125,4 +126,5 @@
             })
         </script>
     @endpush
+	@endif
 </x-base-layout>

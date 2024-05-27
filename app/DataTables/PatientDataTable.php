@@ -47,7 +47,8 @@ class PatientDataTable extends DataTable
                 return $model->patient->patient_code ?? "";
             })
             ->editColumn('his_number', function (User $model) {
-                if($model->patient->his_number){
+		if(isset($model->patient->patient_code)){
+                if(isset($model->patient->his_number)){
                     return $model->patient->his_number;
                 } else {
                     $ktp = $model->info->card_number ?? '';
@@ -59,7 +60,7 @@ class PatientDataTable extends DataTable
                         $patient->save();
                     }
                     return $patient->his_number ?? "-";
-                }
+                }}else {return "-"; }
             })
             ->editColumn('first_name', function (User $model) {
                 return $model->name;

@@ -8,7 +8,8 @@
 	        'badge-light-success',#
 	        'badge-light-info',#
 	        'badge-light-warning',#
-	        'badge-light-danger'#
+	        'badge-light-danger',#
+		'badge-success'
         ];
 
         $i = 1;

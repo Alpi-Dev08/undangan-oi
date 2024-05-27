@@ -14,10 +14,12 @@
          * @param mixed $query Results from query() method.
          * @return \Yajra\DataTables\DataTableAbstract
          */
+
         public function dataTable($query)
         {
             $query = $query->where('appointment_status',null)->orWhere('appointment_status',1)->orderBy('created_at', 'desc');
-            return datatables()
+            
+		return datatables()
                 ->eloquent($query)
                 ->rawColumns(['action'])
                 ->addIndexColumn()

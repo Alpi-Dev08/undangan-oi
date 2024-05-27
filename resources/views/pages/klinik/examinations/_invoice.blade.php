@@ -81,6 +81,7 @@
                                 </td>
                             </tr>
                         @endforeach
+			@php $total_resep = 0; @endphp
                         @if($examination->resep)
                         <tr class="border-bottom fs-6 fw-bold text-muted">
                             <th class="min-w-175px pb-2">Obat</th>
@@ -90,10 +91,10 @@
                             $resep = json_decode($examination->resep);
                             $obat = $resep->obat;
                             $qty = $resep->qty;
-                            $total_resep = 0;
                         @endphp
                         @foreach($obat as $key => $value)
-                            <tr>
+                            @if(isset(getObat($value)->name))
+			    <tr>
                                 <td class="d-flex align-items-center">
                                     <div class="d-flex flex-column">
                                         <a href="#" class="text-gray-800 text-hover-primary mb-1">{{getObat($value)->name}}</a>
@@ -106,6 +107,7 @@
                             @php
                                 $total_resep += $qty[$key]*getObat($value)->price;
                             @endphp
+			   @endif
                         @endforeach
                         @endif
 

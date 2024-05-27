@@ -86,23 +86,27 @@
                             RESEP OBAT
                         </td>
                     </tr>
+		    @php $totalobat=0; @endphp
+		    @if($examination->resep)
                     @php
                         $resep = json_decode($examination->resep);
                         $obat = $resep->obat;
                         $qty = $resep->qty;
-                        $totalobat = 0;
                     @endphp
                     @for($i=0;$i<count($resep->obat);$i++)
                         @php $_obat = getObat($obat[$i]); @endphp
+			@if(isset($_obat->id))
                         <tr class="border-bottom border-bottom-dashed">
-                            <td class="pe-7">{{ $_obat->name }}</td>
+                            <td class="pe-7">{{ $_obat->name ?? "-" }}</td>
                             <td class="pe-7">{{ $qty[$i] }}</td>
                             <td class="pe-7" style="text-align: right">Rp {{ number_format($_obat->price,2,'.',',') }}</td>
                             <td class="pe-7" style="text-align: right">Rp {{ number_format($_obat->price*$qty[$i],2,'.',',') }}</td>
                             <td class="pe-7"></td>
                         </tr>
                         @php $totalobat += $_obat->price*$qty[$i]; @endphp
+			@endif
                     @endfor
+		    @endif
                     <tr class="border-top border-top-dashed align-top fs-6 fw-bold text-gray-700">
                         <th class="text-primary">
                            &nbsp;

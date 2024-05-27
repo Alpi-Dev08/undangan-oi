@@ -48,7 +48,7 @@
             [
                 'title' => 'Registrasi', // Patients
                 'path' => 'klinik/patients',
-                'role' => ['admin', 'administrator','admin-perawat'],
+                'role' => ['admin', 'administrator','admin-perawat',],
                 'icon' => theme()->getSvgIcon('assets/media/icons/duotune/communication/com014.svg', 'svg-icon-2'),
             ],
             [
@@ -74,6 +74,32 @@
                 'path' => 'klinik/laboratoryexaminations',
                 'role' => ['laboran', 'administrator'],
                 'icon' => theme()->getSvgIcon('assets/media/icons/duotune/medicine/med004.svg', 'svg-icon-2'),
+            ],
+	    [
+                'title' => 'Farmasi',
+                'role' => ['farmasi', 'administrator'],
+                'icon' => theme()->getSvgIcon('assets/media/icons/duotune/medicine/med002.svg', 'svg-icon-2'),
+		'classes' => ['item' => 'menu-accordion'],
+                'attributes' => [
+                    'data-kt-menu-trigger' => 'click',
+                ],
+		'sub' => [
+                    'class' => 'menu-sub-accordion menu-active-bg',
+                    'items' => [
+			[
+                            'title' => 'Drug Units',
+                            'path' => 'klinik/units',
+                            'bullet' => '<span class="bullet bullet-dot"></span>'
+                        ],
+                        [
+                            'title' => 'Drug',
+                            'path' => 'klinik/drugs',
+                            'bullet' => '<span class="bullet bullet-dot"></span>'
+                        ],
+
+		    ]
+		]
+
             ],
             [
                 'title' => 'Transactions',
@@ -226,21 +252,7 @@
                             'path' => 'klinik/physicals',
                             'bullet' => '<span class="bullet bullet-dot"></span>',
                             'permission' => ['klinik.read'],
-                        ],
-
-                        [
-                            'title' => 'Drug Units',
-                            'path' => 'klinik/units',
-                            'bullet' => '<span class="bullet bullet-dot"></span>',
-                            'permission' => ['klinik.read'],
-                        ],
-                        [
-                            'title' => 'Drug',
-                            'path' => 'klinik/drugs',
-                            'bullet' => '<span class="bullet bullet-dot"></span>',
-                            'permission' => ['klinik.read'],
-                        ],
-
+                        ]
                     ],
                 ],
             ],

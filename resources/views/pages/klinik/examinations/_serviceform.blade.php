@@ -1,4 +1,5 @@
 <!--begin::Card-->
+@if(isset($pemeriksaan_awal))
 @if($pemeriksaan_awal->kriteria_satu=='ya' && $pemeriksaan_awal->kriteria_dua=='ya')
     <div class="alert alert-danger d-flex align-items-center p-5">
         @elseif($pemeriksaan_awal->kriteria_satu=='ya' || $pemeriksaan_awal->kriteria_dua=='ya')
@@ -19,7 +20,7 @@
                         <!--end::Wrapper-->
                     </div>
                     <!--end::Alert-->
-
+@endif
 <div class="card card-xxl-stretch mb-5 mb-xl-8">
     <!--begin::Card body-->
     <!--begin::Card header-->

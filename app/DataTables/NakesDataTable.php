@@ -30,22 +30,25 @@
                     return view('pages.users._avatar', compact('model'));
                 })
                 ->editColumn('his_number', function (User $model) {
+		    //return $model->health_profesional;
                     if($model->health_profesional !== null){
                         if($model->health_profesional->his_number !== null) {
-                            return $model->health_profesional->his_number ?? "";
-                        }
-                    } else {
+				return $model->health_profesional->his_number ?? "";
+                        } else {
                         $ktp = $model->info->card_number ?? '';
                         $nakes = HealthProfesional::where('user_id', $model->id)->first();
-                        if($ktp){
+                        //return $ktp;
+			if($ktp){
                             $satusehat = satu_sehat('get','Practitioner?identifier=https://fhir.kemkes.go.id/id/nik|'.$ktp,'');
                             $his =  json_decode($satusehat)->entry[0]->resource->id ?? "";
                             $nakes->his_number = $his;
                             $nakes->save();
                         }
                         return $nakes->his_number ?? "-";
+			}
                     }
-                    return "-";
+		   return "-";
+                   // return $model->health_profesional;
                 })
                 ->editColumn('email', function (User $model) {
                     return $model->email;
