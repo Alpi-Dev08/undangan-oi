@@ -33,4 +33,8 @@ class PemeriksaanAwal extends Model
         return $this->belongsTo(Patient::class);
     }
 
+    public function examination(){
+        return $this->belongsTo(Examination::class);
+    }
+
 }

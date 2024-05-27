@@ -145,14 +145,7 @@ class SettingsController extends Controller
     {
         $user = User::find($request->user_id);
 
-        if($request->pemeriksaan_awal){
-            $pemeriksaan_awal = PemeriksaanAwal::find($request->pemeriksaan_awal);
-            $pemeriksaan_awal->user_id = $request->user_id;
-            $pemeriksaan_awal->patient_id = $user->patient->id;
-            $pemeriksaan_awal->save();
-        }
-
-        $examination_code = IdGenerator::generate(['table' => 'examinations', 'field' => 'examination_code', 'length' => 12, 'prefix' => 'E'.date('Ymd')]);
+                $examination_code = IdGenerator::generate(['table' => 'examinations', 'field' => 'examination_code', 'length' => 12, 'prefix' => 'E'.date('Ymd')]);
         $medical_record = MedicalRecord::where('user_id', $request->user_id)->first();
         if ($medical_record) {
             $medical_record_id = $medical_record->medical_record_code;
@@ -187,6 +180,14 @@ class SettingsController extends Controller
         $examination->is_consent = $request->isConsent == "ya" ? 1 : 0;
         $examination->consent_data = $consent;
         $examination->save();
+
+        if($request->pemeriksaan_awal){
+            $pemeriksaan_awal = PemeriksaanAwal::find($request->pemeriksaan_awal);
+            $pemeriksaan_awal->examination_id = $examination->id;
+            $pemeriksaan_awal->user_id = $request->user_id;
+            $pemeriksaan_awal->patient_id = $user->patient->id;
+            $pemeriksaan_awal->save();
+        }
 
         $inv = IdGenerator::generate(['table' => 'transactions', 'field' => 'invoice_number', 'length' => 14, 'prefix' => 'INV'.date('Ymd')]);
 

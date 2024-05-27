@@ -90,4 +90,8 @@ class Examination extends Model
         return $this->belongsTo(Location::class);
     }
 
+    public function pemeriksaan_awal(){
+        return $this->hasOne(PemeriksaanAwal::class);
+    }
+
 }

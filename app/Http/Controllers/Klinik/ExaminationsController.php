@@ -166,7 +166,7 @@ class ExaminationsController extends Controller
         //$vitalityexaminations = VitalityExamination::where('user_id', $examination->user_id)->orderBy('created_at', 'desc')->get();
 
         $info = $user->info;
-        $pemeriksaan_awal = PemeriksaanAwal::where('user_id', $examination->user_id)->first();
+        $pemeriksaan_awal = PemeriksaanAwal::where('examination_id',$examination->id)->orWhere('user_id', $examination->user_id)->first();
 
         return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories', 'anamnesisexamination', 'examinations', 'physicalscategories', 'physicalexamination', 'otherscategories', 'otherexamination', 'additionalsscategories', 'additionalexamination','laboratoryexamination','pemeriksaan_awal','drugs'));
     }
