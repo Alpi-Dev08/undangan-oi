@@ -32,7 +32,8 @@
             'arm_circumference',
             'chest_size',
             'adbdominal_circumference',
-            'others'
+            'others',
+            'skrining'
         ];
 
         public function examination()
