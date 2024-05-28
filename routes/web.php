@@ -78,6 +78,10 @@
         }
     });
 
+    Route::get('bukti-penyampaian-informasi/{id}', [PagesController::class, 'bukti_penyampaian_informasi'])->name('buktipenyampaianinformasi');
+    Route::post('bukti-penyampaian-informasi', [PagesController::class, 'store_bukti_penyampaian_informasi'])->name('buktipenyampaianinformasi.store');
+    Route::get('bukti-penyampaian/{id}', [PagesController::class, 'get_bukti_penyampaian_informasi'])->name('bukti_penyampaian');
+
     // Documentations pages
     Route::prefix('documentation')->group(function () {
         Route::get('getting-started/changelog', [PagesController::class, 'index']);

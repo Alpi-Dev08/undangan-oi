@@ -1,4 +1,5 @@
-<!doctype html>
+@php use Carbon\Carbon; @endphp
+    <!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -52,7 +53,7 @@
             right: 0cm;
         }
 
-        body{
+        body {
             margin-top: 3cm;
             margin-bottom: 120px;
         }
@@ -60,15 +61,23 @@
     </style>
 
     <title>Surat Keterangan {{ $user->name }}</title>
+    <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
+    <script src="{{ asset('assets/plugins/custom/jsignature/jSignature.min.js') }}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#signature").jSignature({"decor-color":"transparent","height":200,"width":500});
+        })
+    </script>
 </head>
-<body  style="font-family: 'Nunito Sans', sans-serif;">
+<body style="font-family: 'Nunito Sans', sans-serif;">
 <!--begin::Text-->
 <header>
     <table style="width:100%;border-bottom-width:5px;border-bottom-style:double">
         <tr style="vertical-align:baseline">
             <td style="width: 50%;vertical-align:top">
 
-                <img src="{{ public_path(theme()->getMediaUrlPath() . 'logos/logo-klinik.png') }}"  style="height:50px;">
+                <img src="{{ asset(theme()->getMediaUrlPath() . 'logos/logo-klinik.png') }}" style="height:50px;">
             </td>
             <td style="width: 50%; vertical-align:top">
                 <p style="margin:0px; margin-top:10px; font-size:12px;text-align: right;color:#000;">
@@ -89,7 +98,7 @@
                 <p style="margin:0px;text-transform: uppercase;font-size: 14px;">SEMOGA SEHAT DAN BAHAGIA SELALU</p>
             </td>
             <td style="width:50%;text-align: right;vertical-align: bottom;float: right;height:100px">
-                <img src="{{ public_path(theme()->getMediaUrlPath() . 'logos/qr.jpeg') }}"  style="height:85px;margin-right:5px;"><img src="{{ public_path(theme()->getMediaUrlPath() . 'logos/logo-yayasan.png') }}"  style="height:75px;">
+                <img src="{{ asset(theme()->getMediaUrlPath() . 'logos/qr.jpeg') }}" style="height:85px;margin-right:5px;"><img src="{{ asset(theme()->getMediaUrlPath() . 'logos/logo-yayasan.png') }}" style="height:75px;">
             </td>
         </tr>
     </table>
@@ -115,7 +124,7 @@
                 <li>Memberikan persetujuan atau menolak atas tindakan yang akan dilakukan oleh tenaga kesehatan terhadap penyakit yang dideritanya</li>
                 <li>Didampingi keluarga dalam keadaan kritis</li>
                 <li>Memperoleh keamanan dan keselamatan diri selama dalam perawatan di klinik</li>
-                <li>Mengajukan usul, saran, perbaikan atas perlakuan klinik </li>
+                <li>Mengajukan usul, saran, perbaikan atas perlakuan klinik</li>
             </ol>
         </li>
         <li style="font-weight: bold">Kewajiban :
@@ -133,22 +142,78 @@
     </ol>
     <p>Rumah sakit rujukan yang bekerjasama dengan Klinik Satriabudi Dharma Medika adalah Rumah Sakit Medika BSD</p>
 
-    <div style="width:300px;float:left;text-align:center">
-    &nbsp;<br>
-        Petugas Kesehatan<br><br><br><br><br><br>
-
-    <b>{{ (!in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.(!in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}</b><br>
-    <b>{{ $examination->health_profesional->sip_number ? 'SIP.'.$examination->health_profesional->sip_number : '' }}</b>
-    </div>
-    <div style="width:300px;float:right;text-align:center">
-        Kab. Tangerang, {{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }}<br>
+    <div style="width:500px;text-align:center">
+        Kab. Tangerang, {{ Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }}<br>
         Pasien/Keluarga Pasien<br><br>
-        <img src="{{ public_path($examination->bukti_penyampaian_informasi) }}" style="height:50px;"><br>
+        <div id="signature"></div>
+        <form id="signature_form" method="POST" enctype="multipart/form-data" action="{{ route('buktipenyampaianinformasi.store') }}">
+            @csrf
+            <input type="hidden" name="signature" id="sign"><input type="hidden" name="id" value="{{ $examination->id }}">
+            <div class="flex justify-center mt-3">
+                <button type="button" id="reset_signature" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-400 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300"
+                        style="display:none">Reset
+                </button>
+                <button type="button" id="save_signature" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-400 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300" style="display:none">OK</button>
+                <button type="submit">Save</button>
+            </div>
+
+        </form>
+        <hr>
         <b>{{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</b>
     </div>
 </main>
 
 <!--end::Text-->
+<script>
+    $(function () {
+        @if($examination->bukti_penyampaian_informasi)
+        //alert("Anda Sudah Melakukan Tanda Tangan Bukti Penyampaian Informasi");
+        //window.location.href = "https://kliniksatriabudi.com";
+        @endif
+
+        $(":submit").attr("disabled", true);
+
+        $("#signature").bind('change', function (e) {
+            const data = $("#signature").jSignature("getData", "default");
+            $("#sign").val(data);
+            $("#reset_signature").show();
+            $("#save_signature").show();
+            $(":submit").attr("disabled", true);
+        });
+
+        $("#save_signature").click(function () {
+            $("canvas").css("pointer-events", "none");
+            $("#save_signature").hide();
+            $(":submit").attr("disabled", false);
+        });
+
+        $("#reset_signature").click(function () {
+            $("#signature").jSignature("reset");
+            $("#save_signature").hide();
+            $("#reset_signature").hide();
+            $(":submit").attr("disabled", true);
+            $("canvas").css("pointer-events", "");
+            $("#sign").val("");
+        })
+
+        $("#signature_form").submit(function () {
+            if ($("#sign").val() === "") {
+                alert("Tanda tangan tidak boleh kosong");
+                return false;
+            } else {
+                $.ajax({
+                    url: $(this).attr("action"),
+                    type: $(this).attr("method"),
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        alert(response.message);
+                        window.location.href = "https://kliniksatriabudi.com";
+                    }
+                });
+            }
+        });
+    })
+</script>
 </body>
 </html>
 

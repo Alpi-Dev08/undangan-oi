@@ -32,6 +32,7 @@ use Doctrine\DBAL\Driver\PDO\Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use QrCode;
 use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 class ExaminationsController extends Controller
@@ -168,7 +169,9 @@ class ExaminationsController extends Controller
         $info = $user->info;
         $pemeriksaan_awal = PemeriksaanAwal::where('examination_id',$examination->id)->orWhere('user_id', $examination->user_id)->first();
 
-        return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories', 'anamnesisexamination', 'examinations', 'physicalscategories', 'physicalexamination', 'otherscategories', 'otherexamination', 'additionalsscategories', 'additionalexamination','laboratoryexamination','pemeriksaan_awal','drugs'));
+        $qr = QrCode::size(150)->style('square')->generate('https://klinik.dharma.or.id/bukti-penyampaian-infomasi/'.$examination->id);
+
+        return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories', 'anamnesisexamination', 'examinations', 'physicalscategories', 'physicalexamination', 'otherscategories', 'otherexamination', 'additionalsscategories', 'additionalexamination','laboratoryexamination','pemeriksaan_awal','drugs','qr'));
     }
 
     /**
@@ -358,9 +361,9 @@ class ExaminationsController extends Controller
         $data = $request->all();
 
         // get the default inner page
-        /*return view('pages.klinik.examinations.pdf', compact([
+        return view('pages.klinik.examinations.pdf', compact([
             'user', 'info', 'examination'
-        ]));*/
+        ]));
 
         $pdf = Pdf::loadView('pages.klinik.examinations.pdf', compact(['user', 'info', 'examination',
         ]));

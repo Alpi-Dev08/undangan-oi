@@ -1483,7 +1483,11 @@
 
                                 @csrf
                                 <div class="row">
-                                    <button type="submit" class="btn btn-bg-dark text-white">Download PDF</button>
+                                    <button id="button_bukti_penyampaian" type="submit" class="btn btn-bg-dark text-white" style="display:none">Download PDF</button>
+                                    <div id="signature_bukti_penyampaian" class="row text-center" style="display: none">
+                                        {!! $qr !!}
+                                        <em class="text-center">Scan untuk melakukan Tanda Tangan</em><br>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -1768,7 +1772,14 @@
 @push('customscript')
     <script>
         $(function () {
-            $assesment = $("#assessment").html();
+            @if($examination->bukti_penyampaian_informasi)
+                $('#button_bukti_penyampaian').show();
+                $('#signature_bukti_penyampaian').hide();
+            @else
+                $('#button_bukti_penyampaian').hide();
+                $('#signature_bukti_penyampaian').show();
+            @endif
+                $assesment = $("#assessment").html();
             $("#icdtens").change(function () {
                 $("#assessment").append($(this).find("option:selected").text() + ' | ');
             });
@@ -1780,6 +1791,22 @@
             $(document).on('click', '#remove-item', function () {
                 $(this).closest('#inputFromRow').remove();
             });
+
+            setInterval(function () {
+                $.ajax({
+                    url: '{{ route('bukti_penyampaian', $examination->id) }}',
+                    type: 'GET',
+                    success: function (data) {
+                        if (data.status == 'success') {
+                            $('#button_bukti_penyampaian').show();
+                            $('#signature_bukti_penyampaian').hide();
+                        } else {
+                            $('#button_bukti_penyampaian').hide();
+                            $('#signature_bukti_penyampaian').show();
+                        }
+                    }
+                });
+            }, 5000);
         })
     </script>
 @endpush
