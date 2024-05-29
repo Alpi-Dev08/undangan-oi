@@ -1025,7 +1025,7 @@
                 </div>
                 <!--end::Alert-->
 
-                @if($examination->vitality->skrining)
+                @if($examination->vitality->skrining!==null)
                     <!--begin::Alert-->
                     <div class="alert alert-dismissible bg-light-success d-flex flex-column flex-sm-row p-5 mb-10">
                         <!--begin::Icon-->
