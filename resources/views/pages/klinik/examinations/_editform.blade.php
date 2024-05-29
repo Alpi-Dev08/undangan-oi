@@ -1317,26 +1317,26 @@
 
                                 <table class="table" style="width:100%">
                                     <tbody>
-                                        <tr>
-                                            <td>Ruangan</td>
-                                            <td class="d-flex">:&nbsp;<input type="text" name="ruangan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Ruangan">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jenis Operasi</td>
-                                            <td class="d-flex">:&nbsp;<input type="text" name="operasi" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jenis Operasi">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Tanggal</td>
-                                            <td class="d-flex">:&nbsp;<input type="date" name="tanggal" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Tanggal">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Waktu</td>
-                                            <td class="d-flex">:&nbsp;<input type="time" name="jam" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Waktu">
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td>Ruangan</td>
+                                        <td class="d-flex">:&nbsp;<input type="text" name="ruangan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Ruangan">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Jenis Operasi</td>
+                                        <td class="d-flex">:&nbsp;<input type="text" name="operasi" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jenis Operasi">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tanggal</td>
+                                        <td class="d-flex">:&nbsp;<input type="date" name="tanggal" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Tanggal">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Waktu</td>
+                                        <td class="d-flex">:&nbsp;<input type="time" name="jam" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Waktu">
+                                        </td>
+                                    </tr>
 
                                     </tbody>
                                 </table>
@@ -1802,12 +1802,103 @@
                         <div class="row">
                             <input type="hidden" name="examination_id" value="{{ $examination->id }}">
                             <input type="hidden" name="user_id" value="{{ $user->id }}">
-
                             @if(isset($examination->psikososial))
                                 @php $psikososial = json_decode($examination->psikososial); @endphp
                             @endif
                             <!--begin::Input group-->
                             <div class="col-12 mb-6">
+                                <h4>Kebutuhan Khusus</h4>
+                                <div class="d-flex flex-row">
+                                    <div class="d-flex flex-row flex-row-fluid">
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            @if(isset($examination->psikososial) && $psikososial->khusus == "Alat bantu Dengar")
+                                                <input value="Alat bantu Dengar" checked class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_satu"/>
+                                            @else
+                                                <input value="Alat bantu Dengar" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_satu"/>
+                                            @endif
+                                            <label class="form-check-label" for="khusus_satu">
+                                                Alat bantu Dengar
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            @if(isset($examination->psikososial) && $psikososial->khusus == "Kacamata")
+                                                <input value="Kacamata" checked class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_dua"/>
+                                            @else
+                                                <input value="Kacamata" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_dua"/>
+                                            @endif
+                                            <label class="form-check-label" for="khusus_dua">
+                                                Kacamata
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            @if(isset($examination->psikososial) && $psikososial->khusus == "Tongkat")
+                                                <input value="Tongkat" checked class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_tiga"/>
+                                            @else
+                                                <input value="Tongkat" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_tiga"/>
+                                            @endif
+                                            <label class="form-check-label" for="khusus_tiga">
+                                                Tongkat
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            @if(isset($examination->psikososial) && $psikososial->khusus == "Kursi Roda")
+                                                <input value="Kursi Roda" checked class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_empat"/>
+                                            @else
+                                                <input value="Kursi Roda" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_empat"/>
+                                            @endif
+                                            <label class="form-check-label" for="khusus_empat">
+                                                Kursi Roda
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            @if(isset($examination->psikososial) && $psikososial->khusus == "Disabilitas")
+                                                <input value="Disabilitas" checked class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_lima"/>
+                                            @else
+                                                <input value="Disabilitas" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_lima"/>
+                                            @endif
+                                            <label class="form-check-label" for="khusus_lima">
+                                                Disabilitas
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-row">
+                                    <div class="d-flex flex-row flex-row-fluid">
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            @if(isset($examination->psikososial) && $psikososial->khusus == "Tidak Bisa Bicara")
+                                                <input value="Tidak Bisa Bicara" checked class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_enam"/>
+                                            @else
+                                                <input value="Tidak Ada" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_enam"/>
+                                            @endif
+                                            <label class="form-check-label" for="khusus_enam">
+                                                Tidak Ada
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            @if(isset($examination->psikososial) && $psikososial->khusus == "Lainnya")
+                                                <input value="Lainnya" checked class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_tujuh"/>
+                                            @else
+                                                <input value="Lainnya" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_tujuh"/>
+                                            @endif
+                                            <label class="form-check-label me-5" for="khusus_tujuh">
+                                                Lainnya
+                                            </label>
+                                            @if(isset($examination->psikososial) && $psikososial->khusus == "Lainnya")
+                                                <input class="form-control me-5" name="lainnya" value="{{ $psikososial->lainnya }}"/>
+                                            @else
+                                                <input class="form-control me-5" name="lainnya"/>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!--end::Input group-->
+
+                            <!--begin::Input group-->
+                            <div class="col-12 mb-6">
+                                <h4>Data Psikologi Dan Sosial</h4>
                                 <div class="d-flex flex-row">
                                     <div class="d-flex flex-column flex-row-auto w-200px">
                                         <label for="pulse" class="form-label">Bicara</label>
@@ -1892,7 +1983,7 @@
                                             @if(isset($examination->psikososial) && $psikososial->emosional == "Marah")
                                                 <input value="Marah" checked class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_dua"/>
                                             @else
-                                            <input value="Marah" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_dua"/>
+                                                <input value="Marah" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_dua"/>
                                             @endif
                                             <label class="form-check-label" for="emosional_dua">
                                                 Marah
@@ -1902,7 +1993,7 @@
                                             @if(isset($examination->psikososial) && $psikososial->emosional == "Cemas")
                                                 <input value="Cemas" checked class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_tiga"/>
                                             @else
-                                            <input value="Cemas" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_tiga"/>
+                                                <input value="Cemas" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_tiga"/>
                                             @endif
                                             <label class="form-check-label" for="emosional_tiga">
                                                 Cemas
@@ -1912,7 +2003,7 @@
                                             @if(isset($examination->psikososial) && $psikososial->emosional == "Takut")
                                                 <input value="Takut" checked class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_empat"/>
                                             @else
-                                            <input value="Takut" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_empat"/>
+                                                <input value="Takut" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_empat"/>
                                             @endif
                                             <label class="form-check-label" for="emosional_empat">
                                                 Takut
@@ -1922,7 +2013,7 @@
                                             @if(isset($examination->psikososial) && $psikososial->emosional == "Sedih")
                                                 <input value="Sedih" checked class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_lima"/>
                                             @else
-                                            <input value="Sedih" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_lima"/>
+                                                <input value="Sedih" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_lima"/>
                                             @endif
                                             <label class="form-check-label" for="emosional_lima">
                                                 Sedih
@@ -1944,7 +2035,7 @@
                                             @if(isset($examination->psikososial) && $psikososial->nyeri == "Tidak ada")
                                                 <input value="Tidak ada" checked class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_satu"/>
                                             @else
-                                            <input value="Tidak ada" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_satu"/>
+                                                <input value="Tidak ada" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_satu"/>
                                             @endif
                                             <label class="form-check-label" for="kriteria_dua">
                                                 Tidak ada
@@ -1954,7 +2045,7 @@
                                             @if(isset($examination->psikososial) && $psikososial->nyeri == "Ada (Tingkat Sedang)")
                                                 <input value="Ada (Tingkat Sedang)" checked class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_dua"/>
                                             @else
-                                            <input value="Ada (Tingkat Sedang)" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_dua"/>
+                                                <input value="Ada (Tingkat Sedang)" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_dua"/>
                                             @endif
                                             <label class="form-check-label" for="kriteria_dua">
                                                 Ada (Tingkat Sedang)
@@ -1964,7 +2055,7 @@
                                             @if(isset($examination->psikososial) && $psikososial->nyeri == "Nyeri dada kiri tembus punggung")
                                                 <input value="Nyeri dada kiri tembus punggung" checked class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_tiga"/>
                                             @else
-                                            <input value="Nyeri dada kiri tembus punggung" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_tiga"/>
+                                                <input value="Nyeri dada kiri tembus punggung" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_tiga"/>
                                             @endif
                                             <label class="form-check-label" for="kriteria_dua">
                                                 Nyeri dada kiri tembus punggung
@@ -1986,7 +2077,7 @@
                                             @if(isset($examination->psikososial) && $psikososial->sosiologi == "Komunikatif")
                                                 <input value="Komunikatif" checked class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_satu"/>
                                             @else
-                                            <input value="Komunikatif" class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_satu"/>
+                                                <input value="Komunikatif" class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_satu"/>
                                             @endif
                                             <label class="form-check-label" for="sosiologi_satu">
                                                 Komunikatif
@@ -1996,7 +2087,7 @@
                                             @if(isset($examination->psikososial) && $psikososial->sosiologi == "Komunikatif Tidak Efek")
                                                 <input value="Komunikatif Tidak Efek" checked class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_dua"/>
                                             @else
-                                            <input value="Komunikatif Tidak Efek" class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_dua"/>
+                                                <input value="Komunikatif Tidak Efek" class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_dua"/>
                                             @endif
                                             <label class="form-check-label" for="sosiologi_dua">
                                                 Komunikatif Tidak Efek
@@ -2006,7 +2097,7 @@
                                             @if(isset($examination->psikososial) && $psikososial->sosiologi == "Menarik Diri")
                                                 <input value="Menarik Diri" checked class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_tiga"/>
                                             @else
-                                            <input value="Menarik Diri" class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_tiga"/>
+                                                <input value="Menarik Diri" class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_tiga"/>
                                             @endif
                                             <label class="form-check-label" for="sosiologi_tiga">
                                                 Menarik Diri
@@ -2079,13 +2170,14 @@
             left: 201px !important;
         }
 
-        #penandaanoperasi{
+        #penandaanoperasi {
             position: relative;
         }
 
         #penandaan_operasi {
             position: relative; /* Needed for absolute positioning of the point */
         }
+
         #point {
             position: absolute;
             width: 15px;
@@ -2119,9 +2211,9 @@
                 $(this).closest('#inputFromRow').remove();
             });
 
-           /* setInterval(function () {
-                $.ajax({
-                    url: '{{ route('bukti_penyampaian', $examination->id) }}',
+            /* setInterval(function () {
+                 $.ajax({
+                     url: '{{ route('bukti_penyampaian', $examination->id) }}',
                     type: 'GET',
                     success: function (data) {
                         if (data.status == 'success') {
@@ -2135,7 +2227,7 @@
                 });
             }, 5000);*/
 
-            $("#penandaan_operasi").click(function(e) {
+            $("#penandaan_operasi").click(function (e) {
                 e.preventDefault();
                 var containerOffset = $(".container").offset();
                 var imageOffset = $("#image").offset();
