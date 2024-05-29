@@ -464,4 +464,21 @@ class ExaminationsController extends Controller
 
         return $pdf->download('surat_keterangan_persetujuan_'.$user->name.'.pdf');
     }
+
+    public function psikososial(Request $request)
+    {
+        $data = $request->all();
+        $examination = Examination::where('id', $request->examination_id);
+
+        unset($data['_token']);
+        unset($data['examination_id']);
+        unset($data['_method']);
+        unset($data['user_id']);
+
+        if($examination){
+            $examination->update(['psikososial'=>json_encode($data)]);
+        }
+
+        return redirect()->route('examinations.edit', ['examination'=>$request->examination_id])->with('success', 'Vitality Examination has been updated !!');
+    }
 }

@@ -89,7 +89,7 @@
                         'status'               => $location->status == '1' ? "active" : "inactive",
                         'address'              => [
                             'city'       => $location->city->name,
-                            'country'    => $location->country->code,
+                            'country'    => $location->country->name,
                             'extension'  => [[
                                                  'extension' => [
                                                      [
@@ -156,15 +156,14 @@
                             ]
                         ],
                     ];
-
+                    //echo json_encode($jsonSatuSehat);exit;
                     $location->json_satu_sehat = json_encode($jsonSatuSehat);
                     $location->save();
 
-                    $satusehat = satu_sehat('create', 'Location', '', $jsonSatuSehat);
+                    $satusehat = satu_sehat('create', 'Location', $jsonSatuSehat);
                     $data      = json_decode($satusehat);
 
                     $location->response_satu_sehat = $satusehat;
-                    $location->location_id         = $data->id;
                     $location->save();
 
                 } catch (Exception $e) {
@@ -223,14 +222,14 @@
          *
          * @return \Illuminate\Http\Response
          */
-        public function update(UpdateLocationRequest $request, Location $location)
+        public function update(Request $request, Location $location)
         {
             if (is_null($this->user) || !$this->user->can('klinik.update')) {
                 abort(403, 'Sorry !! You are Unauthorized to edit any master date !');
             }
 
             // Validation Data
-            $validated = $request->validated();
+            $validated = $request->all();
 
             // Process Data
             if ($validated) {
@@ -311,10 +310,12 @@
                         ],
                     ];
 
+                    //echo json_encode($jsonSatuSehat);exit;
+
                     $location->json_satu_sehat = json_encode($jsonSatuSehat);
                     $location->update();
 
-                    $satusehat = satu_sehat('update', 'Location', $location->location_id, $jsonSatuSehat);
+                    $satusehat = satu_sehat('update', 'Location', $jsonSatuSehat,$location->location_id);
 
 
                     $location->response_satu_sehat = $satusehat;

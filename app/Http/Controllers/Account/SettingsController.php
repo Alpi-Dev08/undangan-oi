@@ -158,6 +158,8 @@ class SettingsController extends Controller
             $medical_record->save();
         }
 
+
+
         $data = [
             'patient_id' => $user->patient->his_number,
             'action' => $request->isConsent=="ya" ? "OPTIN" : "OPTOUT",
@@ -179,6 +181,83 @@ class SettingsController extends Controller
         $examination->status = 'waiting payment';
         $examination->is_consent = $request->isConsent == "ya" ? 1 : 0;
         $examination->consent_data = $consent;
+
+
+        $healthprofesional = HealthProfesional::find($request->health_profesional_id);
+
+        if($healthprofesional->his_number){
+            $reference = "Practitioner/".$healthprofesional->his_number;
+            $reference_name = $healthprofesional->user->name;
+        } else {
+            $reference = "Practitioner/1000652469";
+            $healthprofesional = HealthProfesional::where('his_number', '1000652469')->first();
+            $reference_name = $healthprofesional->user->name;
+        }
+
+        $jayParsedAry = [
+            "resourceType" => "Encounter",
+            "identifier" => [
+                [
+                    "system" => "http://sys-ids.kemkes.go.id/encounter/10085107",
+                    "use" => "official",
+                    "value" => $examination_code
+                ]
+            ],
+            "status" => "arrived",
+            "class" => [
+                "system" => "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                "code" => "AMB",
+                "display" => "ambulatory"
+            ],
+            "subject" => [
+                "reference" => "Patient/". $user->patient->his_number,
+                "display" =>  $user->name
+            ],
+            "participant" => [
+                [
+                    "type" => [
+                        [
+                            "coding" => [
+                                [
+                                    "system" => "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+                                    "code" => "ATND",
+                                    "display" => "attender"
+                                ]
+                            ]
+                        ]
+                    ],
+                    "individual" => [
+                        "reference" => $reference,
+                        "display" => $reference_name
+                    ]
+                ]
+            ],
+            "period" => [
+                "start" => date('Y-m-d\TH:i:sP'),
+            ],
+            "location" => [
+                [
+                    "location" => [
+                        "reference" => "Location/a2aa15d0-c67d-4ae7-bb40-457a8af06d0c",
+                        "display" => "Poli Umim"
+                    ]
+                ]
+            ],
+            "statusHistory" => [
+                [
+                    "status" => "arrived",
+                    "period" => [
+                        "start" => date('Y-m-d\TH:i:sP'),
+                        "end" => date('Y-m-d\TH:i:sP'),
+                    ]
+                ]
+            ],
+            "serviceProvider" => [
+                "reference" => "Organization/b5ba02bc-97f6-4f42-872c-02808dfb787c"
+            ]
+        ];
+        $encounter = satu_sehat('create','Encounter',$jayParsedAry);
+
         $examination->save();
 
         if($request->pemeriksaan_awal){
@@ -206,6 +285,9 @@ class SettingsController extends Controller
                 'examination', 'package', 'packageDetails', 'service_categories',
             ]));
         }
+
+
+
 
         return redirect()->route('examinations.services', ['id' => $examination->id]);
     }

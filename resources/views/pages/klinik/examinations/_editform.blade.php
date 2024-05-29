@@ -48,6 +48,19 @@
 
             <!--begin::Nav item-->
             <li class="nav-item p-0 ms-0">
+                <a class="nav-link btn btn-color-gray-400 flex-center px-3 active" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#psikososial">
+                    <!--begin::Title-->
+                    <span class="nav-text fw-semibold fs-4 mb-3">Psikososial</span>
+                    <!--end::Title-->
+                    <!--begin::Bullet-->
+                    <span class="bullet-custom position-absolute z-index-2 w-100 h-1px top-100 bottom-n100 bg-primary rounded"></span>
+                    <!--end::Bullet-->
+                </a>
+            </li>
+            <!--end::Nav item-->
+
+            <!--begin::Nav item-->
+            <li class="nav-item p-0 ms-0">
                 <a class="nav-link btn btn-color-gray-400 flex-center px-3 active" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#examination">
                     <!--begin::Title-->
                     <span class="nav-text fw-semibold fs-4 mb-3">Examination</span>
@@ -1731,6 +1744,195 @@
                     </div>
                 </div>
             </div>
+
+            <div class="tab-pane" id="psikososial" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
+                <div class="d-flex flex-column flex-md-row rounded border p-10">
+                    <form method="POST" class="form" action="{{ route('examination.psikososial') }}">
+                        @method('POST')
+                        @endif
+                        {{ csrf_field() }}
+                        <!--begin::Scroll-->
+                        <div class="row">
+                            <input type="hidden" name="examination_id" value="{{ $examination->id }}">
+                            <input type="hidden" name="user_id" value="{{ $user->id }}">
+
+                            <!--begin::Input group-->
+                            <div class="col-12 mb-6">
+                                <div class="d-flex flex-row">
+                                    <div class="d-flex flex-column flex-row-auto w-200px">
+                                        <label for="pulse" class="form-label">Bicara</label>
+                                    </div>
+                                    <div class="d-flex flex-row flex-row-fluid">
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            <input value="Jelas" class="form-check-input h-20px w-30px me-5" type="radio" name="bicara" id="bicara_satu"/>
+                                            <label class="form-check-label" for="bicara_satu">
+                                                Jelas
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            <input value="TIdak Dimen" class="form-check-input h-20px w-30px me-5" type="radio" name="bicara" id="bicara_dua"/>
+                                            <label class="form-check-label" for="bicara_dua">
+                                                TIdak Dimen
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!--end::Input group-->
+
+                            <!--begin::Input group-->
+                            <div class="col-12 mb-6">
+                                <div class="d-flex flex-row">
+                                    <div class="d-flex flex-column flex-row-auto w-200px">
+                                        <label for="pulse" class="form-label">Komunikasi</label>
+                                    </div>
+                                    <div class="d-flex flex-row flex-row-fluid">
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            <input value="Verbal" class="form-check-input h-20px w-30px me-5" type="radio" name="komunikasi" id="komunikasi_satu"/>
+                                            <label class="form-check-label" for="komunikasi_satu">
+                                                Verbal
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            <input value="Non Verbal" class="form-check-input h-20px w-30px me-5" type="radio" name="komunikasi" id="komunikasi_dua"/>
+                                            <label class="form-check-label" for="komunikasi_dua">
+                                                Non Verbal
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+
+                            <!--begin::Input group-->
+                            <div class="col-12 mb-6">
+                                <div class="d-flex flex-row">
+                                    <div class="d-flex flex-column flex-row-auto w-200px">
+                                        <label for="pulse" class="form-label">Status Emosional</label>
+                                    </div>
+                                    <div class="d-flex flex-row flex-row-fluid">
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            <input value="Stabil/Tenang" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_satu"/>
+                                            <label class="form-check-label" for="emosional_satu">
+                                                Stabil/Tenang
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            <input value="Marah" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_dua"/>
+                                            <label class="form-check-label" for="emosional_dua">
+                                                Marah
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            <input value="Cemas" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_tiga"/>
+                                            <label class="form-check-label" for="emosional_tiga">
+                                                Cemas
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            <input value="Takut" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_empat"/>
+                                            <label class="form-check-label" for="emosional_empat">
+                                                Takut
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            <input value="Sedih" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_lima"/>
+                                            <label class="form-check-label" for="emosional_lima">
+                                                Sedih
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+
+                            <!--begin::Input group-->
+                            <div class="col-12 mb-6">
+                                <div class="d-flex flex-row">
+                                    <div class="d-flex flex-column flex-row-auto w-200px">
+                                        <label for="pulse" class="form-label">Nyeri Dada</label>
+                                    </div>
+                                    <div class="d-flex flex-row flex-row-fluid">
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            <input value="Tidak ada" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_satu"/>
+                                            <label class="form-check-label" for="kriteria_dua">
+                                                Tidak ada
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            <input value="Ada (Tingkat Sedang)" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_dua"/>
+                                            <label class="form-check-label" for="kriteria_dua">
+                                                Ada (Tingkat Sedang)
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            <input value="Nyeri dada kiri tembus punggung" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_tiga"/>
+                                            <label class="form-check-label" for="kriteria_dua">
+                                                Nyeri dada kiri tembus punggung
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+
+                            <!--begin::Input group-->
+                            <div class="col-12 mb-6">
+                                <div class="d-flex flex-row">
+                                    <div class="d-flex flex-column flex-row-auto w-200px">
+                                        <label for="pulse" class="form-label">Sosiologi</label>
+                                    </div>
+                                    <div class="d-flex flex-row flex-row-fluid">
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            <input value="Komunikatif" class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_satu"/>
+                                            <label class="form-check-label" for="sosiologi_satu">
+                                                Komunikatif
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            <input value="Komunikatif Tidak Efek" class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_dua"/>
+                                            <label class="form-check-label" for="sosiologi_dua">
+                                                Komunikatif Tidak Efek
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            <input value="Menarik Diri" class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_tiga"/>
+                                            <label class="form-check-label" for="sosiologi_tiga">
+                                                Menarik Diri
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+
+                        </div>
+                        <!--end::Scroll-->
+                        <!--begin::Actions-->
+                        <div class="text-center pt-15">
+                            <a href="{{ route('examinations.index')  }}" class="btn btn-sm btn-light-primary">
+                                <!--begin::Svg Icon | path: assets/media/icons/duotune/arrows/arr079.svg-->
+                                <span class="svg-icon svg-icon-muted svg-icon-2hx">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path opacity="0.5" d="M14.2657 11.4343L18.45 7.25C18.8642 6.83579 18.8642 6.16421 18.45 5.75C18.0358 5.33579 17.3642 5.33579 16.95 5.75L11.4071 11.2929C11.0166 11.6834 11.0166 12.3166 11.4071 12.7071L16.95 18.25C17.3642 18.6642 18.0358 18.6642 18.45 18.25C18.8642 17.8358 18.8642 17.1642 18.45 16.75L14.2657 12.5657C13.9533 12.2533 13.9533 11.7467 14.2657 11.4343Z" fill="currentColor"/>
+                            <path d="M8.2657 11.4343L12.45 7.25C12.8642 6.83579 12.8642 6.16421 12.45 5.75C12.0358 5.33579 11.3642 5.33579 10.95 5.75L5.40712 11.2929C5.01659 11.6834 5.01659 12.3166 5.40712 12.7071L10.95 18.25C11.3642 18.6642 12.0358 18.6642 12.45 18.25C12.8642 17.8358 12.8642 17.1642 12.45 16.75L8.2657 12.5657C7.95328 12.2533 7.95328 11.7467 8.2657 11.4343Z" fill="currentColor"/>
+                        </svg>
+                    </span>
+                                <!--end::Svg Icon-->
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary" data-kt-examinations-modal-action="submit">
+                                <span class="indicator-label">Submit</span>
+                                <span class="indicator-progress">Please wait...
+                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+            </span>
+                            </button>
+                        </div>
+                        <!--end::Actions-->
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -1773,11 +1975,11 @@
     <script>
         $(function () {
             @if($examination->bukti_penyampaian_informasi)
-                $('#button_bukti_penyampaian').show();
-                $('#signature_bukti_penyampaian').hide();
+            $('#button_bukti_penyampaian').show();
+            $('#signature_bukti_penyampaian').hide();
             @else
-                $('#button_bukti_penyampaian').hide();
-                $('#signature_bukti_penyampaian').show();
+            $('#button_bukti_penyampaian').hide();
+            $('#signature_bukti_penyampaian').show();
             @endif
                 $assesment = $("#assessment").html();
             $("#icdtens").change(function () {
