@@ -1025,8 +1025,8 @@
                 </div>
                 <!--end::Alert-->
 
-                @if($examination->vitality->skrining!==null)
-                    <!--begin::Alert-->
+                @if(isset($examination->vitality->skrining))
+                    <!--begin::Alert-->s
                     <div class="alert alert-dismissible bg-light-success d-flex flex-column flex-sm-row p-5 mb-10">
                         <!--begin::Icon-->
                         <i class="ki-duotone ki-notification-bing fs-2hx text-primary me-4 mb-5 mb-sm-0"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
