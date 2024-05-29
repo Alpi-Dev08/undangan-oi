@@ -481,4 +481,24 @@ class ExaminationsController extends Controller
 
         return redirect()->route('examinations.edit', ['examination'=>$request->examination_id])->with('success', 'Vitality Examination has been updated !!');
     }
+
+    public function penandaan_operasi(Request $request)
+    {
+        $examination = Examination::find($request->id);
+        $user = User::find($examination->user_id);
+        $info = $user->info;
+
+        // get the default inner page
+        $data = json_decode(json_encode($request->all()));
+        //echo json_encode($data);exit;
+        /*return view('pages.klinik.examinations.operasi', compact([
+            'user', 'info', 'examination', 'data'
+        ]));*/
+
+
+        $pdf = Pdf::loadView('pages.klinik.examinations.operasi', compact(['user', 'info', 'examination', 'data',
+        ]));
+
+        return $pdf->download('penandaan_lokasi_operasi'.$user->name.'.pdf');
+    }
 }

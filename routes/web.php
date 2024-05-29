@@ -175,6 +175,7 @@
                  ->name('suket.hakkewajiban');
             Route::post('suket-persetujuan/{id}', [ExaminationsController::class, 'persetujuan'])
                  ->name('suket.persetujuan');
+            Route::post('suket-operasi/{id}', [ExaminationsController::class, 'penandaan_operasi'])->name('suket.operasi');
 
             Route::resource('servicecategories', ServiceCategoriesController::class);
             Route::resource('services', ServicesController::class);
