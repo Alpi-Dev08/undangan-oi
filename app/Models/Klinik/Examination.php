@@ -39,7 +39,8 @@
             'is_consent',
             'consent_data',
             'bukti_penyampaian_informasi',
-            'bukti_persetujuan_tindakan_medis'
+            'bukti_persetujuan_tindakan_medis',
+            'psikososial'
         ];
 
         public function user()

@@ -719,256 +719,254 @@
                                 </div>
 
                                 <div class="tab-pane active" id="skrining" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
-                                    @if(isset($vitalityexamination->id))
-                                        <form method="POST" class="form" action="{{ route('vitalityexaminations.skrining') }}">
-                                            @method('POST')
-                                            @endif
-                                            {{ csrf_field() }}
-                                            <!--begin::Scroll-->
-                                            <div class="row">
-                                                <input type="hidden" name="examination_id" value="{{ $examination->id }}">
-                                                <input type="hidden" name="user_id" value="{{ $user->id }}">
+                                    <form method="POST" class="form" action="{{ route('vitalityexaminations.skrining') }}">
+                                        @method('POST')
+                                        {{ csrf_field() }}
+                                        <!--begin::Scroll-->
+                                        <div class="row">
+                                            <input type="hidden" name="examination_id" value="{{ $examination->id }}">
+                                            <input type="hidden" name="user_id" value="{{ $user->id }}">
 
-                                                <!--begin::Input group-->
-                                                <div class="col-12 mb-6">
-                                                    <div class="d-flex flex-row">
-                                                        <div class="d-flex flex-column flex-row-auto w-200px">
-                                                            <label for="pulse" class="form-label">Kesadaran</label>
-                                                        </div>
-                                                        <div class="d-flex flex-row flex-row-fluid">
-                                                            <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                                                <input value="Sadar Penuh" class="form-check-input h-20px w-30px me-5" type="radio" name="kesadaran" id="kesadaran_satu"/>
-                                                                <label class="form-check-label" for="kriteria_dua">
-                                                                    Sadar Penuh
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                                                <input value="Tampak mengantuk / gelisah bicara tidak jelas" class="form-check-input h-20px w-30px me-5" type="radio" name="kesadaran" id="kesadaran_dua"/>
-                                                                <label class="form-check-label" for="kriteria_dua">
-                                                                    Tampak mengantuk / gelisah bicara tidak jelas
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                                                <input value="Tidak Sadar" class="form-check-input h-20px w-30px me-5" type="radio" name="kesadaran" id="kesadaran_tiga"/>
-                                                                <label class="form-check-label" for="kriteria_dua">
-                                                                    Tidak Sadar
-                                                                </label>
-                                                            </div>
-                                                        </div>
+                                            <!--begin::Input group-->
+                                            <div class="col-12 mb-6">
+                                                <div class="d-flex flex-row">
+                                                    <div class="d-flex flex-column flex-row-auto w-200px">
+                                                        <label for="pulse" class="form-label">Kesadaran</label>
                                                     </div>
-
-                                                </div>
-                                                <!--end::Input group-->
-
-                                                <!--begin::Input group-->
-                                                <div class="col-12 mb-6">
-                                                    <div class="d-flex flex-row">
-                                                        <div class="d-flex flex-column flex-row-auto w-200px">
-                                                            <label for="pulse" class="form-label">Pernafasan</label>
+                                                    <div class="d-flex flex-row flex-row-fluid">
+                                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                                            <input value="Sadar Penuh" class="form-check-input h-20px w-30px me-5" type="radio" name="kesadaran" id="kesadaran_satu"/>
+                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                Sadar Penuh
+                                                            </label>
                                                         </div>
-                                                        <div class="d-flex flex-row flex-row-fluid">
-                                                            <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                                                <input value="Nafas normal" class="form-check-input h-20px w-30px me-5" type="radio" name="pernafasan" id="pernafasan_satu"/>
-                                                                <label class="form-check-label" for="kriteria_dua">
-                                                                    Nafas normal
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                                                <input value="Tampak sesak" class="form-check-input h-20px w-30px me-5" type="radio" name="pernafasan" id="pernafasan_dua"/>
-                                                                <label class="form-check-label" for="kriteria_dua">
-                                                                    Tampak sesak
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                                                <input value="Tidak bernapas" class="form-check-input h-20px w-30px me-5" type="radio" name="pernafasan" id="pernafasan_tiga"/>
-                                                                <label class="form-check-label" for="kriteria_dua">
-                                                                    Tidak bernapas
-                                                                </label>
-                                                            </div>
+                                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                                            <input value="Tampak mengantuk / gelisah bicara tidak jelas" class="form-check-input h-20px w-30px me-5" type="radio" name="kesadaran" id="kesadaran_dua"/>
+                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                Tampak mengantuk / gelisah bicara tidak jelas
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                                            <input value="Tidak Sadar" class="form-check-input h-20px w-30px me-5" type="radio" name="kesadaran" id="kesadaran_tiga"/>
+                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                Tidak Sadar
+                                                            </label>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!--end::Input group-->
-
-                                                <!--begin::Input group-->
-                                                <div class="col-12 mb-6">
-                                                    <div class="d-flex flex-row">
-                                                        <div class="d-flex flex-column flex-row-auto w-200px">
-                                                            <label for="pulse" class="form-label">Resiko Jatuh</label>
-                                                        </div>
-                                                        <div class="d-flex flex-row flex-row-fluid">
-                                                            <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                                                <input value="Resiko rendah" class="form-check-input h-20px w-30px me-5" type="radio" name="jatuh" id="jatuh_satu"/>
-                                                                <label class="form-check-label" for="kriteria_dua">
-                                                                    Resiko rendah
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                                                <input value="Resiko sedang" class="form-check-input h-20px w-30px me-5" type="radio" name="jatuh" id="jatuh_dua"/>
-                                                                <label class="form-check-label" for="kriteria_dua">
-                                                                    Resiko sedang
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                                                <input value="Resiko Tinggi" class="form-check-input h-20px w-30px me-5" type="radio" name="jatuh" id="jatuh_tiga"/>
-                                                                <label class="form-check-label" for="kriteria_dua">
-                                                                    Resiko Tinggi
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!--end::Input group-->
-
-                                                <!--begin::Input group-->
-                                                <div class="col-12 mb-6">
-                                                    <div class="d-flex flex-row">
-                                                        <div class="d-flex flex-column flex-row-auto w-200px">
-                                                            <label for="pulse" class="form-label">Nyeri Dada</label>
-                                                        </div>
-                                                        <div class="d-flex flex-row flex-row-fluid">
-                                                            <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                                                <input value="Tidak ada" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_satu"/>
-                                                                <label class="form-check-label" for="kriteria_dua">
-                                                                    Tidak ada
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                                                <input value="Ada (Tingkat Sedang)" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_dua"/>
-                                                                <label class="form-check-label" for="kriteria_dua">
-                                                                    Ada (Tingkat Sedang)
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                                                <input value="Nyeri dada kiri tembus punggung" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_tiga"/>
-                                                                <label class="form-check-label" for="kriteria_dua">
-                                                                    Nyeri dada kiri tembus punggung
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!--end::Input group-->
-
-                                                <!--begin::Input group-->
-                                                <div class="col-12 mb-6">
-                                                    <div class="d-flex flex-row">
-                                                        <div class="d-flex flex-column flex-row-auto w-200px">
-                                                            <label for="pulse" class="form-label">Skala Nyeri</label>
-                                                        </div>
-                                                        <div class="d-flex flex-column">
-                                                            <div class="d-flex flex-column flex-row-auto mb-5">
-                                                                <img class="w-500px" src="http://127.0.0.1:8000/assets/media/misc/painscale.png" alt="">
-                                                            </div>
-                                                            <div class="d-flex flex-row flex-row-auto mb-5">
-                                                                <label class="d-flex w-200px form-label">Lokasi : </label>
-                                                                <input type="text" name="lokasi_nyeri" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0">
-                                                            </div>
-                                                            <div class="d-flex flex-row flex-row-fluid mb-5">
-                                                                <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                                                    <input value="1-3" class="form-check-input h-20px w-30px me-5" type="radio" name="skala" id="skala_satu"/>
-                                                                    <label class="form-check-label" for="kriteria_dua">
-                                                                        1-3
-                                                                    </label>
-                                                                </div>
-                                                                <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                                                    <input value="4-6" class="form-check-input h-20px w-30px me-5" type="radio" name="skala" id="skala_dua"/>
-                                                                    <label class="form-check-label" for="kriteria_dua">
-                                                                        4-6
-                                                                    </label>
-                                                                </div>
-                                                                <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                                                    <input value="6-10" class="form-check-input h-20px w-30px me-5" type="radio" name="skala" id="skala_tiga"/>
-                                                                    <label class="form-check-label" for="kriteria_dua">
-                                                                        6-10
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <!--end::Input group-->
-
-                                                <!--begin::Input group-->
-                                                <div class="col-12 mb-6">
-                                                    <div class="d-flex flex-row">
-                                                        <div class="d-flex flex-column flex-row-auto w-200px">
-                                                            <label for="pulse" class="form-label">Batuk</label>
-                                                        </div>
-                                                        <div class="d-flex flex-row flex-row-fluid">
-                                                            <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                                                <input value="Tidak ada" class="form-check-input h-20px w-30px me-5" type="radio" name="batuk" id="batuk_satu"/>
-                                                                <label class="form-check-label" for="kriteria_dua">
-                                                                    Tidak ada
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                                                <input value="Batuk > 2 Minggu" class="form-check-input h-20px w-30px me-5" type="radio" name="batuk" id="batuk_dua"/>
-                                                                <label class="form-check-label" for="kriteria_dua">
-                                                                    Batuk > 2 Minggu
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!--end::Input group-->
-
-                                                <!--begin::Input group-->
-                                                <div class="col-12 mb-6">
-                                                    <div class="d-flex flex-row">
-                                                        <div class="d-flex flex-column flex-row-auto w-200px">
-                                                            <label for="pulse" class="form-label">Keputusan</label>
-                                                        </div>
-                                                        <div class="d-flex flex-row flex-row-fluid">
-                                                            <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                                                <input value="Diterima" class="form-check-input h-20px w-30px me-5" type="radio" name="keputusan" id="keputusan_satu"/>
-                                                                <label class="form-check-label" for="kriteria_dua">
-                                                                    Diterima
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                                                <input value="Di Dahulukan" class="form-check-input h-20px w-30px me-5" type="radio" name="keputusan" id="keputusan_dua"/>
-                                                                <label class="form-check-label" for="kriteria_dua">
-                                                                    Di Dahulukan
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                                                <input value="Dirujuk" class="form-check-input h-20px w-30px me-5" type="radio" name="keputusan" id="keputusan_tiga"/>
-                                                                <label class="form-check-label" for="kriteria_dua">
-                                                                    Dirujuk
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!--end::Input group-->
-
 
                                             </div>
-                                            <!--end::Scroll-->
-                                            <!--begin::Actions-->
-                                            <div class="text-center pt-15">
-                                                <a href="{{ route('examinations.index')  }}" class="btn btn-sm btn-light-primary">
-                                                    <!--begin::Svg Icon | path: assets/media/icons/duotune/arrows/arr079.svg-->
-                                                    <span class="svg-icon svg-icon-muted svg-icon-2hx">
+                                            <!--end::Input group-->
+
+                                            <!--begin::Input group-->
+                                            <div class="col-12 mb-6">
+                                                <div class="d-flex flex-row">
+                                                    <div class="d-flex flex-column flex-row-auto w-200px">
+                                                        <label for="pulse" class="form-label">Pernafasan</label>
+                                                    </div>
+                                                    <div class="d-flex flex-row flex-row-fluid">
+                                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                                            <input value="Nafas normal" class="form-check-input h-20px w-30px me-5" type="radio" name="pernafasan" id="pernafasan_satu"/>
+                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                Nafas normal
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                                            <input value="Tampak sesak" class="form-check-input h-20px w-30px me-5" type="radio" name="pernafasan" id="pernafasan_dua"/>
+                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                Tampak sesak
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                                            <input value="Tidak bernapas" class="form-check-input h-20px w-30px me-5" type="radio" name="pernafasan" id="pernafasan_tiga"/>
+                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                Tidak bernapas
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--end::Input group-->
+
+                                            <!--begin::Input group-->
+                                            <div class="col-12 mb-6">
+                                                <div class="d-flex flex-row">
+                                                    <div class="d-flex flex-column flex-row-auto w-200px">
+                                                        <label for="pulse" class="form-label">Resiko Jatuh</label>
+                                                    </div>
+                                                    <div class="d-flex flex-row flex-row-fluid">
+                                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                                            <input value="Resiko rendah" class="form-check-input h-20px w-30px me-5" type="radio" name="jatuh" id="jatuh_satu"/>
+                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                Resiko rendah
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                                            <input value="Resiko sedang" class="form-check-input h-20px w-30px me-5" type="radio" name="jatuh" id="jatuh_dua"/>
+                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                Resiko sedang
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                                            <input value="Resiko Tinggi" class="form-check-input h-20px w-30px me-5" type="radio" name="jatuh" id="jatuh_tiga"/>
+                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                Resiko Tinggi
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--end::Input group-->
+
+                                            <!--begin::Input group-->
+                                            <div class="col-12 mb-6">
+                                                <div class="d-flex flex-row">
+                                                    <div class="d-flex flex-column flex-row-auto w-200px">
+                                                        <label for="pulse" class="form-label">Nyeri Dada</label>
+                                                    </div>
+                                                    <div class="d-flex flex-row flex-row-fluid">
+                                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                                            <input value="Tidak ada" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_satu"/>
+                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                Tidak ada
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                                            <input value="Ada (Tingkat Sedang)" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_dua"/>
+                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                Ada (Tingkat Sedang)
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                                            <input value="Nyeri dada kiri tembus punggung" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_tiga"/>
+                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                Nyeri dada kiri tembus punggung
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--end::Input group-->
+
+                                            <!--begin::Input group-->
+                                            <div class="col-12 mb-6">
+                                                <div class="d-flex flex-row">
+                                                    <div class="d-flex flex-column flex-row-auto w-200px">
+                                                        <label for="pulse" class="form-label">Skala Nyeri</label>
+                                                    </div>
+                                                    <div class="d-flex flex-column">
+                                                        <div class="d-flex flex-column flex-row-auto mb-5">
+                                                            <img class="w-500px" src="http://127.0.0.1:8000/assets/media/misc/painscale.png" alt="">
+                                                        </div>
+                                                        <div class="d-flex flex-row flex-row-auto mb-5">
+                                                            <label class="d-flex w-200px form-label">Lokasi : </label>
+                                                            <input type="text" name="lokasi_nyeri" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0">
+                                                        </div>
+                                                        <div class="d-flex flex-row flex-row-fluid mb-5">
+                                                            <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                                                <input value="1-3" class="form-check-input h-20px w-30px me-5" type="radio" name="skala" id="skala_satu"/>
+                                                                <label class="form-check-label" for="kriteria_dua">
+                                                                    1-3
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                                                <input value="4-6" class="form-check-input h-20px w-30px me-5" type="radio" name="skala" id="skala_dua"/>
+                                                                <label class="form-check-label" for="kriteria_dua">
+                                                                    4-6
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                                                <input value="6-10" class="form-check-input h-20px w-30px me-5" type="radio" name="skala" id="skala_tiga"/>
+                                                                <label class="form-check-label" for="kriteria_dua">
+                                                                    6-10
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <!--end::Input group-->
+
+                                            <!--begin::Input group-->
+                                            <div class="col-12 mb-6">
+                                                <div class="d-flex flex-row">
+                                                    <div class="d-flex flex-column flex-row-auto w-200px">
+                                                        <label for="pulse" class="form-label">Batuk</label>
+                                                    </div>
+                                                    <div class="d-flex flex-row flex-row-fluid">
+                                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                                            <input value="Tidak ada" class="form-check-input h-20px w-30px me-5" type="radio" name="batuk" id="batuk_satu"/>
+                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                Tidak ada
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                                            <input value="Batuk > 2 Minggu" class="form-check-input h-20px w-30px me-5" type="radio" name="batuk" id="batuk_dua"/>
+                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                Batuk > 2 Minggu
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--end::Input group-->
+
+                                            <!--begin::Input group-->
+                                            <div class="col-12 mb-6">
+                                                <div class="d-flex flex-row">
+                                                    <div class="d-flex flex-column flex-row-auto w-200px">
+                                                        <label for="pulse" class="form-label">Keputusan</label>
+                                                    </div>
+                                                    <div class="d-flex flex-row flex-row-fluid">
+                                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                                            <input value="Diterima" class="form-check-input h-20px w-30px me-5" type="radio" name="keputusan" id="keputusan_satu"/>
+                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                Diterima
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                                            <input value="Di Dahulukan" class="form-check-input h-20px w-30px me-5" type="radio" name="keputusan" id="keputusan_dua"/>
+                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                Di Dahulukan
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                                            <input value="Dirujuk" class="form-check-input h-20px w-30px me-5" type="radio" name="keputusan" id="keputusan_tiga"/>
+                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                Dirujuk
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--end::Input group-->
+
+
+                                        </div>
+                                        <!--end::Scroll-->
+                                        <!--begin::Actions-->
+                                        <div class="text-center pt-15">
+                                            <a href="{{ route('examinations.index')  }}" class="btn btn-sm btn-light-primary">
+                                                <!--begin::Svg Icon | path: assets/media/icons/duotune/arrows/arr079.svg-->
+                                                <span class="svg-icon svg-icon-muted svg-icon-2hx">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                             <path opacity="0.5" d="M14.2657 11.4343L18.45 7.25C18.8642 6.83579 18.8642 6.16421 18.45 5.75C18.0358 5.33579 17.3642 5.33579 16.95 5.75L11.4071 11.2929C11.0166 11.6834 11.0166 12.3166 11.4071 12.7071L16.95 18.25C17.3642 18.6642 18.0358 18.6642 18.45 18.25C18.8642 17.8358 18.8642 17.1642 18.45 16.75L14.2657 12.5657C13.9533 12.2533 13.9533 11.7467 14.2657 11.4343Z" fill="currentColor"/>
                             <path d="M8.2657 11.4343L12.45 7.25C12.8642 6.83579 12.8642 6.16421 12.45 5.75C12.0358 5.33579 11.3642 5.33579 10.95 5.75L5.40712 11.2929C5.01659 11.6834 5.01659 12.3166 5.40712 12.7071L10.95 18.25C11.3642 18.6642 12.0358 18.6642 12.45 18.25C12.8642 17.8358 12.8642 17.1642 12.45 16.75L8.2657 12.5657C7.95328 12.2533 7.95328 11.7467 8.2657 11.4343Z" fill="currentColor"/>
                         </svg>
                     </span>
-                                                    <!--end::Svg Icon-->
-                                                    Cancel
-                                                </a>
-                                                <button type="submit" class="btn btn-primary" data-kt-examinations-modal-action="submit">
-                                                    <span class="indicator-label">Submit</span>
-                                                    <span class="indicator-progress">Please wait...
+                                                <!--end::Svg Icon-->
+                                                Cancel
+                                            </a>
+                                            <button type="submit" class="btn btn-primary" data-kt-examinations-modal-action="submit">
+                                                <span class="indicator-label">Submit</span>
+                                                <span class="indicator-progress">Please wait...
                 <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
             </span>
-                                                </button>
-                                            </div>
-                                            <!--end::Actions-->
-                                        </form>
+                                            </button>
+                                        </div>
+                                        <!--end::Actions-->
+                                    </form>
 
                                 </div>
                             </div>

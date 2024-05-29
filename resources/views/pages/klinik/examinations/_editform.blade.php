@@ -48,7 +48,7 @@
 
             <!--begin::Nav item-->
             <li class="nav-item p-0 ms-0">
-                <a class="nav-link btn btn-color-gray-400 flex-center px-3 active" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#psikososial">
+                <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#psikososial">
                     <!--begin::Title-->
                     <span class="nav-text fw-semibold fs-4 mb-3">Psikososial</span>
                     <!--end::Title-->
@@ -1039,7 +1039,7 @@
                 <!--end::Alert-->
 
                 @if(isset($examination->vitality->skrining))
-                    <!--begin::Alert-->s
+                    <!--begin::Alert-->
                     <div class="alert alert-dismissible bg-light-success d-flex flex-column flex-sm-row p-5 mb-10">
                         <!--begin::Icon-->
                         <i class="ki-duotone ki-notification-bing fs-2hx text-primary me-4 mb-5 mb-sm-0"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
@@ -1749,13 +1749,15 @@
                 <div class="d-flex flex-column flex-md-row rounded border p-10">
                     <form method="POST" class="form" action="{{ route('examination.psikososial') }}">
                         @method('POST')
-                        @endif
                         {{ csrf_field() }}
                         <!--begin::Scroll-->
                         <div class="row">
                             <input type="hidden" name="examination_id" value="{{ $examination->id }}">
                             <input type="hidden" name="user_id" value="{{ $user->id }}">
 
+                            @if(isset($examination->psikososial))
+                                @php $psikososial = json_decode($examination->psikososial); @endphp
+                            @endif
                             <!--begin::Input group-->
                             <div class="col-12 mb-6">
                                 <div class="d-flex flex-row">
@@ -1764,13 +1766,21 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                            <input value="Jelas" class="form-check-input h-20px w-30px me-5" type="radio" name="bicara" id="bicara_satu"/>
+                                            @if(isset($examination->psikososial) && $psikososial->bicara == "Jelas")
+                                                <input value="Jelas" checked class="form-check-input h-20px w-30px me-5" type="radio" name="bicara" id="bicara_satu"/>
+                                            @else
+                                                <input value="Jelas" class="form-check-input h-20px w-30px me-5" type="radio" name="bicara" id="bicara_satu"/>
+                                            @endif
                                             <label class="form-check-label" for="bicara_satu">
                                                 Jelas
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                            <input value="TIdak Dimen" class="form-check-input h-20px w-30px me-5" type="radio" name="bicara" id="bicara_dua"/>
+                                            @if(isset($examination->psikososial) && $psikososial->bicara == "Tidak Dimen")
+                                                <input value="Tidak Dimen" checked class="form-check-input h-20px w-30px me-5" type="radio" name="bicara" id="bicara_dua"/>
+                                            @else
+                                                <input value="Tidak Dimen" class="form-check-input h-20px w-30px me-5" type="radio" name="bicara" id="bicara_dua"/>
+                                            @endif
                                             <label class="form-check-label" for="bicara_dua">
                                                 TIdak Dimen
                                             </label>
@@ -1789,13 +1799,21 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                            <input value="Verbal" class="form-check-input h-20px w-30px me-5" type="radio" name="komunikasi" id="komunikasi_satu"/>
+                                            @if(isset($examination->psikososial) && $psikososial->komunikasi == "Verbal")
+                                                <input value="Verbal" checked class="form-check-input h-20px w-30px me-5" type="radio" name="komunikasi" id="komunikasi_satu"/>
+                                            @else
+                                                <input value="Verbal" class="form-check-input h-20px w-30px me-5" type="radio" name="komunikasi" id="komunikasi_satu"/>
+                                            @endif
                                             <label class="form-check-label" for="komunikasi_satu">
                                                 Verbal
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                            <input value="Non Verbal" class="form-check-input h-20px w-30px me-5" type="radio" name="komunikasi" id="komunikasi_dua"/>
+                                            @if(isset($examination->psikososial) && $psikososial->komunikasi == "Non Verbal")
+                                                <input value="Non Verbal" checked class="form-check-input h-20px w-30px me-5" type="radio" name="komunikasi" id="komunikasi_dua"/>
+                                            @else
+                                                <input value="Non Verbal" class="form-check-input h-20px w-30px me-5" type="radio" name="komunikasi" id="komunikasi_dua"/>
+                                            @endif
                                             <label class="form-check-label" for="komunikasi_dua">
                                                 Non Verbal
                                             </label>
@@ -1813,31 +1831,51 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
-                                            <input value="Stabil/Tenang" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_satu"/>
+                                            @if(isset($examination->psikososial) && $psikososial->emosional == "Stabil/Tenang")
+                                                <input value="Stabil/Tenang" checked class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_satu"/>
+                                            @else
+                                                <input value="Stabil/Tenang" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_satu"/>
+                                            @endif
                                             <label class="form-check-label" for="emosional_satu">
                                                 Stabil/Tenang
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            @if(isset($examination->psikososial) && $psikososial->emosional == "Marah")
+                                                <input value="Marah" checked class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_dua"/>
+                                            @else
                                             <input value="Marah" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_dua"/>
+                                            @endif
                                             <label class="form-check-label" for="emosional_dua">
                                                 Marah
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            @if(isset($examination->psikososial) && $psikososial->emosional == "Cemas")
+                                                <input value="Cemas" checked class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_tiga"/>
+                                            @else
                                             <input value="Cemas" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_tiga"/>
+                                            @endif
                                             <label class="form-check-label" for="emosional_tiga">
                                                 Cemas
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            @if(isset($examination->psikososial) && $psikososial->emosional == "Takut")
+                                                <input value="Takut" checked class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_empat"/>
+                                            @else
                                             <input value="Takut" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_empat"/>
+                                            @endif
                                             <label class="form-check-label" for="emosional_empat">
                                                 Takut
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            @if(isset($examination->psikososial) && $psikososial->emosional == "Sedih")
+                                                <input value="Sedih" checked class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_lima"/>
+                                            @else
                                             <input value="Sedih" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_lima"/>
+                                            @endif
                                             <label class="form-check-label" for="emosional_lima">
                                                 Sedih
                                             </label>
@@ -1855,19 +1893,31 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            @if(isset($examination->psikososial) && $psikososial->nyeri == "Tidak ada")
+                                                <input value="Tidak ada" checked class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_satu"/>
+                                            @else
                                             <input value="Tidak ada" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_satu"/>
+                                            @endif
                                             <label class="form-check-label" for="kriteria_dua">
                                                 Tidak ada
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            @if(isset($examination->psikososial) && $psikososial->nyeri == "Ada (Tingkat Sedang)")
+                                                <input value="Ada (Tingkat Sedang)" checked class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_dua"/>
+                                            @else
                                             <input value="Ada (Tingkat Sedang)" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_dua"/>
+                                            @endif
                                             <label class="form-check-label" for="kriteria_dua">
                                                 Ada (Tingkat Sedang)
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            @if(isset($examination->psikososial) && $psikososial->nyeri == "Nyeri dada kiri tembus punggung")
+                                                <input value="Nyeri dada kiri tembus punggung" checked class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_tiga"/>
+                                            @else
                                             <input value="Nyeri dada kiri tembus punggung" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_tiga"/>
+                                            @endif
                                             <label class="form-check-label" for="kriteria_dua">
                                                 Nyeri dada kiri tembus punggung
                                             </label>
@@ -1885,19 +1935,31 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            @if(isset($examination->psikososial) && $psikososial->sosiologi == "Komunikatif")
+                                                <input value="Komunikatif" checked class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_satu"/>
+                                            @else
                                             <input value="Komunikatif" class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_satu"/>
+                                            @endif
                                             <label class="form-check-label" for="sosiologi_satu">
                                                 Komunikatif
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            @if(isset($examination->psikososial) && $psikososial->sosiologi == "Komunikatif Tidak Efek")
+                                                <input value="Komunikatif Tidak Efek" checked class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_dua"/>
+                                            @else
                                             <input value="Komunikatif Tidak Efek" class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_dua"/>
+                                            @endif
                                             <label class="form-check-label" for="sosiologi_dua">
                                                 Komunikatif Tidak Efek
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
+                                            @if(isset($examination->psikososial) && $psikososial->sosiologi == "Menarik Diri")
+                                                <input value="Menarik Diri" checked class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_tiga"/>
+                                            @else
                                             <input value="Menarik Diri" class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_tiga"/>
+                                            @endif
                                             <label class="form-check-label" for="sosiologi_tiga">
                                                 Menarik Diri
                                             </label>

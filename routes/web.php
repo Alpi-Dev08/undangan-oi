@@ -167,7 +167,7 @@
                  ->name('transactions.service');
 
             Route::post('examinations-psikososial', [ExaminationsController::class, 'psikososial'])
-                 ->name('examinations.psikososial');
+                 ->name('examination.psikososial');
 
             Route::post('suket-sehat/{id}', [ExaminationsController::class, 'sehat'])->name('suket.sehat');
             Route::post('suket-sakit/{id}', [ExaminationsController::class, 'sakit'])->name('suket.sakit');

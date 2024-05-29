@@ -361,9 +361,9 @@ class ExaminationsController extends Controller
         $data = $request->all();
 
         // get the default inner page
-        return view('pages.klinik.examinations.pdf', compact([
+        /*return view('pages.klinik.examinations.pdf', compact([
             'user', 'info', 'examination'
-        ]));
+        ]));*/
 
         $pdf = Pdf::loadView('pages.klinik.examinations.pdf', compact(['user', 'info', 'examination',
         ]));
