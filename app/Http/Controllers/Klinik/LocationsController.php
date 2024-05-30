@@ -163,7 +163,7 @@
                     $satusehat = satu_sehat('create', 'Location', $jsonSatuSehat);
                     $data      = json_decode($satusehat);
 
-                    $location->response_satu_sehat = $data;
+                    $location->response_satu_sehat = $satusehat;
                     $location->save();
 
                 } catch (Exception $e) {
