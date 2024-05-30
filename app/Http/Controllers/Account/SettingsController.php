@@ -182,6 +182,17 @@ class SettingsController extends Controller
         $examination->is_consent = $request->isConsent == "ya" ? 1 : 0;
         $examination->consent_data = $consent;
 
+        $location = Location::find($request->location_id);
+
+        if($location->location_id){
+            $reference = "Location/".$location->location_id;
+            $reference_name = $location->name;
+        } else {
+            $reference = "Location/a2aa15d0-c67d-4ae7-bb40-457a8af06d0c";
+            $location = Location::where('location_id', 'a2aa15d0-c67d-4ae7-bb40-457a8af06d0c')->first();
+            $reference_name = $location->name;
+        }
+
 
         $healthprofesional = HealthProfesional::find($request->health_profesional_id);
 
@@ -199,7 +210,7 @@ class SettingsController extends Controller
                 "resourceType"    => "Encounter",
                 "identifier"      => [
                     [
-                        "system" => "http://sys-ids.kemkes.go.id/encounter/10085107",
+                        "system" => "http://sys-ids.kemkes.go.id/encounter/".env('SATU_SEHAT_ORGANIZATION_ID'),
                         "use"    => "official",
                         "value"  => $examination_code
                     ]
@@ -254,7 +265,7 @@ class SettingsController extends Controller
                     ]
                 ],
                 "serviceProvider" => [
-                    "reference" => "Organization/b5ba02bc-97f6-4f42-872c-02808dfb787c"
+                    "reference" => "Organization/".env('SATU_SEHAT_ORGANIZATION_ID'),
                 ]
             ];
 
