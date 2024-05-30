@@ -264,8 +264,8 @@ class ExaminationsController extends Controller
                         "encounter"      => [
                             "reference" => "Encounter/".$examination->encounter_id,
                         ],
-                        "onsetDateTime"  => date('Y-m-d'),
-                        "recordedDate"   => date('Y-m-d'),
+                        "onsetDateTime"  => date('Y-m-d\TH:i:sP'),
+                        "recordedDate"   => date('Y-m-d\TH:i:sP')
                     ];
 
                     $condition = satu_sehat('create','Condition',$reqCondition);
