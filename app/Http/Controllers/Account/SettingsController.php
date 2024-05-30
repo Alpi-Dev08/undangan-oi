@@ -256,8 +256,10 @@ class SettingsController extends Controller
                 "reference" => "Organization/b5ba02bc-97f6-4f42-872c-02808dfb787c"
             ]
         ];
-        $encounter = satu_sehat('create','Encounter',$jayParsedAry);
 
+        $encounter = satu_sehat('create','Encounter',$jayParsedAry);
+        $examination->encounter_id = $encounter->id;
+        $examination->encounter = json_encode($jayParsedAry);
         $examination->save();
 
         if($request->pemeriksaan_awal){

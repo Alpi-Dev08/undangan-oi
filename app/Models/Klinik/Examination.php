@@ -40,7 +40,8 @@
             'consent_data',
             'bukti_penyampaian_informasi',
             'bukti_persetujuan_tindakan_medis',
-            'psikososial'
+            'psikososial',
+            'encounter_id'
         ];
 
         public function user()

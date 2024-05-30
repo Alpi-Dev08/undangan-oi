@@ -48,6 +48,31 @@ class ExaminationsController extends Controller
         });
     }
 
+    public function index_()
+    {
+        $json = '{"resourceType":"Encounter","identifier":[{"system":"http:\/\/sys-ids.kemkes.go.id\/encounter\/10085107","use":"official","value":"E20240529623"}],"status":"arrived","class":{"system":"http:\/\/terminology.hl7.org\/CodeSystem\/v3-ActCode","code":"AMB","display":"ambulatory"},"subject":{"reference":"Patient\/P00491717250","display":"Auni Reza Sukma Permata "},"participant":[{"type":[{"coding":[{"system":"http:\/\/terminology.hl7.org\/CodeSystem\/v3-ParticipationType","code":"ATND","display":"attender"}]}],"individual":{"reference":"Practitioner\/1000652469","display":"Yunianti Lafau"}}],"period":{"start":"2024-05-29T15:43:24+00:00"},"location":[{"location":{"reference":"Location\/a2aa15d0-c67d-4ae7-bb40-457a8af06d0c","display":"Poli Umim"}}],"statusHistory":[{"status":"arrived","period":{"start":"2024-05-29T15:43:24+00:00","end":"2024-05-29T15:43:24+00:00"}}],"serviceProvider":{"reference":"Organization\/b5ba02bc-97f6-4f42-872c-02808dfb787c"}}';
+
+        $data = json_decode($json, true);
+        $data['status']='in-progress';
+
+        $data['statusHistory'][] = [
+            "status" => "in-progress",
+            "period" => [
+                "start" => "2024-05-29T20:43:24+00:00"
+            ]
+        ];
+
+        foreach ($data['statusHistory'] as $key => $value) {
+            if ($value['status'] == 'arrived') {
+                $data['statusHistory'][$key]['period']['end'] = "2024-05-29T20:43:24+00:00";
+            }
+        }
+
+
+
+        print_r($data['statusHistory']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -189,13 +214,109 @@ class ExaminationsController extends Controller
         // Validation Data
         $validated = $request->validated();
 
+        $encounter = json_decode($examination->encounter,true);
 
+        if($examination->encounter_id){
+            $assessment = explode(' |',$validated['assessment']);
+            $assessment_ = [];
+            $n = 1;
+            foreach ($assessment as $row) {
+                $row_ = explode(' - ',$row);
+                if(isset($row_[1])) {
+
+                    $reqCondition = [
+                        "resourceType"   => "Condition",
+                        "clinicalStatus" => [
+                            "coding" => [
+                                [
+                                    "system"  =>
+                                        "http://terminology.hl7.org/CodeSystem/condition-clinical",
+                                    "code"    => "active",
+                                    "display" => "Active",
+                                ],
+                            ],
+                        ],
+                        "category"       => [
+                            [
+                                "coding" => [
+                                    [
+                                        "system"  =>
+                                            "http://terminology.hl7.org/CodeSystem/condition-category",
+                                        "code"    => "encounter-diagnosis",
+                                        "display" => "Encounter Diagnosis",
+                                    ],
+                                ],
+                            ],
+                        ],
+                        "code"           => [
+                            "coding" => [
+                                [
+                                    "system"  => "http://hl7.org/fhir/sid/icd-10",
+                                    "code"    => $row_[0],
+                                    "display" => $row_[1],
+                                ],
+                            ],
+                        ],
+                        "subject"        => [
+                            "reference" => "Patient/".$examination->patient->his_number,
+                            "display"   => $examination->patient->user->name,
+                        ],
+                        "encounter"      => [
+                            "reference" => "Encounter/".$examination->encounter_id,
+                        ],
+                        "onsetDateTime"  => date('Y-m-d'),
+                        "recordedDate"   => date('Y-m-d'),
+                    ];
+
+                    $condition = satu_sehat('create','Condition',$reqCondition);
+
+                    $encounter["diagnosis"][] = [
+                        "condition" => [
+                            "reference" => "Condition/".$condition->id,
+                            "display"   => $row_[1],
+                        ],
+                        "use"      => [
+                            "coding" => [
+                                [
+                                    "system"  => "http://terminology.hl7.org/CodeSystem/diagnosis-role",
+                                    "code"    => "DD",
+                                    "display" => "Discharge diagnosis",
+                                ],
+                            ],
+                        ],
+                        "rank"      => $n,
+                    ];
+
+                    $n++;
+
+                }
+            }
+
+            $encounter['status']='finished';
+
+            $encounter['statusHistory'][] = [
+                "status" => "finished",
+                "period" => [
+                    "start" => date('Y-m-d\TH:i:sP'),
+                    "end" => date('Y-m-d\TH:i:sP')
+                ]
+            ];
+
+            foreach ($encounter['statusHistory'] as $key => $value) {
+                if ($value['status'] == 'in-progress') {
+                    $encounter['statusHistory'][$key]['period']['end'] = date('Y-m-d\TH:i:sP');
+                }
+            }
+
+            satu_sehat('update','Encounter',$encounter,$examination->encounter_id);
+        }
 
         // Process Data
         if ($validated) {
             // Process Data
             try {
                 $validated['status'] = 'done';
+                $validated['encounter'] = json_encode($encounter);
                 $validated['resep'] = json_encode($request->resep);
                 $examination->update($validated);
             } catch (Exception $e) {
@@ -343,6 +464,27 @@ class ExaminationsController extends Controller
         $id = $request->id;
         $examination = Examination::find($id);
         $vitalityexamination = VitalityExamination::where('examination_id', $examination->id)->first();
+
+        $encounter = json_decode($examination->encounter,true);
+        $encounter['status']='in-progress';
+
+        $encounter['statusHistory'][] = [
+            "status" => "in-progress",
+            "period" => [
+                "start" => "2024-05-29T20:43:24+00:00"
+            ]
+        ];
+
+        foreach ($encounter['statusHistory'] as $key => $value) {
+            if ($value['status'] == 'arrived') {
+                $encounter['statusHistory'][$key]['period']['end'] = date('Y-m-d\TH:i:sP');
+            }
+        }
+
+        satu_sehat('update','Encounter',$encounter,$examination->encounter_id);
+
+        $examination->encounter = json_encode($encounter);
+        $examination->save();
 
         $user = User::find($examination->user_id);
         $info = $user->info;
