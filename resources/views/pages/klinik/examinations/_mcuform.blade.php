@@ -1796,7 +1796,11 @@
                                     @foreach($healthprofesionals as $healthprofesional)
                                         <option
                                             value="{{ $healthprofesional->id }}" {{ $healthprofesional->id === old('health_profesional_id', $examination->health_profesional_id ?? '') ? 'selected' :'' }}>
-                                            {{ ($healthprofesional->user->info->title_prefix !='' ? $healthprofesional->user->info->title_prefix.'. ' : '').$healthprofesional->user->name.($healthprofesional->user->info->title_suffix!='' ? ', '.$healthprofesional->user->info->title_suffix : '') }}
+                                            @if(isset($healthprofesional->user->info))
+                                                {{ ($healthprofesional->user->info->title_prefix !='' ? $healthprofesional->user->info->title_prefix.'. ' : '').$healthprofesional->user->name.($healthprofesional->user->info->title_suffix!='' ? ', '.$healthprofesional->user->info->title_suffix : '') }}
+                                            @else
+                                                {{$healthprofesional->user->name}}
+                                            @endif
                                         </option>
                                     @endforeach
                                 </select>
