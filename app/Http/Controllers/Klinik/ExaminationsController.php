@@ -465,26 +465,28 @@ class ExaminationsController extends Controller
         $examination = Examination::find($id);
         $vitalityexamination = VitalityExamination::where('examination_id', $examination->id)->first();
 
-        $encounter = json_decode($examination->encounter,true);
-        $encounter['status']='in-progress';
+        if($examination->encounter_id) {
+            $encounter           = json_decode($examination->encounter, true);
+            $encounter['status'] = 'in-progress';
 
-        $encounter['statusHistory'][] = [
-            "status" => "in-progress",
-            "period" => [
-                "start" => "2024-05-29T20:43:24+00:00"
-            ]
-        ];
+            $encounter['statusHistory'][] = [
+                "status" => "in-progress",
+                "period" => [
+                    "start" => "2024-05-29T20:43:24+00:00"
+                ]
+            ];
 
-        foreach ($encounter['statusHistory'] as $key => $value) {
-            if ($value['status'] == 'arrived') {
-                $encounter['statusHistory'][$key]['period']['end'] = date('Y-m-d\TH:i:sP');
+            foreach ($encounter['statusHistory'] as $key => $value) {
+                if ($value['status'] == 'arrived') {
+                    $encounter['statusHistory'][$key]['period']['end'] = date('Y-m-d\TH:i:sP');
+                }
             }
+
+            satu_sehat('update', 'Encounter', $encounter, $examination->encounter_id);
+
+            $examination->encounter = json_encode($encounter);
+            $examination->save();
         }
-
-        satu_sehat('update','Encounter',$encounter,$examination->encounter_id);
-
-        $examination->encounter = json_encode($encounter);
-        $examination->save();
 
         $user = User::find($examination->user_id);
         $info = $user->info;
