@@ -194,72 +194,74 @@ class SettingsController extends Controller
             $reference_name = $healthprofesional->user->name;
         }
 
-        $jayParsedAry = [
-            "resourceType" => "Encounter",
-            "identifier" => [
-                [
-                    "system" => "http://sys-ids.kemkes.go.id/encounter/10085107",
-                    "use" => "official",
-                    "value" => $examination_code
-                ]
-            ],
-            "status" => "arrived",
-            "class" => [
-                "system" => "http://terminology.hl7.org/CodeSystem/v3-ActCode",
-                "code" => "AMB",
-                "display" => "ambulatory"
-            ],
-            "subject" => [
-                "reference" => "Patient/". $user->patient->his_number,
-                "display" =>  $user->name
-            ],
-            "participant" => [
-                [
-                    "type" => [
-                        [
-                            "coding" => [
-                                [
-                                    "system" => "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
-                                    "code" => "ATND",
-                                    "display" => "attender"
+        if($user->patient->his_number) {
+            $jayParsedAry = [
+                "resourceType"    => "Encounter",
+                "identifier"      => [
+                    [
+                        "system" => "http://sys-ids.kemkes.go.id/encounter/10085107",
+                        "use"    => "official",
+                        "value"  => $examination_code
+                    ]
+                ],
+                "status"          => "arrived",
+                "class"           => [
+                    "system"  => "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                    "code"    => "AMB",
+                    "display" => "ambulatory"
+                ],
+                "subject"         => [
+                    "reference" => "Patient/" . $user->patient->his_number,
+                    "display"   => $user->name
+                ],
+                "participant"     => [
+                    [
+                        "type"       => [
+                            [
+                                "coding" => [
+                                    [
+                                        "system"  => "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+                                        "code"    => "ATND",
+                                        "display" => "attender"
+                                    ]
                                 ]
                             ]
+                        ],
+                        "individual" => [
+                            "reference" => $reference,
+                            "display"   => $reference_name
                         ]
-                    ],
-                    "individual" => [
-                        "reference" => $reference,
-                        "display" => $reference_name
                     ]
-                ]
-            ],
-            "period" => [
-                "start" => date('Y-m-d\TH:i:sP'),
-            ],
-            "location" => [
-                [
-                    "location" => [
-                        "reference" => "Location/a2aa15d0-c67d-4ae7-bb40-457a8af06d0c",
-                        "display" => "Poli Umim"
+                ],
+                "period"          => [
+                    "start" => date('Y-m-d\TH:i:sP'),
+                ],
+                "location"        => [
+                    [
+                        "location" => [
+                            "reference" => "Location/a2aa15d0-c67d-4ae7-bb40-457a8af06d0c",
+                            "display"   => "Poli Umim"
+                        ]
                     ]
-                ]
-            ],
-            "statusHistory" => [
-                [
-                    "status" => "arrived",
-                    "period" => [
-                        "start" => date('Y-m-d\TH:i:sP'),
-                        "end" => date('Y-m-d\TH:i:sP'),
+                ],
+                "statusHistory"   => [
+                    [
+                        "status" => "arrived",
+                        "period" => [
+                            "start" => date('Y-m-d\TH:i:sP'),
+                            "end"   => date('Y-m-d\TH:i:sP'),
+                        ]
                     ]
+                ],
+                "serviceProvider" => [
+                    "reference" => "Organization/b5ba02bc-97f6-4f42-872c-02808dfb787c"
                 ]
-            ],
-            "serviceProvider" => [
-                "reference" => "Organization/b5ba02bc-97f6-4f42-872c-02808dfb787c"
-            ]
-        ];
+            ];
 
-        $encounter = satu_sehat('create','Encounter',$jayParsedAry);
-        $examination->encounter_id = $encounter->id;
-        $examination->encounter = json_encode($jayParsedAry);
+            $encounter                 = satu_sehat('create', 'Encounter', $jayParsedAry);
+            $examination->encounter_id = $encounter->id;
+            $examination->encounter    = json_encode($jayParsedAry);
+        }
         $examination->save();
 
         if($request->pemeriksaan_awal){
