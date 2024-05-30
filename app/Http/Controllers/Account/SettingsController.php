@@ -185,12 +185,12 @@ class SettingsController extends Controller
         $location = Location::find($request->location_id);
 
         if($location->location_id){
-            $reference = "Location/".$location->location_id;
-            $reference_name = $location->name;
+            $location_ref = "Location/".$location->location_id;
+            $location_display = $location->name;
         } else {
-            $reference = "Location/a2aa15d0-c67d-4ae7-bb40-457a8af06d0c";
-            $location = Location::where('location_id', 'a2aa15d0-c67d-4ae7-bb40-457a8af06d0c')->first();
-            $reference_name = $location->name;
+            $location_ref = "Location/b6442053-e8f1-4944-b349-316b3f59aef1";
+            $location = Location::where('location_id', 'b6442053-e8f1-4944-b349-316b3f59aef1')->first();
+            $location_display = $location->name;
         }
 
 
@@ -250,8 +250,8 @@ class SettingsController extends Controller
                 "location"        => [
                     [
                         "location" => [
-                            "reference" => "Location/a2aa15d0-c67d-4ae7-bb40-457a8af06d0c",
-                            "display"   => "Poli Umim"
+                            "reference" => $location_ref,
+                            "display"   => $location_display
                         ]
                     ]
                 ],
