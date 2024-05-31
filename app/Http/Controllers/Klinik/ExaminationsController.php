@@ -310,7 +310,7 @@ class ExaminationsController extends Controller
                 }
             }
 
-            satu_sehat('update','Encounter',$encounter,$examination->encounter_id);
+            $encounter = satu_sehat('update','Encounter',$encounter,$examination->encounter_id);
         }
 
         // Process Data
