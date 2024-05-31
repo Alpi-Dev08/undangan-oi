@@ -200,8 +200,8 @@ class SettingsController extends Controller
             $reference = "Practitioner/".$healthprofesional->his_number;
             $reference_name = $healthprofesional->user->name;
         } else {
-            $reference = "Practitioner/1000652469";
-            $healthprofesional = HealthProfesional::where('his_number', '1000652469')->first();
+            $reference = "Practitioner/10000571263";
+            $healthprofesional = HealthProfesional::where('his_number', '10000571263')->first();
             $reference_name = $healthprofesional->user->name;
         }
 
