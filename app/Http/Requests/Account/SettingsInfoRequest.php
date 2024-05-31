@@ -37,6 +37,7 @@ class SettingsInfoRequest extends FormRequest
             'district_id'           => 'nullable|integer',
             'sub_district_id'       => 'nullable|integer',
             'card_number'           => 'nullable|string',
+            'his_number'            => 'nullable|string',
             'title_prefix'          => 'nullable|string|max:255',
             'title_suffix'          => 'nullable|string|max:255',
             'photo'                 => 'nullable|max:255',
