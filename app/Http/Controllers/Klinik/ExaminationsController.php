@@ -363,7 +363,7 @@
             $examination         = Examination::find($id);
             $vitalityexamination = VitalityExamination::where('examination_id', $examination->id)->first();
 
-            if ($examination->encounter_id) {
+            if ($examination->encounter_id && $examination->encounter_status != "finished") {
                 $encounter           = json_decode($examination->encounter, true);
                 $encounter['status'] = 'in-progress';
 
