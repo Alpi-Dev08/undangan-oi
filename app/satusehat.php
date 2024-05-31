@@ -8,11 +8,13 @@
     {
         $clientId     = env('SATU_SEHAT_CLIENT_ID');
         $clientSecret = env('SATU_SEHAT_CLIENT_SECRET');
+        $url          = env('SATU_SEHAT_AUTH_URL') . '/accesstoken?grant_type=client_credentials';
 
-        $request = Http::asForm()->post(env('SATU_SEHAT_AUTH_URL') . '/accesstoken?grant_type=client_credentials', [
+        $data    = [
             'client_id'     => $clientId,
             'client_secret' => $clientSecret
-        ]);
+        ];
+        $request = Http::asForm()->post($url, $data);
 
         $response = response()->json([
             "success" => $request->ok(),
@@ -22,9 +24,9 @@
         Log::info($response);
 
         $logs = [
-            'service'     => $service,
+            'service'     => 'auth',
             'url'         => $url,
-            'type'        => $type,
+            'type'        => 'create',
             'messages'    => json_encode($data),
             'response'    => json_encode($request->object()),
             'status'      => $request->status(),
@@ -52,9 +54,9 @@
         Log::info($response);
 
         $logs = [
-            'service'     => $service,
+            'service'     => 'consent',
             'url'         => $url,
-            'type'        => $type,
+            'type'        => 'create',
             'messages'    => json_encode($data),
             'response'    => json_encode($request->object()),
             'status'      => $request->status(),
