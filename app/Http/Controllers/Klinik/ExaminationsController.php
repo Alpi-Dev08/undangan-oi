@@ -270,24 +270,26 @@ class ExaminationsController extends Controller
 
                     $condition = satu_sehat('create','Condition',$reqCondition);
 
-                    $encounter["diagnosis"][] = [
-                        "condition" => [
-                            "reference" => "Condition/".$condition->id,
-                            "display"   => $row_[1],
-                        ],
-                        "use"      => [
-                            "coding" => [
-                                [
-                                    "system"  => "http://terminology.hl7.org/CodeSystem/diagnosis-role",
-                                    "code"    => "DD",
-                                    "display" => "Discharge diagnosis",
+                    if(isset($condition->id)) {
+                        $encounter["diagnosis"][] = [
+                            "condition" => [
+                                "reference" => "Condition/" . $condition->id,
+                                "display"   => $row_[1],
+                            ],
+                            "use"       => [
+                                "coding" => [
+                                    [
+                                        "system"  => "http://terminology.hl7.org/CodeSystem/diagnosis-role",
+                                        "code"    => "DD",
+                                        "display" => "Discharge diagnosis",
+                                    ],
                                 ],
                             ],
-                        ],
-                        "rank"      => $n,
-                    ];
+                            "rank"      => $n,
+                        ];
 
-                    $n++;
+                        $n++;
+                    }
 
                 }
             }
