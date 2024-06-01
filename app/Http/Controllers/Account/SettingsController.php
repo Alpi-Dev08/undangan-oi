@@ -290,7 +290,7 @@
                         [
                             "location" => [
                                 "reference" => "Location/b6442053-e8f1-4944-b349-316b3f59aef1",
-                                "display"   => "Poli Umim"
+                                "display"   => "Poli Umum"
                             ]
                         ]
                     ],
@@ -309,8 +309,11 @@
                 ];
 
                 $encounter                 = satu_sehat('create', 'Encounter', $jayParsedAry);
-                $examination->encounter_id = $encounter->id;
-                $examination->encounter    = json_encode($jayParsedAry);
+
+                if(isset($encounter->id)) {
+                    $examination->encounter_id = $encounter->id;
+                    $examination->encounter    = json_encode($jayParsedAry);
+                }
             }
             $examination->save();
 
