@@ -365,18 +365,20 @@
 
             if ($examination->encounter_id && $examination->encounter_status != "finished") {
                 $encounter           = json_decode($examination->encounter, true);
-                $encounter['status'] = 'in-progress';
 
-                $encounter['statusHistory'][] = [
-                    "status" => "in-progress",
-                    "period" => [
-                        "start" => "2024-05-29T20:43:24+00:00"
-                    ]
-                ];
+                if($encounter['status'] == 'arrived'){
+                    $encounter['status'] = 'in-progress';
+                    $encounter['statusHistory'][] = [
+                        "status" => "in-progress",
+                        "period" => [
+                            "start" => "2024-05-29T20:43:24+00:00"
+                        ]
+                    ];
 
-                foreach ($encounter['statusHistory'] as $key => $value) {
-                    if ($value['status'] == 'arrived') {
-                        $encounter['statusHistory'][$key]['period']['end'] = date('Y-m-d\TH:i:sP');
+                    foreach ($encounter['statusHistory'] as $key => $value) {
+                        if ($value['status'] == 'arrived') {
+                            $encounter['statusHistory'][$key]['period']['end'] = date('Y-m-d\TH:i:sP');
+                        }
                     }
                 }
 
@@ -644,19 +646,21 @@
                     }
                 }
 
-                $encounter['status'] = 'finished';
+                if($encounter['status'] == 'in-progress'){
+                    $encounter['status'] = 'finished';
 
-                $encounter['statusHistory'][] = [
-                    "status" => "finished",
-                    "period" => [
-                        "start" => date('Y-m-d\TH:i:sP'),
-                        "end"   => date('Y-m-d\TH:i:sP')
-                    ]
-                ];
+                    $encounter['statusHistory'][] = [
+                        "status" => "finished",
+                        "period" => [
+                            "start" => date('Y-m-d\TH:i:sP'),
+                            "end"   => date('Y-m-d\TH:i:sP')
+                        ]
+                    ];
 
-                foreach ($encounter['statusHistory'] as $key => $value) {
-                    if ($value['status'] == 'in-progress') {
-                        $encounter['statusHistory'][$key]['period']['end'] = date('Y-m-d\TH:i:sP');
+                    foreach ($encounter['statusHistory'] as $key => $value) {
+                        if ($value['status'] == 'in-progress') {
+                            $encounter['statusHistory'][$key]['period']['end'] = date('Y-m-d\TH:i:sP');
+                        }
                     }
                 }
 
