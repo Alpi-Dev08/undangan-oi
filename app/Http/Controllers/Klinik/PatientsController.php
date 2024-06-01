@@ -130,107 +130,111 @@
             }
 
             if(isset($patient->user->info)) {
+                if($request->his_number){
 
-                $patiensatusehat = [
-                    "resourceType" => "Patient",
-                    "meta" => [
-                        "profile" => [
-                            "https://fhir.kemkes.go.id/r4/StructureDefinition/Patient"
-                        ]
-                    ],
-                    "identifier" => [
-                        [
-                            "use" => "official",
-                            "system" => "https://fhir.kemkes.go.id/id/nik",
-                            "value" => $patient->user->info->nik ?? ''
+                }else {
+                    $patiensatusehat = [
+                        "resourceType"    => "Patient",
+                        "meta"            => [
+                            "profile" => [
+                                "https://fhir.kemkes.go.id/r4/StructureDefinition/Patient"
+                            ]
                         ],
-                        [
-                            "use" => "official",
-                            "system" => "https://fhir.kemkes.go.id/id/paspor",
-                            "value" => $patient->user->info->paspor ?? ''
-                        ],
-                        [
-                            "use" => "official",
-                            "system" => "https://fhir.kemkes.go.id/id/kk",
-                            "value" => $patient->user->info->kk ?? ''
-                        ]
-                    ],
-                    "active" => true,
-                    "name" => [
-                        [
-                            "use" => "official",
-                            "text" => $patient->user->name ?? $patient->user->info->first_name . ' ' . $patient->user->info->last_name,
-                        ]
-                    ],
-                    "telecom" => [
-                        [
-                            "system" => "phone",
-                            "value" => $patient->user->info->phone ?? '',
-                            "use" => "mobile"
-                        ],
-                        [
-                            "system" => "phone",
-                            "value" => $patient->user->info->phone ?? '',
-                            "use" => "home"
-                        ],
-                        [
-                            "system" => "email",
-                            "value" => $patient->user->email ?? '',
-                            "use" => "home"
-                        ]
-                    ],
-                    "gender" => $patient->user->info->gender->name ?? '',
-                    "birthDate" => $patient->user->info->birth_date ?? '',
-                    "deceasedBoolean" => false,
-                    "address" => [
-                        [
-                            "use" => "home",
-                            "line" => [
-                                $patient->user->info->address ?? ''
+                        "identifier"      => [
+                            [
+                                "use"    => "official",
+                                "system" => "https://fhir.kemkes.go.id/id/nik",
+                                "value"  => $patient->user->info->nik ?? ''
                             ],
-                            "city" => "Jakarta",
-                            "postalCode" => "12950",
-                            "country" => "ID",
-                            "extension" => [
-                                [
-                                    "url" => "https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode",
-                                    "extension" => [
-                                        [
-                                            "url" => "province",
-                                            "valueCode" => $patient->user->info->province->code ?? ''
-                                        ],
-                                        [
-                                            "url" => "city",
-                                            "valueCode" => $patient->user->info->city->code ?? ''
-                                        ],
-                                        [
-                                            "url" => "district",
-                                            "valueCode" => $patient->user->info->district->code ?? ''
-                                        ],
-                                        [
-                                            "url" => "village",
-                                            "valueCode" => $patient->user->info->subdistrict->code ?? ''
-                                        ],
-                                        [
-                                            "url" => "rt",
-                                            "valueCode" => $patient->user->info->rt ?? ''
-                                        ],
-                                        [
-                                            "url" => "rw",
-                                            "valueCode" => $patient->user->info->rw ?? ''
+                            [
+                                "use"    => "official",
+                                "system" => "https://fhir.kemkes.go.id/id/paspor",
+                                "value"  => $patient->user->info->paspor ?? ''
+                            ],
+                            [
+                                "use"    => "official",
+                                "system" => "https://fhir.kemkes.go.id/id/kk",
+                                "value"  => $patient->user->info->kk ?? ''
+                            ]
+                        ],
+                        "active"          => true,
+                        "name"            => [
+                            [
+                                "use"  => "official",
+                                "text" => $patient->user->name ?? $patient->user->info->first_name . ' ' . $patient->user->info->last_name,
+                            ]
+                        ],
+                        "telecom"         => [
+                            [
+                                "system" => "phone",
+                                "value"  => $patient->user->info->phone ?? '',
+                                "use"    => "mobile"
+                            ],
+                            [
+                                "system" => "phone",
+                                "value"  => $patient->user->info->phone ?? '',
+                                "use"    => "home"
+                            ],
+                            [
+                                "system" => "email",
+                                "value"  => $patient->user->email ?? '',
+                                "use"    => "home"
+                            ]
+                        ],
+                        "gender"          => $patient->user->info->gender->name ?? '',
+                        "birthDate"       => $patient->user->info->birth_date ?? '',
+                        "deceasedBoolean" => false,
+                        "address"         => [
+                            [
+                                "use"        => "home",
+                                "line"       => [
+                                    $patient->user->info->address ?? ''
+                                ],
+                                "city"       => "Jakarta",
+                                "postalCode" => "12950",
+                                "country"    => "ID",
+                                "extension"  => [
+                                    [
+                                        "url"       => "https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode",
+                                        "extension" => [
+                                            [
+                                                "url"       => "province",
+                                                "valueCode" => $patient->user->info->province->code ?? ''
+                                            ],
+                                            [
+                                                "url"       => "city",
+                                                "valueCode" => $patient->user->info->city->code ?? ''
+                                            ],
+                                            [
+                                                "url"       => "district",
+                                                "valueCode" => $patient->user->info->district->code ?? ''
+                                            ],
+                                            [
+                                                "url"       => "village",
+                                                "valueCode" => $patient->user->info->subdistrict->code ?? ''
+                                            ],
+                                            [
+                                                "url"       => "rt",
+                                                "valueCode" => $patient->user->info->rt ?? ''
+                                            ],
+                                            [
+                                                "url"       => "rw",
+                                                "valueCode" => $patient->user->info->rw ?? ''
+                                            ]
                                         ]
                                     ]
                                 ]
                             ]
                         ]
-                    ]
-                ];
+                    ];
 
-                $satusehat = satu_sehat('create', 'Patint', '', $patiensatusehat);
+                    $satusehat = satu_sehat('create', 'Patient', '', $patiensatusehat);
+                }
             }
 
             // attach this info to the current user
             $patient->user()->associate($user->id);
+            $patient->his_number    = $request->his_number;
             //$patient->patient_code  = 'P'.date('Ymd'). str_pad($latest + 1, 4, '0', STR_PAD_LEFT);
             $patient->patient_code  = $patient_id;
             $patient->register_date = date('Ymd');
