@@ -227,8 +227,8 @@
                 $reference      = "Location/" . $location->location_id;
                 $reference_name = $location->name;
             } else {
-                $reference      = "Location/a2aa15d0-c67d-4ae7-bb40-457a8af06d0c";
-                $location       = Location::where('location_id', 'a2aa15d0-c67d-4ae7-bb40-457a8af06d0c')->first();
+                $reference      = "Location/b6442053-e8f1-4944-b349-316b3f59aef1";
+                $location       = Location::where('location_id', 'b6442053-e8f1-4944-b349-316b3f59aef1')->first();
                 $reference_name = $location->name;
             }
 
@@ -289,7 +289,7 @@
                     "location"        => [
                         [
                             "location" => [
-                                "reference" => "Location/a2aa15d0-c67d-4ae7-bb40-457a8af06d0c",
+                                "reference" => "Location/b6442053-e8f1-4944-b349-316b3f59aef1",
                                 "display"   => "Poli Umim"
                             ]
                         ]
