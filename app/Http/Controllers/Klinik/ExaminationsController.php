@@ -571,7 +571,7 @@
             $encounter = json_decode($examination->encounter, true);
 
             if ($examination->encounter_id && $examination->encounter_status != "finished") {
-                $assessment  = explode(' |', $validated['assessment']);
+                $assessment  = explode(' | ', $validated['assessment']);
                 $assessment_ = [];
                 $n           = 1;
                 foreach ($assessment as $row) {
@@ -622,6 +622,7 @@
 
                         $condition = satu_sehat('create', 'Condition', $reqCondition);
 
+                        $condition = json_decode($condition);
                         if (isset($condition->id)) {
                             $encounter["diagnosis"][] = [
                                 "condition" => [

@@ -313,6 +313,7 @@
                 if(isset($encounter->id)) {
                     $examination->encounter_id = $encounter->id;
                     $examination->encounter    = json_encode($jayParsedAry);
+                    $examination->encounter_status = $encounter->status;
                 }
             }
             $examination->save();
