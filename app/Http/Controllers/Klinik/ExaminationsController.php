@@ -364,10 +364,10 @@
             $vitalityexamination = VitalityExamination::where('examination_id', $examination->id)->first();
 
             if ($examination->encounter_id && $examination->encounter_status != "finished") {
-                $encounter           = json_decode($examination->encounter, true);
+                $encounter = json_decode($examination->encounter, true);
 
-                if($encounter['status'] == 'arrived'){
-                    $encounter['status'] = 'in-progress';
+                if ($encounter['status'] == 'arrived') {
+                    $encounter['status']          = 'in-progress';
                     $encounter['statusHistory'][] = [
                         "status" => "in-progress",
                         "period" => [
@@ -382,9 +382,11 @@
                     }
                 }
 
-                satu_sehat('update', 'Encounter', $encounter, $examination->encounter_id);
+                $encounter_ = satu_sehat('update', 'Encounter', $encounter, $examination->encounter_id);
 
-                $examination->encounter = json_encode($encounter);
+                $examination->encounter        = json_encode($encounter_);
+                $examination->encounter_status = $encounter['status'];
+
                 $examination->save();
             }
 
@@ -647,7 +649,7 @@
                     }
                 }
 
-                if($encounter['status'] == 'in-progress'){
+                if ($encounter['status'] == 'in-progress') {
                     $encounter['status'] = 'finished';
 
                     $encounter['statusHistory'][] = [
