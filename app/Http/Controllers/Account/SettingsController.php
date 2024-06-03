@@ -310,9 +310,10 @@
 
                 $encounter                 = satu_sehat('create', 'Encounter', $jayParsedAry);
 
+                $encounter = json_decode($encounter);
                 if(isset($encounter->id)) {
                     $examination->encounter_id = $encounter->id;
-                    $examination->encounter    = json_encode($jayParsedAry);
+                    $examination->encounter    = $encounter;
                     $examination->encounter_status = $encounter->status;
                 }
             }

@@ -384,7 +384,7 @@
 
                 $encounter_ = satu_sehat('update', 'Encounter', $encounter, $examination->encounter_id);
 
-                $examination->encounter        = json_encode($encounter_);
+                $examination->encounter        = $encounter_;
                 $examination->encounter_status = $encounter['status'];
 
                 $examination->save();
@@ -677,8 +677,9 @@
                 try {
                     $validated['status'] = 'done';
                     if (isset($encounter_)) {
+                        $encounter_ = json_decode($encounter_);
                         $validated['encounter_status'] = $encounter_->status;
-                        $validated['encounter']        = json_encode($encounter_);
+                        $validated['encounter']        = $encounter_;
                     }
                     $validated['resep'] = json_encode($request->resep);
                     $examination->update($validated);
