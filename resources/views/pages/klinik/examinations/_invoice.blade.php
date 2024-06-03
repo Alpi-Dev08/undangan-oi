@@ -1,4 +1,5 @@
-<!-- begin::Wrapper-->
+@php use Carbon\Carbon; @endphp
+    <!-- begin::Wrapper-->
 <div class="mw-lg-950px mx-auto w-100" id="printableArea">
     <!-- begin::Header-->
     <div class="d-flex justify-content-between flex-column flex-sm-row mb-19">
@@ -13,7 +14,7 @@
             <!--begin::Text-->
             <div class="text-sm-end fw-semibold fs-4 text-muted mt-7">
                 <div>tangerang</div>
-                <div>Indonesia </div>
+                <div>Indonesia</div>
             </div>
             <!--end::Text-->
         </div>
@@ -26,7 +27,7 @@
             <!--begin::Message-->
             <div class="fw-bold fs-2">Dear {{ ($info->title_prefix !='' ? $info->title_prefix.'. ' : '').$user->name.($info->title_suffix!='' ? ', '.$info->title_suffix : '') }}
                 <span class="fs-6">({{$user->phone}})</span>,
-                <br />
+                <br/>
                 <span class="text-muted fs-5">Here are your order details. We thank you for your purchase.</span></div>
             <!--begin::Message-->
             <!--begin::Separator-->
@@ -40,7 +41,7 @@
                 </div>
                 <div class="flex-root d-flex flex-column">
                     <span class="text-muted">Date</span>
-                    <span class="fs-5">{{ \Carbon\Carbon::parse($transaction->created_at)->format('d F Y') }}</span>
+                    <span class="fs-5">{{ Carbon::parse($transaction->created_at)->format('d F Y') }}</span>
                 </div>
             </div>
             <!--end::Order details-->
@@ -81,34 +82,40 @@
                                 </td>
                             </tr>
                         @endforeach
-			@php $total_resep = 0; @endphp
+                        @php $total_resep = 0; @endphp
                         @if($examination->resep)
-                        <tr class="border-bottom fs-6 fw-bold text-muted">
-                            <th class="min-w-175px pb-2">Obat</th>
-                            <th class="min-w-100px text-end pb-2"></th>
-                        </tr>
-                        @php
-                            $resep = json_decode($examination->resep);
-                            $obat = $resep->obat;
-                            $qty = $resep->qty;
-                        @endphp
-                        @foreach($obat as $key => $value)
-                            @if(isset(getObat($value)->name))
-			    <tr>
-                                <td class="d-flex align-items-center">
-                                    <div class="d-flex flex-column">
-                                        <a href="#" class="text-gray-800 text-hover-primary mb-1">{{getObat($value)->name}}</a>
-                                    </div>
-                                </td>
-                                <td class="text-end text-gray-800">
-                                    <span class="text-gray-600 me-2">Rp </span>{{number_format($qty[$key]*getObat($value)->price,0,',','.')}}
-                                </td>
+                            <tr class="border-bottom fs-6 fw-bold text-muted">
+                                <th class="min-w-175px pb-2">Obat</th>
+                                <th class="min-w-100px text-end pb-2"></th>
                             </tr>
                             @php
-                                $total_resep += $qty[$key]*getObat($value)->price;
+                                $resep = json_decode($examination->resep);
+                                $obat = $resep->obat;
+                                $qty = $resep->qty;
                             @endphp
-			   @endif
-                        @endforeach
+                            @if(isset($resep->obat))
+                                @php
+                                    $obat = $resep->obat;
+                                    $qty = $resep->qty;
+                                @endphp
+                                @foreach($obat as $key => $value)
+                                    @if(isset(getObat($value)->name))
+                                        <tr>
+                                            <td class="d-flex align-items-center">
+                                                <div class="d-flex flex-column">
+                                                    <a href="#" class="text-gray-800 text-hover-primary mb-1">{{getObat($value)->name}}</a>
+                                                </div>
+                                            </td>
+                                            <td class="text-end text-gray-800">
+                                                <span class="text-gray-600 me-2">Rp </span>{{number_format($qty[$key]*getObat($value)->price,0,',','.')}}
+                                            </td>
+                                        </tr>
+                                        @php
+                                            $total_resep += $qty[$key]*getObat($value)->price;
+                                        @endphp
+                                    @endif
+                                @endforeach
+                            @endif
                         @endif
 
                         <!--end::Products-->
@@ -120,11 +127,13 @@
                         </tr>
                         <!--end::Grand total-->
                         <tr>
-                  			    <td colspan="2">Notes : </td>
-                  			</tr>
-                  			<tr>
-                  			    <td colspan="2"><pre>{{ $transaction->notes }}</pre></td>
-                  			</tr>
+                            <td colspan="2">Notes :</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <pre>{{ $transaction->notes }}</pre>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -146,9 +155,9 @@
         <!-- end::Actions-->
         <!-- begin::Action-->
         @if($transaction->status=='waiting payment')
-        <form id="kt_account_profile_details_form" class="form" method="POST" action="{{ route('examinations.create.payment') }}" enctype="multipart/form-data">
-        @csrf
-        <!--begin::Card body-->
+            <form id="kt_account_profile_details_form" class="form" method="POST" action="{{ route('examinations.create.payment') }}" enctype="multipart/form-data">
+                @csrf
+                <!--begin::Card body-->
                 <!--begin::Input group-->
 
                 <div class="card-footer d-flex justify-content-end py-6 px-9">
@@ -159,7 +168,7 @@
                     </button>
                 </div>
                 <!--end::Actions-->
-        </form>
+            </form>
         @endif
         <!-- end::Action-->
     </div>
@@ -167,13 +176,13 @@
 </div>
 <!-- end::Wrapper-->
 @section('styles')
-<style>
- @media print {
-  .noprint{
-    display:none !important;
-  }
- }
-</style>
+    <style>
+        @media print {
+            .noprint {
+                display: none !important;
+            }
+        }
+    </style>
 @endsection
 @push('customscript')
     <script>
@@ -188,4 +197,4 @@
             document.body.innerHTML = originalContents;
         }
     </script>
-    @endpush
+@endpush

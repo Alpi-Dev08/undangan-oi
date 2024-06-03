@@ -14,41 +14,42 @@
          * Build DataTable class.
          *
          * @param mixed $query Results from query() method.
+         *
          * @return \Yajra\DataTables\DataTableAbstract
          */
         public function dataTable($query)
         {
             $query = $query->whereHas(
-                'roles', function($q){
+                'roles', function ($q) {
                 $q->where('name', 'dokter');
             });
             return datatables()
                 ->eloquent($query)
-                ->rawColumns(['first_name','action'])
+                ->rawColumns(['first_name', 'action'])
                 ->addIndexColumn()
                 ->editColumn('first_name', function (User $model) {
                     return view('pages.users._avatar', compact('model'));
                 })
                 ->editColumn('his_number', function (User $model) {
-		    //return $model->health_profesional;
-                    if($model->health_profesional !== null){
-                        if($model->health_profesional->his_number !== null) {
-				return $model->health_profesional->his_number ?? "";
+                    //return $model->health_profesional;
+                    if ($model->health_profesional !== null) {
+                        if ($model->health_profesional->his_number !== null) {
+                            return $model->health_profesional->his_number ?? "";
                         } else {
-                        $ktp = $model->info->card_number ?? '';
-                        $nakes = HealthProfesional::where('user_id', $model->id)->first();
-                        //return $ktp;
-			if($ktp){
-                            $satusehat = satu_sehat('get','Practitioner?identifier=https://fhir.kemkes.go.id/id/nik|'.$ktp,'');
-                            $his =  json_decode($satusehat)->entry[0]->resource->id ?? "";
-                            $nakes->his_number = $his;
-                            $nakes->save();
+                            $ktp   = $model->info->card_number ?? '';
+                            $nakes = HealthProfesional::where('user_id', $model->id)->first();
+                            //return $ktp;
+                            if ($ktp && cekNIK($ktp)) {
+                                $satusehat         = satu_sehat('get', 'Practitioner?identifier=https://fhir.kemkes.go.id/id/nik|' . $ktp, '');
+                                $his               = json_decode($satusehat)->entry[0]->resource->id ?? "";
+                                $nakes->his_number = $his;
+                                $nakes->save();
+                            }
+                            return $nakes->his_number ?? "-";
                         }
-                        return $nakes->his_number ?? "-";
-			}
                     }
-		   return "-";
-                   // return $model->health_profesional;
+                    return "-";
+                    // return $model->health_profesional;
                 })
                 ->editColumn('email', function (User $model) {
                     return $model->email;
@@ -65,6 +66,7 @@
          * Get query source of dataTable.
          *
          * @param \App\Models\User $model
+         *
          * @return \Illuminate\Database\Eloquent\Builder
          */
         public function query(User $model)
@@ -80,18 +82,18 @@
         public function html()
         {
             return $this->builder()
-                ->setTableId('users-table')
-                ->columns($this->getColumns())
-                ->minifiedAjax()
-                ->orderBy(0,'asc')
-                ->stateSave(false)
-                ->responsive()
-                ->autoWidth(false)
-                ->parameters([
-                    'scrollX'      => true,
-                    'drawCallback' => 'function() { KTMenu.createInstances(); }',
-                ])
-                ->addTableClass('align-middle table-row-dashed fs-6 gy-5');
+                        ->setTableId('users-table')
+                        ->columns($this->getColumns())
+                        ->minifiedAjax()
+                        ->orderBy(0, 'asc')
+                        ->stateSave(false)
+                        ->responsive()
+                        ->autoWidth(false)
+                        ->parameters([
+                            'scrollX'      => true,
+                            'drawCallback' => 'function() { KTMenu.createInstances(); }',
+                        ])
+                        ->addTableClass('align-middle table-row-dashed fs-6 gy-5');
         }
 
         /**
@@ -108,10 +110,10 @@
                 Column::make('email'),
                 Column::make('phone'),
                 Column::computed('action')
-                    ->exportable(false)
-                    ->printable(false)
-                    ->addClass('text-center')
-                    ->responsivePriority(-1),
+                      ->exportable(false)
+                      ->printable(false)
+                      ->addClass('text-center')
+                      ->responsivePriority(-1),
             ];
         }
 
@@ -120,7 +122,8 @@
          *
          * @return string
          */
-        protected function filename() : string
+        protected function filename()
+        : string
         {
             return 'Users_' . date('YmdHis');
         }

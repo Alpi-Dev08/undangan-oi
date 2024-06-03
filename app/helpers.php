@@ -372,3 +372,7 @@
             return $obat;
         }
     }
+
+    function cekNIK($str) {
+        return ctype_digit($str) && strlen($str) === 16;
+    }

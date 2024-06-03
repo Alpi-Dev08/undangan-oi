@@ -1,140 +1,145 @@
 <?php
 
-namespace App\DataTables;
+    namespace App\DataTables;
 
-use App\Models\Klinik\Patient;
-use App\Models\User;
-use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Services\DataTable;
+    use App\Models\Klinik\Patient;
+    use App\Models\User;
+    use Yajra\DataTables\Html\Column;
+    use Yajra\DataTables\Services\DataTable;
 
-class PatientDataTable extends DataTable
-{
-    /**
-     * Build DataTable class.
-     *
-     * @param  mixed  $query Results from query() method.
-     * @return \Yajra\DataTables\DataTableAbstract
-     */
-    public function dataTable($query)
+    class PatientDataTable extends DataTable
     {
-        $query = $query->whereHas(
-            'roles', function ($q) {
+        /**
+         * Build DataTable class.
+         *
+         * @param mixed $query Results from query() method.
+         *
+         * @return \Yajra\DataTables\DataTableAbstract
+         */
+        public function dataTable($query)
+        {
+            $query = $query->whereHas(
+                'roles', function ($q) {
                 $q->where('name', 'patient');
             });
 
-        $query = $query->orderBy('created_at','desc');
+            $query = $query->orderBy('created_at', 'desc');
 
-        return datatables()
-            ->eloquent($query)
-            ->filter(function ($query) {
-                if (request()->has('search')) {
-                    $search = request()->get('search');
-		    $query->where(function($q) use ($search){
-		    	$q->where('first_name', 'like', '%'.$search['value'].'%')
-                    		->orWhere('last_name', 'like', '%'.$search['value'].'%')
-                    		->orWhere('phone', 'like', '%'.$search['value'].'%')
-                    		->orWhereRelation('patient', 'patient_code', 'like', '%'.$search['value'].'%');
-		    });
-                    /*$query->where('first_name', 'like', '%'.$search['value'].'%')
-                    ->where('last_name', 'like', '%'.$search['value'].'%')
-                    ->where('phone', 'like', '%'.$search['value'].'%')
-                    ->orWhereRelation('patient', 'patient_code', 'like', '%'.$search['value'].'%');*/
-                }
-            })
-            ->rawColumns(['first_name', 'action'])
-            ->addIndexColumn()
-            ->editColumn('patient_id', function (User $model) {
-                return $model->patient->patient_code ?? "";
-            })
-            ->editColumn('his_number', function (User $model) {
-		if(isset($model->patient->patient_code)){
-                if(isset($model->patient->his_number)){
-                    return $model->patient->his_number;
-                } else {
-                    $ktp = $model->info->card_number ?? '';
-                    $patient = Patient::where('patient_code', $model->patient->patient_code)->first();
-                    if($ktp){
-                        $satusehat = satu_sehat('get','Patient?identifier=https://fhir.kemkes.go.id/id/nik|'.$ktp,'');
-                        $his =  json_decode($satusehat)->entry[0]->resource->identifier[0]->value ?? "";
-                        $patient->his_number = $his;
-                        $patient->save();
+            return datatables()
+                ->eloquent($query)
+                ->filter(function ($query) {
+                    if (request()->has('search')) {
+                        $search = request()->get('search');
+                        $query->where(function ($q) use ($search) {
+                            $q->where('first_name', 'like', '%' . $search['value'] . '%')
+                              ->orWhere('last_name', 'like', '%' . $search['value'] . '%')
+                              ->orWhere('phone', 'like', '%' . $search['value'] . '%')
+                              ->orWhereRelation('patient', 'patient_code', 'like', '%' . $search['value'] . '%');
+                        });
+                        /*$query->where('first_name', 'like', '%'.$search['value'].'%')
+                        ->where('last_name', 'like', '%'.$search['value'].'%')
+                        ->where('phone', 'like', '%'.$search['value'].'%')
+                        ->orWhereRelation('patient', 'patient_code', 'like', '%'.$search['value'].'%');*/
                     }
-                    return $patient->his_number ?? "-";
-                }}else {return "-"; }
-            })
-            ->editColumn('first_name', function (User $model) {
-                return $model->name;
-            })
-            ->addColumn('phone', function (User $model) {
-                return $model->phone;
-            })
-            ->addColumn('birthday', function (User $model) {
-                return $model->info->date_of_birth ?? "";
-            })
-            ->addColumn('action', function (User $model) {
-                return view('pages.klinik.patients._action', compact('model'));
-            });
-    }
+                })
+                ->rawColumns(['first_name', 'action'])
+                ->addIndexColumn()
+                ->editColumn('patient_id', function (User $model) {
+                    return $model->patient->patient_code ?? "";
+                })
+                ->editColumn('his_number', function (User $model) {
+                    if (isset($model->patient->patient_code)) {
+                        if (isset($model->patient->his_number)) {
+                            return $model->patient->his_number;
+                        } else {
+                            $ktp     = $model->info->card_number ?? '';
+                            $patient = Patient::where('patient_code', $model->patient->patient_code)->first();
+                            if ($ktp && cekNIK($ktp)) {
+                                $satusehat           = satu_sehat('get', 'Patient?identifier=https://fhir.kemkes.go.id/id/nik|' . $ktp, '');
+                                $his                 = json_decode($satusehat)->entry[0]->resource->identifier[0]->value ?? "";
+                                $patient->his_number = $his;
+                                $patient->save();
+                            }
+                            return $patient->his_number ?? "-";
+                        }
+                    } else {
+                        return "-";
+                    }
+                })
+                ->editColumn('first_name', function (User $model) {
+                    return $model->name;
+                })
+                ->addColumn('phone', function (User $model) {
+                    return $model->phone;
+                })
+                ->addColumn('birthday', function (User $model) {
+                    return $model->info->date_of_birth ?? "";
+                })
+                ->addColumn('action', function (User $model) {
+                    return view('pages.klinik.patients._action', compact('model'));
+                });
+        }
 
-    /**
-     * Get query source of dataTable.
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function query(User $model)
-    {
-        return $model->newQuery();
-    }
+        /**
+         * Get query source of dataTable.
+         *
+         * @return \Illuminate\Database\Eloquent\Builder
+         */
+        public function query(User $model)
+        {
+            return $model->newQuery();
+        }
 
-    /**
-     * Optional method if you want to use html builder.
-     *
-     * @return \Yajra\DataTables\Html\Builder
-     */
-    public function html()
-    {
-        return $this->builder()
-            ->setTableId('patients-table')
-            ->columns($this->getColumns())
-            ->minifiedAjax()
-            ->orderBy(0, 'asc')
-            ->stateSave(false)
-            ->responsive()
-            ->autoWidth(false)
-            ->parameters([
-                'scrollX' => true,
-                'drawCallback' => 'function() { KTMenu.createInstances(); }',
-            ])
-            ->addTableClass('align-middle table-row-dashed fs-6 gy-5');
-    }
+        /**
+         * Optional method if you want to use html builder.
+         *
+         * @return \Yajra\DataTables\Html\Builder
+         */
+        public function html()
+        {
+            return $this->builder()
+                        ->setTableId('patients-table')
+                        ->columns($this->getColumns())
+                        ->minifiedAjax()
+                        ->orderBy(0, 'asc')
+                        ->stateSave(false)
+                        ->responsive()
+                        ->autoWidth(false)
+                        ->parameters([
+                            'scrollX'      => true,
+                            'drawCallback' => 'function() { KTMenu.createInstances(); }',
+                        ])
+                        ->addTableClass('align-middle table-row-dashed fs-6 gy-5');
+        }
 
-    /**
-     * Get columns.
-     *
-     * @return array
-     */
-    protected function getColumns()
-    {
-        return [
-            Column::make('DT_RowIndex')->title('No')->orderable(false)->searchable(false),
-            Column::make('patient_id')->title(__('Patient ID')),
-            Column::make('his_number')->title(__('IHS Number')),
-            Column::make('first_name')->title(__('Name')),
-            Column::make('phone'),
-            Column::make('birthday')->title(__('Birthday')),
-            Column::computed('action')
-                ->exportable(false)
-                ->printable(false)
-                ->addClass('text-center')
-                ->responsivePriority(-1),
-        ];
-    }
+        /**
+         * Get columns.
+         *
+         * @return array
+         */
+        protected function getColumns()
+        {
+            return [
+                Column::make('DT_RowIndex')->title('No')->orderable(false)->searchable(false),
+                Column::make('patient_id')->title(__('Patient ID')),
+                Column::make('his_number')->title(__('IHS Number')),
+                Column::make('first_name')->title(__('Name')),
+                Column::make('phone'),
+                Column::make('birthday')->title(__('Birthday')),
+                Column::computed('action')
+                      ->exportable(false)
+                      ->printable(false)
+                      ->addClass('text-center')
+                      ->responsivePriority(-1),
+            ];
+        }
 
-    /**
-     * Get filename for export.
-     */
-    protected function filename(): string
-    {
-        return 'Patients_'.date('YmdHis');
+        /**
+         * Get filename for export.
+         */
+        protected function filename()
+        : string
+        {
+            return 'Patients_' . date('YmdHis');
+        }
     }
-}

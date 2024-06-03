@@ -75,6 +75,7 @@
                         <!--begin::Col-->
                         <div class="col-lg-8 fv-row">
                             <input type="text" required name="card_number" id="card_number" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Card Number" value=""/>
+                            <input type="hidden" name="his_number" id="his_number" value=""/>
                         </div>
                         <!--end::Col-->
                     </div>
@@ -623,6 +624,7 @@
                                 if(response.status == "success"){
                                     $("#card_number").removeClass("is-invalid");
                                     $("#card_number").addClass("is-valid");
+                                    $("#his_number").val(response.data);
                                 }else{
                                     swal.fire({
                                         title: "IHS Number Tidak Ditemukan",
