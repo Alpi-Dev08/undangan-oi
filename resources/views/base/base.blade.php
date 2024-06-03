@@ -60,6 +60,16 @@ License: {{ theme()->getOption('product', 'license') }}
     @endif
 
     @yield('styles')
+    <style>
+        .table.gy-5 th, .table.gy-5 td {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
+        .table > :not(caption) > * > *{
+            padding : 0 !important;
+        }
+    </style>
 </head>
 {{-- end::Head --}}
 
