@@ -384,8 +384,10 @@
 
                 $encounter_ = satu_sehat('update', 'Encounter', $encounter, $examination->encounter_id);
 
-                $examination->encounter        = $encounter_;
-                $examination->encounter_status = $encounter['status'];
+                $encounter_ = json_decode($encounter_);
+
+                $examination->encounter        = json_encode($encounter_);
+                $examination->encounter_status = $encounter_->status;
 
                 $examination->save();
             }
