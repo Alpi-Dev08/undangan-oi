@@ -681,7 +681,7 @@
                     if (isset($encounter_)) {
                         $encounter_ = json_decode($encounter_);
                         $validated['encounter_status'] = $encounter_->status;
-                        $validated['encounter']        = $encounter_;
+                        $validated['encounter']        = json_encode($encounter_);
                     }
                     $validated['resep'] = json_encode($request->resep);
                     $examination->update($validated);
