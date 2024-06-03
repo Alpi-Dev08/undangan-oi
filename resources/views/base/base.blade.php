@@ -62,12 +62,8 @@ License: {{ theme()->getOption('product', 'license') }}
     @yield('styles')
     <style>
         .table.gy-5 th, .table.gy-5 td {
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-        }
-
-        .table > :not(caption) > * > *{
-            padding : 0 !important;
+            padding-top: 0.25rem !important;
+            padding-bottom: 0.25rem !important;
         }
     </style>
 </head>
