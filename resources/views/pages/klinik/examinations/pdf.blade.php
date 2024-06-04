@@ -1,4 +1,5 @@
-<!doctype html>
+@php use Carbon\Carbon; @endphp
+    <!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -110,15 +111,15 @@
             <td style="width:18%;font-size:12px;font-weight:bold">Examination Date
             <td>
             <td style="width:30%;font-size:12px;">
-                : {{ \Carbon\Carbon::parse($examination->created_at)->locale('id')->format('d F Y H:i:s') }}
+                : {{ Carbon::parse($examination->created_at)->locale('id')->format('d F Y H:i:s') }}
             <td>
         </tr>
         <tr>
             <td style="width:17%;font-size:12px;font-weight:bold">Birth Date / Age
             <td>
             <td style="width:35%;font-size:12px;">
-                : {{ \Carbon\Carbon::parse($user->info->date_of_birth)->locale('id')->format('d F Y') }}
-                / {{ \Carbon\Carbon::createFromDate($user->info->date_of_birth)->diff(\Carbon\Carbon::now())->format('%y Tahun %m Bulan %d Hari') }}
+                : {{ Carbon::parse($user->info->date_of_birth)->locale('id')->format('d F Y') }}
+                / {{ Carbon::createFromDate($user->info->date_of_birth)->diff(Carbon::now())->format('%y Tahun %m Bulan %d Hari') }}
             <td>
             <td style="width:18%;font-size:12px;font-weight:bold">Doctor
             <td>
@@ -222,8 +223,36 @@
                 <td style="font-size:12px;width:65%">{{ $examination->vitality->bmi_conclusion ?? "-" }}</td>
             </tr>
         </table>
-
         <hr class="mt-10">
+        @if($examination->psikosisial)
+            @php
+                $psikososial = json_decode($examination->psikososial);
+            @endphp
+            <h4 style="font-weight: bolder;color:#436ba4;font-size:12px;margin:0px;margin-top:10px;text-transform: uppercase">Kebutuhan Khusus</h4>
+            @if($psikososial->khusus)
+                <p>{{ $psikososial->khusus }}</p>
+            @endif
+            <h4 style="font-weight: bolder;color:#436ba4;font-size:12px;margin:0px;margin-top:10px;text-transform: uppercase">Data Psikologi dan Sosial</h4>
+            <table>
+                <tr>
+                    <td style="font-size:12px;width:35%;padding-left:10px">Bicara</td>
+                    <td style="font-size:12px;width:65%">{{ ucwords($psikososial->bicara) ?? "-" }}</td>
+                </tr>
+                <tr>
+                    <td style="font-size:12px;width:35%;padding-left:10px">Komunikasi</td>
+                    <td style="font-size:12px;width:65%">{{ ucwords($psikososial->komunikasi) ?? "-" }}</td>
+                </tr>
+                <tr>
+                    <td style="font-size:12px;width:35%;padding-left:10px">Status Emosional</td>
+                    <td style="font-size:12px;width:65%">{{ ucwords($psikososial->emosional) ?? "-" }}</td>
+                </tr>
+                <tr>
+                    <td style="font-size:12px;width:35%;padding-left:10px">Sosiologi</td>
+                    <td style="font-size:12px;width:65%">{{ ucwords($psikososial->sosiologi) ?? "-" }}</td>
+                </tr>
+            </table>
+            <hr class="mt-10">
+        @endif
         @if($examination->service_category->is_mcu == 1)
 
             <h4 style="margin-bottom:0px;font-weight: bolder;color:#436ba4;font-size:12px;margin:0px;margin-top:10px;text-transform: uppercase">
@@ -487,7 +516,7 @@
                         @if($obat)
                             @foreach($obat as $key => $value)
                                 @if(isset(getObat($value)->name))
-                                <p style="margin:0px;">{{ getObat($value)->name }} x {{$qty[$key]}}</p>
+                                    <p style="margin:0px;">{{ getObat($value)->name }} x {{$qty[$key]}}</p>
                                 @endif
                             @endforeach
                         @endif
