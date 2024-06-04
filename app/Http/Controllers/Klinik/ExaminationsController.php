@@ -572,8 +572,8 @@
             // Validation Data
             $validated = $request->validated();
 
-            $encounter = json_decode($examination->encounter, true);
-	    $encounter_ = '';
+            $encounter  = json_decode($examination->encounter, true);
+            $encounter_ = '';
             if ($examination->encounter_id && $examination->encounter_status != "finished") {
                 $assessment  = explode(' | ', $validated['assessment']);
                 $assessment_ = [];
@@ -631,7 +631,7 @@
                             $encounter["diagnosis"][] = [
                                 "condition" => [
                                     "reference" => "Condition/" . $condition->id,
-                                    "display"   => trim(str_replace('|','',$row_[1])),
+                                    "display"   => trim(str_replace('|', '', $row_[1])),
                                 ],
                                 "use"       => [
                                     "coding" => [
@@ -679,9 +679,11 @@
                 try {
                     $validated['status'] = 'done';
                     if (isset($encounter_)) {
-                        $encounter_ = json_decode($encounter_);
-                        $validated['encounter_status'] = $encounter_->status;
-                        $validated['encounter']        = json_encode($encounter_);
+                        if ($encounter_ != null || $encounter_ != "") {
+                            $encounter_                    = json_decode($encounter_);
+                            $validated['encounter_status'] = $encounter_->status;
+                            $validated['encounter']        = json_encode($encounter_);
+                        }
                     }
                     $validated['resep'] = json_encode($request->resep);
                     $examination->update($validated);
