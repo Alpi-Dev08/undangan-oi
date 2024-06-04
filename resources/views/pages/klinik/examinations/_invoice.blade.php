@@ -90,8 +90,6 @@
                             </tr>
                             @php
                                 $resep = json_decode($examination->resep);
-                                $obat = $resep->obat;
-                                $qty = $resep->qty;
                             @endphp
                             @if(isset($resep->obat))
                                 @php
