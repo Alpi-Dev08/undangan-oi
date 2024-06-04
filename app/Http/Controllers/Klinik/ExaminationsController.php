@@ -371,7 +371,7 @@
                     $encounter['statusHistory'][] = [
                         "status" => "in-progress",
                         "period" => [
-                            "start" => "2024-05-29T20:43:24+00:00"
+                            "start" => date('Y-m-d\TH:i:sP') //"2024-05-29T20:43:24+00:00"
                         ]
                     ];
 
@@ -573,7 +573,7 @@
             $validated = $request->validated();
 
             $encounter = json_decode($examination->encounter, true);
-
+	    $encounter_ = '';
             if ($examination->encounter_id && $examination->encounter_status != "finished") {
                 $assessment  = explode(' | ', $validated['assessment']);
                 $assessment_ = [];
