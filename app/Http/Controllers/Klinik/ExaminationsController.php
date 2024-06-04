@@ -631,7 +631,7 @@
                             $encounter["diagnosis"][] = [
                                 "condition" => [
                                     "reference" => "Condition/" . $condition->id,
-                                    "display"   => $row_[1],
+                                    "display"   => trim(str_replace('|','',$row_[1])),
                                 ],
                                 "use"       => [
                                     "coding" => [
