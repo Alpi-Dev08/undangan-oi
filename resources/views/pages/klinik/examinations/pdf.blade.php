@@ -224,16 +224,20 @@
             </tr>
         </table>
         <hr class="mt-10">
-        @if($examination->psikosisial)
+        @if($examination->psikososial)
             @php
                 $psikososial = json_decode($examination->psikososial);
             @endphp
             <h4 style="font-weight: bolder;color:#436ba4;font-size:12px;margin:0px;margin-top:10px;text-transform: uppercase">Kebutuhan Khusus</h4>
             @if($psikososial->khusus)
-                <p>{{ $psikososial->khusus }}</p>
+                <table style="width:100%;font-size:12px;">
+                    <tr>
+                        <td style="font-size:12px;width:35%;padding-left:10px" colspan="2">{{ ucwords($psikososial->khusus) }}</td>
+                    </tr>
+                </table>
             @endif
             <h4 style="font-weight: bolder;color:#436ba4;font-size:12px;margin:0px;margin-top:10px;text-transform: uppercase">Data Psikologi dan Sosial</h4>
-            <table>
+            <table style="width:100%;font-size:12px;">
                 <tr>
                     <td style="font-size:12px;width:35%;padding-left:10px">Bicara</td>
                     <td style="font-size:12px;width:65%">{{ ucwords($psikososial->bicara) ?? "-" }}</td>
