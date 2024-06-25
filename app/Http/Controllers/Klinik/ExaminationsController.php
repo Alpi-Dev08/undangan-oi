@@ -48,30 +48,6 @@
             });
         }
 
-        public function index_()
-        {
-            $json = '{"resourceType":"Encounter","identifier":[{"system":"http:\/\/sys-ids.kemkes.go.id\/encounter\/10085107","use":"official","value":"E20240529623"}],"status":"arrived","class":{"system":"http:\/\/terminology.hl7.org\/CodeSystem\/v3-ActCode","code":"AMB","display":"ambulatory"},"subject":{"reference":"Patient\/P00491717250","display":"Auni Reza Sukma Permata "},"participant":[{"type":[{"coding":[{"system":"http:\/\/terminology.hl7.org\/CodeSystem\/v3-ParticipationType","code":"ATND","display":"attender"}]}],"individual":{"reference":"Practitioner\/1000652469","display":"Yunianti Lafau"}}],"period":{"start":"2024-05-29T15:43:24+00:00"},"location":[{"location":{"reference":"Location\/a2aa15d0-c67d-4ae7-bb40-457a8af06d0c","display":"Poli Umim"}}],"statusHistory":[{"status":"arrived","period":{"start":"2024-05-29T15:43:24+00:00","end":"2024-05-29T15:43:24+00:00"}}],"serviceProvider":{"reference":"Organization\/b5ba02bc-97f6-4f42-872c-02808dfb787c"}}';
-
-            $data           = json_decode($json, true);
-            $data['status'] = 'in-progress';
-
-            $data['statusHistory'][] = [
-                "status" => "in-progress",
-                "period" => [
-                    "start" => "2024-05-29T20:43:24+00:00"
-                ]
-            ];
-
-            foreach ($data['statusHistory'] as $key => $value) {
-                if ($value['status'] == 'arrived') {
-                    $data['statusHistory'][$key]['period']['end'] = "2024-05-29T20:43:24+00:00";
-                }
-            }
-
-
-            print_r($data['statusHistory']);
-        }
-
         /**
          * Display a listing of the resource.
          *
@@ -670,7 +646,13 @@
                 }
 
                 $encounter_ = satu_sehat('update', 'Encounter', $encounter, $examination->encounter_id);
-
+                if (isset($encounter_)) {
+                    if ($encounter_ != null || $encounter_ != "") {
+                        $encounter_                    = json_decode($encounter_);
+                        $validated['encounter_status'] = $encounter_->status;
+                        $validated['encounter']        = json_encode($encounter_);
+                    }
+                }
             }
 
             // Process Data
@@ -678,13 +660,6 @@
                 // Process Data
                 try {
                     $validated['status'] = 'done';
-                    if (isset($encounter_)) {
-                        if ($encounter_ != null || $encounter_ != "") {
-                            $encounter_                    = json_decode($encounter_);
-                            $validated['encounter_status'] = $encounter_->status;
-                            $validated['encounter']        = json_encode($encounter_);
-                        }
-                    }
                     $validated['resep'] = json_encode($request->resep);
                     $examination->update($validated);
                 } catch (Exception $e) {

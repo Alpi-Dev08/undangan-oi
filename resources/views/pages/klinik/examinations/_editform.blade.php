@@ -2208,15 +2208,15 @@
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-400px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->alergi_obat == "Ya")
-                                                <input value="Ya" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[alergi_obat]" id="riwayat_kesehatan_dua"/>
+                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->alergi_obat == "Ada")
+                                                <input value="Ada" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[alergi_obat]" id="riwayat_kesehatan_dua"/>
                                             @else
-                                                <input value="Ya" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[alergi_obat]" id="riwayat_kesehatan_dua"/>
+                                                <input value="Ada" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[alergi_obat]" id="riwayat_kesehatan_dua"/>
                                             @endif
                                             <label class="form-check-label me-5 w-150px" for="riwayat_kesehatan_dua">
-                                                Ya, sebutkan
+                                                Ada, Sebutkan
                                             </label>
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->alergi_obat == "Ya")
+                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->alergi_obat == "Ada")
                                                 <input class="form-control form-control-sm me-5" name="riwayat_alergi_obat" value="{{ $psikososial->riwayat_alergi_obat }}"/>
                                             @else
                                                 <input class="form-control form-control-sm me-5" name="riwayat_alergi_obat"/>
@@ -2241,15 +2241,15 @@
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-400px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->alergi_makanan == "Ya")
-                                                <input value="Ya" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[alergi_makanan]" id="riwayat_kesehatan_empat"/>
+                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->alergi_makanan == "Ada")
+                                                <input value="Ada" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[alergi_makanan]" id="riwayat_kesehatan_empat"/>
                                             @else
-                                                <input value="Ya" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[alergi_makanan]" id="riwayat_kesehatan_empat"/>
+                                                <input value="Ada" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[alergi_makanan]" id="riwayat_kesehatan_empat"/>
                                             @endif
                                             <label class="form-check-label me-5 w-150px" for="riwayat_kesehatan_empat">
-                                                Ya, sebutkan
+                                                Ada, Sebutkan
                                             </label>
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->alergi_makanan == "Ya")
+                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->alergi_makanan == "Ada")
                                                 <input class="form-control form-control-sm me-5" name="riwayat_alergi_makanan" value="{{ $psikososial->riwayat_alergi_makanan }}"/>
                                             @else
                                                 <input class="form-control form-control-sm me-5" name="riwayat_alergi_makanan"/>

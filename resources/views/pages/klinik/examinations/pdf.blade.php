@@ -229,12 +229,14 @@
                 $psikososial = json_decode($examination->psikososial);
             @endphp
             <h4 style="font-weight: bolder;color:#436ba4;font-size:12px;margin:0px;margin-top:10px;text-transform: uppercase">Kebutuhan Khusus</h4>
-            @if($psikososial->khusus)
-                <table style="width:100%;font-size:12px;">
-                    <tr>
-                        <td style="font-size:12px;width:35%;padding-left:10px" colspan="2">{{ ucwords($psikososial->khusus) }}</td>
-                    </tr>
-                </table>
+            @if(isset($psikososial->khusus))
+                @if($psikososial->khusus)
+                    <table style="width:100%;font-size:12px;">
+                        <tr>
+                            <td style="font-size:12px;width:35%;padding-left:10px" colspan="2">{{ ucwords($psikososial->khusus) }}</td>
+                        </tr>
+                    </table>
+                @endif
             @endif
             <h4 style="font-weight: bolder;color:#436ba4;font-size:12px;margin:0px;margin-top:10px;text-transform: uppercase">Data Psikologi dan Sosial</h4>
             <table style="width:100%;font-size:12px;">
@@ -255,6 +257,72 @@
                     <td style="font-size:12px;width:65%">{{ ucwords($psikososial->sosiologi) ?? "-" }}</td>
                 </tr>
             </table>
+
+            @if(isset($psikososial->pola_kebiasaan))
+                <h4 style="font-weight: bolder;color:#436ba4;font-size:12px;margin:0px;margin-top:10px;text-transform: uppercase">Pola Kebiasaan</h4>
+                <table style="width:100%;font-size:12px;">
+                    @foreach($psikososial->pola_kebiasaan as $key => $value)
+                        <tr>
+                            <td style="font-size:12px;width:35%;padding-left:10px">{{ ucwords($key) }}</td>
+                            <td style="font-size:12px;width:65%">{{ ucwords($value) ?? "-" }}</td>
+                        </tr>
+                    @endforeach
+                </table>
+            @endif
+            @if(isset($psikososial->riwayat_pekerjaan))
+                <h4 style="font-weight: bolder;color:#436ba4;font-size:12px;margin:0px;margin-top:10px;text-transform: uppercase">Riwayat Pekerjaan</h4>
+                <table style="width:100%;font-size:12px;">
+                    @foreach($psikososial->riwayat_pekerjaan as $key => $value)
+                        <tr>
+                            <td style="font-size:12px;width:35%;padding-left:10px">{{ ucwords(str_replace('_',' ',$key)) }}</td>
+                            <td style="font-size:12px;width:65%">{{ ucwords($value) ?? "-" }}</td>
+                        </tr>
+                        @if($key =='zat_bahaya' && $value == 'Ya')
+                            <tr>
+                                <td style="font-size:12px;width:35%;padding-left:10px">Jenis Zat Bahaya</td>
+                                <td style="font-size:12px;width:65%">{{ ucwords($psikososial->riwayat_pekerjaan_bahaya) ?? "-" }}</td>
+                            </tr>
+                        @elseif($key =='berpergian' && $value == 'Ya')
+                            <tr>
+                                <td style="font-size:12px;width:35%;padding-left:10px">Tujuan Perjalanan</td>
+                                <td style="font-size:12px;width:65%">{{ ucwords($psikososial->riwayat_pekerjaan_berpergian) ?? "-" }}</td>
+                            </tr>
+                        @endif
+                    @endforeach
+                </table>
+            @endif
+            @if(isset($psikososial->riwayat_kesehatan))
+                <h4 style="font-weight: bolder;color:#436ba4;font-size:12px;margin:0px;margin-top:10px;text-transform: uppercase">Riwayat Kesehatan</h4>
+                <table style="width:100%;font-size:12px;">
+                    @foreach($psikososial->riwayat_kesehatan as $key => $value)
+                        <tr>
+                            <td style="font-size:12px;width:35%;padding-left:10px">{{ ucwords(str_replace('_',' ',$key)) }}</td>
+                            <td style="font-size:12px;width:65%">{{ ucwords($value) ?? "-" }}</td>
+                        </tr>
+                        @if($key =='alergi_obat' && $value == 'Ada')
+                            <tr>
+                                <td style="font-size:12px;width:35%;padding-left:10px">Alergi Obat</td>
+                                <td style="font-size:12px;width:65%">{{ ucwords($psikososial->riwayat_alergi_obat) ?? "-" }}</td>
+                            </tr>
+                        @elseif($key =='alergi_makanan' && $value == 'Ada')
+                            <tr>
+                                <td style="font-size:12px;width:35%;padding-left:10px">Makanan Alergi</td>
+                                <td style="font-size:12px;width:65%">{{ ucwords($psikososial->riwayat_alergi_makanan) ?? "-" }}</td>
+                            </tr>
+                        @elseif($key =='penyakit_dahulu' && $value == 'Lain-lain')
+                            <tr>
+                                <td style="font-size:12px;width:35%;padding-left:10px">Penyakit Dahulu</td>
+                                <td style="font-size:12px;width:65%">{{ ucwords($psikososial->riwayat_penyakit_dahulu) ?? "-" }}</td>
+                            </tr>
+                        @elseif($key =='penyakit_keluarga' && $value == 'Lain-lain')
+                            <tr>
+                                <td style="font-size:12px;width:35%;padding-left:10px">Penyakit Keluarga</td>
+                                <td style="font-size:12px;width:65%">{{ ucwords($psikososial->riwayat_penyakit_keluarga) ?? "-" }}</td>
+                            </tr>
+                        @endif
+                    @endforeach
+                </table>
+            @endif
             <hr class="mt-10">
         @endif
         @if($examination->service_category->is_mcu == 1)
