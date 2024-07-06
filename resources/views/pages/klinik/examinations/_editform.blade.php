@@ -1816,51 +1816,31 @@
                                 <div class="d-flex flex-row">
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->khusus == "Alat bantu Dengar")
-                                                <input value="Alat bantu Dengar" checked class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_satu"/>
-                                            @else
-                                                <input value="Alat bantu Dengar" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_satu"/>
-                                            @endif
+                                            <input value="Alat bantu Dengar" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_satu" {{ isset($psikososial->khusus) && $psikososial->khusus == "Alat bantu Dengar" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="khusus_satu">
                                                 Alat bantu Dengar
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->khusus == "Kacamata")
-                                                <input value="Kacamata" checked class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_dua"/>
-                                            @else
-                                                <input value="Kacamata" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_dua"/>
-                                            @endif
+                                            <input value="Kacamata" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_dua" {{ isset($psikososial->khusus) && $psikososial->khusus == "Kacamata" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="khusus_dua">
                                                 Kacamata
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->khusus == "Tongkat")
-                                                <input value="Tongkat" checked class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_tiga"/>
-                                            @else
-                                                <input value="Tongkat" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_tiga"/>
-                                            @endif
+                                            <input value="Tongkat" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_tiga" {{ isset($psikososial->khusus) && $psikososial->khusus == "Tongkat" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="khusus_tiga">
                                                 Tongkat
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->khusus == "Kursi Roda")
-                                                <input value="Kursi Roda" checked class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_empat"/>
-                                            @else
-                                                <input value="Kursi Roda" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_empat"/>
-                                            @endif
+                                            <input value="Kursi Roda" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_empat" {{ isset($psikososial->khusus) && $psikososial->khusus == "Kursi Roda" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="khusus_empat">
                                                 Kursi Roda
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->khusus == "Disabilitas")
-                                                <input value="Disabilitas" checked class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_lima"/>
-                                            @else
-                                                <input value="Disabilitas" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_lima"/>
-                                            @endif
+                                            <input value="Disabilitas" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_lima" {{ isset($psikososial->khusus) && $psikososial->khusus == "Disabilitas" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="khusus_lima">
                                                 Disabilitas
                                             </label>
@@ -1871,29 +1851,17 @@
                                 <div class="d-flex flex-row mt-2">
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->khusus == "Tidak Ada")
-                                                <input value="Tidak Ada" checked class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_enam"/>
-                                            @else
-                                                <input value="Tidak Ada" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_enam"/>
-                                            @endif
+                                            <input value="Tidak Ada" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_enam" {{ isset($psikososial->khusus) && $psikososial->khusus == "Tidak Ada" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="khusus_enam">
                                                 Tidak Ada
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-400px">
-                                            @if(isset($examination->psikososial) && $psikososial->khusus == "Lainnya")
-                                                <input value="Lainnya" checked class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_tujuh"/>
-                                            @else
-                                                <input value="Lainnya" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_tujuh"/>
-                                            @endif
+                                            <input value="Lainnya" class="form-check-input h-20px w-30px me-5" type="radio" name="khusus" id="khusus_tujuh" {{ isset($psikososial->khusus) && $psikososial->khusus == "Lainnya" ? 'checked' : '' }}/>
                                             <label class="form-check-label me-5 w-150px" for="khusus_tujuh">
                                                 Lainnya
                                             </label>
-                                            @if(isset($examination->psikososial) && $psikososial->khusus == "Lainnya")
-                                                <input class="form-control form-control-sm me-5" name="lainnya" value="{{ $psikososial->lainnya }}"/>
-                                            @else
-                                                <input class="form-control form-control-sm me-5" name="lainnya"/>
-                                            @endif
+                                            <input class="form-control form-control-sm me-5" name="lainnya" value="{{ $psikososial->khusus == 'Lainnya' ? $psikososial->lainnya : '' }}"/>
                                         </div>
                                     </div>
                                 </div>
@@ -1910,21 +1878,13 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->bicara == "Jelas")
-                                                <input value="Jelas" checked class="form-check-input h-20px w-30px me-5" type="radio" name="bicara" id="bicara_satu"/>
-                                            @else
-                                                <input value="Jelas" class="form-check-input h-20px w-30px me-5" type="radio" name="bicara" id="bicara_satu"/>
-                                            @endif
+                                            <input value="Jelas" class="form-check-input h-20px w-30px me-5" type="radio" name="bicara" id="bicara_satu" {{ isset($psikososial->bicara) && $psikososial->bicara == "Jelas" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="bicara_satu">
                                                 Jelas
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->bicara == "Tidak Dimen")
-                                                <input value="Tidak Dimen" checked class="form-check-input h-20px w-30px me-5" type="radio" name="bicara" id="bicara_dua"/>
-                                            @else
-                                                <input value="Tidak Dimen" class="form-check-input h-20px w-30px me-5" type="radio" name="bicara" id="bicara_dua"/>
-                                            @endif
+                                            <input value="Tidak Dimengerti" class="form-check-input h-20px w-30px me-5" type="radio" name="bicara" id="bicara_dua" {{ isset($psikososial->bicara) && $psikososial->bicara == "Tidak Dimengerti" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="bicara_dua">
                                                 TIdak Dimen
                                             </label>
@@ -1943,21 +1903,13 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->komunikasi == "Verbal")
-                                                <input value="Verbal" checked class="form-check-input h-20px w-30px me-5" type="radio" name="komunikasi" id="komunikasi_satu"/>
-                                            @else
-                                                <input value="Verbal" class="form-check-input h-20px w-30px me-5" type="radio" name="komunikasi" id="komunikasi_satu"/>
-                                            @endif
+                                            <input value="Verbal" class="form-check-input h-20px w-30px me-5" type="radio" name="komunikasi" id="komunikasi_satu" {{ isset($psikososial->komunikasi) && $psikososial->komunikasi == "Verbal" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="komunikasi_satu">
                                                 Verbal
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->komunikasi == "Non Verbal")
-                                                <input value="Non Verbal" checked class="form-check-input h-20px w-30px me-5" type="radio" name="komunikasi" id="komunikasi_dua"/>
-                                            @else
-                                                <input value="Non Verbal" class="form-check-input h-20px w-30px me-5" type="radio" name="komunikasi" id="komunikasi_dua"/>
-                                            @endif
+                                            <input value="Non Verbal" class="form-check-input h-20px w-30px me-5" type="radio" name="komunikasi" id="komunikasi_dua" {{ isset($psikososial->komunikasi) && $psikososial->komunikasi == "Non Verbal" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="komunikasi_dua">
                                                 Non Verbal
                                             </label>
@@ -1975,51 +1927,31 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->emosional == "Stabil/Tenang")
-                                                <input value="Stabil/Tenang" checked class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_satu"/>
-                                            @else
-                                                <input value="Stabil/Tenang" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_satu"/>
-                                            @endif
+                                            <input value="Stabil/Tenang" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_satu" {{ isset($psikososial->emosional) && $psikososial->emosional == "Stabil/Tenang" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="emosional_satu">
                                                 Stabil/Tenang
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->emosional == "Marah")
-                                                <input value="Marah" checked class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_dua"/>
-                                            @else
-                                                <input value="Marah" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_dua"/>
-                                            @endif
+                                            <input value="Marah" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_dua" {{ isset($psikososial->emosional) && $psikososial->emosional == "Marah" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="emosional_dua">
                                                 Marah
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->emosional == "Cemas")
-                                                <input value="Cemas" checked class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_tiga"/>
-                                            @else
-                                                <input value="Cemas" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_tiga"/>
-                                            @endif
+                                            <input value="Cemas" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_tiga" {{ isset($psikososial->emosional) && $psikososial->emosional == "Cemas" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="emosional_tiga">
                                                 Cemas
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->emosional == "Takut")
-                                                <input value="Takut" checked class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_empat"/>
-                                            @else
-                                                <input value="Takut" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_empat"/>
-                                            @endif
+                                            <input value="Takut" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_empat" {{ isset($psikososial->emosional) && $psikososial->emosional == "Takut" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="emosional_empat">
                                                 Takut
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->emosional == "Sedih")
-                                                <input value="Sedih" checked class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_lima"/>
-                                            @else
-                                                <input value="Sedih" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_lima"/>
-                                            @endif
+                                            <input value="Sedih" class="form-check-input h-20px w-30px me-5" type="radio" name="emosional" id="emosional_lima" {{ isset($psikososial->emosional) && $psikososial->emosional == "Sedih" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="emosional_lima">
                                                 Sedih
                                             </label>
@@ -2037,31 +1969,19 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->nyeri == "Tidak ada")
-                                                <input value="Tidak ada" checked class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_satu"/>
-                                            @else
-                                                <input value="Tidak ada" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_satu"/>
-                                            @endif
-                                            <label class="form-check-label" for="kriteria_dua">
+                                            <input value="Tidak ada" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_satu" {{ isset($psikososial->nyeri) && $psikososial->nyeri == "Tidak ada" ? 'checked' : '' }}/>
+                                            <label class="form-check-label" for="nyeri_satu">
                                                 Tidak ada
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->nyeri == "Ada (Tingkat Sedang)")
-                                                <input value="Ada (Tingkat Sedang)" checked class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_dua"/>
-                                            @else
-                                                <input value="Ada (Tingkat Sedang)" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_dua"/>
-                                            @endif
-                                            <label class="form-check-label" for="kriteria_dua">
+                                            <input value="Ada (Tingkat Sedang)" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_dua" {{ isset($psikososial->nyeri) && $psikososial->nyeri == "Ada (Tingkat Sedang)" ? 'checked' : '' }}/>
+                                            <label class="form-check-label" for="nyeri_dua">
                                                 Ada (Tingkat Sedang)
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->nyeri == "Nyeri dada kiri tembus punggung")
-                                                <input value="Nyeri dada kiri tembus punggung" checked class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_tiga"/>
-                                            @else
-                                                <input value="Nyeri dada kiri tembus punggung" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_tiga"/>
-                                            @endif
+                                            <input value="Nyeri dada kiri tembus punggung" class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri" id="nyeri_dua" {{ isset($psikososial->nyeri) && $psikososial->nyeri == "Nyeri dada kiri tembus punggung" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="kriteria_dua">
                                                 Nyeri dada kiri tembus punggung
                                             </label>
@@ -2079,31 +1999,20 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->sosiologi == "Komunikatif")
-                                                <input value="Komunikatif" checked class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_satu"/>
-                                            @else
-                                                <input value="Komunikatif" class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_satu"/>
-                                            @endif
+                                            <input value="Komunikatif" class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_satu" {{ isset($psikososial->sosiologi) && $psikososial->sosiologi == "Komunikatif" ? 'checked' : '' }}/>
+
                                             <label class="form-check-label" for="sosiologi_satu">
                                                 Komunikatif
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->sosiologi == "Komunikatif Tidak Efek")
-                                                <input value="Komunikatif Tidak Efek" checked class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_dua"/>
-                                            @else
-                                                <input value="Komunikatif Tidak Efek" class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_dua"/>
-                                            @endif
+                                            <input value="Komunikatif Tidak Efek" class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_dua" {{ isset($psikososial->sosiologi) && $psikososial->sosiologi == "Komunikatif Tidak Efek" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="sosiologi_dua">
                                                 Komunikatif Tidak Efek
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->sosiologi == "Menarik Diri")
-                                                <input value="Menarik Diri" checked class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_tiga"/>
-                                            @else
-                                                <input value="Menarik Diri" class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_tiga"/>
-                                            @endif
+                                            <input value="Menarik Diri" class="form-check-input h-20px w-30px me-5" type="radio" name="sosiologi" id="sosiologi_tiga" {{ isset($psikososial->sosiologi) && $psikososial->sosiologi == "Menarik Diri" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="sosiologi_tiga">
                                                 Menarik Diri
                                             </label>
@@ -2124,29 +2033,17 @@
                                 <div class="d-flex flex-row mt-2">
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_pekerjaan->zat_bahaya == "Tidak")
-                                                <input value="Tidak" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_pekerjaan[zat_bahaya]" id="riwayat_pekerjaan_satu"/>
-                                            @else
-                                                <input value="Tidak" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_pekerjaan[zat_bahaya]" id="riwayat_pekerjaan_satu"/>
-                                            @endif
+                                            <input value="Tidak" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_pekerjaan[zat_bahaya]" id="riwayat_pekerjaan_satu" {{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->zat_bahaya == "Tidak" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_pekerjaan_satu">
                                                 Tidak
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-400px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_pekerjaan->zat_bahaya == "Ya")
-                                                <input value="Ya" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_pekerjaan[zat_bahaya]" id="riwayat_pekerjaan_dua"/>
-                                            @else
-                                                <input value="Ya" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_pekerjaan[zat_bahaya]" id="riwayat_pekerjaan_dua"/>
-                                            @endif
+                                            <input value="Ya" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_pekerjaan[zat_bahaya]" id="riwayat_pekerjaan_dua" {{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->zat_bahaya == "Ya" ? 'checked' : '' }}/>
                                             <label class="form-check-label me-5 w-150px" for="riwayat_pekerjaan_dua">
                                                 Ya, sebutkan
                                             </label>
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_pekerjaan->zat_bahaya == "Ya")
-                                                <input class="form-control form-control-sm me-5" name="riwayat_pekerjaan_bahaya" value="{{ $psikososial->riwayat_pekerjaan_bahaya }}"/>
-                                            @else
-                                                <input class="form-control form-control-sm me-5" name="riwayat_pekerjaan_bahaya"/>
-                                            @endif
+                                            <input class="form-control form-control-sm me-5" name="riwayat_pekerjaan_bahaya" value="{{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->zat_bahaya == 'Ya' ? $psikososial->riwayat_pekerjaan_bahaya : '' }}"/>
                                         </div>
                                     </div>
                                 </div>
@@ -2159,29 +2056,17 @@
                                 <div class="d-flex flex-row mt-2">
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_pekerjaan->berpergian == "Tidak")
-                                                <input value="Tidak" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_pekerjaan[berpergian]" id="riwayat_pekerjaan_tiga"/>
-                                            @else
-                                                <input value="Tidak" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_pekerjaan[berpergian]" id="riwayat_pekerjaan_tiga"/>
-                                            @endif
+                                            <input value="Tidak" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_pekerjaan[berpergian]" id="riwayat_pekerjaan_tiga" {{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->berpergian == "Tidak" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_pekerjaan_tiga">
                                                 Tidak
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-400px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_pekerjaan->berpergian == "Ya")
-                                                <input value="Ya" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_pekerjaan[berpergian]" id="riwayat_pekerjaan_empat"/>
-                                            @else
-                                                <input value="Ya" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_pekerjaan[berpergian]" id="riwayat_pekerjaan_empat"/>
-                                            @endif
+                                            <input value="Ya" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_pekerjaan[berpergian]" id="riwayat_pekerjaan_empat" {{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->berpergian == "Ya" ? 'checked' : '' }}/>
                                             <label class="form-check-label me-5 w-150px" for="riwayat_pekerjaan_empat">
                                                 Ya, sebutkan
                                             </label>
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_pekerjaan->berpergian == "Ya")
-                                                <input class="form-control form-control-sm me-5" name="riwayat_pekerjaan_berpergian" value="{{ $psikososial->riwayat_pekerjaan_berpergian }}"/>
-                                            @else
-                                                <input class="form-control form-control-sm me-5" name="riwayat_pekerjaan_berpergian"/>
-                                            @endif
+                                            <input class="form-control form-control-sm me-5" name="riwayat_pekerjaan_berpergian" value="{{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->berpergian == 'Ya' ? $psikososial->riwayat_pekerjaan_berpergian : '' }}"/>
                                         </div>
                                     </div>
                                 </div>
@@ -2198,29 +2083,17 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->alergi_obat == "Tidak Ada")
-                                                <input value="Tidak Ada" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[alergi_obat]" id="riwayat_kesehatan_satu"/>
-                                            @else
-                                                <input value="Tidak Ada" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[alergi_obat]" id="riwayat_kesehatan_satu"/>
-                                            @endif
+                                            <input value="Tidak Ada" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[alergi_obat]" id="riwayat_kesehatan_satu" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_obat == "Tidak Ada" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_satu">
                                                 Tidak Ada
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-400px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->alergi_obat == "Ada")
-                                                <input value="Ada" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[alergi_obat]" id="riwayat_kesehatan_dua"/>
-                                            @else
-                                                <input value="Ada" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[alergi_obat]" id="riwayat_kesehatan_dua"/>
-                                            @endif
+                                            <input value="Ada" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[alergi_obat]" id="riwayat_kesehatan_dua" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_obat == "Ada" ? 'checked' : '' }}/>
                                             <label class="form-check-label me-5 w-150px" for="riwayat_kesehatan_dua">
                                                 Ada, Sebutkan
                                             </label>
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->alergi_obat == "Ada")
-                                                <input class="form-control form-control-sm me-5" name="riwayat_alergi_obat" value="{{ $psikososial->riwayat_alergi_obat }}"/>
-                                            @else
-                                                <input class="form-control form-control-sm me-5" name="riwayat_alergi_obat"/>
-                                            @endif
+                                            <input class="form-control form-control-sm me-5" name="riwayat_alergi_obat" value="{{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_obat == 'Ada' ? $psikososial->riwayat_alergi_obat : '' }}"/>
                                         </div>
                                     </div>
                                 </div>
@@ -2231,29 +2104,17 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->alergi_makanan == "Tidak Ada")
-                                                <input value="Tidak Ada" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[alergi_makanan]" id="riwayat_kesehatan_tiga"/>
-                                            @else
-                                                <input value="Tidak Ada" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[alergi_makanan]" id="riwayat_kesehatan_tiga"/>
-                                            @endif
+                                            <input value="Tidak Ada" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[alergi_makanan]" id="riwayat_kesehatan_tiga" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_makanan == "Tidak Ada" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_tiga">
                                                 Tidak Ada
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-400px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->alergi_makanan == "Ada")
-                                                <input value="Ada" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[alergi_makanan]" id="riwayat_kesehatan_empat"/>
-                                            @else
-                                                <input value="Ada" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[alergi_makanan]" id="riwayat_kesehatan_empat"/>
-                                            @endif
+                                            <input value="Ada" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[alergi_makanan]" id="riwayat_kesehatan_empat" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_makanan == "Ada" ? 'checked' : '' }}/>
                                             <label class="form-check-label me-5 w-150px" for="riwayat_kesehatan_empat">
                                                 Ada, Sebutkan
                                             </label>
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->alergi_makanan == "Ada")
-                                                <input class="form-control form-control-sm me-5" name="riwayat_alergi_makanan" value="{{ $psikososial->riwayat_alergi_makanan }}"/>
-                                            @else
-                                                <input class="form-control form-control-sm me-5" name="riwayat_alergi_makanan"/>
-                                            @endif
+                                            <input class="form-control form-control-sm me-5" name="riwayat_alergi_makanan" value="{{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_makanan == 'Ada' ? $psikososial->riwayat_alergi_makanan : '' }}"/>
                                         </div>
                                     </div>
                                 </div>
@@ -2264,41 +2125,25 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Hipertensi")
-                                                <input value="Hipertensi" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_5"/>
-                                            @else
-                                                <input value="Hipertensi" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_5"/>
-                                            @endif
+                                            <input value="Hipertensi" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_5" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Hipertensi" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_5">
                                                 Hipertensi
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "DM")
-                                                <input value="DM" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_6"/>
-                                            @else
-                                                <input value="DM" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_6"/>
-                                            @endif
+                                            <input value="DM" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_6" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "DM" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_6">
                                                 DM
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "PJK")
-                                                <input value="PJK" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_7"/>
-                                            @else
-                                                <input value="PJK" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_7"/>
-                                            @endif
+                                            <input value="PJK" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_7" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "PJK" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_7">
                                                 PJK
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Asm")
-                                                <input value="Asm" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_8"/>
-                                            @else
-                                                <input value="Asm" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_8"/>
-                                            @endif
+                                            <input value="Asm" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_8" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Asm" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_8">
                                                 Asm
                                             </label>
@@ -2311,41 +2156,25 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Stroke")
-                                                <input value="Stroke" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_9"/>
-                                            @else
-                                                <input value="Stroke" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_9"/>
-                                            @endif
+                                            <input value="Stroke" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_9" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Stroke" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_9">
                                                 Stroke
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Liver")
-                                                <input value="Liver" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_10"/>
-                                            @else
-                                                <input value="Liver" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_10"/>
-                                            @endif
+                                            <input value="Liver" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_10" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Liver" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_10">
                                                 Liver
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Ginjal")
-                                                <input value="Ginjal" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_11"/>
-                                            @else
-                                                <input value="Ginjal" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_11"/>
-                                            @endif
+                                            <input value="Ginjal" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_11" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Ginjal" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_11">
                                                 Ginjal
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "TB Paru")
-                                                <input value="TB Paru" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_12"/>
-                                            @else
-                                                <input value="TB Paru" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_12"/>
-                                            @endif
+                                            <input value="TB Paru" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_12" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "TB Paru" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_12">
                                                 TB Paru
                                             </label>
@@ -2358,39 +2187,23 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Hepatitis")
-                                                <input value="Hepatitis" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_13"/>
-                                            @else
-                                                <input value="Hepatitis" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_13"/>
-                                            @endif
+                                            <input value="Hepatitis" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_13" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Hepatitis" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_13">
                                                 Hepatitis
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Tidak Ada")
-                                                <input value="Tidak Ada" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_14"/>
-                                            @else
-                                                <input value="Tidak Ada" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_14"/>
-                                            @endif
+                                            <input value="Tidak Ada" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_14" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Tidak Ada" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_14">
                                                 Tidak Ada
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-400px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Lain-lain")
-                                                <input value="Lain-lain" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_15"/>
-                                            @else
-                                                <input value="Lain-lain" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_15"/>
-                                            @endif
+                                            <input value="Lain-lain" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_15" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Lain-lain" ? 'checked' : '' }}/>
                                             <label class="form-check-label w-150px" for="riwayat_kesehatan_15">
                                                 Lain-lain
                                             </label>
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Lain-lain")
-                                                <input class="form-control form-control-sm me-5" name="riwayat_penyakit_dahulu" value="{{ $psikososial->riwayat_penyakit_dahulu }}"/>
-                                            @else
-                                                <input class="form-control form-control-sm me-5" name="riwayat_penyakit_dahulu"/>
-                                            @endif
+                                            <input class="form-control form-control-sm me-5" name="riwayat_penyakit_dahulu" value="{{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_dahulu == 'Lain-lain' ? $psikososial->riwayat_penyakit_dahulu : '' }}"/>
                                         </div>
                                     </div>
                                 </div>
@@ -2401,41 +2214,25 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "Hipertensi")
-                                                <input value="Hipertensi" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_16"/>
-                                            @else
-                                                <input value="Hipertensi" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_16"/>
-                                            @endif
+                                            <input value="Hipertensi" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_16" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "Hipertensi" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_16">
                                                 Hipertensi
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "DM")
-                                                <input value="DM" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_17"/>
-                                            @else
-                                                <input value="DM" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_17"/>
-                                            @endif
+                                            <input value="DM" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_17" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "DM" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_17">
                                                 DM
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "PJK")
-                                                <input value="PJK" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_18"/>
-                                            @else
-                                                <input value="PJK" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_18"/>
-                                            @endif
+                                            <input value="PJK" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_18" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "PJK" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_18">
                                                 PJK
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "Asm")
-                                                <input value="Asm" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_19"/>
-                                            @else
-                                                <input value="Asm" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_19"/>
-                                            @endif
+                                            <input value="Asm" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_19" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "Asm" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_19">
                                                 Asm
                                             </label>
@@ -2448,41 +2245,25 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "Stroke")
-                                                <input value="Stroke" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_20"/>
-                                            @else
-                                                <input value="Stroke" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_20"/>
-                                            @endif
+                                            <input value="Stroke" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_20" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "Stroke" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_20">
                                                 Stroke
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "Liver")
-                                                <input value="Liver" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_21"/>
-                                            @else
-                                                <input value="Liver" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_21"/>
-                                            @endif
+                                            <input value="Liver" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_21" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "Liver" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_21">
                                                 Liver
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "Ginjal")
-                                                <input value="Ginjal" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_22"/>
-                                            @else
-                                                <input value="Ginjal" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_22"/>
-                                            @endif
+                                            <input value="Liver" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_21" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "Liver" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_22">
                                                 Ginjal
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "TB Paru")
-                                                <input value="TB Paru" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_23"/>
-                                            @else
-                                                <input value="TB Paru" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_23"/>
-                                            @endif
+                                            <input value="Ginjal" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_22" {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "Ginjal" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_23">
                                                 TB Paru
                                             </label>
@@ -2495,49 +2276,29 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "Hepatitis")
-                                                <input value="Hepatitis" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_24"/>
-                                            @else
-                                                <input value="Hepatitis" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_24"/>
-                                            @endif
+                                            <input value="Hepatitis" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_24" {{ isset($examination->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "Hepatitis" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_24">
                                                 Hepatitis
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "Hemofilia")
-                                                <input value="Hemofilia" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_25"/>
-                                            @else
-                                                <input value="Hemofilia" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_25"/>
-                                            @endif
+                                            <input value="Hemofilia" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_25" {{ isset($examination->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "Hemofilia" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_25">
                                                 Hemofilia
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "Tidak Ada")
-                                                <input value="Tidak Ada" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_26"/>
-                                            @else
-                                                <input value="Tidak Ada" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_26"/>
-                                            @endif
+                                            <input value="Tidak Ada" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_26" {{ isset($examination->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "Tidak Ada" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="riwayat_kesehatan_26">
                                                 Tidak Ada
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-400px">
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "Lain-lain")
-                                                <input value="Lain-lain" checked class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_27"/>
-                                            @else
-                                                <input value="Lain-lain" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_27"/>
-                                            @endif
+                                            <input value="Lain-lain" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_keluarga]" id="riwayat_kesehatan_27" {{ isset($examination->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "Lain-lain" ? 'checked' : '' }}/>
                                             <label class="form-check-label w-150px" for="riwayat_kesehatan_27">
                                                 Lain-lain
                                             </label>
-                                            @if(isset($examination->psikososial) && $psikososial->riwayat_kesehatan->penyakit_keluarga == "Lain-lain")
-                                                <input class="form-control form-control-sm me-5" name="riwayat_penyakit_keluarga" value="{{ $psikososial->riwayat_penyakit_keluarga }}"/>
-                                            @else
-                                                <input class="form-control form-control-sm me-5" name="riwayat_penyakit_keluarga"/>
-                                            @endif
+                                            <input class="form-control form-control-sm me-5" name="riwayat_penyakit_keluarga" value="{{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->penyakit_keluarga == 'Lain-lain' ? $psikososial->riwayat_penyakit_keluarga : '' }}"/>
                                         </div>
                                     </div>
                                 </div>
@@ -2552,31 +2313,19 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->pola_kebiasaan->nutrisi == "Cukup makan sayur/buah")
-                                                <input value="Cukup makan sayur/buah" checked class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[nutrisi]" id="nutrisi_satu"/>
-                                            @else
-                                                <input value="Cukup makan sayur/buah" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[nutrisi]" id="nutrisi_satu"/>
-                                            @endif
+                                            <input value="Cukup makan sayur/buah" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[nutrisi]" id="nutrisi_satu" {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->nutrisi == "Cukup makan sayur/buah" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="nutrisi_satu">
                                                 Cukup makan sayur/buah
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->pola_kebiasaan->nutrisi == "Kurang makan sayur/buah")
-                                                <input value="Kurang makan sayur/buah" checked class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[nutrisi]" id="nutrisi_dua"/>
-                                            @else
-                                                <input value="Kurang makan sayur/buah" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[nutrisi]" id="nutrisi_dua"/>
-                                            @endif
+                                            <input value="Kurang makan sayur/buah" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[nutrisi]" id="nutrisi_dua" {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->nutrisi == "Kurang makan sayur/buah" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="nutrisi_dua">
                                                 Kurang makan sayur/buah
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->pola_kebiasaan->nutrisi == "Tidak makan sayur/buah")
-                                                <input value="Tidak makan sayur/buah" checked class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[nutrisi]" id="nutrisi_tiga"/>
-                                            @else
-                                                <input value="Tidak makan sayur/buah" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[nutrisi]" id="nutrisi_tiga"/>
-                                            @endif
+                                            <input value="Tidak makan sayur/buah" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[nutrisi]" id="nutrisi_tiga" {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->nutrisi == "Tidak makan sayur/buah" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="nutrisi_tiga">
                                                 Tidak makan sayur/buah
                                             </label>
@@ -2590,21 +2339,13 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->pola_kebiasaan->istirahat == "Tidak ada kelainan")
-                                                <input value="Tidak ada kelainan" checked class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[istirahat]" id="istirahat_satu"/>
-                                            @else
-                                                <input value="Tidak ada kelainan" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[istirahat]" id="istirahat_satu"/>
-                                            @endif
+                                            <input value="Tidak ada kelainan" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[istirahat]" id="istirahat_satu" {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->istirahat == "Tidak ada kelainan" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="istirahat_satu">
                                                 Tidak ada kelainan
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->pola_kebiasaan->istirahat == "Insomnia")
-                                                <input value="Insomnia" checked class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[istirahat]" id="istirahat_dua"/>
-                                            @else
-                                                <input value="Insomnia" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[istirahat]" id="istirahat_dua"/>
-                                            @endif
+                                            <input value="Insomnia" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[istirahat]" id="istirahat_dua" {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->istirahat == "Insomnia" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="istirahat_dua">
                                                 Insomnia
                                             </label>
@@ -2618,21 +2359,13 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->pola_kebiasaan->aktivitas == "30 menit/hari")
-                                                <input value="30 menit/hari" checked class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[aktivitas]" id="aktivitas_satu"/>
-                                            @else
-                                                <input value="30 menit/hari" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[aktivitas]" id="aktivitas_satu"/>
-                                            @endif
+                                            <input value="30 menit/hari" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[aktivitas]" id="aktivitas_satu" {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->aktivitas == "30 menit/hari" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="aktivitas_satu">
                                                 30 menit/hari
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->pola_kebiasaan->aktivitas == "<30 menit/hari")
-                                                <input value="<30 menit/hari" checked class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[aktivitas]" id="aktivitas_dua"/>
-                                            @else
-                                                <input value="<30 menit/hari" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[aktivitas]" id="aktivitas_dua"/>
-                                            @endif
+                                            <input value="<30 menit/hari" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[aktivitas]" id="aktivitas_dua" {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->aktivitas == "<30 menit/hari" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="aktivitas_dua">
                                                 <30 menit/hari
                                             </label>
@@ -2646,41 +2379,25 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->pola_kebiasaan->rokok == "Ya")
-                                                <input value="Ya" checked class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[rokok]" id="rokok_satu"/>
-                                            @else
-                                                <input value="Ya" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[rokok]" id="rokok_satu"/>
-                                            @endif
+                                            <input value="Ya" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[rokok]" id="rokok_satu" {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->rokok == "Ya" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="rokok_satu">
                                                 Ya
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->pola_kebiasaan->rokok == "Tidak")
-                                                <input value="Tidak" checked class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[rokok]" id="rokok_dua"/>
-                                            @else
-                                                <input value="Tidak" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[rokok]" id="rokok_dua"/>
-                                            @endif
+                                            <input value="Tidak" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[rokok]" id="rokok_dua" {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->rokok == "Tidak" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="rokok_dua">
                                                 Tidak
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->pola_kebiasaan->rokok == "perokok aktif")
-                                                <input value="perokok aktif" checked class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[rokok]" id="rokok_tiga"/>
-                                            @else
-                                                <input value="perokok aktif" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[rokok]" id="rokok_tiga"/>
-                                            @endif
+                                            <input value="perokok aktif" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[rokok]" id="rokok_tiga" {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->rokok == "perokok aktif" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="rokok_tiga">
                                                 perokok aktif
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->pola_kebiasaan->rokok == "perokok pasif")
-                                                <input value="perokok pasif" checked class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[rokok]" id="rokok_empat"/>
-                                            @else
-                                                <input value="perokok pasif" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[rokok]" id="rokok_empat"/>
-                                            @endif
+                                            <input value="perokok pasif" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[rokok]" id="rokok_empat" {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->rokok == "perokok pasif" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="rokok_empat">
                                                 perokok pasif
                                             </label>
@@ -2694,21 +2411,13 @@
                                     </div>
                                     <div class="d-flex flex-row flex-row-fluid">
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->pola_kebiasaan->alkohol == "Ya")
-                                                <input value="Ya" checked class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[alkohol]" id="alkohol_satu"/>
-                                            @else
-                                                <input value="Ya" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[alkohol]" id="alkohol_satu"/>
-                                            @endif
+                                            <input value="Ya" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[alkohol]" id="alkohol_satu" {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->alkohol == "Ya" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="alkohol_satu">
                                                 Ya
                                             </label>
                                         </div>
                                         <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            @if(isset($examination->psikososial) && $psikososial->pola_kebiasaan->alkohol == "Tidak")
-                                                <input value="Tidak" checked class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[alkohol]" id="alkohol_dua"/>
-                                            @else
-                                                <input value="Tidak" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[alkohol]" id="alkohol_dua"/>
-                                            @endif
+                                            <input value="Tidak" class="form-check-input h-20px w-30px me-5" type="radio" name="pola_kebiasaan[alkohol]" id="alkohol_dua" {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->alkohol == "Tidak" ? 'checked' : '' }}/>
                                             <label class="form-check-label" for="alkohol_dua">
                                                 Tidak
                                             </label>
