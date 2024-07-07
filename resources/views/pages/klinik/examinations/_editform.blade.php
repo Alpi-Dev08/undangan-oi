@@ -1861,7 +1861,7 @@
                                             <label class="form-check-label me-5 w-150px" for="khusus_tujuh">
                                                 Lainnya
                                             </label>
-                                            <input class="form-control form-control-sm me-5" name="lainnya" value="{{ $psikososial->khusus == 'Lainnya' ? $psikososial->lainnya : '' }}"/>
+                                            <input class="form-control form-control-sm me-5" name="lainnya" value="{{ isset($psikososial->khusus) && $psikososial->khusus == 'Lainnya' ? $psikososial->lainnya : '' }}"/>
                                         </div>
                                     </div>
                                 </div>
