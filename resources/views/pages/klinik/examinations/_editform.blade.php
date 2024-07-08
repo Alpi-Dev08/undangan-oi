@@ -2499,9 +2499,9 @@
 
         #point {
             position: absolute;
-            width: 15px;
-            height: 15px;
-            background-color: red;
+            width: 40px;
+            height: 40px;
+            border: 2px solid red;
             border-radius: 50%;
         }
     </style>
