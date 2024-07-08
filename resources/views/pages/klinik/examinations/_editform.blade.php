@@ -2501,7 +2501,7 @@
             position: absolute;
             width: 40px;
             height: 40px;
-            border: 2px solid red;
+            border: 2px solid black;
             border-radius: 50%;
         }
     </style>
