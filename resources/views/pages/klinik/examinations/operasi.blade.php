@@ -56,13 +56,12 @@
             margin-top: 3cm;
             margin-bottom: 120px;
         }
-
-
+        
         #point {
             position: absolute;
-            width: 15px;
-            height: 15px;
-            background-color: red;
+            width: 40px;
+            height: 40px;
+            border: 2px solid red;
             border-radius: 50%;
             left: {{ $data->coordinate_x ?? 0 }}px; /* Adjust the position of the point */
             top:{{ $data->coordinate_y+218 ?? 0 }}px;
