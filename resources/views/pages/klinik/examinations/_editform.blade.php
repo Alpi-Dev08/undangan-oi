@@ -1286,7 +1286,7 @@
                             <a class="nav-link w-100 btn btn-flex btn-active-light-info" data-bs-toggle="tab"
                                href="#hakkewajiban">
                                 <span class="d-flex flex-column align-items-start" style="text-align:left">
-                                    <span class="fs-7 fw-bold">Bukti Penyampaian Informasi</span>
+                                    <span class="fs-7 fw-bold">Bukti Penyampaian Hak dan Kewajiban</span>
                                 </span>
                             </a>
                         </li>
@@ -1782,14 +1782,38 @@
 
                             @csrf
                             <div class="row">
-                                <div class="mb-10">
-                                    <label class="form-check form-switch form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" name="setuju" value="1"/>
-                                        <span class="form-check-label fw-semibold text-muted">
-                                                            Setuju/Tidak Setuju
-                                                        </span>
-                                    </label>
-                                </div>
+                            <div class="form-check form-check-custom form-check-solid mb-3">
+                                <input class="form-check-input" type="radio" id="setuju" name="persetujuan" value="setuju" onchange="toggleAlasan()" />
+                                <label class="form-check-label fw-semibold text-black" for="setuju">
+                                    Setuju dengan Tindakan yang telah dijelaskan
+                                </label>
+                            </div>
+                            <div class="form-check form-check-custom form-check-solid mb-3">
+                                <input class="form-check-input" type="radio" id="tidakSetuju" name="persetujuan" value="tidakSetuju" onchange="toggleAlasan()" />
+                                <label class="form-check-label fw-semibold text-black" for="tidakSetuju">
+                                    Tidak Setuju dengan Tindakan yang telah dijelaskan
+                                </label>
+                            </div>
+                            <div id="alasanContainer" style="display: none;" class="mb-10">
+                                <label for="exampleFormControlInput1" class="form-label">Alasan :</label>
+                                <textarea rows="3" class="form-control form-control-solid" placeholder="Alasan" name="description"></textarea>
+                            </div>
+                            <div id="signature_bukti_penyampaian" class="row text-center">
+                                {!! $qr !!}
+                                <em class="text-center">Scan untuk melakukan Tanda Tangan</em><br>
+                            </div>
+                            <script>
+                            function toggleAlasan() {
+                                const tidakSetujuCheckbox = document.getElementById('tidakSetuju');
+                                const alasanContainer = document.getElementById('alasanContainer');
+
+                                if (tidakSetujuCheckbox.checked) {
+                                    alasanContainer.style.display = 'block'; 
+                                } else {
+                                    alasanContainer.style.display = 'none'; 
+                                }
+                            }
+                            </script>
                                 <button type="submit" class="btn btn-bg-dark text-white">Download PDF</button>
                             </div>
                             </form>
