@@ -65,8 +65,8 @@
                         <thead>
                         <tr class="border-bottom fs-6 fw-bold text-muted">
                             <th class="min-w-175px pb-2">Layanan</th>
-                            <th class="min-w-100px text-end pb-2">Total</th>
                             <th class="min-w-100px text-end pb-2">Quantity</th>
+                            <th class="min-w-100px text-end pb-2">Total</th>
                         </tr>
                         </thead>
                         <tbody class="fw-semibold text-gray-600">
@@ -78,6 +78,7 @@
                                         <a href="#" class="text-gray-800 text-hover-primary mb-1">{{$detail->name}}</a>
                                     </div>
                                 </td>
+                                <td class="text-end"></td> <!-- Empty quantity column -->
                                 <td class="text-end text-gray-800">
                                     <span class="text-gray-600 me-2">Rp</span>{{number_format($detail->price,0,',','.')}}
                                 </td>
@@ -85,48 +86,47 @@
                         @endforeach
                         @php $total_resep = 0; @endphp
                         @if($examination->resep)
-                            <tr class="border-bottom fs-6 fw-bold text-muted">
-                                <th class="min-w-175px pb-2">Obat</th>
-                                <th class="min-w-100px text-end pb-2"></th>
-                            </tr>
+                        <tr class="border-bottom fs-6 fw-bold text-muted">
+                            <th class="min-w-175px pb-2">Obat</th>
+                            <th class="min-w-100px text-end pb-2"></th>
+                            <th class="min-w-100px text-end pb-2"></th>
+                        </tr>
+                        @php
+                            $resep = json_decode($examination->resep);
+                        @endphp
+                        @if(isset($resep->obat))
                             @php
-                                $resep = json_decode($examination->resep);
+                                $obat = $resep->obat;
+                                $qty = $resep->qty;
                             @endphp
-                            @if(isset($resep->obat))
-                                @php
-                                    $obat = $resep->obat;
-                                    $qty = $resep->qty;
-                                @endphp
-                                                        @foreach($obat as $key => $value)
-                            @if(isset(getObat($value)->name))
-                                <tr>
-                                    <td class="d-flex align-items-center">
-                                        <div class="d-flex flex-column">
-                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">{{getObat($value)->name}}</a>
-                                        </div>
-                                    </td>
-                                    <td class="text-end text-gray-800">
-                                        <span class="text-gray-600 me-2">Rp </span>{{number_format($qty[$key]*getObat($value)->price,0,',','.')}}
-                                    </td>
-                                    <!-- Tambahkan kolom quantity di sini -->
-                                    <td class="text-end">
-                                        <span class="text-muted">{{$qty[$key]}}</span>
-                                    </td>
-                                </tr>
-                                @php
-                                    $total_resep += $qty[$key]*getObat($value)->price;
-                                @endphp
-                            @endif
-                        @endforeach
-
-                            @endif
+                            @foreach($obat as $key => $value)
+                                @if(isset(getObat($value)->name))
+                                    <tr>
+                                        <td class="d-flex align-items-center">
+                                            <div class="d-flex flex-column">
+                                                <a href="#" class="text-gray-800 text-hover-primary mb-1">{{getObat($value)->name}}</a>
+                                            </div>
+                                        </td>
+                                        <td class="text-end">
+                                            <span class="text-muted">{{$qty[$key]}}</span>
+                                        </td>
+                                        <td class="text-end text-gray-800">
+                                            <span class="text-gray-600 me-2">Rp</span>{{number_format($qty[$key]*getObat($value)->price,0,',','.')}}
+                                        </td>
+                                    </tr>
+                                    @php
+                                        $total_resep += $qty[$key]*getObat($value)->price;
+                                    @endphp
+                                @endif
+                            @endforeach
                         @endif
+                    @endif
 
                         <!--end::Products-->
 
                         <!--begin::Grand total-->
                         <tr>
-                            <td class="fs-3 text-dark fw-bold text-end">Grand Total</td>
+                            <td class="fs-3 text-dark fw-bold text-end" colspan="2">Grand Total</td>
                             <td class="text-dark fs-3 fw-bolder text-end">Rp</span>{{number_format($transaction->amount+$total_resep,0,',','.')}}</td>
                         </tr>
                         <!--end::Grand total-->
