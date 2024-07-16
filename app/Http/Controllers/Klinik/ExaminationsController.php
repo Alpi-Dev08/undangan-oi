@@ -176,7 +176,7 @@
 
             $qr = QrCode::size(150)
                         ->style('square')
-                        ->generate('https://klinik.dharma.or.id/bukti-penyampaian-infomasi/' . $examination->id);
+                        ->generate('https://klinik.dharma.or.id/bukti-penyampaian-informasi/' . $examination->id);
 
             return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories', 'anamnesisexamination', 'examinations', 'physicalscategories', 'physicalexamination', 'otherscategories', 'otherexamination', 'additionalsscategories', 'additionalexamination', 'laboratoryexamination', 'pemeriksaan_awal', 'drugs', 'qr'));
         }
