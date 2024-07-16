@@ -76,6 +76,7 @@
                         <div class="col-lg-8 fv-row">
                             <input type="text" required name="card_number" id="card_number" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Card Number" value=""/>
                             <input type="hidden" name="his_number" id="his_number" value=""/>
+                            <div id="error-message" class="text-danger" style="display: none;">Card Number is required.</div>
                         </div>
                         <!--end::Col-->
                     </div>
