@@ -1199,6 +1199,7 @@
                                             <option value="{{ $drug->id }}">{{  $drug->name }}</option>
                                         @endforeach
                                     </select>
+                                    <input placeholder="Keterangan" name="resep[keterangan][]" class="w-200px me-5 form-control form-control-solid" type="text">
                                     <input placeholder="Qty" name="resep[qty][]" class="w-100px me-5 form-control form-control-solid" type="number" min="1">
                                     <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" id="remove-item">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
@@ -1554,6 +1555,7 @@
                                         {!! $qr !!}
                                         <em class="text-center">Scan untuk melakukan Tanda Tangan</em><br>
                                     </div>
+                                    <button type="submit" class="btn btn-bg-dark text-white">Download PDF</button>
                                 </div>
                             </form>
                         </div>
@@ -2488,6 +2490,7 @@
                 <option value="{{ $drug->id }}">{{  $drug->name }}</option>
             @endforeach
         </select>
+        <input placeholder="Keterangan" name="resep[keterangan][]" class="w-200px me-5 form-control form-control-solid" type="text">
         <input placeholder="Qty" name="resep[qty][]" class="w-100px me-5 form-control form-control-solid" type="number" min="1">
         <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" id="remove-item">
             <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
@@ -2523,9 +2526,9 @@
 
         #point {
             position: absolute;
-            width: 40px;
-            height: 40px;
-            border: 2px solid black;
+            width: 15px;
+            height: 15px;
+            background-color: red;
             border-radius: 50%;
         }
     </style>
