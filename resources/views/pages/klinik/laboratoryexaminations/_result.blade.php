@@ -13,6 +13,10 @@
     .bg-klinik {
         background-color: #4874ac;
     }
+
+    .link-input {
+        width: 97%;
+    }
 </style>
 <div class="mw-lg-950px mx-auto w-100 border border-3 border-klinik">
     <!-- begin::Header-->
@@ -100,7 +104,7 @@
     </div>
 
     <form id="kt_invoice_form" method="POST" class="form"
-          action="{{ route('result.update',['laboratoryexaminations' => $laboratoryexaminations->id]) }}">
+        action="{{ route('result.update',['laboratoryexaminations' => $laboratoryexaminations->id]) }}">
         @csrf
         @method("PUT")
         <table class="w-100 py-5" data-kt-element="items">
@@ -121,16 +125,16 @@
                         <td>
                             <input type="hidden" class="form-control text-end" name="id[]" value="{{ $value->id }}"/>
                             <input type="text" class="form-control w-75 text-end" name="hasil[]"
-                                   value="{{ $value->hasil }}"/>
+                                value="{{ $value->hasil }}"/>
                         </td>
                         <td>{{ $value->nilai_rujukan }}</td>
                         <td>
-                            <input type="text" class="form-control w-75  text-end" name="satuan[]"
-                                   value="{{ $value->satuan ?? '' }}"/>
+                            <input type="text" class="form-control w-75 text-end" name="satuan[]"
+                                value="{{ $value->satuan ?? '' }}"/>
                         </td>
                         <td>
-                            <input type="text" class="form-control w-75  text-end" name="keterangan[]"
-                                   value="{{ $value->keterangan ?? '' }}"/>
+                            <input type="text" class="form-control w-75 text-end" name="keterangan[]"
+                                value="{{ $value->keterangan ?? '' }}"/>
                         </td>
                     </tr>
                 @endforeach
@@ -140,20 +144,30 @@
                         <td class="px-5">{{ $value['name'] }}</td>
                         <td>
                             <input type="hidden" class="form-control text-end" name="id[]" value="{{ $value['id'] }}"/>
-                            <input type="text" class="form-control w-75  text-end" name="hasil[]" value=""/>
+                            <input type="text" class="form-control w-75 text-end" name="hasil[]" value=""/>
                         </td>
                         <td>{{ $value['nilai_rujukan'] }}</td>
                         <td>
-                            <input type="text" class="form-control w-75  text-end" name="satuan[]" value=""/>
+                            <input type="text" class="form-control w-75 text-end" name="satuan[]" value=""/>
                         </td>
                         <td>
-                            <input type="text" class="form-control w-75  text-end" name="keterangan[]" value=""/>
+                            <input type="text" class="form-control w-75 text-end" name="keterangan[]" value=""/>
                         </td>
                     </tr>
                 @endforeach
             @endif
             </tbody>
         </table>
+
+        <!-- Kolom input link sebelum tombol submit -->
+        <div class="row col-12 flex-root d-flex flex-row mb-3 mt-3">
+            <div class="col-2">
+                <span class="fs-5" style="margin-left: 1.2rem;">Link drive</span>
+            </div>
+            <div class="col-10">
+                <input type="text" class="form-control link-input" name="link" value=""/>
+            </div>
+        </div>
 
         <div class="d-flex flex-stack flex-wrap mt-lg-20 pt-13 d-print-none p-5">
             <!-- begin::Actions-->
@@ -168,5 +182,6 @@
         </div>
         <!-- end::Footer-->
     </form>
+
 </div>
 <!-- end::Wrapper-->
