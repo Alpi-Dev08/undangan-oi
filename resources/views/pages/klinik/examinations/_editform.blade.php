@@ -1546,8 +1546,7 @@
 
                         <div class="tab-pane fade" id="hakkewajiban" role="tabpanel">
                             <h3 class="fs-3 fw-bold">Bukti Penyampaian Hak dan Kewajiban</h3>
-                            <form method="post" action="{{ route('suket.hakkewajiban',$examination->id) }}">
-
+                            <form method="post" action="{{ route('suket.hakkewajiban', $examination->id) }}">
                                 @csrf
                                 <div class="row">
                                     <button id="button_bukti_penyampaian" type="submit" class="btn btn-bg-dark text-white" style="display:none">Download PDF</button>
@@ -1555,10 +1554,11 @@
                                         {!! $qr !!}
                                         <em class="text-center">Scan untuk melakukan Tanda Tangan</em><br>
                                     </div>
-                                    <button type="submit" class="btn btn-bg-dark text-white">Download PDF</button>
+                                    <a href="{{ route('download_buktipenyampaianinformasi', $examination->id) }}" class="btn btn-bg-dark text-white">Download PDF</a>
                                 </div>
                             </form>
                         </div>
+
 
                         <div class="tab-pane fade" id="persetujuan" role="tabpanel">
                             <h3 class="fs-3 fw-bold">Persetujuan Tindakan Medis</h3>
