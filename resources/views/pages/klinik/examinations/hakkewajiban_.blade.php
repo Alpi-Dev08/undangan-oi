@@ -1,5 +1,4 @@
-@php use Carbon\Carbon; @endphp
-    <!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -143,7 +142,7 @@
     <p>Rumah sakit rujukan yang bekerjasama dengan Klinik Satriabudi Dharma Medika adalah Rumah Sakit Medika BSD</p>
 
     <div style="width:500px;text-align:center">
-        Kab. Tangerang, {{ Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }}<br>
+        Kab. Tangerang, {{ Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }}
         Pasien/Keluarga Pasien<br><br>
         <div id="signature"></div>
         <form id="signature_form" method="POST" enctype="multipart/form-data" action="{{ route('buktipenyampaianinformasi.store') }}">
@@ -155,6 +154,7 @@
                 </button>
                 <button type="button" id="save_signature" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-400 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300" style="display:none">OK</button>
                 <button type="submit">Save</button>
+                <button type="button" id="download_pdf" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-400 hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-300" style="display:none">Download PDF</button>
             </div>
 
         </form>
@@ -178,12 +178,14 @@
             $("#sign").val(data);
             $("#reset_signature").show();
             $("#save_signature").show();
+            $("#download_pdf").hide(); 
             $(":submit").attr("disabled", true);
         });
 
         $("#save_signature").click(function () {
             $("canvas").css("pointer-events", "none");
             $("#save_signature").hide();
+            $("#download_pdf").show(); 
             $(":submit").attr("disabled", false);
         });
 
@@ -191,10 +193,11 @@
             $("#signature").jSignature("reset");
             $("#save_signature").hide();
             $("#reset_signature").hide();
+            $("#download_pdf").hide(); 
             $(":submit").attr("disabled", true);
             $("canvas").css("pointer-events", "");
             $("#sign").val("");
-        })
+        });
 
         $("#signature_form").submit(function () {
             if ($("#sign").val() === "") {
@@ -212,8 +215,14 @@
                 });
             }
         });
-    })
+
+        // Handle Download PDF button click
+        $("#download_pdf").click(function () {
+            const pdfUrl = `/generate-pdf?id=${$('input[name="id"]').val()}`;
+            
+            window.open(pdfUrl, '_blank');
+        });
+    });
 </script>
 </body>
 </html>
-
