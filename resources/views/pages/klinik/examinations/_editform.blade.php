@@ -83,6 +83,19 @@
                 </a>
             </li>
             <!--end::Nav item-->
+
+            <!--begin::Nav item-->
+            <li class="nav-item p-0 ms-0">
+                <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#odontogram">
+                    <!--begin::Title-->
+                    <span class="nav-text fw-semibold fs-4 mb-3">Odontogram</span>
+                    <!--end::Title-->
+                    <!--begin::Bullet-->
+                    <span class="bullet-custom position-absolute z-index-2 w-100 h-1px top-100 bottom-n100 bg-primary rounded"></span>
+                    <!--end::Bullet-->
+                </a>
+            </li>
+            <!--end::Nav item-->
         </ul>
         <!--end::Tabs-->
     </div>
@@ -534,6 +547,148 @@
                 </div>
                 <!--end::details View-->
             </div>
+            <div class="tab-pane" id="odontogram" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
+                <!--begin::details View-->
+                <form id="kt_modal_add_examinations_form" method="POST" class="form" action="{{ route('examinations.update',['examination' => $examination->id]) }}">
+                    @method('PUT')
+                    {{ csrf_field() }}
+                    <!--begin::Scroll-->
+                    <div class="d-flex flex-column flex-row-fluid">
+                        <!--begin::Input group-->
+                        <div class="row mb-6">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Health Profesional') }}</label>
+                            <!--end::Label-->
+                            <!--begin::Col-->
+                            <div class="col-lg-8">
+                                <input type="hidden" name="user_id" value="{{$user->id}}">
+                                <select name="health_profesional_id" aria-label="{{ __('Health Profesional') }}" data-control="select2" data-placeholder="{{ __('Select a Health Profesional...') }}" class="form-select form-select-solid form-select-lg fw-bold">
+                                    <option value="">{{ __('Select a Health Profesional...') }}</option>
+                                    @foreach($healthprofesionals as $healthprofesional)
+                                        <option value="{{ $healthprofesional->id }}" {{ $healthprofesional->id === old('health_profesional_id', $examination->health_profesional_id ?? '') ? 'selected' :'' }}>
+                                            @if(isset($healthprofesional->user->info))
+                                                {{ ($healthprofesional->user->info->title_prefix !='' ? $healthprofesional->user->info->title_prefix.'. ' : '').$healthprofesional->user->name.($healthprofesional->user->info->title_suffix!='' ? ', '.$healthprofesional->user->info->title_suffix : '') }}
+                                            @else
+                                                {{$healthprofesional->user->name}}
+                                            @endif
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-6">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">Subjective Anamnesa</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="col-lg-8">
+                                <div class="input-group input-group-solid has-validation mb-3">
+                                    <textarea name="subjective" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('subjective anamnesa') is-invalid @enderror" placeholder="Subjective Anamnesa">{{ $examination->subjective }}</textarea>
+                                </div>
+                                @error('subjective')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <!--end::Input-->
+                        </div>
+
+
+                        <div class="row mb-6">
+                            <div class="col-lg-12 text-center">
+                                <img src="{{ asset('images/odontogram.png') }}" alt="Gambar Odontogram" class="img-fluid mb-3">
+                            </div>
+                        </div>
+
+                        <!-- start Gambar -->
+                        <div class="row mb-6" id="input-container">
+                            <div class="col-lg-4">
+                                <label class="col-form-label fw-bold fs-6">Pilih Gambar</label>
+                                <select name="gambar[]" class="form-select form-select-solid mb-3">
+                                    <option value="gambar1">Gambar 18</option>
+                                    <option value="gambar2">Gambar 17</option>
+                                    <option value="gambar3">Gambar 16</option>
+                                    <option value="gambar4">Gambar 15</option>
+                                    <option value="gambar5">Gambar 14</option>
+                                    <option value="gambar6">Gambar 13</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-8">
+                                <label class="col-form-label fw-bold fs-6">Keterangan</label>
+                                <input type="text" name="keterangan[]" class="form-control form-control-solid mb-3" placeholder="Keterangan">
+                            </div>
+                        </div>
+
+                        <div class="row mb-6">
+                            <div class="col-lg-12 text-center">
+                                <button type="button" id="add-column" class="btn btn-primary">Tambah</button>
+                            </div>
+                        </div>
+
+                        <!-- end Gambar -->
+
+                        <div class="row mb-6">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">Assesment</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="col-lg-8">
+                                <div class="input-group input-group-solid has-validation mb-3">
+                                    <textarea name="subjective" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('assesment') is-invalid @enderror" placeholder="Assesment">{{ $examination->subjective }}</textarea>
+                                </div>
+                                @error('subjective')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <!--end::Input-->
+                        </div>
+
+                        <div class="row mb-6">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">Plan</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="col-lg-8">
+                                <div class="input-group input-group-solid has-validation mb-3">
+                                    <textarea name="subjective" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('plan') is-invalid @enderror" placeholder="Plan">{{ $examination->subjective }}</textarea>
+                                </div>
+                                @error('subjective')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <!--end::Input-->
+                        </div>
+
+
+                        
+
+                    </div>
+                    <!--end::Scroll-->
+                    <!--begin::Actions-->
+                    <div class="text-center pt-15">
+                        <a href="{{ route('examinations.index')  }}" class="btn btn-sm btn-light-primary">
+                            <!--begin::Svg Icon | path: assets/media/icons/duotune/arrows/arr079.svg-->
+                            <span class="svg-icon svg-icon-muted svg-icon-2hx">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path opacity="0.5" d="M14.2657 11.4343L18.45 7.25C18.8642 6.83579 18.8642 6.16421 18.45 5.75C18.0358 5.33579 17.3642 5.33579 16.95 5.75L11.4071 11.2929C11.0166 11.6834 11.0166 12.3166 11.4071 12.7071L16.95 18.25C17.3642 18.6642 18.0358 18.6642 18.45 18.25C18.8642 17.8358 18.8642 17.1642 18.45 16.75L14.2657 12.5657C13.9533 12.2533 13.9533 11.7467 14.2657 11.4343Z" fill="currentColor"/>
+                                    <path d="M8.2657 11.4343L12.45 7.25C12.8642 6.83579 12.8642 6.16421 12.45 5.75C12.0358 5.33579 11.3642 5.33579 10.95 5.75L5.40712 11.2929C5.01659 11.6834 5.01659 12.3166 5.40712 12.7071L10.95 18.25C11.3642 18.6642 12.0358 18.6642 12.45 18.25C12.8642 17.8358 12.8642 17.1642 12.45 16.75L8.2657 12.5657C7.95328 12.2533 7.95328 11.7467 8.2657 11.4343Z" fill="currentColor"/>
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary" data-kt-examinations-modal-action="submit">
+                            <span class="indicator-label">Submit</span>
+                            <span class="indicator-progress">Please wait...
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </div>
+                    <!--end::Actions-->
+                </form>
+            </div>
+
+
             <div class="tab-pane" id="medicalrecord" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
@@ -915,6 +1070,7 @@
                     </div>
                 @endif
             @endif
+            
             <div class="tab-pane active" id="examination" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
 
 
@@ -1554,7 +1710,6 @@
                                         {!! $qr !!}
                                         <em class="text-center">Scan untuk melakukan Tanda Tangan</em><br>
                                     </div>
-                                    <a href="{{ route('download_buktipenyampaianinformasi', $examination->id) }}" class="btn btn-bg-dark text-white">Download PDF</a>
                                 </div>
                             </form>
                         </div>
@@ -2594,4 +2749,63 @@
             });
         })
     </script>
+
+    <script>
+        document.getElementById('add-column').addEventListener('click', function () {
+            var container = document.getElementById('input-container');
+
+            var row = document.createElement('div');
+            row.className = 'row mb-6';
+
+            var col1 = document.createElement('div');
+            col1.className = 'col-lg-4';
+
+            var label1 = document.createElement('label');
+            label1.className = 'col-form-label fw-bold fs-6';
+            label1.textContent = 'Pilih Gambar';
+
+            var select = document.createElement('select');
+            select.name = 'gambar[]';
+            select.className = 'form-select form-select-solid mb-3';
+            select.innerHTML = `
+                <option value="gambar1">Gambar 1</option>
+                <option value="gambar2">Gambar 2</option>
+                <option value="gambar3">Gambar 3</option>
+                <option value="gambar4">Gambar 4</option>
+                <option value="gambar5">Gambar 5</option>
+                <option value="gambar6">Gambar 6</option>
+            `;
+
+            col1.appendChild(label1);
+            col1.appendChild(select);
+
+            var col2 = document.createElement('div');
+            col2.className = 'col-lg-8';
+
+            var label2 = document.createElement('label');
+            label2.className = 'col-form-label fw-bold fs-6';
+            label2.textContent = 'Keterangan';
+
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'keterangan[]';
+            input.className = 'form-control form-control-solid mb-3';
+            input.placeholder = 'Keterangan';
+
+            col2.appendChild(label2);
+            col2.appendChild(input);
+
+            row.appendChild(col1);
+            row.appendChild(col2);
+
+            container.appendChild(row);
+        });
+    </script>
+
+    <style>
+        .small-img {
+            max-width: 30%; 
+            height: 50%; 
+        }
+    </style>
 @endpush
