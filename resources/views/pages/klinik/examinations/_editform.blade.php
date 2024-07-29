@@ -1199,6 +1199,7 @@
                                             <option value="{{ $drug->id }}">{{  $drug->name }}</option>
                                         @endforeach
                                     </select>
+                                    <input placeholder="Keterangan" name="resep[keterangan][]" class="w-200px me-5 form-control form-control-solid" type="text">
                                     <input placeholder="Qty" name="resep[qty][]" class="w-100px me-5 form-control form-control-solid" type="number" min="1">
                                     <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" id="remove-item">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
@@ -1545,8 +1546,7 @@
 
                         <div class="tab-pane fade" id="hakkewajiban" role="tabpanel">
                             <h3 class="fs-3 fw-bold">Bukti Penyampaian Hak dan Kewajiban</h3>
-                            <form method="post" action="{{ route('suket.hakkewajiban',$examination->id) }}">
-
+                            <form method="post" action="{{ route('suket.hakkewajiban', $examination->id) }}">
                                 @csrf
                                 <div class="row">
                                     <button id="button_bukti_penyampaian" type="submit" class="btn btn-bg-dark text-white" style="display:none">Download PDF</button>
@@ -1554,9 +1554,11 @@
                                         {!! $qr !!}
                                         <em class="text-center">Scan untuk melakukan Tanda Tangan</em><br>
                                     </div>
+                                    <a href="{{ route('download_buktipenyampaianinformasi', $examination->id) }}" class="btn btn-bg-dark text-white">Download PDF</a>
                                 </div>
                             </form>
                         </div>
+
 
                         <div class="tab-pane fade" id="persetujuan" role="tabpanel">
                             <h3 class="fs-3 fw-bold">Persetujuan Tindakan Medis</h3>
@@ -2488,6 +2490,7 @@
                 <option value="{{ $drug->id }}">{{  $drug->name }}</option>
             @endforeach
         </select>
+        <input placeholder="Keterangan" name="resep[keterangan][]" class="w-200px me-5 form-control form-control-solid" type="text">
         <input placeholder="Qty" name="resep[qty][]" class="w-100px me-5 form-control form-control-solid" type="number" min="1">
         <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" id="remove-item">
             <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
@@ -2523,9 +2526,9 @@
 
         #point {
             position: absolute;
-            width: 40px;
-            height: 40px;
-            border: 2px solid black;
+            width: 15px;
+            height: 15px;
+            background-color: red;
             border-radius: 50%;
         }
     </style>
