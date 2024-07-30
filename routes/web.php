@@ -50,6 +50,7 @@
     use App\Http\Controllers\RolesController;
     use App\Http\Controllers\UsersController;
     use Illuminate\Support\Facades\Route;
+    use App\Http\Controllers\Master\OdontogramSymbolsController;
 
     /*
     |--------------------------------------------------------------------------
@@ -116,6 +117,7 @@
         //Masters Data
         Route::prefix('masters')->group(function () {
             Route::resource('religions', ReligionsController::class);
+            Route::resource('odontogramsymbols', OdontogramSymbolsController::class);
             Route::resource('genders', GendersController::class);
             Route::resource('works', WorksController::class);
             Route::resource('educations', EducationsController::class);

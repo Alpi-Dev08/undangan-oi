@@ -30,6 +30,7 @@
     use App\Models\Master\Religion;
     use App\Models\Master\SubDistrict;
     use App\Models\Master\Work;
+    use App\Models\Master\OdontogramSymbol;
     use App\Models\User;
     use App\Models\UserInfo;
     use Haruncpi\LaravelIdGenerator\IdGenerator;
@@ -65,6 +66,7 @@
             $works      = Work::all();
             $maritals   = MaritalStatus::all();
             $educations = Education::all();
+            $odontogramsymbols  = OdontogramSymbol::all();
 
             $specialities = Speciality::all();
             $types        = HealthProfesionalType::all();
@@ -89,6 +91,7 @@
                 'specialities',
                 'types',
                 'nakes',
+                'odontogramsymbols',
             ]));
         }
 
