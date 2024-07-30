@@ -24,7 +24,8 @@ class UpdateOdontogramSymbolRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:100|unique:odontogram_symbols,name,'.$this->odontogramsymbol->id
+            'code' => 'required|max:100|unique:odontogram_symbols,name,'.$this->odontogramsymbol->id,
+            'name' => 'required|max:255'
         ];
     }
 
@@ -36,7 +37,8 @@ class UpdateOdontogramSymbolRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.requried' => 'Please give a odontogram symbol name'
+            'code.requried' => 'Please give a odontogram symbol code',
+            'name.requried' => 'The description may not be greater than 255 characters'
         ];
     }
 }

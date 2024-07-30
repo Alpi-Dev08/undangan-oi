@@ -3,9 +3,10 @@
     <div class="card card-xxl-stretch mb-5 mb-xl-8">
         <!--begin::Card body-->
         <div class="card-header border-0 pt-5">
-            <h3 class="card-title align-items-start flex-column">
-                Edit Odontogram Symbol {{  $odontogramsymbol->name }}
-            </h3>
+        <h3 class="card-title align-items-start flex-column">
+            Edit Odontogram Code {{ $odontogramsymbol->code }}
+        </h3>
+
 
             <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title=""
                  data-bs-original-title="Click to cancel">

@@ -13,7 +13,7 @@ class OdontogramSymbol extends Model
     use SpatieLogsActivity, HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name'
+        'code', 'name'
     ];
 
     /**

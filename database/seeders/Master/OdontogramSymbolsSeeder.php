@@ -18,6 +18,7 @@ class OdontogramSymbolsSeeder extends Seeder
 
         foreach ($data as $value) {
             OdontogramSymbol::create([
+                'code' => $value['code'],
                 'name' => $value['name'],
             ]);
         }
@@ -26,12 +27,12 @@ class OdontogramSymbolsSeeder extends Seeder
     public function data()
     {
         return [
-            ['name' => 'sou'],
-            ['name' => 'non'],
-            ['name' => 'une'],
-            ['name' => 'pre'],
-            ['name' => 'imv'],
-            ['name' => 'ano']
+            ['code' => 'sou', 'name' => 'Gigi sehat, normal, tanpa kelainan'],
+            ['code' => 'non', 'name' => 'Gigi tidak ada/tidak diketahui'],
+            ['code' => 'une', 'name' => 'Un-erupted'],
+            ['code' => 'pre', 'name' => 'Partial Eerupted'],
+            ['code' => 'imv', 'name' => 'Impacted visible'],
+            ['code' => 'ano', 'name' => 'Anomali']
         ];
     }
 }

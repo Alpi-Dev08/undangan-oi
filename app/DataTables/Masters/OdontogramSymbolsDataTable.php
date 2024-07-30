@@ -21,11 +21,15 @@ class OdontogramSymbolsDataTable extends DataTable
             ->filter(function ($query) {
                 if (request()->has('search')) {
                     $search = request()->get('search');
-                    $query->where('name', 'like', "%" . $search['value'] . "%");
+                    $query->where('code', 'like', "%" . $search['value'] . "%")
+                        ->orWhere('name', 'like', "%" . $search['value'] . "%");
                 }
             })
             ->rawColumns(['action'])
             ->addIndexColumn()
+            ->addColumn('code', function (OdontogramSymbol $model) {
+                return $model->code;
+            })
             ->addColumn('name', function (OdontogramSymbol $model) {
                 return $model->name;
             })
@@ -76,6 +80,7 @@ class OdontogramSymbolsDataTable extends DataTable
     {
         return [
             Column::make('DT_RowIndex')->title('No')->orderable(false)->searchable(false),
+            Column::make('code')->title(__('Code'))->searchable(true),
             Column::make('name')->title(__('Name'))->searchable(true),
             Column::computed('action')
                 ->exportable(false)
