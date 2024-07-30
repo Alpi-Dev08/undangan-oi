@@ -368,6 +368,21 @@ return [
                 ],
             ],
         ],
+        'odontogramsymbols' => [
+            '*' => [
+                'title' => 'Daftar Singkatan Odontogram',
+            ],
+            'assets' => [
+                'custom' => [
+                    'css' => [
+                        'plugins/custom/datatables/datatables.bundle.css',
+                    ],
+                    'js' => [
+                        'plugins/custom/datatables/datatables.bundle.js',
+                    ],
+                ],
+            ],
+        ],
     ],
 
     'klinik' => [

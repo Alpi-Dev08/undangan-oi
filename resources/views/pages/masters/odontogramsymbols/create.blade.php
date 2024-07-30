@@ -4,7 +4,7 @@
         <!--begin::Card body-->
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
-                Add Odontogram Symbol
+                Add Odontogram Code
             </h3>
 
             <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title=""

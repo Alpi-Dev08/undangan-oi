@@ -351,6 +351,12 @@
                             'bullet' => '<span class="bullet bullet-dot"></span>',
                             'permission' => ['masters.read'],
                         ],
+                        [
+                            'title' => 'Daftar Singkatan Odontogram',
+                            'path' => 'masters/odontogramsymbols',
+                            'bullet' => '<span class="bullet bullet-dot"></span>',
+                            'permission' => ['masters.read'],
+                        ],
                     ],
                 ],
             ],

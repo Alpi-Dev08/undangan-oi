@@ -10,14 +10,30 @@
             <!--end::Label-->
             <!--begin::Input-->
             <div class="input-group input-group-solid has-validation mb-3">
-                <input type="text" name="name" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('name') is-invalid @enderror" placeholder="Odontogram Symbol" value="{{ $odontogramsymbol->name ?? '' }}"/>
+                <input type="text" name="code" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('code') is-invalid @enderror" placeholder="Odontogram Symbol" value="{{ $odontogramsymbol->code ?? '' }}"/>
             </div>
-            @error('name')
+            @error('code')
             <div class="text-danger">{{ $message }}</div>
         @enderror
         <!--end::Input-->
         </div>
         <!--end::Input group-->
+
+        <!--begin::Input group for Keterangan-->
+        <div class="fv-row mb-7">
+            <!--begin::Label-->
+            <label class="fw-bold fs-6 mb-2">Description</label>
+            <!--end::Label-->
+            <!--begin::Input-->
+            <div class="input-group input-group-solid has-validation mb-3">
+                <input type="text" name="name" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('name') is-invalid @enderror" placeholder="Description" value="{{ $odontogramsymbol->name ?? '' }}"/>
+            </div>
+            @error('name')
+            <div class="text-danger">{{ $message }}</div>
+            @enderror
+            <!--end::Input-->
+        </div>
+        <!--end::Input group for Keterangan-->
     </div>
     <!--end::Scroll-->
     <!--begin::Actions-->
