@@ -67,6 +67,7 @@ class OdontogramSymbolsController extends Controller
         // Process Data
         if($validated){
             try{
+                OdontogramSymbol::create(['code' => $request->code]);
                 OdontogramSymbol::create(['name' => $request->name]);
             }catch(Exception $e){
                 report($e);
@@ -104,7 +105,11 @@ class OdontogramSymbolsController extends Controller
         }
 
         $odontogramsymbol = OdontogramSymbol::find($id);
-        return view('pages.masters.odontogramsymbols.edit',compact('odontogramsymbol'));
+        $odontogramsymbols = OdontogramSymbol::all();
+
+        dd($odontogramsymbol, $odontogramsymbols);
+
+        return view('pages.masters.odontogramsymbols.edit',compact('odontogramsymbol', 'odontogramsymbols'));
     }
 
     /**
