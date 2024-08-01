@@ -26,6 +26,7 @@
     use App\Models\Klinik\Transaction;
     use App\Models\Klinik\TransactionDetail;
     use App\Models\Klinik\VitalityExamination;
+    use App\Models\Master\OdontogramSymbol;
     use App\Models\User;
     use Barryvdh\DomPDF\Facade\Pdf;
     use Doctrine\DBAL\Driver\PDO\Exception;
@@ -169,6 +170,8 @@
             $additionalexamination = AdditionalExamination::where('examination_id', $examination->id)->first();
             //$vitalityexaminations = VitalityExamination::where('user_id', $examination->user_id)->orderBy('created_at', 'desc')->get();
 
+            $odontogramsymbols = OdontogramSymbol::all();
+
             $info             = $user->info;
             $pemeriksaan_awal = PemeriksaanAwal::where('examination_id', $examination->id)
                                                ->orWhere('user_id', $examination->user_id)
@@ -178,7 +181,11 @@
                         ->style('square')
                         ->generate('https://klinik.dharma.or.id/bukti-penyampaian-informasi/' . $examination->id);
 
-            return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories', 'anamnesisexamination', 'examinations', 'physicalscategories', 'physicalexamination', 'otherscategories', 'otherexamination', 'additionalsscategories', 'additionalexamination', 'laboratoryexamination', 'pemeriksaan_awal', 'drugs', 'qr'));
+            $qr_persetujuan_tindakan_medis = QrCode::size(150)
+                        ->style('square')
+                        ->generate('https://klinik.dharma.or.id/persetujuan-tindakan-medis/' . $examination->id);
+
+            return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories', 'anamnesisexamination', 'examinations', 'physicalscategories', 'physicalexamination', 'otherscategories', 'otherexamination', 'additionalsscategories', 'additionalexamination', 'laboratoryexamination', 'pemeriksaan_awal', 'drugs', 'qr','qr_persetujuan_tindakan_medis', 'odontogramsymbols'));
         }
 
         /**

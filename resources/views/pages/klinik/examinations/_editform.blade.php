@@ -623,7 +623,11 @@
                                     <select name="odontogram_symbol_id" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-lg fw-bold">
                                         <option value="">{{ __('Select an Odontogram Code...') }}</option>
                                         @foreach($odontogramsymbols as $odontogramsymbol)
+<<<<<<< HEAD
                                             <option value="{{ $symbol->id }}" {{ $odontogramsymbol->id === old('odontogram_symbol_id', $odontogramsymbol->odontogram_symbol_id ?? '') ? 'selected' : '' }}>
+=======
+                                            <option value="{{ $odontogramsymbol->id }}" {{ $odontogramsymbol->id === old('odontogram_symbol_id', $odontogramsymbol->odontogram_symbol_id ?? '') ? 'selected' : '' }}>
+>>>>>>> staging
                                                 {{ $odontogramsymbol->code }}
                                             </option>
                                         @endforeach
@@ -677,7 +681,7 @@
                         </div>
 
 
-                        
+
 
                     </div>
                     <!--end::Scroll-->
@@ -1087,7 +1091,7 @@
                     </div>
                 @endif
             @endif
-            
+
             <div class="tab-pane active" id="examination" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
 
 
@@ -1981,7 +1985,11 @@
                                 <textarea rows="3" class="form-control form-control-solid" placeholder="Alasan" name="description"></textarea>
                             </div>
                             <div id="signature_persetujuan_tindakan_medis" class="row text-center">
+<<<<<<< HEAD
                                 {!! $qr2 !!}
+=======
+                                {!! $qr_persetujuan_tindakan_medis !!}
+>>>>>>> staging
                                 <em class="text-center">Scan untuk melakukan Tanda Tangan</em><br>
                             </div>
                             <script>
@@ -1990,9 +1998,9 @@
                                 const alasanContainer = document.getElementById('alasanContainer');
 
                                 if (tidakSetujuCheckbox.checked) {
-                                    alasanContainer.style.display = 'block'; 
+                                    alasanContainer.style.display = 'block';
                                 } else {
-                                    alasanContainer.style.display = 'none'; 
+                                    alasanContainer.style.display = 'none';
                                 }
                             }
                             </script>
@@ -2737,7 +2745,7 @@
                 $(this).closest('#inputFromRow').remove();
             });
 
-            /* setInterval(function () {
+            setInterval(function () {
                  $.ajax({
                      url: '{{ route('bukti_penyampaian', $examination->id) }}',
                     type: 'GET',
@@ -2751,7 +2759,7 @@
                         }
                     }
                 });
-            }, 5000);*/
+            }, 5000);
 
             $("#penandaan_operasi").click(function (e) {
                 e.preventDefault();
@@ -2823,8 +2831,8 @@
 
     <style>
         .small-img {
-            max-width: 30%; 
-            height: 50%; 
+            max-width: 30%;
+            height: 50%;
         }
     </style>
 @endpush
