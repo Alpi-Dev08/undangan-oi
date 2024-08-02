@@ -607,8 +607,8 @@
 
 
                         <div class="row mb-6">
-                            <div class="col-lg-12 text-center">
-                                <img src="{{ asset('images/odontogram.png') }}" alt="Gambar Odontogram" class="img-fluid mb-3">
+                            <div class="col-lg-10 text-center">
+                                <img src="{{ asset('images/odontogram.png') }}" alt="Gambar Odontogram" class="img-fluid mb-3 custom-img">
                             </div>
                         </div>
 
@@ -616,29 +616,25 @@
                         <div class="row mb-6" id="input-container">
                             <div class="col-lg-4">
                                 <label class="col-form-label fw-bold fs-6">Gambar</label>
-                                <input type="text" name="gambar[]" class="form-control form-control-solid mb-3" placeholder="Keterangan">
+                                <input type="text" name="gambar[]" class="form-control form-control-solid mb-3" placeholder="Gambar">
                             </div>
-                            <div class="col-lg-2">
+                            <div class="col-lg-4">
+                                <label class="col-form-label fw-bold fs-6">Odontogram Code</label>
                                 <div class="input-group input-group-solid has-validation mb-3">
-                                    <select name="odontogram_symbol_id" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-lg fw-bold">
+                                    <select name="odontogram_symbol_id[]" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-lg ">
                                         <option value="">{{ __('Select an Odontogram Code...') }}</option>
                                         @foreach($odontogramsymbols as $odontogramsymbol)
-<<<<<<< HEAD
-                                            <option value="{{ $symbol->id }}" {{ $odontogramsymbol->id === old('odontogram_symbol_id', $odontogramsymbol->odontogram_symbol_id ?? '') ? 'selected' : '' }}>
-=======
-                                            <option value="{{ $odontogramsymbol->id }}" {{ $odontogramsymbol->id === old('odontogram_symbol_id', $odontogramsymbol->odontogram_symbol_id ?? '') ? 'selected' : '' }}>
->>>>>>> staging
-                                                {{ $odontogramsymbol->code }}
-                                            </option>
+                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                            </div> 
+                            </div>
                             <div class="col-lg-4">
                                 <label class="col-form-label fw-bold fs-6">Keterangan</label>
                                 <input type="text" name="keterangan[]" class="form-control form-control-solid mb-3" placeholder="Keterangan">
                             </div>
                         </div>
+
 
                         <div class="row mb-6">
                             <div class="col-lg-12 text-center">
@@ -1369,15 +1365,15 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <div class="col-lg-8">
-                                <div class="d-flex flex-row" id="inputFromRow">
+                                <div class="d-flex flex-row mb-2 align-items-center" id="inputFromRow">
                                     <select name="resep[obat][]" aria-label="{{ __('Pilih Obat') }}" data-placeholder="{{ __('Pilih Obat...') }}" class="mb-2 form-select form-select-solid form-select-lg fw-bold me-5">
                                         <option value="">{{ __('Pilih Obat...') }}</option>
                                         @foreach($drugs as $drug)
                                             <option value="{{ $drug->id }}">{{  $drug->name }}</option>
                                         @endforeach
                                     </select>
-                                    <input placeholder="Keterangan" name="resep[keterangan][]" class="w-200px me-5 form-control form-control-solid" type="text">
-                                    <input placeholder="Qty" name="resep[qty][]" class="w-100px me-5 form-control form-control-solid" type="number" min="1">
+                                    <input placeholder="Keterangan" name="resep[keterangan][]" class="w-200px me-5 mb-2 form-control form-control-solid" type="text">
+                                    <input placeholder="Qty" name="resep[qty][]" class="w-100px me-5 mb-2 form-control form-control-solid" type="number" min="1">
                                     <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" id="remove-item">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
                                         <span class="svg-icon svg-icon-3">
@@ -1985,11 +1981,7 @@
                                 <textarea rows="3" class="form-control form-control-solid" placeholder="Alasan" name="description"></textarea>
                             </div>
                             <div id="signature_persetujuan_tindakan_medis" class="row text-center">
-<<<<<<< HEAD
-                                {!! $qr2 !!}
-=======
                                 {!! $qr_persetujuan_tindakan_medis !!}
->>>>>>> staging
                                 <em class="text-center">Scan untuk melakukan Tanda Tangan</em><br>
                             </div>
                             <script>
@@ -2784,55 +2776,87 @@
     </script>
 
     <script>
-        document.getElementById('add-column').addEventListener('click', function () {
-            var container = document.getElementById('input-container');
+            document.getElementById('add-column').addEventListener('click', function () {
+                var container = document.getElementById('input-container');
 
-            var row = document.createElement('div');
-            row.className = 'row mb-6';
+                var row = document.createElement('div');
+                row.className = 'row mb-5';
 
-            var col1 = document.createElement('div');
-            col1.className = 'col-lg-4';
+                var col1 = document.createElement('div');
+                col1.className = 'col-lg-4';
 
-            var label1 = document.createElement('label');
-            label1.className = 'col-form-label fw-bold fs-6';
-            label1.textContent = 'Gambar';
+                var label1 = document.createElement('label');
+                label1.className = 'col-form-label fw-bold fs-6';
 
-            var input1 = document.createElement('input');
-            input1.type = 'text';
-            input1.name = 'gambar[]';
-            input1.className = 'form-control form-control-solid mb-3';
-            input1.placeholder = 'Gambar';
+                var input1 = document.createElement('input');
+                input1.type = 'text';
+                input1.name = 'gambar[]';
+                input1.className = 'form-control form-control-solid mb-3';
+                input1.placeholder = 'Gambar';
 
-            col1.appendChild(label1);
-            col1.appendChild(input1);
+                col1.appendChild(label1);
+                col1.appendChild(input1);
 
-            var col2 = document.createElement('div');
-            col2.className = 'col-lg-4';
+                var col2 = document.createElement('div');
+                col2.className = 'col-lg-4';
 
-            var label2 = document.createElement('label');
-            label2.className = 'col-form-label fw-bold fs-6';
-            label2.textContent = 'Keterangan';
+                var label2 = document.createElement('label');
+                label2.className = 'col-form-label fw-bold fs-6';
 
-            var input2 = document.createElement('input');
-            input2.type = 'text';
-            input2.name = 'keterangan[]';
-            input2.className = 'form-control form-control-solid mb-3';
-            input2.placeholder = 'Keterangan';
+                var inputGroup = document.createElement('div');
+                inputGroup.className = 'input-group input-group-solid has-validation mb-3';
 
-            col2.appendChild(label2);
-            col2.appendChild(input2);
+                var select = document.createElement('select');
+                select.name = 'odontogram_symbol_id[]';
+                select.ariaLabel = '{{ __('Odontogram Code') }}';
+                select.dataset.control = 'select2';
+                select.dataset.placeholder = '{{ __('Select an Odontogram Code...') }}';
+                select.className = 'form-select form-select-solid form-select-lg';
 
-            row.appendChild(col1);
-            row.appendChild(col2);
+                var option = document.createElement('option');
+                option.value = '';
+                option.textContent = '{{ __('Select an Odontogram Code...') }}';
+                select.appendChild(option);
 
-            container.appendChild(row);
-        });
-    </script>
+                @foreach($odontogramsymbols as $odontogramsymbol)
+                var option = document.createElement('option');
+                option.value = '{{ $odontogramsymbol->id }}';
+                option.textContent = '{{ $odontogramsymbol->code }}';
+                select.appendChild(option);
+                @endforeach
 
-    <style>
-        .small-img {
-            max-width: 30%;
-            height: 50%;
+                inputGroup.appendChild(select);
+                col2.appendChild(label2);
+                col2.appendChild(inputGroup);
+
+                var col3 = document.createElement('div');
+                col3.className = 'col-lg-4';
+
+                var label3 = document.createElement('label');
+                label3.className = 'col-form-label fw-bold fs-6';
+
+                var input3 = document.createElement('input');
+                input3.type = 'text';
+                input3.name = 'keterangan[]';
+                input3.className = 'form-control form-control-solid mb-3';
+                input3.placeholder = 'Keterangan';
+
+                col3.appendChild(label3);
+                col3.appendChild(input3);
+
+                row.appendChild(col1);
+                row.appendChild(col2);
+                row.appendChild(col3);
+
+                container.appendChild(row);
+            });
+        </script>
+
+        <style>
+            .custom-img {
+            max-width: 100%; 
+            height: auto; 
+            max-height: 400px; 
         }
-    </style>
+        </style>
 @endpush
