@@ -67,8 +67,7 @@ class OdontogramSymbolsController extends Controller
         // Process Data
         if($validated){
             try{
-                OdontogramSymbol::create(['code' => $request->code]);
-                OdontogramSymbol::create(['name' => $request->name]);
+                OdontogramSymbol::create($validated);
             }catch(Exception $e){
                 report($e);
                 return false;
