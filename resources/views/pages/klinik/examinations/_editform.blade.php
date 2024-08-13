@@ -560,6 +560,128 @@
                 <!--end::details View-->
             </div>
             <div class="tab-pane" id="odontogram" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
+
+                <!--begin::Alert-->
+                <div class="alert alert-dismissible bg-light-primary border border-primary d-flex flex-column flex-sm-row p-5 mb-10 mx-0 row">
+                    <!--begin::Close-->
+                    <button type="button" class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto" data-bs-dismiss="alert">
+                        <!--begin::Svg Icon | path: /var/www/preview.keenthemes.com/keenthemes/metronic/docs/core/html/src/media/icons/duotune/arrows/arr088.svg-->
+                        <span class="svg-icon svg-icon-muted svg-icon-2hx"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect opacity="0.5" x="7.05025" y="15.5356" width="12" height="2" rx="1" transform="rotate(-45 7.05025 15.5356)" fill="currentColor"/>
+<rect x="8.46447" y="7.05029" width="12" height="2" rx="1" transform="rotate(45 8.46447 7.05029)" fill="currentColor"/>
+</svg></span>
+                        <!--end::Svg Icon-->
+                    </button>
+                    <!--end::Close-->
+                    <!--begin::Wrapper-->
+                    <div class="row col-12 pe-0 pe-sm-10">
+                        @if(isset($pemeriksaan_awal))
+                            <h5>Pemeriksaan Awal</h5>
+                            @if($pemeriksaan_awal->kriteria_satu=='ya' && $pemeriksaan_awal->kriteria_dua=='ya')
+                                @php $text_class = 'text-danger'; @endphp
+                            @elseif($pemeriksaan_awal->kriteria_satu=='ya' || $pemeriksaan_awal->kriteria_dua=='ya')
+                                @php $text_class = 'text-warning'; @endphp
+                            @else
+                                @php $text_class = 'text-success'; @endphp
+                            @endif
+                            <!--begin::Content-->
+                            <div class="col-12 {{ $text_class }} fw-bolder mb-5">
+                                <span>{{ $pemeriksaan_awal->interpretasi  }} / {{ ucwords($pemeriksaan_awal->tindakan)  }}</span>
+                            </div>
+                            <!--end::Content-->
+                        @endif
+                        <!--begin::Title-->
+                        <h5>Jenis Pemeriksaan</h5>
+                        <!--end::Title-->
+                        <div class="col-12">{{ $examination->service_category->name }}
+                            <ul class="row">
+                                @foreach(service_examination($examination->id) as $service)
+                                    <li class="col-4">{{ $service->service->name }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                    <!--end::Wrapper-->
+
+                    <div class="row col-12 pe-0 pe-sm-10">
+                        <h5 class="mb-1">Vital Sign & BMI</h5>
+                        <div class="row col-12">
+                            <div class="row col-6">
+                                <div class="col-12 row">
+                                    <div class="col-4">Weight</div>
+                                    <div class="col-8">: {{ $examination->vitality->weight ?? "-" }} Kg</div>
+                                </div>
+                                <div class="col-12 row">
+                                    <div class="col-4">Height</div>
+                                    <div class="col-8">: {{ $examination->vitality->height ?? "-" }} cm</div>
+                                </div>
+                                <div class="col-12 row">
+                                    <div class="col-4">Body Mass Index</div>
+                                    <div class="col-8">: {{ $examination->vitality->body_mass_index ?? "-" }}</div>
+                                </div>
+                                <div class="col-12 row">
+                                    <div class="col-4">Ideal Weight</div>
+                                    <div class="col-8">: {{ $examination->vitality->ideal_weight ?? "-" }} Kg</div>
+                                </div>
+                                <div class="col-12 row">
+                                    <div class="col-4">Body Fat</div>
+                                    <div class="col-8">: {{ $examination->vitality->body_fat ?? "-" }}</div>
+                                </div>
+                                <div class="col-12 row">
+                                    <div class="col-4">BMI Conclusion</div>
+                                    <div class="col-8">: {{ $examination->vitality->bmi_conclusion ?? "-" }}</div>
+                                </div>
+                                <div class="col-12">&nbsp;</div>
+                                <div class="col-12 row">
+                                    <div class="col-4">Arm Circumference</div>
+                                    <div class="col-8">: {{ $examination->vitality->arm_circumference ?? "-" }}</div>
+                                </div>
+                                <div class="col-12 row">
+                                    <div class="col-4">Abdominal Circumference</div>
+                                    <div class="col-8">: {{ $examination->vitality->adbdominal_circumference ?? "-" }}</div>
+                                </div>
+                            </div>
+                            <div class="row col-6">
+                                <div class="col-12 row">
+                                    <div class="col-4">Blood Pressure</div>
+                                    <div class="col-8">: {{ $examination->vitality->blood_pressure ?? "-" }}</div>
+                                </div>
+                                <div class="col-12 row">
+                                    <div class="col-4">Heart Rate</div>
+                                    <div class="col-8">: {{ $examination->vitality->heart_rate ?? "-" }}</div>
+                                </div>
+                                <div class="col-12 row">
+                                    <div class="col-4">Respiratory Rate</div>
+                                    <div class="col-8">: {{ $examination->vitality->respiratory_rate ?? "-" }}</div>
+                                </div>
+                                <div class="col-12 row">
+                                    <div class="col-4">Temperature</div>
+                                    <div class="col-8">: {{ $examination->vitality->temperature ?? "-" }}</div>
+                                </div>
+                                <div class="col-12 row">
+                                    <div class="col-4">Oxygen Saturation</div>
+                                    <div class="col-8">: {{ $examination->vitality->oxygen_saturation ?? "-" }}</div>
+                                </div>
+                                <div class="col-12 row">
+                                    <div class="col-4">Waist Circumference</div>
+                                    <div class="col-8">: {{ $examination->vitality->waist_circumferennce ?? "-" }}</div>
+                                </div>
+                                <div class="col-12">&nbsp;</div>
+                                <div class="col-12 row">
+                                    <div class="col-4">Neck Circumference</div>
+                                    <div class="col-8">: {{ $examination->vitality->neck_circumference ?? "-" }}</div>
+                                </div>
+                                <div class="col-12 row">
+                                    <div class="col-4">Chest Size</div>
+                                    <div class="col-8">: {{ $examination->vitality->chest_size ?? "-" }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!--end::Alert-->
+
                 <!--begin::details View-->
                 <form id="kt_modal_add_examinations_form" method="POST" class="form" action="{{ route('examinations.update',['examination' => $examination->id]) }}">
                     @method('PUT')
@@ -591,14 +713,30 @@
 
                         <div class="row mb-6">
                             <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Subjective Anamnesa</label>
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">Subjective</label>
                             <!--end::Label-->
                             <!--begin::Input-->
                             <div class="col-lg-8">
                                 <div class="input-group input-group-solid has-validation mb-3">
-                                    <textarea name="subjective" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('subjective anamnesa') is-invalid @enderror" placeholder="Subjective Anamnesa">{{ $examination->subjective }}</textarea>
+                                    <textarea name="subjective" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('subjective') is-invalid @enderror" placeholder="Subjective">{{ $examination->subjective }}</textarea>
                                 </div>
                                 @error('subjective')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <!--end::Input-->
+                        </div>
+
+                        <div class="row mb-6">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">Objective</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="col-lg-8">
+                                <div class="input-group input-group-solid has-validation mb-3">
+                                    <textarea name="objective" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('objective') is-invalid @enderror" placeholder="Objective">{{ $examination->objective }}</textarea>
+                                </div>
+                                @error('objective')
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -613,7 +751,7 @@
                                 <div class="col-auto text-center">
                                     <label class="col-form-label fw-bold fs-6">Gambar {{ $i }}</label>
                                     <div>
-                                        <img src="{{ asset('images/odontogram1.png') }}" alt="Gambar Odontogram {{ $i }}" class="img-fluid mb-1 custom-img" style="max-width: 50px;">
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram {{ $i }}" class="img-fluid mb-1 custom-img" style="max-width: 50px;">
                                     </div>
                                     <div class="mb-1 d-flex justify-content-center">
                                         <div class="input-group input-group-solid has-validation" style="width: 80px;">
@@ -638,7 +776,7 @@
                                 <div class="col-auto text-center">
                                     <label class="col-form-label fw-bold fs-6">Gambar {{ $i }}</label>
                                     <div>
-                                        <img src="{{ asset('images/odontogram1.png') }}" alt="Gambar Odontogram {{ $i }}" class="img-fluid mb-1 custom-img" style="max-width: 50px;">
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram {{ $i }}" class="img-fluid mb-1 custom-img" style="max-width: 50px;">
                                     </div>
                                     <div class="mb-1 d-flex justify-content-center">
                                         <div class="input-group input-group-solid has-validation" style="width: 80px;">
@@ -663,7 +801,7 @@
                                 <div class="col-auto text-center">
                                     <label class="col-form-label fw-bold fs-6">Gambar {{ $i }}</label>
                                     <div>
-                                        <img src="{{ asset('images/odontogram1.png') }}" alt="Gambar Odontogram {{ $i }}" class="img-fluid mb-1 custom-img" style="max-width: 50px;">
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram {{ $i }}" class="img-fluid mb-1 custom-img" style="max-width: 50px;">
                                     </div>
                                     <div class="mb-1 d-flex justify-content-center">
                                         <div class="input-group input-group-solid has-validation" style="width: 80px;">
@@ -688,7 +826,7 @@
                                 <div class="col-auto text-center">
                                     <label class="col-form-label fw-bold fs-6">Gambar {{ $i }}</label>
                                     <div>
-                                        <img src="{{ asset('images/odontogram1.png') }}" alt="Gambar Odontogram {{ $i }}" class="img-fluid mb-1 custom-img" style="max-width: 50px;">
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram {{ $i }}" class="img-fluid mb-1 custom-img" style="max-width: 50px;">
                                     </div>
                                     <div class="mb-1 d-flex justify-content-center">
                                         <div class="input-group input-group-solid has-validation" style="width: 80px;">
@@ -710,14 +848,79 @@
 
                         <div class="row mb-6">
                             <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Assesment</label>
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">Assessment</label>
                             <!--end::Label-->
                             <!--begin::Input-->
                             <div class="col-lg-8">
-                                <div class="input-group input-group-solid has-validation mb-3">
-                                    <textarea name="subjective" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('assesment') is-invalid @enderror" placeholder="Assesment">{{ $examination->subjective }}</textarea>
+                                <select id="icdtens" aria-label="{{ __('Select a Diagnosa') }}" data-control="select2" data-placeholder="{{ __('Select a Diagnosa...') }}" class="form-select form-select-solid form-select-lg fw-bold">
+                                    <option value="">{{ __('Select a Diagnosa...') }}</option>
+                                    @foreach($icdtens as $icdten)
+                                        <option value="{{ $icdten->id }}">{{  $icdten->code.' - '.$icdten->name }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="input-group input-group-solid has-validation mb-3 mt-3">
+                                    <textarea name="assessment" id="assessment" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('assessment') is-invalid @enderror" placeholder="Assessment">{{ $examination->assessment }}</textarea>
                                 </div>
-                                @error('subjective')
+                                @error('assessment')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <!--end::Input-->
+                        </div>
+
+                        <!--begin::Input group-->
+                        <div class="row mb-6">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">
+                                <span>{{ __('Plan') }}</span>
+
+                            </label>
+                            <!--end::Label-->
+
+                            <!--begin::Col-->
+                            <div class="col-lg-8">
+                                <select name="plan_id" aria-label="{{ __('Select a Plan') }}" data-control="select2" data-placeholder="{{ __('Select a Plan...') }}" class="form-select form-select-solid form-select-lg fw-bold">
+                                    <option value="">{{ __('Select a Plan...') }}</option>
+                                    @foreach($plans as $plan)
+                                        <option value="{{ $plan->id }}" {{  $plan->id === old('plan_id', $examination->plan_id ?? '') ? 'selected' :'' }}>{{  $plan->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+
+                        <div class="row mb-6">
+                            <!--begin::Label-->
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">Resep</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <div class="col-lg-8">
+                                <div class="d-flex flex-row mb-2 align-items-center" id="inputFromRow">
+                                    <select name="resep[obat][]" aria-label="{{ __('Pilih Obat') }}" data-placeholder="{{ __('Pilih Obat...') }}" class="mb-2 form-select form-select-solid form-select-lg fw-bold me-5">
+                                        <option value="">{{ __('Pilih Obat...') }}</option>
+                                        @foreach($drugs as $drug)
+                                            <option value="{{ $drug->id }}">{{  $drug->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <input placeholder="Keterangan" name="resep[keterangan][]" class="w-200px me-5 mb-2 form-control form-control-solid" type="text">
+                                    <input placeholder="Qty" name="resep[qty][]" class="w-100px me-5 mb-2 form-control form-control-solid" type="number" min="1">
+                                    <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" id="remove-item">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
+                                        <span class="svg-icon svg-icon-3">
+																						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+																							<path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor"/>
+																							<path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="currentColor"/>
+																							<path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="currentColor"/>
+																						</svg>
+																					</span>
+                                        <!--end::Svg Icon-->
+                                    </button>
+                                </div>
+
+                                <div class="d-flex flex-column" id="newRow"></div>
+                                <i class="btn btn-primary" id="tambah_obat">Tambah</i>
+                                @error('resep')
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -726,14 +929,14 @@
 
                         <div class="row mb-6">
                             <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Plan</label>
+                            <label class="col-lg-4 col-form-label fw-bold fs-6">Saran</label>
                             <!--end::Label-->
                             <!--begin::Input-->
                             <div class="col-lg-8">
                                 <div class="input-group input-group-solid has-validation mb-3">
-                                    <textarea name="subjective" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('plan') is-invalid @enderror" placeholder="Plan">{{ $examination->subjective }}</textarea>
+                                    <textarea name="saran" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('saran') is-invalid @enderror" placeholder="Saran">{{ $examination->saran }}</textarea>
                                 </div>
-                                @error('subjective')
+                                @error('saran')
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -1811,21 +2014,83 @@
                                     <table class="table" style="width:100%">
                                         <tbody>
                                         <tr>
-                                            <td>Dkter Pelaksana Tindakan</td>
+                                            <td>Dokter Pelaksana Tindakan</td>
                                             <td>: {{ (!in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.(!in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}</b>
                                                 <br>
                                                 <b>{{ $examination->health_profesional->sip_number ? 'SIP.'.$examination->health_profesional->sip_number : '' }}
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Pemberi Informasi</td>
-                                            <td class="d-flex">:&nbsp;<input type="text" name="pemberi_informasi" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Pemberi Informasi">
+                                            <td>Nama</td>
+                                            <td>: {{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tempat,Tanggal Lahir</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="tempat_tgl" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Tempat, Tanggal Lahir">
                                             </td>
                                         </tr>
                                         <tr>
+                                            <td>Jenis kelamin</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="jenis_kel" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jenis kelamin">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Alamat</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="alamat_pas" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alamat">
+                                            </td>
+                                        </tr>
+                                        <!-- <tr>
                                             <td>Penerima Informasi/pemberi persetujuan</td>
                                             <td>: {{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</td>
+                                        </tr> -->
+                                        <!-- <tr>
+                                            <td>Tindakan Terhadap</td>
+                                            <td>
+                                                <select name="relation" id="relation" style="
+                                                    width: 200px; /* Lebar dropdown */
+                                                    height: 40px; /* Tinggi dropdown */
+                                                    font-size: 16px; /* Ukuran font */
+                                                    padding: 5px; /* Ruang di dalam dropdown */
+                                                ">
+                                                    <option value="saya-sendiri">Saya Sendiri</option>
+                                                    <option value="istri">Istri</option>
+                                                    <option value="suami">Suami</option>
+                                                    <option value="ayah">Ayah</option>
+                                                    <option value="ibu">Ibu</option>
+                                                    <option value="anak">Anak Saya</option>
+                                                </select>
+                                            </td>
+                                        </tr> -->
+                                        <tr>
+                                            <td>Tindakan Terhadap</td>
+                                            <td class="d-flex">:&nbsp;
+                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                    <input type="text" value="Saya" name="terhadap" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Saya">
+                                                    <!-- <input type="text" name="jenis_tindakan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jenis Tindakan"> -->
+                                                </div>
+                                            </td>
                                         </tr>
+                                        <tr>
+                                            <td>Nama</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="nama_pasien" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nama pasien">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tempat,Tanggal Lahir</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="tempat_tanggal" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Tempat, Tanggal Lahir">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Jenis kelamin</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="jenis_kelamin" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jenis kelamin">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Alamat</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="alamat" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alamat">
+                                            </td>
+                                        </tr>
+
                                         <tr>
                                             <td>Diagnosis (WD & DD)</td>
                                             <td class="d-flex">:&nbsp;
@@ -1871,21 +2136,6 @@
                                         </tr>
 
                                         <tr>
-                                            <td>Indikasi Tindakan</td>
-                                            <td class="d-flex">:&nbsp;
-                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
-                                                    <input type="text" name="indikasi" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
-                                                    <label class="form-check form-switch form-check-custom form-check-solid">
-                                                        <input class="form-check-input" type="checkbox" name="indikasi_check" value="1"/>
-                                                        <span class="form-check-label fw-semibold text-muted">
-                                                            Check
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
                                             <td>Tata Cara</td>
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
@@ -1916,7 +2166,7 @@
                                         </tr>
 
                                         <tr>
-                                            <td>Resiko</td>
+                                            <td>Alternatif dan Resiko</td>
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
                                                     <input type="text" name="resiko" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
@@ -1931,7 +2181,7 @@
                                         </tr>
 
                                         <tr>
-                                            <td>Komplikasi</td>
+                                            <td>Resiko dan Komplikasi</td>
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
                                                     <input type="text" name="komplikasi" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
@@ -1961,36 +2211,6 @@
                                         </tr>
 
                                         <tr>
-                                            <td>Alternatif dan Resiko</td>
-                                            <td class="d-flex">:&nbsp;
-                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
-                                                    <input type="text" name="alternatif" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
-                                                    <label class="form-check form-switch form-check-custom form-check-solid">
-                                                        <input class="form-check-input" type="checkbox" name="alternatif_check" value="1"/>
-                                                        <span class="form-check-label fw-semibold text-muted">
-                                                            Check
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Lain-lain</td>
-                                            <td class="d-flex">:&nbsp;
-                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
-                                                    <input type="text" name="lain" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
-                                                    <label class="form-check form-switch form-check-custom form-check-solid">
-                                                        <input class="form-check-input" type="checkbox" name="lain_check" value="1"/>
-                                                        <span class="form-check-label fw-semibold text-muted">
-                                                            Check
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
                                             <td>Yang Bertandatangan</td>
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
@@ -2001,17 +2221,21 @@
                                                 </div>
                                             </td>
                                         </tr>
+
                                         <tr>
-                                            <td>Tindakan Terhadap</td>
-                                            <td class="d-flex">:&nbsp;
-                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
-                                                    <input type="text" value="Saya" name="terhadap" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Saya">
-                                                    <input type="text" name="jenis_tindakan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jenis Tindakan">
+                                            <td>Tanda Tangan:</td>
+                                            <td class="d-flex">
+                                                <div class="d-flex flex-column w-100">
+                                                    <canvas id="signature-pad" name="signature" style="border:1px solid #000; width: 100%; max-width: 300px; height: auto; max-height: 100px;"></canvas>
+                                                    <div class="d-flex mt-2">
+                                                        <button id="clear" class="btn btn-secondary" type="button">Clear</button>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
 
-                                        <tr>
+
+                                        <!-- <tr>
                                             <td>Pemberi Persetujuan</td>
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
@@ -2021,7 +2245,7 @@
                                                     <input type="text" name="alamat_tindak" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alamat">
                                                 </div>
                                             </td>
-                                        </tr>
+                                        </tr> -->
                                         </tbody>
                                     </table>
                             </div>
@@ -2029,14 +2253,14 @@
                             @csrf
                             <div class="row">
                             <div class="form-check form-check-custom form-check-solid mb-3">
-                                <input class="form-check-input" type="radio" id="setuju" name="persetujuan" value="setuju" onchange="toggleAlasan()" />
-                                <label class="form-check-label fw-semibold text-black" for="setuju">
+                                <input class="form-check-input" type="radio" id="Setuju" name="persetujuan" value="setuju" onchange="toggleAlasan()" />
+                                <label class="form-check-label fw-semibold text-black" for="Setuju">
                                     Setuju dengan Tindakan yang telah dijelaskan
                                 </label>
                             </div>
                             <div class="form-check form-check-custom form-check-solid mb-3">
-                                <input class="form-check-input" type="radio" id="tidakSetuju" name="persetujuan" value="tidakSetuju" onchange="toggleAlasan()" />
-                                <label class="form-check-label fw-semibold text-black" for="tidakSetuju">
+                                <input class="form-check-input" type="radio" id="Tidak Setuju" name="persetujuan" value="Tidak Setuju" onchange="toggleAlasan()" />
+                                <label class="form-check-label fw-semibold text-black" for="Tidak Setuju">
                                     Tidak Setuju dengan Tindakan yang telah dijelaskan
                                 </label>
                             </div>
@@ -2044,13 +2268,9 @@
                                 <label for="exampleFormControlInput1" class="form-label">Alasan :</label>
                                 <textarea rows="3" class="form-control form-control-solid" placeholder="Alasan" name="description"></textarea>
                             </div>
-                            <div id="signature_persetujuan_tindakan_medis" class="row text-center">
-                                {!! $qr_persetujuan_tindakan_medis !!}
-                                <em class="text-center">Scan untuk melakukan Tanda Tangan</em><br>
-                            </div>
                             <script>
                             function toggleAlasan() {
-                                const tidakSetujuCheckbox = document.getElementById('tidakSetuju');
+                                const tidakSetujuCheckbox = document.getElementById('Tidak Setuju');
                                 const alasanContainer = document.getElementById('alasanContainer');
 
                                 if (tidakSetujuCheckbox.checked) {
@@ -2916,6 +3136,103 @@
             });
         </script>
 
+        <script>
+            var canvas = document.getElementById('signature-pad');
+            var ctx = canvas.getContext('2d');
+            var drawing = false;
+
+            function getMousePos(canvas, evt) {
+                var rect = canvas.getBoundingClientRect();
+                return {
+                    x: evt.clientX - rect.left,
+                    y: evt.clientY - rect.top
+                };
+            }
+
+            function getTouchPos(canvas, touch) {
+                var rect = canvas.getBoundingClientRect();
+                return {
+                    x: touch.touches[0].clientX - rect.left,
+                    y: touch.touches[0].clientY - rect.top
+                };
+            }
+
+            canvas.addEventListener('mousedown', function(e) {
+                drawing = true;
+                var pos = getMousePos(canvas, e);
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+            });
+
+            canvas.addEventListener('mousemove', function(e) {
+                if (drawing) {
+                    var pos = getMousePos(canvas, e);
+                    ctx.lineTo(pos.x, pos.y);
+                    ctx.stroke();
+                }
+            });
+
+            canvas.addEventListener('mouseup', function() {
+                drawing = false;
+            });
+
+            canvas.addEventListener('touchstart', function(e) {
+                drawing = true;
+                var pos = getTouchPos(canvas, e);
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+                e.preventDefault();
+            });
+
+            canvas.addEventListener('touchmove', function(e) {
+                if (drawing) {
+                    var pos = getTouchPos(canvas, e);
+                    ctx.lineTo(pos.x, pos.y);
+                    ctx.stroke();
+                }
+                e.preventDefault();
+            });
+
+            canvas.addEventListener('touchend', function() {
+                drawing = false;
+                e.preventDefault();
+            });
+
+            document.getElementById('clear').addEventListener('click', function() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            });
+
+            document.getElementById('save').addEventListener('click', function() {
+                var dataURL = canvas.toDataURL();
+                console.log("Tanda tangan disimpan sebagai data URL:", dataURL);
+            });
+
+        </script>
+
+        <script>
+            const canvas = document.getElementById('signature-pad');
+            const clearButton = document.getElementById('clear');
+            const signatureInput = document.createElement('input');
+            
+            signatureInput.type = 'hidden';
+            signatureInput.name = 'signature';
+            document.querySelector('form').appendChild(signatureInput);
+
+            // Mengosongkan Canvas
+            clearButton.addEventListener('click', () => {
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                signatureInput.value = ''; // Clear hidden input
+            });
+
+            // Tangkap dan Simpan Tanda Tangan di hidden input
+            canvas.addEventListener('mouseup', () => {
+                signatureInput.value = canvas.toDataURL('image/png');
+                console.log("Signature Captured:", signatureInput.value);
+            });
+        </script>
+
+        
         <style>
             .custom-img {
             max-width: 100%; 
