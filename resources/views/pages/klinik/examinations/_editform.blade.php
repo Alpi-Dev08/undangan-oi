@@ -86,18 +86,6 @@
 
             <!--begin::Nav item-->
             <li class="nav-item p-0 ms-0">
-                <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#odontogram">
-                    <!--begin::Title-->
-                    <span class="nav-text fw-semibold fs-4 mb-3">Odontogram</span>
-                    <!--end::Title-->
-                    <!--begin::Bullet-->
-                    <span class="bullet-custom position-absolute z-index-2 w-100 h-1px top-100 bottom-n100 bg-primary rounded"></span>
-                    <!--end::Bullet-->
-                </a>
-            </li>
-            <!--end::Nav item-->
-            <!--begin::Nav item-->
-            <li class="nav-item p-0 ms-0">
                 <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#lab">
                     <!--begin::Title-->
                     <span class="nav-text fw-semibold fs-4 mb-3">Pemeriksaan Penunjang</span>
@@ -559,418 +547,7 @@
                 </div>
                 <!--end::details View-->
             </div>
-            <div class="tab-pane" id="odontogram" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
-
-                <!--begin::Alert-->
-                <div class="alert alert-dismissible bg-light-primary border border-primary d-flex flex-column flex-sm-row p-5 mb-10 mx-0 row">
-                    <!--begin::Close-->
-                    <button type="button" class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto" data-bs-dismiss="alert">
-                        <!--begin::Svg Icon | path: /var/www/preview.keenthemes.com/keenthemes/metronic/docs/core/html/src/media/icons/duotune/arrows/arr088.svg-->
-                        <span class="svg-icon svg-icon-muted svg-icon-2hx"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect opacity="0.5" x="7.05025" y="15.5356" width="12" height="2" rx="1" transform="rotate(-45 7.05025 15.5356)" fill="currentColor"/>
-<rect x="8.46447" y="7.05029" width="12" height="2" rx="1" transform="rotate(45 8.46447 7.05029)" fill="currentColor"/>
-</svg></span>
-                        <!--end::Svg Icon-->
-                    </button>
-                    <!--end::Close-->
-                    <!--begin::Wrapper-->
-                    <div class="row col-12 pe-0 pe-sm-10">
-                        @if(isset($pemeriksaan_awal))
-                            <h5>Pemeriksaan Awal</h5>
-                            @if($pemeriksaan_awal->kriteria_satu=='ya' && $pemeriksaan_awal->kriteria_dua=='ya')
-                                @php $text_class = 'text-danger'; @endphp
-                            @elseif($pemeriksaan_awal->kriteria_satu=='ya' || $pemeriksaan_awal->kriteria_dua=='ya')
-                                @php $text_class = 'text-warning'; @endphp
-                            @else
-                                @php $text_class = 'text-success'; @endphp
-                            @endif
-                            <!--begin::Content-->
-                            <div class="col-12 {{ $text_class }} fw-bolder mb-5">
-                                <span>{{ $pemeriksaan_awal->interpretasi  }} / {{ ucwords($pemeriksaan_awal->tindakan)  }}</span>
-                            </div>
-                            <!--end::Content-->
-                        @endif
-                        <!--begin::Title-->
-                        <h5>Jenis Pemeriksaan</h5>
-                        <!--end::Title-->
-                        <div class="col-12">{{ $examination->service_category->name }}
-                            <ul class="row">
-                                @foreach(service_examination($examination->id) as $service)
-                                    <li class="col-4">{{ $service->service->name }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                    <!--end::Wrapper-->
-
-                    <div class="row col-12 pe-0 pe-sm-10">
-                        <h5 class="mb-1">Vital Sign & BMI</h5>
-                        <div class="row col-12">
-                            <div class="row col-6">
-                                <div class="col-12 row">
-                                    <div class="col-4">Weight</div>
-                                    <div class="col-8">: {{ $examination->vitality->weight ?? "-" }} Kg</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Height</div>
-                                    <div class="col-8">: {{ $examination->vitality->height ?? "-" }} cm</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Body Mass Index</div>
-                                    <div class="col-8">: {{ $examination->vitality->body_mass_index ?? "-" }}</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Ideal Weight</div>
-                                    <div class="col-8">: {{ $examination->vitality->ideal_weight ?? "-" }} Kg</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Body Fat</div>
-                                    <div class="col-8">: {{ $examination->vitality->body_fat ?? "-" }}</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">BMI Conclusion</div>
-                                    <div class="col-8">: {{ $examination->vitality->bmi_conclusion ?? "-" }}</div>
-                                </div>
-                                <div class="col-12">&nbsp;</div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Arm Circumference</div>
-                                    <div class="col-8">: {{ $examination->vitality->arm_circumference ?? "-" }}</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Abdominal Circumference</div>
-                                    <div class="col-8">: {{ $examination->vitality->adbdominal_circumference ?? "-" }}</div>
-                                </div>
-                            </div>
-                            <div class="row col-6">
-                                <div class="col-12 row">
-                                    <div class="col-4">Blood Pressure</div>
-                                    <div class="col-8">: {{ $examination->vitality->blood_pressure ?? "-" }}</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Heart Rate</div>
-                                    <div class="col-8">: {{ $examination->vitality->heart_rate ?? "-" }}</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Respiratory Rate</div>
-                                    <div class="col-8">: {{ $examination->vitality->respiratory_rate ?? "-" }}</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Temperature</div>
-                                    <div class="col-8">: {{ $examination->vitality->temperature ?? "-" }}</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Oxygen Saturation</div>
-                                    <div class="col-8">: {{ $examination->vitality->oxygen_saturation ?? "-" }}</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Waist Circumference</div>
-                                    <div class="col-8">: {{ $examination->vitality->waist_circumferennce ?? "-" }}</div>
-                                </div>
-                                <div class="col-12">&nbsp;</div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Neck Circumference</div>
-                                    <div class="col-8">: {{ $examination->vitality->neck_circumference ?? "-" }}</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Chest Size</div>
-                                    <div class="col-8">: {{ $examination->vitality->chest_size ?? "-" }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <!--end::Alert-->
-
-                <!--begin::details View-->
-                <form id="kt_modal_add_examinations_form" method="POST" class="form" action="{{ route('examinations.update',['examination' => $examination->id]) }}">
-                    @method('PUT')
-                    {{ csrf_field() }}
-                    <!--begin::Scroll-->
-                    <div class="d-flex flex-column flex-row-fluid">
-                        <!--begin::Input group-->
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Health Profesional') }}</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <input type="hidden" name="user_id" value="{{$user->id}}">
-                                <select name="health_profesional_id" aria-label="{{ __('Health Profesional') }}" data-control="select2" data-placeholder="{{ __('Select a Health Profesional...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                                    <option value="">{{ __('Select a Health Profesional...') }}</option>
-                                    @foreach($healthprofesionals as $healthprofesional)
-                                        <option value="{{ $healthprofesional->id }}" {{ $healthprofesional->id === old('health_profesional_id', $examination->health_profesional_id ?? '') ? 'selected' :'' }}>
-                                            @if(isset($healthprofesional->user->info))
-                                                {{ ($healthprofesional->user->info->title_prefix !='' ? $healthprofesional->user->info->title_prefix.'. ' : '').$healthprofesional->user->name.($healthprofesional->user->info->title_suffix!='' ? ', '.$healthprofesional->user->info->title_suffix : '') }}
-                                            @else
-                                                {{$healthprofesional->user->name}}
-                                            @endif
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Subjective</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <div class="col-lg-8">
-                                <div class="input-group input-group-solid has-validation mb-3">
-                                    <textarea name="subjective" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('subjective') is-invalid @enderror" placeholder="Subjective">{{ $examination->subjective }}</textarea>
-                                </div>
-                                @error('subjective')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <!--end::Input-->
-                        </div>
-
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Objective</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <div class="col-lg-8">
-                                <div class="input-group input-group-solid has-validation mb-3">
-                                    <textarea name="objective" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('objective') is-invalid @enderror" placeholder="Objective">{{ $examination->objective }}</textarea>
-                                </div>
-                                @error('objective')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <!--end::Input-->
-                        </div>
-
-
-                        <div class="container">
-                            <!-- Row 1  -->
-                            <div class="row mb-3 justify-content-center">
-                                @foreach([18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28] as $i)
-                                <div class="col-auto text-center">
-                                    <label class="col-form-label fw-bold fs-6">Gambar {{ $i }}</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram {{ $i }}" class="img-fluid mb-1 custom-img" style="max-width: 50px;">
-                                    </div>
-                                    <div class="mb-1 d-flex justify-content-center">
-                                        <div class="input-group input-group-solid has-validation" style="width: 80px;">
-                                            <select name="odontogram_symbol_id[]" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div style="width: 80px;">
-                                            <input type="text" name="keterangan[]" class="form-control form-control-solid form-control-sm" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
-                                @endforeach
-                            </div>
-
-                            <!-- Row 2  -->
-                            <div class="row mb-3 justify-content-center">
-                                @foreach([55, 54, 53, 52, 51, 61, 62, 63, 64, 65] as $i)
-                                <div class="col-auto text-center">
-                                    <label class="col-form-label fw-bold fs-6">Gambar {{ $i }}</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram {{ $i }}" class="img-fluid mb-1 custom-img" style="max-width: 50px;">
-                                    </div>
-                                    <div class="mb-1 d-flex justify-content-center">
-                                        <div class="input-group input-group-solid has-validation" style="width: 80px;">
-                                            <select name="odontogram_symbol_id[]" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div style="width: 80px;">
-                                            <input type="text" name="keterangan[]" class="form-control form-control-solid form-control-sm" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
-                                @endforeach
-                            </div>
-
-                            <!-- Row 3  -->
-                            <div class="row mb-3 justify-content-center">
-                                @foreach([85, 84, 83, 82, 81, 71, 72, 73, 74, 75] as $i)
-                                <div class="col-auto text-center">
-                                    <label class="col-form-label fw-bold fs-6">Gambar {{ $i }}</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram {{ $i }}" class="img-fluid mb-1 custom-img" style="max-width: 50px;">
-                                    </div>
-                                    <div class="mb-1 d-flex justify-content-center">
-                                        <div class="input-group input-group-solid has-validation" style="width: 80px;">
-                                            <select name="odontogram_symbol_id[]" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div style="width: 80px;">
-                                            <input type="text" name="keterangan[]" class="form-control form-control-solid form-control-sm" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
-                                @endforeach
-                            </div>
-
-                            <!-- Row 4  -->
-                            <div class="row mb-3 justify-content-center">
-                                @foreach([48, 47, 46, 45, 44, 43, 42, 41, 31, 32, 33, 34, 35, 36, 37, 38] as $i)
-                                <div class="col-auto text-center">
-                                    <label class="col-form-label fw-bold fs-6">Gambar {{ $i }}</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram {{ $i }}" class="img-fluid mb-1 custom-img" style="max-width: 50px;">
-                                    </div>
-                                    <div class="mb-1 d-flex justify-content-center">
-                                        <div class="input-group input-group-solid has-validation" style="width: 80px;">
-                                            <select name="odontogram_symbol_id[]" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div style="width: 80px;">
-                                            <input type="text" name="keterangan[]" class="form-control form-control-solid form-control-sm" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
-                                @endforeach
-                            </div>
-                        </div>
-
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Assessment</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <div class="col-lg-8">
-                                <select id="icdtens" aria-label="{{ __('Select a Diagnosa') }}" data-control="select2" data-placeholder="{{ __('Select a Diagnosa...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                                    <option value="">{{ __('Select a Diagnosa...') }}</option>
-                                    @foreach($icdtens as $icdten)
-                                        <option value="{{ $icdten->id }}">{{  $icdten->code.' - '.$icdten->name }}</option>
-                                    @endforeach
-                                </select>
-                                <div class="input-group input-group-solid has-validation mb-3 mt-3">
-                                    <textarea name="assessment" id="assessment" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('assessment') is-invalid @enderror" placeholder="Assessment">{{ $examination->assessment }}</textarea>
-                                </div>
-                                @error('assessment')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <!--end::Input-->
-                        </div>
-
-                        <!--begin::Input group-->
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">
-                                <span>{{ __('Plan') }}</span>
-
-                            </label>
-                            <!--end::Label-->
-
-                            <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <select name="plan_id" aria-label="{{ __('Select a Plan') }}" data-control="select2" data-placeholder="{{ __('Select a Plan...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                                    <option value="">{{ __('Select a Plan...') }}</option>
-                                    @foreach($plans as $plan)
-                                        <option value="{{ $plan->id }}" {{  $plan->id === old('plan_id', $examination->plan_id ?? '') ? 'selected' :'' }}>{{  $plan->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Input group-->
-
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Resep</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <div class="col-lg-8">
-                                <div class="d-flex flex-row mb-2 align-items-center" id="inputFromRow">
-                                    <select name="resep[obat][]" aria-label="{{ __('Pilih Obat') }}" data-placeholder="{{ __('Pilih Obat...') }}" class="mb-2 form-select form-select-solid form-select-lg fw-bold me-5">
-                                        <option value="">{{ __('Pilih Obat...') }}</option>
-                                        @foreach($drugs as $drug)
-                                            <option value="{{ $drug->id }}">{{  $drug->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <input placeholder="Keterangan" name="resep[keterangan][]" class="w-200px me-5 mb-2 form-control form-control-solid" type="text">
-                                    <input placeholder="Qty" name="resep[qty][]" class="w-100px me-5 mb-2 form-control form-control-solid" type="number" min="1">
-                                    <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" id="remove-item">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
-                                        <span class="svg-icon svg-icon-3">
-																						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-																							<path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor"/>
-																							<path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="currentColor"/>
-																							<path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="currentColor"/>
-																						</svg>
-																					</span>
-                                        <!--end::Svg Icon-->
-                                    </button>
-                                </div>
-
-                                <div class="d-flex flex-column" id="newRow"></div>
-                                <i class="btn btn-primary" id="tambah_obat">Tambah</i>
-                                @error('resep')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <!--end::Input-->
-                        </div>
-
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Saran</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <div class="col-lg-8">
-                                <div class="input-group input-group-solid has-validation mb-3">
-                                    <textarea name="saran" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('saran') is-invalid @enderror" placeholder="Saran">{{ $examination->saran }}</textarea>
-                                </div>
-                                @error('saran')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <!--end::Input-->
-                        </div>
-
-
-
-
-                    </div>
-                    <!--end::Scroll-->
-                    <!--begin::Actions-->
-                    <div class="text-center pt-15">
-                        <a href="{{ route('examinations.index')  }}" class="btn btn-sm btn-light-primary">
-                            <!--begin::Svg Icon | path: assets/media/icons/duotune/arrows/arr079.svg-->
-                            <span class="svg-icon svg-icon-muted svg-icon-2hx">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path opacity="0.5" d="M14.2657 11.4343L18.45 7.25C18.8642 6.83579 18.8642 6.16421 18.45 5.75C18.0358 5.33579 17.3642 5.33579 16.95 5.75L11.4071 11.2929C11.0166 11.6834 11.0166 12.3166 11.4071 12.7071L16.95 18.25C17.3642 18.6642 18.0358 18.6642 18.45 18.25C18.8642 17.8358 18.8642 17.1642 18.45 16.75L14.2657 12.5657C13.9533 12.2533 13.9533 11.7467 14.2657 11.4343Z" fill="currentColor"/>
-                                    <path d="M8.2657 11.4343L12.45 7.25C12.8642 6.83579 12.8642 6.16421 12.45 5.75C12.0358 5.33579 11.3642 5.33579 10.95 5.75L5.40712 11.2929C5.01659 11.6834 5.01659 12.3166 5.40712 12.7071L10.95 18.25C11.3642 18.6642 12.0358 18.6642 12.45 18.25C12.8642 17.8358 12.8642 17.1642 12.45 16.75L8.2657 12.5657C7.95328 12.2533 7.95328 11.7467 8.2657 11.4343Z" fill="currentColor"/>
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
-                            Cancel
-                        </a>
-                        <button type="submit" class="btn btn-primary" data-kt-examinations-modal-action="submit">
-                            <span class="indicator-label">Submit</span>
-                            <span class="indicator-progress">Please wait...
-                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                            </span>
-                        </button>
-                    </div>
-                    <!--end::Actions-->
-                </form>
-            </div>
+            
 
 
             <div class="tab-pane" id="medicalrecord" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
@@ -1547,6 +1124,19 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <!-- <select id="health_profesional_select" name="health_profesional_id" aria-label="{{ __('Health Profesional') }}" data-control="select2" data-placeholder="{{ __('Select a Health Profesional...') }}" class="form-select form-select-solid">
+                                    <option value="">{{ __('Select a Health Profesional...') }}</option>
+
+                                    @foreach($healthprofesionals as $healthprofesional)
+                                        <option value="{{ $healthprofesional->id }}" data-type="{{ $healthprofesional->healthprofesionaltype->name ?? '' }}" {{ $healthprofesional->id === old('health_profesional_id', $examination->health_profesional_id ?? '') ? 'selected' : '' }}>
+                                            @if(isset($healthprofesional->user->info))
+                                                {{ ($healthprofesional->user->info->title_prefix != '' ? $healthprofesional->user->info->title_prefix . '. ' : '') . $healthprofesional->user->name . ($healthprofesional->user->info->title_suffix != '' ? ', ' . $healthprofesional->user->info->title_suffix : '') }}
+                                            @else
+                                                {{ $healthprofesional->user->name ?? 'Unknown Name' }}
+                                            @endif
+                                        </option>
+                                    @endforeach
+                                </select> -->
                             </div>
                         </div>
 
@@ -1581,6 +1171,74 @@
                             </div>
                             <!--end::Input-->
                         </div>
+                        
+                        <div class="container">
+                        <!-- <div id="odontogram_section" class="container" style="display: none;"> -->
+                            <!-- Row 1  -->
+                            <div class="row justify-content-center g-0">
+                                @foreach([18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28] as $i)
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">{{ $i }}</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram {{ $i }}" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_id[]" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan[]" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+
+                            <!-- Row 2  -->
+                            <div class="row justify-content-center g-0">
+                                @foreach([48, 47, 46, 45, 44, 43, 42, 41, 31, 32, 33, 34, 35, 36, 37, 38] as $i)
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">{{ $i }}</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram {{ $i }}" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_id[]" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan[]" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <!-- <script>
+                            document.getElementById('health_profesional_select').addEventListener('change', function () {
+                                var selectedOption = this.options[this.selectedIndex];
+                                var odontogramSection = document.getElementById('odontogram_section');
+
+                                if (selectedOption.getAttribute('data-type') === 'dokter gigi') {
+                                    odontogramSection.style.display = 'block';
+                                } else {
+                                    odontogramSection.style.display = 'none';
+                                }
+                            });
+
+                            document.getElementById('health_profesional_select').dispatchEvent(new Event('change'));
+                        </script> -->
 
                         <div class="row mb-6">
                             <!--begin::Label-->
@@ -2223,12 +1881,18 @@
                                         </tr>
 
                                         <tr>
-                                            <td>Tanda Tangan:</td>
-                                            <td class="d-flex">
-                                                <div class="d-flex flex-column w-100">
+                                            <td style="width:20%;">Tanda Tangan:</td>
+                                            <td class="d-flex">:&nbsp;
+                                                <div class="d-flex gap-3 flex-column w-100">
                                                     <canvas id="signature-pad" name="signature" style="border:1px solid #000; width: 100%; max-width: 300px; height: auto; max-height: 100px;"></canvas>
-                                                    <div class="d-flex mt-2">
+                                                    <div class="d-flex justify-content-between mt-2">
                                                         <button id="clear" class="btn btn-secondary" type="button">Clear</button>
+                                                        <label class="form-check form-switch form-check-custom form-check-solid">
+                                                            <input class="form-check-input" type="checkbox" name="signature_check" value="1"/>
+                                                            <span class="form-check-label fw-semibold text-muted">
+                                                                Check
+                                                            </span>
+                                                        </label>
                                                     </div>
                                                 </div>
                                             </td>
