@@ -106,8 +106,9 @@ class OdontogramSymbolsController extends Controller
         $odontogramsymbol = OdontogramSymbol::find($id);
         $odontogramsymbols = OdontogramSymbol::all();
 
+        dd($odontogramsymbol, $odontogramsymbols);
 
-        return view('pages.masters.odontogramsymbols.edit',compact('odontogramsymbol','odontogramsymbols'));
+        return view('pages.masters.odontogramsymbols.edit',compact('odontogramsymbol', 'odontogramsymbols'));
     }
 
     /**

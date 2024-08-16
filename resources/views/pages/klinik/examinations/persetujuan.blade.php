@@ -96,168 +96,125 @@
     </table>
 </footer>
 <main style="font-size:12px!important;">
-    <p style="color:#000;margin:0px;font-size:22px;text-align:center;font-weight:bolder;text-transform:uppercase;font-family: 'Roboto Condensed', sans-serif;margin-bottom:50px;margin-top:20px;        text-decoration:underline;">Pemberian Informasi</p>
+    <p style="color:#000;margin:0px;font-size:22px;text-align:center;font-weight:bolder;text-transform:uppercase;font-family: 'Roboto Condensed', sans-serif;margin-bottom:50px;margin-top:20px;        text-decoration:underline;">Dokumen Persetujuan / Penolakan Tindakan Medis</p>
+    <p>Saya yang bertandatangan di bawah ini:</p>
     <table class="table"  style="width:100%;">
         <tbody>
             <tr>
-                <td style="width:20%;">Dokter Pelaksana Tindakan</td>
-                <td style="width:80%;">: <b>{{ (!in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.(!in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}</b><br>
-                    <b>{{ $examination->health_profesional->sip_number ? 'SIP.'.$examination->health_profesional->sip_number : '' }}</b></td>
-            </tr>
-            <tr>
-                <td style="width:20%;">Pemberi Informasi</td>
-                <td style="width:80%;">: <b>{{ $data->pemberi_informasi }}</b></td>
-            </tr>
-            <tr>
-                <td style="width:20%;">Penerima Informasi/Pemberi Persetujuan</td>
+                <td style="width:20%;">Nama</td>
                 <td style="width:80%;">: <b>{{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</b></td>
             </tr>
+            <tr>
+                <td style="width:20%;">Tempat, Tanggal Lahir</td>
+                <td style="width:80%;">: <b>{{ $data->tempat_tgl }}</b></td>
+            </tr>
+            <tr>
+                <td style="width:20%;">Jenis Kelamin</td>
+                <td style="width:80%;">: <b>{{ $data->jenis_kel }}</b></td>
+            </tr>
+            <tr>
+                <td style="width:20%;">Alamat</td>
+                <td style="width:80%;">: <b>{{ $data->alamat_pas }}</b></td>
+            </tr>
         </tbody>
     </table>
+
+    <p>Dengan ini menyatakan dengan sesungguhnya telah memberikan pernyataan :</p>
+    
+    <p><strong>{{ $data->persetujuan }} dilakukan tindakan medis</strong></p>
+
+    @if($data->persetujuan === 'Tidak Setuju')
+        <p>Alasan: {{ $data->description }}</p>
+    @endif
+
+    <p>Untuk dilakukan tindakan medis yang ada hubungannya dengan penyakit yang diderita oleh <b>{{ $data->terhadap }}</b>, dengan :</p>
 
     <br>
-    <table class="table"  style="width:100%;border:1px solid black">
-        <thead>
-        <tr>
-            <th style="border:1px solid black;text-align:center;width:30px">No.</th>
-            <th style="border:1px solid black">Jenis Informasi</th>
-            <th style="border:1px solid black">Isi Informasi</th>
-            <th style="border:1px solid black">Tanda</th>
-        </tr>
-        </thead>
+    <table class="table"  style="width:100%;">
         <tbody>
-        <tr>
-            <td style="border:1px solid black;text-align:center;">1. </td>
-            <td style="border:1px solid black">Diagnosis (WD & DD)</td>
-            <td style="border:1px solid black">{{ $data->diagnosis }}</td>
-            <td style="border:1px solid black; text-align: center;width:150px">{{ isset($data->diagnosis_check) ? "v" : "-" }}</td>
-        </tr>
-        <tr>
-            <td style="border:1px solid black;text-align:center;">2. </td>
-            <td style="border:1px solid black">Dasar Diagnosis</td>
-            <td style="border:1px solid black">{{ $data->dasar_diagnosis }}</td>
-            <td style="border:1px solid black; text-align: center">{{ isset($data->dasar_diagnosis_check) ? "v" : "-" }}</td>
-        </tr>
-        <tr>
-            <td style="border:1px solid black;text-align:center;">3. </td>
-            <td style="border:1px solid black">Tindakan Kedokteran</td>
-            <td style="border:1px solid black">{{ $data->tindakan }}</td>
-            <td style="border:1px solid black; text-align: center">{{ isset($data->tindakan_check) ? "v" : "-" }}</td>
-        </tr>
-        <tr>
-            <td style="border:1px solid black;text-align:center;">4. </td>
-            <td style="border:1px solid black">Indikasi Tindakan</td>
-            <td style="border:1px solid black">{{ $data->indikasi }}</td>
-            <td style="border:1px solid black; text-align: center">{{ isset($data->indikasi_check) ? "v" : "-" }}</td>
-        </tr>
-        <tr>
-            <td style="border:1px solid black;text-align:center;">5. </td>
-            <td style="border:1px solid black">Tata Cara</td>
-            <td style="border:1px solid black">{{ $data->tatacara }}</td>
-            <td style="border:1px solid black; text-align: center">{{ isset($data->tatacara_check) ? "v" : "-" }}</td>
-        </tr>
-        <tr>
-            <td style="border:1px solid black;text-align:center;">6. </td>
-            <td style="border:1px solid black">Tujuan</td>
-            <td style="border:1px solid black">{{ $data->tujuan }}</td>
-            <td style="border:1px solid black; text-align: center">{{ isset($data->tujuan_check) ? "v" : "-" }}</td>
-        </tr>
-        <tr>
-            <td style="border:1px solid black;text-align:center;">7. </td>
-            <td style="border:1px solid black">Risiko</td>
-            <td style="border:1px solid black">{{ $data->resiko }}</td>
-            <td style="border:1px solid black; text-align: center">{{ isset($data->resiko_check) ? "v" : "-" }}</td>
-        </tr>
-        <tr>
-            <td style="border:1px solid black;text-align:center;">8. </td>
-            <td style="border:1px solid black">Komplikasi</td>
-            <td style="border:1px solid black">{{ $data->komplikasi }}</td>
-            <td style="border:1px solid black; text-align: center">{{ isset($data->komplikasi_check) ? "v" : "-" }}</td>
-        </tr>
-        <tr>
-            <td style="border:1px solid black;text-align:center;">9. </td>
-            <td style="border:1px solid black">Prognosis</td>
-            <td style="border:1px solid black">{{ $data->prognosis }}</td>
-            <td style="border:1px solid black; text-align: center">{{ isset($data->prognosis_check) ? "v" : "-" }}</td>
-        </tr>
-        <tr>
-            <td style="border:1px solid black;text-align:center;">10. </td>
-            <td style="border:1px solid black">Alternatif dan Risiko</td>
-            <td style="border:1px solid black">{{ $data->alternatif }}</td>
-            <td style="border:1px solid black; text-align: center">{{ isset($data->alternatif_check) ? "v" : "-" }}</td>
-        </tr>
-        <tr>
-            <td style="border:1px solid black;text-align:center;">11. </td>
-            <td style="border:1px solid black">Lain-lain</td>
-            <td style="border:1px solid black">{{ $data->lain }}</td>
-            <td style="border:1px solid black; text-align: center">{{ isset($data->lain_check) ? "v" : "-" }}</td>
-        </tr>
-        <tr>
-            <td colspan="3"  style="border:1px solid black">Dengan ini menyatakan bahwa saya telah menerangkan hal-hal di atas secara benar dan jujur dan memberikan kesempatan untuk bertanya dan/atau berdiskusi</td>
-            <td style="border:1px solid black; text-align: center"></td>
-        </tr>
-        <tr>
-            <td colspan="3"  style="border:1px solid black">>Dengan ini menyatakan bahwa saya telah menerima informasi sebagaimana di atas yang saya beri tanda/paraf di kolom kanannya, dan telah memahaminya</td>
-            <td style="border:1px solid black; text-align: center"></td>
-        </tr>
-        <tr>
-            <td colspan="4"  style="border:1px solid black">*Bila pasien tidak kompeten atau tidak mau menerima informasi, maka penerima informasi adalah wali atau keluarga terdekat</td>
-        </tr>
-
+            <tr>
+                <td style="width:20%;">Nama</td>
+                <td style="width:80%;">: <b>{{ $data->nama_pasien }}</b></td>
+            </tr>
+            <tr>
+                <td style="width:20%;">Tempat, Tanggal Lahir</td>
+                <td style="width:80%;">: <b>{{ $data->tempat_tanggal }}</b></td>
+            </tr>
+            <tr>
+                <td style="width:20%;">Jenis Kelamin</td>
+                <td style="width:80%;">: <b>{{ $data->jenis_kelamin }}</b></td>
+            </tr>
+            <tr>
+                <td style="width:20%;">Alamat</td>
+                <td style="width:80%;">: <b>{{ $data->alamat }}</b></td>
+            </tr>
+            <tr>
+                <td style="width:20%;">Diagnosis (WD & DD)</td>
+                <td style="width:80%;">: <b>{{ $data->diagnosis }}</b></td>
+            </tr>
+            <tr>
+                <td style="width:20%;">Dasar Diagnosis</td>
+                <td style="width:80%;">: <b>{{ $data->dasar_diagnosis }}</b></td>
+            </tr>
+            <tr>
+                <td style="width:20%;">Tindakan Kedokteran</td>
+                <td style="width:80%;">: <b>{{ $data->tindakan }}</b></td>
+            </tr>
+            <tr>
+                <td style="width:20%;">Tata Cara</td>
+                <td style="width:80%;">: <b>{{ $data->tatacara }}</b></td>
+            </tr>
+            <tr>
+                <td style="width:20%;">Tujuan</td>
+                <td style="width:80%;">: <b>{{ $data->tujuan }}</b></td>
+            </tr>
+            <tr>
+                <td style="width:20%;">Alternatif dan Risiko</td>
+                <td style="width:80%;">: <b>{{ $data->resiko }}</b></td>
+            </tr>
+            <tr>
+                <td style="width:20%;">Resiko dan Komplikasi</td>
+                <td style="width:80%;">: <b>{{ $data->komplikasi }}</b></td>
+            </tr>
+            <tr>
+                <td style="width:20%;">Prognosis</td>
+                <td style="width:80%;">: <b>{{ $data->prognosis }}</b></td>
+            </tr>
         </tbody>
     </table>
 
-    <div class="page_break"></div>
-    <table class="table"  style="width:100%;border:1px solid black">
+    <p>
+        Yang tujuan, sifat dan perlunya tindakan medis tersebut diatas, serta risiko yang dapat 
+        ditimbulkannya telah cukup dijelaskan oleh dokter dan telah saya mengerti sepenuhnya.
+    </p>
+    <p>
+        Demikian dokumen pernyataan ini saya buat dengan penuh kesadaran dan tanpa paksaan.
+    </p>
+    <table class="table"  style="width:100%;">
         <tbody>
             <tr>
-                <td colspan="4" style=" border:1px solid black;text-align: center">
-                    <p style="font-weight: bold">PERSETUJUAN TINDAKAN KEDOKTERAN</p>
+                <td colspan="4" style="text-align: right;">
+                    Kab. Tangerang, {{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Pukul {{ date('H:i:s')  }}
                 </td>
             </tr>
             <tr>
-                <td colspan="4" style="padding:0px 10px;">
-                    Yang bertandatangan di bawah ini, saya, nama <b>{{ $data->nama }}</b>, umur <b>{{ $data->umur }}</b> tahun, <b>{{ $data->jenis_kelamin }}</b>, alamat <b>{{ $data->alamat }}</b>, dengan ini menyatakan <b>{{ isset($data->setuju) ? "persetujuan" : 'penolakan'  }}</b> untuk dilakukannya tindakan <b>{{ $data->jenis_tindakan }}</b> terhadap <b>{{ $data->terhadap }}</b> saya* bernama <b>{{ $data->nama_tindak }}</b>,
-                    umur <b>{{ $data->umur_tindak }}</b> tahun, <b>{{ $data->jenis_kelamin_tindak }}</b>, alamat <b>{{ $data->alamat_tindak }}</b>
-                    Saya memahami perlunya dan manfaat tindakan tersebut sebagaimana telah dijelaskan seperti diatas kepada saya, termasuk resiko dan komplikasi yang mungkin timbul jika tindakan tersebut tidak dilakukan.
-                    Saya juga menyadari bahwa oleh karena ilmu kedokteran bukanlah ilmu pasti, maka keberhasilan tindakan kedokteran bukanlah keniscayaan, melainkan sangat bergantung kepada izin Tuhan Yang Maha Esa.
+                <td colspan="2" style="text-align: center">Dokter Pemeriksa</td>
+                <td colspan="2" style="text-align: center">Yang Menyatakan</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center">
+                    <br>
+                    <b>{{ (!in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.(!in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}</b><br>
+                    <b>{{ $examination->health_profesional->sip_number ? 'SIP.'.$examination->health_profesional->sip_number : '' }}</b>
                 </td>
-            </tr>
-            <tr>
-                <td colspan="4">Kab. Tangerang, Tanggal{{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Pukul  {{ date('H:i:s')  }}</td>
-            </tr>
-            <tr>
-                <td colspan="2"style="text-align: center">Yang Menyatakan</td>
-                <td colspan="2" style="text-align: center">Saksi</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-               <td>&nbsp;</td>
-               <td>&nbsp;</td>
-               <td>&nbsp;</td>
-            </tr>
-            <tr>
-               <td>&nbsp;</td>
-               <td>&nbsp;</td>
-               <td>&nbsp;</td>
-               <td>&nbsp;</td>
-            </tr>
-            <tr>
-               <td>&nbsp;</td>
-               <td>&nbsp;</td>
-               <td>&nbsp;</td>
-               <td>&nbsp;</td>
-            </tr>
-            <tr>
-               <td>&nbsp;</td>
-               <td>&nbsp;</td>
-               <td>&nbsp;</td>
-               <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td colspan="2" style="text-align: center">(....................................)</td>
-                <td style="text-align: center">(....................................)</td>
-                <td style="text-align: center">(....................................)</td>
+                <td colspan="2" style="text-align: center">
+                    @if(isset($signature) && !empty($signature))
+                        <img src="{{ $signature }}" alt="Tanda Tangan" style="border:1px solid #000;"/>
+                    @else
+                        <p>No signature available</p>
+                    @endif
+                    <b>{{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</b><br>
+                </td>
             </tr>
         </tbody>
     </table>

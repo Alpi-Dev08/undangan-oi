@@ -7,6 +7,7 @@
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\File;
+    use Barryvdh\DomPDF\Facade as PDF;
 
     class PagesController extends Controller
     {
@@ -123,4 +124,35 @@
             fclose($ifp);
             return $output_file;
         }
+
+        public function generatePDF($id)
+        {
+            $examination = Examination::find($id);
+            if (!$examination) {
+                return response()->json(['message' => 'Examination not found'], 404);
+            }
+
+            $user = User::find($examination->user_id);
+            if (!$user) {
+                return response()->json(['message' => 'User not found'], 404);
+            }
+
+            $info = $user->info;
+            $signature = $examination->signature; // Assuming you have a field for the signature
+
+            $pdf = PDF::loadView('pages.klinik.examinations.hakkewajiban_', compact('user', 'info', 'examination', 'signature'));
+
+            return $pdf->download('Bukti_Penyampaian_Informasi_' . $user->name . '.pdf');
+        }
+
+        public function store(Request $request)
+        {
+            $signature = $request->input('signature'); 
+            \Log::info('Signature received: ' . $signature);  
+
+            return view('pages.klinik.examinations.persetujuan', ['signature' => $signature]);
+        }
+
+
+
     }

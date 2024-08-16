@@ -86,18 +86,6 @@
 
             <!--begin::Nav item-->
             <li class="nav-item p-0 ms-0">
-                <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#odontogram">
-                    <!--begin::Title-->
-                    <span class="nav-text fw-semibold fs-4 mb-3">Odontogram</span>
-                    <!--end::Title-->
-                    <!--begin::Bullet-->
-                    <span class="bullet-custom position-absolute z-index-2 w-100 h-1px top-100 bottom-n100 bg-primary rounded"></span>
-                    <!--end::Bullet-->
-                </a>
-            </li>
-            <!--end::Nav item-->
-            <!--begin::Nav item-->
-            <li class="nav-item p-0 ms-0">
                 <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#lab">
                     <!--begin::Title-->
                     <span class="nav-text fw-semibold fs-4 mb-3">Pemeriksaan Penunjang</span>
@@ -559,151 +547,7 @@
                 </div>
                 <!--end::details View-->
             </div>
-            <div class="tab-pane" id="odontogram" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
-                <!--begin::details View-->
-                <form id="kt_modal_add_examinations_form" method="POST" class="form" action="{{ route('examinations.update',['examination' => $examination->id]) }}">
-                    @method('PUT')
-                    {{ csrf_field() }}
-                    <!--begin::Scroll-->
-                    <div class="d-flex flex-column flex-row-fluid">
-                        <!--begin::Input group-->
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Health Profesional') }}</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <input type="hidden" name="user_id" value="{{$user->id}}">
-                                <select name="health_profesional_id" aria-label="{{ __('Health Profesional') }}" data-control="select2" data-placeholder="{{ __('Select a Health Profesional...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                                    <option value="">{{ __('Select a Health Profesional...') }}</option>
-                                    @foreach($healthprofesionals as $healthprofesional)
-                                        <option value="{{ $healthprofesional->id }}" {{ $healthprofesional->id === old('health_profesional_id', $examination->health_profesional_id ?? '') ? 'selected' :'' }}>
-                                            @if(isset($healthprofesional->user->info))
-                                                {{ ($healthprofesional->user->info->title_prefix !='' ? $healthprofesional->user->info->title_prefix.'. ' : '').$healthprofesional->user->name.($healthprofesional->user->info->title_suffix!='' ? ', '.$healthprofesional->user->info->title_suffix : '') }}
-                                            @else
-                                                {{$healthprofesional->user->name}}
-                                            @endif
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Subjective Anamnesa</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <div class="col-lg-8">
-                                <div class="input-group input-group-solid has-validation mb-3">
-                                    <textarea name="subjective" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('subjective anamnesa') is-invalid @enderror" placeholder="Subjective Anamnesa">{{ $examination->subjective }}</textarea>
-                                </div>
-                                @error('subjective')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <!--end::Input-->
-                        </div>
-
-
-                        <div class="row mb-6">
-                            <div class="col-lg-12 text-center">
-                                <img src="{{ asset('images/odontogram.png') }}" alt="Gambar Odontogram" class="img-fluid mb-3">
-                            </div>
-                        </div>
-
-                        <!-- start Gambar -->
-                        <div class="row mb-6" id="input-container">
-                            <div class="col-lg-4">
-                                <label class="col-form-label fw-bold fs-6">Gambar</label>
-                                <input type="text" name="gambar[]" class="form-control form-control-solid mb-3" placeholder="Keterangan">
-                            </div>
-                            <div class="col-lg-2">
-                                <div class="input-group input-group-solid has-validation mb-3">
-                                    <select name="odontogram_symbol_id" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                        @foreach($odontogramsymbols as $odontogramsymbol)
-                                            <option value="{{ $odontogramsymbol->id }}" {{ $odontogramsymbol->id === old('odontogram_symbol_id', $odontogramsymbol->odontogram_symbol_id ?? '') ? 'selected' : '' }}>
-                                                {{ $odontogramsymbol->code }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div> 
-                            <div class="col-lg-4">
-                                <label class="col-form-label fw-bold fs-6">Keterangan</label>
-                                <input type="text" name="keterangan[]" class="form-control form-control-solid mb-3" placeholder="Keterangan">
-                            </div>
-                        </div>
-
-                        <div class="row mb-6">
-                            <div class="col-lg-12 text-center">
-                                <button type="button" id="add-column" class="btn btn-primary">Tambah</button>
-                            </div>
-                        </div>
-
-                        <!-- end Gambar -->
-
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Assesment</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <div class="col-lg-8">
-                                <div class="input-group input-group-solid has-validation mb-3">
-                                    <textarea name="subjective" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('assesment') is-invalid @enderror" placeholder="Assesment">{{ $examination->subjective }}</textarea>
-                                </div>
-                                @error('subjective')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <!--end::Input-->
-                        </div>
-
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Plan</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <div class="col-lg-8">
-                                <div class="input-group input-group-solid has-validation mb-3">
-                                    <textarea name="subjective" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('plan') is-invalid @enderror" placeholder="Plan">{{ $examination->subjective }}</textarea>
-                                </div>
-                                @error('subjective')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <!--end::Input-->
-                        </div>
-
-
-
-
-                    </div>
-                    <!--end::Scroll-->
-                    <!--begin::Actions-->
-                    <div class="text-center pt-15">
-                        <a href="{{ route('examinations.index')  }}" class="btn btn-sm btn-light-primary">
-                            <!--begin::Svg Icon | path: assets/media/icons/duotune/arrows/arr079.svg-->
-                            <span class="svg-icon svg-icon-muted svg-icon-2hx">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path opacity="0.5" d="M14.2657 11.4343L18.45 7.25C18.8642 6.83579 18.8642 6.16421 18.45 5.75C18.0358 5.33579 17.3642 5.33579 16.95 5.75L11.4071 11.2929C11.0166 11.6834 11.0166 12.3166 11.4071 12.7071L16.95 18.25C17.3642 18.6642 18.0358 18.6642 18.45 18.25C18.8642 17.8358 18.8642 17.1642 18.45 16.75L14.2657 12.5657C13.9533 12.2533 13.9533 11.7467 14.2657 11.4343Z" fill="currentColor"/>
-                                    <path d="M8.2657 11.4343L12.45 7.25C12.8642 6.83579 12.8642 6.16421 12.45 5.75C12.0358 5.33579 11.3642 5.33579 10.95 5.75L5.40712 11.2929C5.01659 11.6834 5.01659 12.3166 5.40712 12.7071L10.95 18.25C11.3642 18.6642 12.0358 18.6642 12.45 18.25C12.8642 17.8358 12.8642 17.1642 12.45 16.75L8.2657 12.5657C7.95328 12.2533 7.95328 11.7467 8.2657 11.4343Z" fill="currentColor"/>
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
-                            Cancel
-                        </a>
-                        <button type="submit" class="btn btn-primary" data-kt-examinations-modal-action="submit">
-                            <span class="indicator-label">Submit</span>
-                            <span class="indicator-progress">Please wait...
-                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                            </span>
-                        </button>
-                    </div>
-                    <!--end::Actions-->
-                </form>
-            </div>
+            
 
 
             <div class="tab-pane" id="medicalrecord" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
@@ -1280,6 +1124,19 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <!-- <select id="health_profesional_select" name="health_profesional_id" aria-label="{{ __('Health Profesional') }}" data-control="select2" data-placeholder="{{ __('Select a Health Profesional...') }}" class="form-select form-select-solid">
+                                    <option value="">{{ __('Select a Health Profesional...') }}</option>
+
+                                    @foreach($healthprofesionals as $healthprofesional)
+                                        <option value="{{ $healthprofesional->id }}" data-type="{{ $healthprofesional->healthprofesionaltype->name ?? '' }}" {{ $healthprofesional->id === old('health_profesional_id', $examination->health_profesional_id ?? '') ? 'selected' : '' }}>
+                                            @if(isset($healthprofesional->user->info))
+                                                {{ ($healthprofesional->user->info->title_prefix != '' ? $healthprofesional->user->info->title_prefix . '. ' : '') . $healthprofesional->user->name . ($healthprofesional->user->info->title_suffix != '' ? ', ' . $healthprofesional->user->info->title_suffix : '') }}
+                                            @else
+                                                {{ $healthprofesional->user->name ?? 'Unknown Name' }}
+                                            @endif
+                                        </option>
+                                    @endforeach
+                                </select> -->
                             </div>
                         </div>
 
@@ -1314,6 +1171,74 @@
                             </div>
                             <!--end::Input-->
                         </div>
+                        
+                        <div class="container">
+                        <!-- <div id="odontogram_section" class="container" style="display: none;"> -->
+                            <!-- Row 1  -->
+                            <div class="row justify-content-center g-0">
+                                @foreach([18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28] as $i)
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">{{ $i }}</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram {{ $i }}" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_id[]" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan[]" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+
+                            <!-- Row 2  -->
+                            <div class="row justify-content-center g-0">
+                                @foreach([48, 47, 46, 45, 44, 43, 42, 41, 31, 32, 33, 34, 35, 36, 37, 38] as $i)
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">{{ $i }}</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram {{ $i }}" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_id[]" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan[]" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <!-- <script>
+                            document.getElementById('health_profesional_select').addEventListener('change', function () {
+                                var selectedOption = this.options[this.selectedIndex];
+                                var odontogramSection = document.getElementById('odontogram_section');
+
+                                if (selectedOption.getAttribute('data-type') === 'dokter gigi') {
+                                    odontogramSection.style.display = 'block';
+                                } else {
+                                    odontogramSection.style.display = 'none';
+                                }
+                            });
+
+                            document.getElementById('health_profesional_select').dispatchEvent(new Event('change'));
+                        </script> -->
 
                         <div class="row mb-6">
                             <!--begin::Label-->
@@ -1365,15 +1290,15 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <div class="col-lg-8">
-                                <div class="d-flex flex-row" id="inputFromRow">
+                                <div class="d-flex flex-row mb-2 align-items-center" id="inputFromRow">
                                     <select name="resep[obat][]" aria-label="{{ __('Pilih Obat') }}" data-placeholder="{{ __('Pilih Obat...') }}" class="mb-2 form-select form-select-solid form-select-lg fw-bold me-5">
                                         <option value="">{{ __('Pilih Obat...') }}</option>
                                         @foreach($drugs as $drug)
                                             <option value="{{ $drug->id }}">{{  $drug->name }}</option>
                                         @endforeach
                                     </select>
-                                    <input placeholder="Keterangan" name="resep[keterangan][]" class="w-200px me-5 form-control form-control-solid" type="text">
-                                    <input placeholder="Qty" name="resep[qty][]" class="w-100px me-5 form-control form-control-solid" type="number" min="1">
+                                    <input placeholder="Keterangan" name="resep[keterangan][]" class="w-200px me-5 mb-2 form-control form-control-solid" type="text">
+                                    <input placeholder="Qty" name="resep[qty][]" class="w-100px me-5 mb-2 form-control form-control-solid" type="number" min="1">
                                     <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" id="remove-item">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
                                         <span class="svg-icon svg-icon-3">
@@ -1747,21 +1672,83 @@
                                     <table class="table" style="width:100%">
                                         <tbody>
                                         <tr>
-                                            <td>Dkter Pelaksana Tindakan</td>
+                                            <td>Dokter Pelaksana Tindakan</td>
                                             <td>: {{ (!in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.(!in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}</b>
                                                 <br>
                                                 <b>{{ $examination->health_profesional->sip_number ? 'SIP.'.$examination->health_profesional->sip_number : '' }}
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Pemberi Informasi</td>
-                                            <td class="d-flex">:&nbsp;<input type="text" name="pemberi_informasi" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Pemberi Informasi">
+                                            <td>Nama</td>
+                                            <td>: {{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tempat,Tanggal Lahir</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="tempat_tgl" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Tempat, Tanggal Lahir">
                                             </td>
                                         </tr>
                                         <tr>
+                                            <td>Jenis kelamin</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="jenis_kel" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jenis kelamin">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Alamat</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="alamat_pas" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alamat">
+                                            </td>
+                                        </tr>
+                                        <!-- <tr>
                                             <td>Penerima Informasi/pemberi persetujuan</td>
                                             <td>: {{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</td>
+                                        </tr> -->
+                                        <!-- <tr>
+                                            <td>Tindakan Terhadap</td>
+                                            <td>
+                                                <select name="relation" id="relation" style="
+                                                    width: 200px; /* Lebar dropdown */
+                                                    height: 40px; /* Tinggi dropdown */
+                                                    font-size: 16px; /* Ukuran font */
+                                                    padding: 5px; /* Ruang di dalam dropdown */
+                                                ">
+                                                    <option value="saya-sendiri">Saya Sendiri</option>
+                                                    <option value="istri">Istri</option>
+                                                    <option value="suami">Suami</option>
+                                                    <option value="ayah">Ayah</option>
+                                                    <option value="ibu">Ibu</option>
+                                                    <option value="anak">Anak Saya</option>
+                                                </select>
+                                            </td>
+                                        </tr> -->
+                                        <tr>
+                                            <td>Tindakan Terhadap</td>
+                                            <td class="d-flex">:&nbsp;
+                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                    <input type="text" value="Saya" name="terhadap" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Saya">
+                                                    <!-- <input type="text" name="jenis_tindakan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jenis Tindakan"> -->
+                                                </div>
+                                            </td>
                                         </tr>
+                                        <tr>
+                                            <td>Nama</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="nama_pasien" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nama pasien">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tempat,Tanggal Lahir</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="tempat_tanggal" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Tempat, Tanggal Lahir">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Jenis kelamin</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="jenis_kelamin" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jenis kelamin">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Alamat</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="alamat" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alamat">
+                                            </td>
+                                        </tr>
+
                                         <tr>
                                             <td>Diagnosis (WD & DD)</td>
                                             <td class="d-flex">:&nbsp;
@@ -1807,21 +1794,6 @@
                                         </tr>
 
                                         <tr>
-                                            <td>Indikasi Tindakan</td>
-                                            <td class="d-flex">:&nbsp;
-                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
-                                                    <input type="text" name="indikasi" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
-                                                    <label class="form-check form-switch form-check-custom form-check-solid">
-                                                        <input class="form-check-input" type="checkbox" name="indikasi_check" value="1"/>
-                                                        <span class="form-check-label fw-semibold text-muted">
-                                                            Check
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
                                             <td>Tata Cara</td>
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
@@ -1852,7 +1824,7 @@
                                         </tr>
 
                                         <tr>
-                                            <td>Resiko</td>
+                                            <td>Alternatif dan Resiko</td>
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
                                                     <input type="text" name="resiko" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
@@ -1867,7 +1839,7 @@
                                         </tr>
 
                                         <tr>
-                                            <td>Komplikasi</td>
+                                            <td>Resiko dan Komplikasi</td>
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
                                                     <input type="text" name="komplikasi" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
@@ -1897,36 +1869,6 @@
                                         </tr>
 
                                         <tr>
-                                            <td>Alternatif dan Resiko</td>
-                                            <td class="d-flex">:&nbsp;
-                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
-                                                    <input type="text" name="alternatif" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
-                                                    <label class="form-check form-switch form-check-custom form-check-solid">
-                                                        <input class="form-check-input" type="checkbox" name="alternatif_check" value="1"/>
-                                                        <span class="form-check-label fw-semibold text-muted">
-                                                            Check
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Lain-lain</td>
-                                            <td class="d-flex">:&nbsp;
-                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
-                                                    <input type="text" name="lain" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
-                                                    <label class="form-check form-switch form-check-custom form-check-solid">
-                                                        <input class="form-check-input" type="checkbox" name="lain_check" value="1"/>
-                                                        <span class="form-check-label fw-semibold text-muted">
-                                                            Check
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
                                             <td>Yang Bertandatangan</td>
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
@@ -1937,17 +1879,27 @@
                                                 </div>
                                             </td>
                                         </tr>
+
                                         <tr>
-                                            <td>Tindakan Terhadap</td>
+                                            <td style="width:20%;">Tanda Tangan:</td>
                                             <td class="d-flex">:&nbsp;
-                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
-                                                    <input type="text" value="Saya" name="terhadap" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Saya">
-                                                    <input type="text" name="jenis_tindakan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jenis Tindakan">
+                                                <div class="d-flex gap-3 flex-column w-100">
+                                                    <canvas id="signature-pad" name="signature" style="border:1px solid #000; width: 100%; max-width: 300px; height: auto; max-height: 100px;"></canvas>
+                                                    <div class="d-flex justify-content-between mt-2">
+                                                        <button id="clear" class="btn btn-secondary" type="button">Clear</button>
+                                                        <label class="form-check form-switch form-check-custom form-check-solid">
+                                                            <input class="form-check-input" type="checkbox" name="signature_check" value="1"/>
+                                                            <span class="form-check-label fw-semibold text-muted">
+                                                                Check
+                                                            </span>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
 
-                                        <tr>
+
+                                        <!-- <tr>
                                             <td>Pemberi Persetujuan</td>
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
@@ -1957,7 +1909,7 @@
                                                     <input type="text" name="alamat_tindak" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alamat">
                                                 </div>
                                             </td>
-                                        </tr>
+                                        </tr> -->
                                         </tbody>
                                     </table>
                             </div>
@@ -1965,14 +1917,14 @@
                             @csrf
                             <div class="row">
                             <div class="form-check form-check-custom form-check-solid mb-3">
-                                <input class="form-check-input" type="radio" id="setuju" name="persetujuan" value="setuju" onchange="toggleAlasan()" />
-                                <label class="form-check-label fw-semibold text-black" for="setuju">
+                                <input class="form-check-input" type="radio" id="Setuju" name="persetujuan" value="setuju" onchange="toggleAlasan()" />
+                                <label class="form-check-label fw-semibold text-black" for="Setuju">
                                     Setuju dengan Tindakan yang telah dijelaskan
                                 </label>
                             </div>
                             <div class="form-check form-check-custom form-check-solid mb-3">
-                                <input class="form-check-input" type="radio" id="tidakSetuju" name="persetujuan" value="tidakSetuju" onchange="toggleAlasan()" />
-                                <label class="form-check-label fw-semibold text-black" for="tidakSetuju">
+                                <input class="form-check-input" type="radio" id="Tidak Setuju" name="persetujuan" value="Tidak Setuju" onchange="toggleAlasan()" />
+                                <label class="form-check-label fw-semibold text-black" for="Tidak Setuju">
                                     Tidak Setuju dengan Tindakan yang telah dijelaskan
                                 </label>
                             </div>
@@ -1980,13 +1932,9 @@
                                 <label for="exampleFormControlInput1" class="form-label">Alasan :</label>
                                 <textarea rows="3" class="form-control form-control-solid" placeholder="Alasan" name="description"></textarea>
                             </div>
-                            <div id="signature_persetujuan_tindakan_medis" class="row text-center">
-                                {!! $qr_persetujuan_tindakan_medis !!}
-                                <em class="text-center">Scan untuk melakukan Tanda Tangan</em><br>
-                            </div>
                             <script>
                             function toggleAlasan() {
-                                const tidakSetujuCheckbox = document.getElementById('tidakSetuju');
+                                const tidakSetujuCheckbox = document.getElementById('Tidak Setuju');
                                 const alasanContainer = document.getElementById('alasanContainer');
 
                                 if (tidakSetujuCheckbox.checked) {
@@ -2776,55 +2724,184 @@
     </script>
 
     <script>
-        document.getElementById('add-column').addEventListener('click', function () {
-            var container = document.getElementById('input-container');
+            document.getElementById('add-column').addEventListener('click', function () {
+                var container = document.getElementById('input-container');
 
-            var row = document.createElement('div');
-            row.className = 'row mb-6';
+                var row = document.createElement('div');
+                row.className = 'row mb-5';
 
-            var col1 = document.createElement('div');
-            col1.className = 'col-lg-4';
+                var col1 = document.createElement('div');
+                col1.className = 'col-lg-4';
 
-            var label1 = document.createElement('label');
-            label1.className = 'col-form-label fw-bold fs-6';
-            label1.textContent = 'Gambar';
+                var label1 = document.createElement('label');
+                label1.className = 'col-form-label fw-bold fs-6';
 
-            var input1 = document.createElement('input');
-            input1.type = 'text';
-            input1.name = 'gambar[]';
-            input1.className = 'form-control form-control-solid mb-3';
-            input1.placeholder = 'Gambar';
+                var input1 = document.createElement('input');
+                input1.type = 'text';
+                input1.name = 'gambar[]';
+                input1.className = 'form-control form-control-solid mb-3';
+                input1.placeholder = 'Gambar';
 
-            col1.appendChild(label1);
-            col1.appendChild(input1);
+                col1.appendChild(label1);
+                col1.appendChild(input1);
 
-            var col2 = document.createElement('div');
-            col2.className = 'col-lg-4';
+                var col2 = document.createElement('div');
+                col2.className = 'col-lg-4';
 
-            var label2 = document.createElement('label');
-            label2.className = 'col-form-label fw-bold fs-6';
-            label2.textContent = 'Keterangan';
+                var label2 = document.createElement('label');
+                label2.className = 'col-form-label fw-bold fs-6';
 
-            var input2 = document.createElement('input');
-            input2.type = 'text';
-            input2.name = 'keterangan[]';
-            input2.className = 'form-control form-control-solid mb-3';
-            input2.placeholder = 'Keterangan';
+                var inputGroup = document.createElement('div');
+                inputGroup.className = 'input-group input-group-solid has-validation mb-3';
 
-            col2.appendChild(label2);
-            col2.appendChild(input2);
+                var select = document.createElement('select');
+                select.name = 'odontogram_symbol_id[]';
+                select.ariaLabel = '{{ __('Odontogram Code') }}';
+                select.dataset.control = 'select2';
+                select.dataset.placeholder = '{{ __('Select an Odontogram Code...') }}';
+                select.className = 'form-select form-select-solid form-select-lg';
 
-            row.appendChild(col1);
-            row.appendChild(col2);
+                var option = document.createElement('option');
+                option.value = '';
+                option.textContent = '{{ __('Select an Odontogram Code...') }}';
+                select.appendChild(option);
 
-            container.appendChild(row);
-        });
-    </script>
+                @foreach($odontogramsymbols as $odontogramsymbol)
+                var option = document.createElement('option');
+                option.value = '{{ $odontogramsymbol->id }}';
+                option.textContent = '{{ $odontogramsymbol->code }}';
+                select.appendChild(option);
+                @endforeach
 
-    <style>
-        .small-img {
-            max-width: 30%;
-            height: 50%;
+                inputGroup.appendChild(select);
+                col2.appendChild(label2);
+                col2.appendChild(inputGroup);
+
+                var col3 = document.createElement('div');
+                col3.className = 'col-lg-4';
+
+                var label3 = document.createElement('label');
+                label3.className = 'col-form-label fw-bold fs-6';
+
+                var input3 = document.createElement('input');
+                input3.type = 'text';
+                input3.name = 'keterangan[]';
+                input3.className = 'form-control form-control-solid mb-3';
+                input3.placeholder = 'Keterangan';
+
+                col3.appendChild(label3);
+                col3.appendChild(input3);
+
+                row.appendChild(col1);
+                row.appendChild(col2);
+                row.appendChild(col3);
+
+                container.appendChild(row);
+            });
+        </script>
+
+        <script>
+            var canvas = document.getElementById('signature-pad');
+            var ctx = canvas.getContext('2d');
+            var drawing = false;
+
+            function getMousePos(canvas, evt) {
+                var rect = canvas.getBoundingClientRect();
+                return {
+                    x: evt.clientX - rect.left,
+                    y: evt.clientY - rect.top
+                };
+            }
+
+            function getTouchPos(canvas, touch) {
+                var rect = canvas.getBoundingClientRect();
+                return {
+                    x: touch.touches[0].clientX - rect.left,
+                    y: touch.touches[0].clientY - rect.top
+                };
+            }
+
+            canvas.addEventListener('mousedown', function(e) {
+                drawing = true;
+                var pos = getMousePos(canvas, e);
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+            });
+
+            canvas.addEventListener('mousemove', function(e) {
+                if (drawing) {
+                    var pos = getMousePos(canvas, e);
+                    ctx.lineTo(pos.x, pos.y);
+                    ctx.stroke();
+                }
+            });
+
+            canvas.addEventListener('mouseup', function() {
+                drawing = false;
+            });
+
+            canvas.addEventListener('touchstart', function(e) {
+                drawing = true;
+                var pos = getTouchPos(canvas, e);
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+                e.preventDefault();
+            });
+
+            canvas.addEventListener('touchmove', function(e) {
+                if (drawing) {
+                    var pos = getTouchPos(canvas, e);
+                    ctx.lineTo(pos.x, pos.y);
+                    ctx.stroke();
+                }
+                e.preventDefault();
+            });
+
+            canvas.addEventListener('touchend', function() {
+                drawing = false;
+                e.preventDefault();
+            });
+
+            document.getElementById('clear').addEventListener('click', function() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            });
+
+            document.getElementById('save').addEventListener('click', function() {
+                var dataURL = canvas.toDataURL();
+                console.log("Tanda tangan disimpan sebagai data URL:", dataURL);
+            });
+
+        </script>
+
+        <script>
+            const canvas = document.getElementById('signature-pad');
+            const clearButton = document.getElementById('clear');
+            const signatureInput = document.createElement('input');
+            
+            signatureInput.type = 'hidden';
+            signatureInput.name = 'signature';
+            document.querySelector('form').appendChild(signatureInput);
+
+            // Mengosongkan Canvas
+            clearButton.addEventListener('click', () => {
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                signatureInput.value = ''; // Clear hidden input
+            });
+
+            // Tangkap dan Simpan Tanda Tangan di hidden input
+            canvas.addEventListener('mouseup', () => {
+                signatureInput.value = canvas.toDataURL('image/png');
+                console.log("Signature Captured:", signatureInput.value);
+            });
+        </script>
+
+        
+        <style>
+            .custom-img {
+            max-width: 100%; 
+            height: auto; 
+            max-height: 400px; 
         }
-    </style>
+        </style>
 @endpush
