@@ -1112,6 +1112,8 @@
                             <!--begin::Col-->
                             <div class="col-lg-8">
                                 <input type="hidden" name="user_id" value="{{$user->id}}">
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
                                 <select name="health_profesional_id" aria-label="{{ __('Health Profesional') }}" data-control="select2" data-placeholder="{{ __('Select a Health Profesional...') }}" class="form-select form-select-solid form-select-lg fw-bold">
                                     <option value="">{{ __('Select a Health Profesional...') }}</option>
                                     @foreach($healthprofesionals as $healthprofesional)
@@ -1137,6 +1139,21 @@
                                         </option>
                                     @endforeach
                                 </select> -->
+=======
+=======
+>>>>>>> Stashed changes
+				<input type="hidden" name="health_profesional_id" value="{{ $examination->health_profesional_id }}">
+				<h5>
+                                @if(isset($examination->health_profesional->user->info))
+                                    {{ ($examination->health_profesional->user->info->title_prefix !='' ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.($examination->health_profesional->user->info->title_suffix!='' ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}
+                                @else
+                                    {{$examination->health_profesional->user->name}}
+                                @endif
+				</h5>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
                             </div>
                         </div>
 

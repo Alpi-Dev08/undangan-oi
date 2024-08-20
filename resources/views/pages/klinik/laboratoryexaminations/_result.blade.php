@@ -146,7 +146,7 @@
                             <input type="hidden" class="form-control text-end" name="id[]" value="{{ $value['id'] }}"/>
                             <input type="text" class="form-control w-75 text-end" name="hasil[]" value=""/>
                         </td>
-                        <td>{{ $value['nilai_rujukan'] }}</td>
+                        <td>{!! $value['nilai_rujukan'] !!}</td>
                         <td>
                             <input type="text" class="form-control w-75 text-end" name="satuan[]" value=""/>
                         </td>

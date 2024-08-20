@@ -36,24 +36,22 @@
 
         /** Define the header rules **/
         header {
-            position: fixed;
             top: 0cm;
             left: 0cm;
             right: 0cm;
-            height: 6.5cm;
+            height: 3cm;
 
         }
 
         /** Define the footer rules **/
         footer {
-            position: fixed;
             bottom: 0cm;
             left: 0cm;
             right: 0cm;
         }
 
         body {
-            margin-top: 3cm;
+            margin-top: 0cm;
             margin-bottom: 120px;
         }
 
@@ -89,21 +87,8 @@
         </tr>
     </table>
 </header>
-<footer>
-    <table style="width:100%;border-top-width: 1px;border-top-style: solid">
-        <tr>
-            <td style="width:50%;text-align: left;vertical-align: top;height:100px">
-                <h2 style="margin:0px;text-transform: uppercase;font-size: 16px;font-weight: bold">WISHING YOU GOOD HEALTH AND HAPPINESS</h2>
-                <p style="margin:0px;text-transform: uppercase;font-size: 14px;">SEMOGA SEHAT DAN BAHAGIA SELALU</p>
-            </td>
-            <td style="width:50%;text-align: right;vertical-align: bottom;float: right;height:100px">
-                <img src="{{ asset(theme()->getMediaUrlPath() . 'logos/qr.jpeg') }}" style="height:85px;margin-right:5px;"><img src="{{ asset(theme()->getMediaUrlPath() . 'logos/logo-yayasan.png') }}" style="height:75px;">
-            </td>
-        </tr>
-    </table>
-</footer>
 <main style="font-size:12px!important;">
-    <p style="color:#000;margin:0px;font-size:22px;text-align:center;font-weight:bolder;text-transform:uppercase;font-family: 'Roboto Condensed', sans-serif;margin-bottom:50px;margin-top:20px;        text-decoration:underline;">BUKTI PENYAMPAIAN INFORMASI</p>
+    <p style="color:#000;margin:0px;font-size:22px;text-align:center;font-weight:bolder;text-transform:uppercase;font-family: 'Roboto Condensed', sans-serif;margin-bottom:50px;margin-top:00px;        text-decoration:underline;">BUKTI PENYAMPAIAN INFORMASI</p>
     <p>Saya yang bertanda tangan di bawah ini menyatakan BENAR telah disampaikan informasi tentang hak dan kewajiban saya selaku pasien yang menggunakan jasa pelayanan di Klinik Satriabudi Dharma Medika Perawatan Mampu sebagai berikut :
     </p>
     <br>
@@ -163,6 +148,19 @@
     </div>
 </main>
 
+<footer>
+    <table style="width:100%;border-top-width: 1px;border-top-style: solid">
+        <tr>
+            <td style="width:50%;text-align: left;vertical-align: top;height:100px">
+                <h2 style="margin:0px;text-transform: uppercase;font-size: 16px;font-weight: bold">WISHING YOU GOOD HEALTH AND HAPPINESS</h2>
+                <p style="margin:0px;text-transform: uppercase;font-size: 14px;">SEMOGA SEHAT DAN BAHAGIA SELALU</p>
+            </td>
+            <td style="width:50%;text-align: right;vertical-align: bottom;float: right;height:100px">
+                <img src="{{ asset(theme()->getMediaUrlPath() . 'logos/qr.jpeg') }}" style="height:85px;margin-right:5px;"><img src="{{ asset(theme()->getMediaUrlPath() . 'logos/logo-yayasan.png') }}" style="height:75px;">
+            </td>
+        </tr>
+    </table>
+</footer>
 <!--end::Text-->
 <script>
     $(function () {

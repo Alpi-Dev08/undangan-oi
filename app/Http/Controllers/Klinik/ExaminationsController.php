@@ -557,7 +557,7 @@
 
             $encounter  = json_decode($examination->encounter, true);
             $encounter_ = '';
-            if ($examination->encounter_id && $examination->encounter_status != "finished") {
+            if ($examination->encounter_id && $examination->encounter_status != "finished" && !empty($validated['assessment'])) {
                 $assessment  = explode(' | ', $validated['assessment']);
                 $assessment_ = [];
                 $n           = 1;
@@ -653,7 +653,8 @@
                 }
 
                 $encounter_ = satu_sehat('update', 'Encounter', $encounter, $examination->encounter_id);
-                if (isset($encounter_)) {
+                //echo json_encode($encounter_);exit;
+		if (isset($encounter_)) {
                     if ($encounter_ != null || $encounter_ != "") {
                         $encounter_                    = json_decode($encounter_);
                         $validated['encounter_status'] = $encounter_->status;

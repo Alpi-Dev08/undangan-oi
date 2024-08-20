@@ -18,6 +18,7 @@
          */
         public function index(Request $request)
         {
+
             // Get view file location from menu config
             $view = theme()->getOption('page', 'view');
             // Check if the page view file exist
@@ -73,13 +74,18 @@
             $user        = User::find($examination->user_id);
             $info        = $user->info;
 
-            //echo json_encode($data);exit;
+            echo json_encode($data);exit;
             return view('pages.klinik.examinations.hakkewajiban_', compact([
                 'user',
                 'info',
                 'examination',
             ]));
         }
+
+    //Route::get('bukti-penyampaian-informasi/{id}', [PagesController::class, 'bukti_penyampaian_informasi'])->name('buktipenyampaianinformasi');
+    //Route::post('bukti-penyampaian-informasi', [PagesController::class, 'store_bukti_penyampaian_informasi'])->name('buktipenyampaianinformasi.store');
+    //Route::get('bukti-penyampaian/{id}', [PagesController::class, 'get_bukti_penyampaian_informasi'])->name('bukti_penyampaian');
+
 
         public function get_bukti_penyampaian_informasi($id)
         {
