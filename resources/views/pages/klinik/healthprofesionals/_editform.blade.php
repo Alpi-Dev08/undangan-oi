@@ -96,6 +96,23 @@
                 </div>
                 <!--end::Input group-->
 
+
+                <!--begin::Input group-->
+                <div class="row mb-6">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Practitioner Type') }}</label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-8">
+                        <select name="health_profesional_type_id" aria-label="{{ __('Practitioner Type') }}" data-control="select2" data-placeholder="{{ __('Select a Practitioner Type...') }}" class="form-select form-select-solid form-select-lg fw-bold">
+                            <option value="">{{ __('Select a Practitioner Type...') }}</option>
+                            @foreach($practitionerTypes as $type)
+                                <option value="{{ $type->id }}" {{  $type->id === old('health_profesional_type_id', $user->health_profesional->health_profesional_type_id ?? '') ? 'selected' :'' }}>{{  $type->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
                 <!--begin::Input group-->
                 <div class="row mb-6">
                     <!--begin::Label-->

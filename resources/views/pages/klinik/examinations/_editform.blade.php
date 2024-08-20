@@ -547,7 +547,7 @@
                 </div>
                 <!--end::details View-->
             </div>
-            
+
 
 
             <div class="tab-pane" id="medicalrecord" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
@@ -1171,11 +1171,16 @@
                             </div>
                             <!--end::Input-->
                         </div>
-                        
-                        <div class="container">
+
+                        @if($examination->health_profesional->health_profesional_type_id == 3)
+                            <div class="row mb-6">
+                                <!--begin::Label-->
+                                <label class="col-lg-4 col-form-label fw-bold fs-6">&nbsp</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <div class="col-lg-8 row justify-content-center g-0">
                         <!-- <div id="odontogram_section" class="container" style="display: none;"> -->
                             <!-- Row 1  -->
-                            <div class="row justify-content-center g-0">
                                 @foreach([18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28] as $i)
                                 <div class="col-auto text-center p-0 m-0">
                                     <label class="col-form-label fw-bold fs-6">{{ $i }}</label>
@@ -1200,7 +1205,8 @@
                             </div>
 
                             <!-- Row 2  -->
-                            <div class="row justify-content-center g-0">
+                                <label class="col-lg-4 col-form-label fw-bold fs-6">&nbsp</label>
+                            <div class="col-lg-8 row justify-content-center g-0">
                                 @foreach([48, 47, 46, 45, 44, 43, 42, 41, 31, 32, 33, 34, 35, 36, 37, 38] as $i)
                                 <div class="col-auto text-center p-0 m-0">
                                     <label class="col-form-label fw-bold fs-6">{{ $i }}</label>
@@ -1224,6 +1230,7 @@
                                 @endforeach
                             </div>
                         </div>
+                        @endif
 
                         <!-- <script>
                             document.getElementById('health_profesional_select').addEventListener('change', function () {
@@ -2877,7 +2884,7 @@
             const canvas = document.getElementById('signature-pad');
             const clearButton = document.getElementById('clear');
             const signatureInput = document.createElement('input');
-            
+
             signatureInput.type = 'hidden';
             signatureInput.name = 'signature';
             document.querySelector('form').appendChild(signatureInput);
@@ -2896,12 +2903,12 @@
             });
         </script>
 
-        
+
         <style>
             .custom-img {
-            max-width: 100%; 
-            height: auto; 
-            max-height: 400px; 
+            max-width: 100%;
+            height: auto;
+            max-height: 400px;
         }
         </style>
 @endpush

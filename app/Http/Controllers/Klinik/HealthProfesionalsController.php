@@ -79,9 +79,10 @@ class HealthProfesionalsController extends Controller
         $works      = Work::all();
         $maritals   = MaritalStatus::all();
         $educations = Education::all();
+        $practitionerTypes = HealthProfesionalType::all();
 
         return view('pages.klinik.healthprofesionals.create', compact([
-            'countries', 'provinces', 'cards', 'bloods', 'religions', 'genders', 'works', 'maritals', 'educations'
+            'countries', 'provinces', 'cards', 'bloods', 'religions', 'genders', 'works', 'maritals', 'educations','practitionerTypes'
         ]));
     }
 
@@ -112,7 +113,7 @@ class HealthProfesionalsController extends Controller
 
         // save on user info
         $info = UserInfo::where('user_id', $user->id)->first();
-        HealthProfesional::create(['user_id'=>$user->id,'health_profesional_type_id'=>1]);
+        HealthProfesional::create(['user_id'=>$user->id,'health_profesional_type_id'=>$request->health_profesional_type_id]);
         if ($info === null) {
             // create new model
             $info = new UserInfo();
@@ -169,6 +170,7 @@ class HealthProfesionalsController extends Controller
         $works      = Work::all();
         $maritals   = MaritalStatus::all();
         $educations = Education::all();
+        $practitionerTypes = HealthProfesionalType::all();
 
         $provinces    = $info->country_id != null ? Province::where('country_id', $info->country_id)->get() : Province::all();
         $cities       = $info->province_id != null ? City::where('province_id', $info->province_id)->get() : null;
@@ -176,7 +178,7 @@ class HealthProfesionalsController extends Controller
         $subdistricts = $info->district_id != null ? SubDistrict::where('district_id', $info->district_id)->get() : null;
 
         return view('pages.klinik.healthprofesionals.edit', compact([
-            'user','countries', 'provinces', 'cards', 'bloods', 'religions', 'genders', 'works', 'maritals', 'educations','info','cities','districts','subdistricts'
+            'user','countries', 'provinces', 'cards', 'bloods', 'religions', 'genders', 'works', 'maritals', 'educations','info','cities','districts','subdistricts','practitionerTypes'
         ]));
 
     }
@@ -208,6 +210,10 @@ class HealthProfesionalsController extends Controller
             // create new model
             $info = new UserInfo();
         }
+
+        $healthprofesionals = HealthProfesional::where(['user_id' => $user->id])->first();
+        $healthprofesionals->health_profesional_type_id = $request->health_profesional_type_id;
+        $healthprofesionals->save();
 
         // attach this info to the current user
         $info->user()->associate($user->id);
