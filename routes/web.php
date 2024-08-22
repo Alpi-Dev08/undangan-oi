@@ -52,6 +52,7 @@
     use App\Http\Controllers\UsersController;
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\Master\OdontogramSymbolsController;
+    use App\Http\Controllers\PDFUploadController;
 
     /*
     |--------------------------------------------------------------------------
@@ -80,9 +81,14 @@
         }
     });
 
-    Route::get('bukti-penyampaian-informasi/{id}', [GlobalController::class, 'bukti_penyampaian_informasi'])->name('buktipenyampaianinformasi');
-    Route::post('bukti-penyampaian-informasi', [GlobalController::class, 'store_bukti_penyampaian_informasi'])->name('buktipenyampaianinformasi.store');
-    Route::get('bukti-penyampaian/{id}', [GlobalController::class, 'get_bukti_penyampaian_informasi'])->name('bukti_penyampaian');
+    Route::get('bukti-penyampaian-informasi/{id}', [PagesController::class, 'bukti_penyampaian_informasi'])->name('buktipenyampaianinformasi');
+    Route::post('bukti-penyampaian-informasi', [PagesController::class, 'store_bukti_penyampaian_informasi'])->name('buktipenyampaianinformasi.store');
+    Route::get('bukti-penyampaian/{id}', [PagesController::class, 'get_bukti_penyampaian_informasi'])->name('bukti_penyampaian');
+    Route::get('generate-pdf/{id}', [PagesController::class, 'generatePDF'])->name('generate.pdf');
+
+    Route::get('persetujuan-tindakan-medis/{id}', [PagesController::class, 'persetujuan_tindakan_medis'])->name('persetujuantindakanmedis');
+    Route::post('persetujuan-tindakan-medis', [PagesController::class, 'store_persetujuan-tindakan-medis'])->name('persetujuantindakanmedis.store');
+    Route::get('persetujuan-tindakan/{id}', [PagesController::class, 'get_persetujuan-tindakan-medis'])->name('bukti_persetujuan');
 
     // Documentations pages
     Route::prefix('documentation')->group(function () {
@@ -179,6 +185,8 @@
             Route::post('suket-persetujuan/{id}', [ExaminationsController::class, 'persetujuan'])
                  ->name('suket.persetujuan');
             Route::post('suket-operasi/{id}', [ExaminationsController::class, 'penandaan_operasi'])->name('suket.operasi');
+            Route::post('/upload-pdf/{patient_code}', [PDFUploadController::class, 'uploadPDF']);
+            Route::get('/patient-pdf/{patient_code}', [PDFUploadController::class, 'getPatientPDF']);
 
             Route::resource('servicecategories', ServiceCategoriesController::class);
             Route::resource('services', ServicesController::class);

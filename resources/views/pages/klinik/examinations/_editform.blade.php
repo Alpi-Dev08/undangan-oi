@@ -893,7 +893,11 @@
                 </div>
 
                 <!-- PDF Display Section -->
-                <div id="pdfDisplay" class="mt-3"></div>
+                <div id="pdfDisplay" class="mt-3">
+                    @if(!empty($pdfPath))
+                        <a href="{{ asset('storage/' . $pdfPath) }}" target="_blank" class="btn btn-primary">Open PDF</a>
+                    @endif
+                </div>
 
                 <!-- Success Message Section -->
                 <div id="successMessage" class="alert alert-success mt-3" style="display: none;"></div>
@@ -905,9 +909,9 @@
                 if (file && file.type === "application/pdf") {
                     var fileURL = URL.createObjectURL(file);
                     var pdfDisplay = document.getElementById('pdfDisplay');
-                    
+
                     pdfDisplay.innerHTML = '';
-                    
+
                     var pdfLink = document.createElement('a');
                     pdfLink.href = fileURL;
                     pdfLink.textContent = "Open PDF";
@@ -919,22 +923,19 @@
                     saveButton.textContent = "Save PDF";
                     saveButton.classList.add('btn', 'btn-success', 'ms-2');
                     saveButton.addEventListener('click', function() {
-                        console.log('Save button clicked');
-
                         var formData = new FormData();
                         formData.append('pdfFile', file);
                         formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
 
-                        console.log('Form data prepared');
-
-                        fetch('/upload-pdf', {
+                        fetch('/upload-pdf/{{ $user->patient->patient_code }}', {
                             method: 'POST',
                             body: formData
                         })
                         .then(response => response.json())
                         .then(data => {
-                            console.log('Server response:', data);
                             if (data.success) {
+                                pdfLink.href = data.filePath;
+
                                 var successMessage = document.getElementById('successMessage');
                                 successMessage.style.display = 'block';
                                 successMessage.textContent = 'PDF saved successfully!';
@@ -972,7 +973,6 @@
                 position: relative;
                 z-index: 1000;
             }
-
             </style>
 
             @if($examination->is_lab)
