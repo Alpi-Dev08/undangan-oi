@@ -86,9 +86,9 @@
 
             <!--begin::Nav item-->
             <li class="nav-item p-0 ms-0">
-                <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#lab">
+                <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#other">
                     <!--begin::Title-->
-                    <span class="nav-text fw-semibold fs-4 mb-3">Pemeriksaan Penunjang</span>
+                    <span class="nav-text fw-semibold fs-4 mb-3">Other</span>
                     <!--end::Title-->
                     <!--begin::Bullet-->
                     <span class="bullet-custom position-absolute z-index-2 w-100 h-1px top-100 bottom-n100 bg-primary rounded"></span>
@@ -885,6 +885,96 @@
                     </div>
                 </div>
             </div>
+
+            <div class="tab-pane" id="other" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
+                <!-- PDF Upload Section -->
+                <div class="pdf-upload">
+                    <input type="file" id="pdfFile" accept="application/pdf" class="form-control"/>
+                </div>
+
+                <!-- PDF Display Section -->
+                <div id="pdfDisplay" class="mt-3"></div>
+
+                <!-- Success Message Section -->
+                <div id="successMessage" class="alert alert-success mt-3" style="display: none;"></div>
+            </div>
+
+            <script>
+            document.getElementById('pdfFile').addEventListener('change', function(event) {
+                var file = event.target.files[0];
+                if (file && file.type === "application/pdf") {
+                    var fileURL = URL.createObjectURL(file);
+                    var pdfDisplay = document.getElementById('pdfDisplay');
+                    
+                    pdfDisplay.innerHTML = '';
+                    
+                    var pdfLink = document.createElement('a');
+                    pdfLink.href = fileURL;
+                    pdfLink.textContent = "Open PDF";
+                    pdfLink.target = "_blank";
+                    pdfLink.classList.add('btn', 'btn-primary');
+                    pdfDisplay.appendChild(pdfLink);
+
+                    var saveButton = document.createElement('button');
+                    saveButton.textContent = "Save PDF";
+                    saveButton.classList.add('btn', 'btn-success', 'ms-2');
+                    saveButton.addEventListener('click', function() {
+                        console.log('Save button clicked');
+
+                        var formData = new FormData();
+                        formData.append('pdfFile', file);
+                        formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+
+                        console.log('Form data prepared');
+
+                        fetch('/upload-pdf', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Server response:', data);
+                            if (data.success) {
+                                var successMessage = document.getElementById('successMessage');
+                                successMessage.style.display = 'block';
+                                successMessage.textContent = 'PDF saved successfully!';
+                            } else {
+                                alert('Failed to save the PDF. Please try again.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                    });
+
+                    pdfDisplay.appendChild(saveButton);
+                } else {
+                    alert('Please upload a valid PDF file.');
+                }
+            });
+            </script>
+
+            <style>
+            .pdf-upload input {
+                margin-bottom: 10px;
+            }
+
+            #pdfDisplay a, #pdfDisplay button {
+                display: inline-block;
+                margin-top: 10px;
+            }
+
+            #successMessage {
+                display: none;
+            }
+
+            #pdfDisplay {
+                position: relative;
+                z-index: 1000;
+            }
+
+            </style>
+
             @if($examination->is_lab)
                 @if($laboratoryexamination->hasil)
                     <div class="tab-pane" id="lab" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
@@ -932,6 +1022,7 @@
                 @endif
             @endif
 
+            
             <div class="tab-pane active" id="examination" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
 
 
@@ -1687,28 +1778,7 @@
                                             <td class="d-flex">:&nbsp;<input type="text" name="alamat_pas" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alamat">
                                             </td>
                                         </tr>
-                                        <!-- <tr>
-                                            <td>Penerima Informasi/pemberi persetujuan</td>
-                                            <td>: {{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</td>
-                                        </tr> -->
-                                        <!-- <tr>
-                                            <td>Tindakan Terhadap</td>
-                                            <td>
-                                                <select name="relation" id="relation" style="
-                                                    width: 200px; /* Lebar dropdown */
-                                                    height: 40px; /* Tinggi dropdown */
-                                                    font-size: 16px; /* Ukuran font */
-                                                    padding: 5px; /* Ruang di dalam dropdown */
-                                                ">
-                                                    <option value="saya-sendiri">Saya Sendiri</option>
-                                                    <option value="istri">Istri</option>
-                                                    <option value="suami">Suami</option>
-                                                    <option value="ayah">Ayah</option>
-                                                    <option value="ibu">Ibu</option>
-                                                    <option value="anak">Anak Saya</option>
-                                                </select>
-                                            </td>
-                                        </tr> -->
+                                        
                                         <tr>
                                             <td>Tindakan Terhadap</td>
                                             <td class="d-flex">:&nbsp;
@@ -1729,27 +1799,26 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Jenis kelamin</td>
-                                            <td class="d-flex">:&nbsp;<input type="text" name="jenis_kelamin" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jenis kelamin">
+                                            <td>Jenis Kelamin</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="jenis_kelamin" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Tempat, Tanggal Lahir">
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>Alamat</td>
-                                            <td class="d-flex">:&nbsp;<input type="text" name="alamat" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alamat">
+                                            <td class="d-flex">:&nbsp;<input type="text" name="alamat" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Tempat, Tanggal Lahir">
                                             </td>
                                         </tr>
-
                                         <tr>
                                             <td>Diagnosis (WD & DD)</td>
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
                                                     <input type="text" name="diagnosis" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
-                                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                                    <!-- <label class="form-check form-switch form-check-custom form-check-solid">
                                                         <input class="form-check-input" type="checkbox" name="diagnosis_check" value="1"/>
                                                         <span class="form-check-label fw-semibold text-muted">
                                                             Check
                                                         </span>
-                                                    </label>
+                                                    </label> -->
                                                 </div>
                                             </td>
                                         </tr>
@@ -1758,12 +1827,12 @@
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
                                                     <input type="text" name="dasar_diagnosis" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
-                                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                                    <!-- <label class="form-check form-switch form-check-custom form-check-solid">
                                                         <input class="form-check-input" type="checkbox" name="dasar_diagnosis_check" value="1"/>
                                                         <span class="form-check-label fw-semibold text-muted">
                                                             Check
                                                         </span>
-                                                    </label>
+                                                    </label> -->
                                                 </div>
                                             </td>
                                         </tr>
@@ -1773,12 +1842,12 @@
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
                                                     <input type="text" name="tindakan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
-                                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                                    <!-- <label class="form-check form-switch form-check-custom form-check-solid">
                                                         <input class="form-check-input" type="checkbox" name="tindakan_check" value="1"/>
                                                         <span class="form-check-label fw-semibold text-muted">
                                                             Check
                                                         </span>
-                                                    </label>
+                                                    </label> -->
                                                 </div>
                                             </td>
                                         </tr>
@@ -1788,12 +1857,12 @@
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
                                                     <input type="text" name="tatacara" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
-                                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                                    <!-- <label class="form-check form-switch form-check-custom form-check-solid">
                                                         <input class="form-check-input" type="checkbox" name="tatacara_check" value="1"/>
                                                         <span class="form-check-label fw-semibold text-muted">
                                                             Check
                                                         </span>
-                                                    </label>
+                                                    </label> -->
                                                 </div>
                                             </td>
                                         </tr>
@@ -1803,12 +1872,12 @@
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
                                                     <input type="text" name="tujuan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
-                                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                                    <!-- <label class="form-check form-switch form-check-custom form-check-solid">
                                                         <input class="form-check-input" type="checkbox" name="tujuan_check" value="1"/>
                                                         <span class="form-check-label fw-semibold text-muted">
                                                             Check
                                                         </span>
-                                                    </label>
+                                                    </label> -->
                                                 </div>
                                             </td>
                                         </tr>
@@ -1818,12 +1887,12 @@
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
                                                     <input type="text" name="resiko" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
-                                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                                    <!-- <label class="form-check form-switch form-check-custom form-check-solid">
                                                         <input class="form-check-input" type="checkbox" name="resiko_check" value="1"/>
                                                         <span class="form-check-label fw-semibold text-muted">
                                                             Check
                                                         </span>
-                                                    </label>
+                                                    </label> -->
                                                 </div>
                                             </td>
                                         </tr>
@@ -1833,12 +1902,12 @@
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
                                                     <input type="text" name="komplikasi" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
-                                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                                    <!-- <label class="form-check form-switch form-check-custom form-check-solid">
                                                         <input class="form-check-input" type="checkbox" name="komplikasi_check" value="1"/>
                                                         <span class="form-check-label fw-semibold text-muted">
                                                             Check
                                                         </span>
-                                                    </label>
+                                                    </label> -->
                                                 </div>
                                             </td>
                                         </tr>
@@ -1848,12 +1917,12 @@
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
                                                     <input type="text" name="prognosis" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
-                                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                                    <!-- <label class="form-check form-switch form-check-custom form-check-solid">
                                                         <input class="form-check-input" type="checkbox" name="prognosis_check" value="1"/>
                                                         <span class="form-check-label fw-semibold text-muted">
                                                             Check
                                                         </span>
-                                                    </label>
+                                                    </label> -->
                                                 </div>
                                             </td>
                                         </tr>
@@ -1863,9 +1932,9 @@
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
                                                     <input type="text" value="{{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}" name="nama" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nama">
-                                                    <input type="text" name="umur" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Umur">
+                                                    <!-- <input type="text" name="umur" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Umur">
                                                     <input type="text" name="jenis_kelamin" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jenis Kelamin">
-                                                    <input type="text" name="alamat" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alamat">
+                                                    <input type="text" name="alamat" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alamat"> -->
                                                 </div>
                                             </td>
                                         </tr>
@@ -1875,31 +1944,16 @@
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-column w-100">
                                                     <canvas id="signature-pad" name="signature" style="border:1px solid #000; width: 100%; max-width: 300px; height: auto; max-height: 100px;"></canvas>
+                                                    <input type="hidden" name="signature" id="signature-data">
                                                     <div class="d-flex justify-content-between mt-2">
                                                         <button id="clear" class="btn btn-secondary" type="button">Clear</button>
-                                                        <label class="form-check form-switch form-check-custom form-check-solid">
-                                                            <input class="form-check-input" type="checkbox" name="signature_check" value="1"/>
-                                                            <span class="form-check-label fw-semibold text-muted">
-                                                                Check
-                                                            </span>
-                                                        </label>
+                                                        <button id="save" class="btn btn-primary" type="submit">Save</button>
                                                     </div>
                                                 </div>
                                             </td>
                                         </tr>
+                                        
 
-
-                                        <!-- <tr>
-                                            <td>Pemberi Persetujuan</td>
-                                            <td class="d-flex">:&nbsp;
-                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
-                                                    <input type="text" value="{{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}" name="nama_tindak" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nama">
-                                                    <input type="text" name="umur_tindak" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Umur">
-                                                    <input type="text" name="jenis_kelamin_tindak" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jenis Kelamin">
-                                                    <input type="text" name="alamat_tindak" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alamat">
-                                                </div>
-                                            </td>
-                                        </tr> -->
                                         </tbody>
                                     </table>
                             </div>
@@ -2803,14 +2857,6 @@
                 };
             }
 
-            function getTouchPos(canvas, touch) {
-                var rect = canvas.getBoundingClientRect();
-                return {
-                    x: touch.touches[0].clientX - rect.left,
-                    y: touch.touches[0].clientY - rect.top
-                };
-            }
-
             canvas.addEventListener('mousedown', function(e) {
                 drawing = true;
                 var pos = getMousePos(canvas, e);
@@ -2830,62 +2876,16 @@
                 drawing = false;
             });
 
-            canvas.addEventListener('touchstart', function(e) {
-                drawing = true;
-                var pos = getTouchPos(canvas, e);
-                ctx.beginPath();
-                ctx.moveTo(pos.x, pos.y);
-                e.preventDefault();
-            });
-
-            canvas.addEventListener('touchmove', function(e) {
-                if (drawing) {
-                    var pos = getTouchPos(canvas, e);
-                    ctx.lineTo(pos.x, pos.y);
-                    ctx.stroke();
-                }
-                e.preventDefault();
-            });
-
-            canvas.addEventListener('touchend', function() {
-                drawing = false;
-                e.preventDefault();
-            });
-
             document.getElementById('clear').addEventListener('click', function() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
             });
 
             document.getElementById('save').addEventListener('click', function() {
                 var dataURL = canvas.toDataURL();
+                document.getElementById('signature-data').value = dataURL;
                 console.log("Tanda tangan disimpan sebagai data URL:", dataURL);
             });
-
         </script>
-
-        <script>
-            const canvas = document.getElementById('signature-pad');
-            const clearButton = document.getElementById('clear');
-            const signatureInput = document.createElement('input');
-
-            signatureInput.type = 'hidden';
-            signatureInput.name = 'signature';
-            document.querySelector('form').appendChild(signatureInput);
-
-            // Mengosongkan Canvas
-            clearButton.addEventListener('click', () => {
-                const ctx = canvas.getContext('2d');
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                signatureInput.value = ''; // Clear hidden input
-            });
-
-            // Tangkap dan Simpan Tanda Tangan di hidden input
-            canvas.addEventListener('mouseup', () => {
-                signatureInput.value = canvas.toDataURL('image/png');
-                console.log("Signature Captured:", signatureInput.value);
-            });
-        </script>
-
 
         <style>
             .custom-img {
