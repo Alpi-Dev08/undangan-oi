@@ -359,9 +359,11 @@
                     ];
 
                     foreach ($encounter['statusHistory'] as $key => $value) {
-                        if ($value['status'] == 'arrived') {
+                        if(isset($value['status'])){
+			if ($value['status'] == 'arrived') {
                             $encounter['statusHistory'][$key]['period']['end'] = date('Y-m-d\TH:i:sP');
                         }
+			}
                     }
                 }
 
@@ -646,9 +648,10 @@
                     ];
 
                     foreach ($encounter['statusHistory'] as $key => $value) {
-                        if ($value['status'] == 'in-progress') {
+                        if(isset($value['status'])){
+			if ($value['status'] == 'in-progress') {
                             $encounter['statusHistory'][$key]['period']['end'] = date('Y-m-d\TH:i:sP');
-                        }
+                        }}
                     }
                 }
 
