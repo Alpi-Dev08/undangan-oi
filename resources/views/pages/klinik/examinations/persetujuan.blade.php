@@ -208,13 +208,15 @@
                     <b>{{ $examination->health_profesional->sip_number ? 'SIP.'.$examination->health_profesional->sip_number : '' }}</b>
                 </td>
                 <td colspan="2" style="text-align: center">
-                    @if(isset($signature) && !empty($signature))
-                        <img src="{{ $signature }}" alt="Tanda Tangan" style="border:1px solid #000;"/>
+                    @if(property_exists($data, 'signature') && !empty($data->signature))
+                    <img src="{{ $data->signature }}" alt="Tanda Tangan" style="width: 100%; max-width: 300px; height: auto; max-height: 100px;">
                     @else
                         <p>No signature available</p>
                     @endif
+                    <br>
                     <b>{{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</b><br>
                 </td>
+
             </tr>
         </tbody>
     </table>
