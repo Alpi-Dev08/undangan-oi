@@ -555,43 +555,6 @@
                     <td>{{ $examination->objective }}</td>
                 </tr>
                 <tr>
-                    <td>
-                        <table style="width:100%;">
-                            <tr>
-                                <td colspan="16" style="font-weight:bold; text-align:center;">Odontogram Images</td>
-                            </tr>
-                            @foreach([18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28] as $i)
-                                @if($loop->first || $loop->iteration == 9)
-                                    <tr>
-                                @endif
-                                <td style="text-align:center;">
-                                    <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram {{ $i }}" style="width:50px;">
-                                    <p style="font-weight:bold;">Gambar {{ $i }}</p>
-                                    <p>Kode: {{ $odontogramsymbols[$loop->index]->code ?? 'Tidak Ada' }}</p>
-                                    <p>Ket: {{ $keterangan[$loop->index] ?? 'Tidak Ada' }}</p>
-                                </td>
-                                @if($loop->iteration == 8 || $loop->last)
-                                    </tr>
-                                @endif
-                            @endforeach
-                            @foreach([48, 47, 46, 45, 44, 43, 42, 41, 31, 32, 33, 34, 35, 36, 37, 38] as $i)
-                                @if($loop->first || $loop->iteration == 9)
-                                    <tr>
-                                @endif
-                                <td style="text-align:center;">
-                                    <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram {{ $i }}" style="width:50px;">
-                                    <p style="font-weight:bold;">Gambar {{ $i }}</p>
-                                    <p>Kode: {{ $odontogramsymbols[$loop->index + 16]->code ?? 'Tidak Ada' }}</p>
-                                    <p>Ket: {{ $keterangan[$loop->index + 16] ?? 'Tidak Ada' }}</p>
-                                </td>
-                                @if($loop->iteration == 8 || $loop->last)
-                                    </tr>
-                                @endif
-                            @endforeach
-                        </table>
-                    </td>
-                </tr>
-                <tr>
                     <td style="font-weight:bold">Assessment</td>
                 </tr>
                 <tr>
@@ -627,8 +590,8 @@
                             @foreach($obat as $key => $value)
                                 @if(isset(getObat($value)->name))
                                 <p style="margin:0px;">
-                                    {{ getObat($value)->name }} 
-                                    @if(isset($keterangan[$key])) 
+                                    {{ getObat($value)->name }}
+                                    @if(isset($keterangan[$key]))
                                         {{ $keterangan[$key] }} pc
                                     @endif
                                     No. {{ $qty[$key] }}
@@ -638,6 +601,45 @@
                         @endif
                     </td>
                 </tr>
+                @if($examination->service_category_id=-17)
+                    <tr>
+                        <td>
+                            <table style="width:100%;">
+                                <tr>
+                                    <td colspan="16" style="font-weight:bold; text-align:center;">Odontogram Images</td>
+                                </tr>
+                                @foreach([18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28] as $i)
+                                    @if($loop->first || $loop->iteration == 9)
+                                        <tr>
+                                            @endif
+                                            <td style="text-align:center;">
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram {{ $i }}" style="width:50px;">
+                                                <p style="font-weight:bold;">Gambar {{ $i }}</p>
+                                                <p>Kode: {{ $odontogramsymbols[$loop->index]->code ?? 'Tidak Ada' }}</p>
+                                                <p>Ket: {{ $keterangan[$loop->index] ?? 'Tidak Ada' }}</p>
+                                            </td>
+                                            @if($loop->iteration == 8 || $loop->last)
+                                        </tr>
+                                    @endif
+                                @endforeach
+                                @foreach([48, 47, 46, 45, 44, 43, 42, 41, 31, 32, 33, 34, 35, 36, 37, 38] as $i)
+                                    @if($loop->first || $loop->iteration == 9)
+                                        <tr>
+                                            @endif
+                                            <td style="text-align:center;">
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram {{ $i }}" style="width:50px;">
+                                                <p style="font-weight:bold;">Gambar {{ $i }}</p>
+                                                <p>Kode: {{ $odontogramsymbols[$loop->index + 16]->code ?? 'Tidak Ada' }}</p>
+                                                <p>Ket: {{ $keterangan[$loop->index + 16] ?? 'Tidak Ada' }}</p>
+                                            </td>
+                                            @if($loop->iteration == 8 || $loop->last)
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </table>
+                        </td>
+                    </tr>
+                @endif
                 <tr>
                     <td style="font-weight:bold">{{ $examination->saran }}</td>
                 </tr>
