@@ -94,7 +94,7 @@
             </div>
             <div class="row col-6 flex-root d-flex flex-row">
                 <div class="col-4">
-                    <span class="fs-5">Dokter Pengirim</span>
+                    <span class="fs-5">Petugas Pemeriksa</span>
                 </div>
                 <div class="col-8">
                     <span class="fs-5">: {{ $laboratoryexaminations->laboratory_name }}</span>

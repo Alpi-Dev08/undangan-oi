@@ -601,7 +601,7 @@
                         @endif
                     </td>
                 </tr>
-                @if($examination->service_category_id=-17)
+                @if($examination->service_category_id==17)
                     <tr>
                         <td>
                             <table style="width:100%;">
