@@ -1761,7 +1761,8 @@
                                         </tr>
                                         <tr>
                                             <td>Nama</td>
-                                            <td>: {{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="nama_pasien" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nama ">
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>Tempat,Tanggal Lahir</td>
@@ -1788,25 +1789,22 @@
                                                 </div>
                                             </td>
                                         </tr>
+                                        
                                         <tr>
                                             <td>Nama</td>
-                                            <td class="d-flex">:&nbsp;<input type="text" name="nama_pasien" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nama pasien">
-                                            </td>
+                                            <td>: {{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</td>
                                         </tr>
                                         <tr>
                                             <td>Tempat,Tanggal Lahir</td>
-                                            <td class="d-flex">:&nbsp;<input type="text" name="tempat_tanggal" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Tempat, Tanggal Lahir">
-                                            </td>
+                                            <td>: {{ $info->place_of_birth.', '.$info->date_of_birth }}</td>
                                         </tr>
                                         <tr>
                                             <td>Jenis Kelamin</td>
-                                            <td class="d-flex">:&nbsp;<input type="text" name="jenis_kelamin" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Tempat, Tanggal Lahir">
-                                            </td>
+                                            <td>: {{ isset($info->gender) ? $info->gender->name : '' }}</td>
                                         </tr>
                                         <tr>
                                             <td>Alamat</td>
-                                            <td class="d-flex">:&nbsp;<input type="text" name="alamat" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Tempat, Tanggal Lahir">
-                                            </td>
+                                            <td>: {{ $info->address }}{{ isset($info->subdistrict) ? ', '.$info->subdistrict->name : '' }}{{ isset($info->district) ? ', '.$info->district->name : '' }}{{ isset($info->city) ? ', '.$info->city->name : '' }}{{ isset($info->province) ? ', '.$info->province->name : '' }}{{ isset($info->country) ? ', '.$info->country->name : '' }}{{ $info->postal_code!='' ? $info->postal_code : (isset($info->subdistrict) ? ' - '.$info->subdistrict->postal_code : '') }}</td>
                                         </tr>
                                         <tr>
                                             <td>Diagnosis (WD & DD)</td>
@@ -1927,17 +1925,17 @@
                                             </td>
                                         </tr>
 
-                                        <tr>
+                                        <!-- <tr>
                                             <td>Yang Bertandatangan</td>
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
                                                     <input type="text" value="{{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}" name="nama" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nama">
-                                                    <!-- <input type="text" name="umur" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Umur">
+                                                    <input type="text" name="umur" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Umur">
                                                     <input type="text" name="jenis_kelamin" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jenis Kelamin">
-                                                    <input type="text" name="alamat" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alamat"> -->
+                                                    <input type="text" name="alamat" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alamat">
                                                 </div>
                                             </td>
-                                        </tr>
+                                        </tr> -->
 
                                         <tr>
                                             <td style="width:20%;">Tanda Tangan:</td>
@@ -1988,10 +1986,679 @@
                                 }
                             }
                             </script>
+                         
                                 <button type="submit" class="btn btn-bg-dark text-white">Download PDF</button>
                             </div>
                             </form>
                         </div>
+
+                        <div class="tab-pane fade" id="surgicalsafetychecklist" role="tabpanel">
+                            <h3 class="fs-3 fw-bold">SIGN IN ( Sebelum induksi anestesi )</h3>
+                            <div class="table-responsive">
+                                <form method="post" action="{{ route('suket.surgicalsafetychecklist', $examination->id) }}">
+                                    @csrf <!-- CSRF Token to prevent 419 error -->
+                                    <table class="table" style="width:100%">
+                                        <tbody>
+                                            <tr>
+                                                <td>Dokter Pelaksana Tindakan</td>
+                                                <td>: {{ (!in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.(!in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}</b>
+                                                    <br>
+                                                    <b>{{ $examination->health_profesional->sip_number ? 'SIP.'.$examination->health_profesional->sip_number : '' }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nama</td>
+                                                <td>: {{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tempat,Tanggal Lahir</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="tempat_tgl" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Tempat, Tanggal Lahir">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>VERFIKASI</strong></td>
+                                            </tr>
+                                            <tr>
+                                            <td> Identitas pasien (nama lengkap dan tanggal lahir) dan gelang pasien</td>
+                                                <td class="d-flex">:&nbsp;
+                                                    <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                        <!-- <input type="text" name="prognosis" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi"> -->
+                                                        <label class="form-check form-switch form-check-custom form-check-solid">
+                                                            <input class="form-check-input" type="checkbox" name="prognosis_check" value="1"/>
+                                                            <span class="form-check-label fw-semibold text-muted">
+                                                                Check
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <td>Nama Operator</td>
+                                                <td class="d-flex">:&nbsp;
+                                                    <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                        <input type="text" name="nama_operator" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
+                                                        <label class="form-check form-switch form-check-custom form-check-solid">
+                                                            <input class="form-check-input" type="checkbox" name="nama_operator_check" value="1"/>
+                                                            <span class="form-check-label fw-semibold text-muted">
+                                                                Check
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td>Nama Tindakan</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="nama_tindakan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nama Tindakan">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Diagnosa</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="diagnosa" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Diagnosa">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td> Pemberian tanda di lokasi operasi</td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="perdarahanYa" name="perdarahan" value="Ya" />
+                                                        <label class="form-check-label fw-semibold text-black" for="perdarahanYa">Ya</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="perdarahanTidak" name="perdarahan" value="Tidak perlu" />
+                                                        <label class="form-check-label fw-semibold text-black" for="perdarahanTidak">Tidak perlu</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>PEMERIKSAAN KELENGKAPAN ANESTESI</strong></td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="kelengkapan_anestesi" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Kelengkapan Anestesi">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>PEMERIKSAAN TANDA VITAL</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tekanan Darah</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="tekanan_darah" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Tekanan Darah">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nadi</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="nadi" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nadi">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pernafasan</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="pernafasan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Pernafasan">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Saturasi O2</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="saturasi_o2" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Saturasi O2">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Suhu</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="suhu" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Suhu">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>RIWAYAT ALERGI</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="alergiAda" name="riwayat_alergi" value="Ada" onchange="toggleKeterangan()" />
+                                                        <label class="form-check-label fw-semibold text-black" for="alergiAda">Ada</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="alergiTidakAda" name="riwayat_alergi" value="Tidak Ada" onchange="toggleKeterangan()" />
+                                                        <label class="form-check-label fw-semibold text-black" for="alergiTidakAda">Tidak Ada</label>
+                                                    </div>
+                                                    <div id="keteranganContainer" style="display: none; margin-left: 20px;" class="mb-10">
+                                                        <label for="keteranganAlergi" class="form-label">Keterangan :</label>
+                                                        <textarea rows="3" class="form-control form-control-solid" placeholder="Masukkan keterangan" name="keterangan_alergi" id="keteranganAlergi"></textarea>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <script>
+                                                function toggleKeterangan() {
+                                                    var alergiAda = document.getElementById('alergiAda').checked;
+                                                    var keteranganContainer = document.getElementById('keteranganContainer');
+
+                                                    if (alergiAda) {
+                                                        keteranganContainer.style.display = 'block';
+                                                    } else {
+                                                        keteranganContainer.style.display = 'none';
+                                                    }
+                                                }
+                                            </script>
+
+                                        
+                                            <tr>
+                                                <td><strong>RISIKO ASPIRASI ATAU GANGGUAN PERNAFASAN</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="aspirasiTidak" name="aspirasi" value="Tidak" />
+                                                        <label class="form-check-label fw-semibold text-black" for="aspirasiTidak">Tidak</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="aspirasiYa" name="aspirasi" value="Ya, dengan alat bantu" />
+                                                        <label class="form-check-label fw-semibold text-black" for="aspirasiYa">Ya, dengan alat bantu</label>
+                                                    </div>
+                                                    
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>RISIKO PERDARAHAN</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="perdarahanTidak" name="resiko_perdarahan" value="Tidak" />
+                                                        <label class="form-check-label fw-semibold text-black" for="perdarahanTidak">Tidak</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="perdarahanYa" name="resiko_perdarahan" value="Ya, dengan dua IV line atau CVC" />
+                                                        <label class="form-check-label fw-semibold text-black" for="perdarahanYa">Ya, dengan dua IV line atau CVC</label>
+                                                    </div>
+                                                    
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>RISIKO ANESTESI</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="umum" name="risiko_perdarahan[]" value="Umum" />
+                                                        <label class="form-check-label fw-semibold text-black" for="umum">Umum</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="spinal" name="risiko_perdarahan[]" value="Spinal" />
+                                                        <label class="form-check-label fw-semibold text-black" for="spinal">Spinal</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="blok" name="risiko_perdarahan[]" value="Blok" />
+                                                        <label class="form-check-label fw-semibold text-black" for="blok">Blok</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="lokal" name="risiko_perdarahan[]" value="Lokal" />
+                                                        <label class="form-check-label fw-semibold text-black" for="lokal">Lokal</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Yang Bertandatangan</td>
+                                                <td class="d-flex">:&nbsp;
+                                                    <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                        <input type="text" value="{{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}" name="nama" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nama">
+                                                        <!-- <input type="text" name="umur" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Umur">
+                                                        <input type="text" name="jenis_kelamin" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jenis Kelamin">
+                                                        <input type="text" name="alamat" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alamat"> -->
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td style="width:20%;">Tanda Tangan:</td>
+                                                <td class="d-flex">:&nbsp;
+                                                    <div class="d-flex gap-3 flex-column w-100">
+                                                        <canvas id="signature-pad" name="signature" style="border:1px solid #000; width: 100%; max-width: 300px; height: auto; max-height: 100px;"></canvas>
+                                                        <input type="hidden" name="signature" id="signature-data">
+                                                        <div class="d-flex justify-content-between mt-2">
+                                                            <button id="clear" class="btn btn-secondary" type="button">Clear</button>
+                                                            <button id="save" class="btn btn-primary" type="submit">Save</button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <h3 class="fs-3 fw-bold">TIME OUT ( Sebelum insisi kulit )</h3>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Dokter Pelaksana Tindakan</td>
+                                                <td>: {{ (!in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.(!in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}</b>
+                                                    <br>
+                                                    <b>{{ $examination->health_profesional->sip_number ? 'SIP.'.$examination->health_profesional->sip_number : '' }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>KELENGKAPAN TIM DAN FASILITAS OPERASI</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="lengkap" name="kelengkapan_tim" value="Lengkap" onchange="toggleAlasan()" />
+                                                        <label class="form-check-label fw-semibold text-black" for="lengkap">Lengkap</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="tidakLengkap" name="kelengkapan_tim" value="Tidak Lengkap" onchange="toggleAlasan()" />
+                                                        <label class="form-check-label fw-semibold text-black" for="tidakLengkap">Tidak Lengkap</label>
+                                                    </div>
+                                                </td>
+                                                <td>Alasan Tidak Lengkap</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="alasan_tidak_lengkap" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alasan">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>PERIKSA KELENGKAPAN PERALATAN OPERASI</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="kasa" name="peralatan[]" value="Kasa" />
+                                                        <label class="form-check-label fw-semibold text-black" for="kasa">Kasa</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="jarum" name="peralatan[]" value="Jarum" />
+                                                        <label class="form-check-label fw-semibold text-black" for="jarum">Jarum</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="dll" name="peralatan[]" value="Dll" onchange="toggleKeteranganDll()" />
+                                                        <label class="form-check-label fw-semibold text-black" for="dll">Dll</label>
+                                                    </div>
+                                                    <div id="keteranganDllContainer" style="display: none; margin-left: 20px;" class="mb-10">
+                                                        <label for="keteranganDll" class="form-label">Keterangan :</label>
+                                                        <textarea rows="3" class="form-control form-control-solid" placeholder="Masukkan keterangan" name="keterangan_dll" id="keteranganDll"></textarea>
+                                                    </div>
+                                                </td>
+                                                <td>Keterangan</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="keterangan_dll" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Keterangan">
+                                                </td>
+                                            </tr>
+                                        
+                                        
+                                            <tr>
+                                                <td><strong>Nama dan Peran Tim Operasi</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="membacakan" name="peran_tim[]" value="Membacakan Secara Verbal" />
+                                                        <label class="form-check-label fw-semibold text-black" for="membacakan">Membacakan Secara Verbal</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="tanggalTindakan" name="peran_tim[]" value="Tanggal Tindakan" />
+                                                        <label class="form-check-label fw-semibold text-black" for="tanggalTindakan">Tanggal Tindakan</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="namaPasien" name="peran_tim[]" value="Nama Lengkap dan Tgl Lahir Pasien" />
+                                                        <label class="form-check-label fw-semibold text-black" for="namaPasien">Nama Lengkap dan Tgl Lahir Pasien</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="diagnosa" name="peran_tim[]" value="Diagnosa" />
+                                                        <label class="form-check-label fw-semibold text-black" for="diagnosa">Diagnosa</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="namaTindakan" name="peran_tim[]" value="Nama Tindakan" />
+                                                        <label class="form-check-label fw-semibold text-black" for="namaTindakan">Nama Tindakan</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="prosedurTindakan" name="peran_tim[]" value="Prosedur Tindakan" />
+                                                        <label class="form-check-label fw-semibold text-black" for="prosedurTindakan">Prosedur Tindakan</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="lokasiTindakan" name="peran_tim[]" value="Lokasi Tindakan" />
+                                                        <label class="form-check-label fw-semibold text-black" for="lokasiTindakan">Lokasi Tindakan</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="informedConsent" name="peran_tim[]" value="Informed Consent" />
+                                                        <label class="form-check-label fw-semibold text-black" for="informedConsent">Informed Consent</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>DOKTER BEDAH :</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Apakah tindakan yang dilakukan berisiko tinggi?</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="risikoTinggiYa" name="risiko_tinggi" value="ya" />
+                                                        <label class="form-check-label fw-semibold text-black" for="risikoTinggiYa">Ya</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="risikoTinggiTidak" name="risiko_tinggi" value="tidak" />
+                                                        <label class="form-check-label fw-semibold text-black" for="risikoTinggiTidak">Tidak</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>waktu Tindakan</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="waktu_tindakan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Waktu yang dibutuhkan">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Apakah sudah diantisipasi perdarahan?</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="perdarahanAntisipasiYa" name="perdarahan_antisipasi" value="ya" />
+                                                        <label class="form-check-label fw-semibold text-black" for="perdarahanAntisipasiYa">Ya</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="perdarahanAntisipasiTidak" name="perdarahan_antisipasi" value="tidak" />
+                                                        <label class="form-check-label fw-semibold text-black" for="perdarahanAntisipasiTidak">Tidak</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>DOKTER ANESTESI : </strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Apakah ada perhatian / kekhawatiran pada pasien ini?</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="perhatianYa" name="perhatian" value="ya" />
+                                                        <label class="form-check-label fw-semibold text-black" for="perhatianYa">Ya</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="perhatianTidak" name="perhatian" value="tidak" />
+                                                        <label class="form-check-label fw-semibold text-black" for="perhatianTidak">Tidak</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Jumlah Pasien ASA</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="jumlah_pasien" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jumlah Pasien ASA">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Apakah ada peralatan yang perlu disediakan (darah)?</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="peralatanYa" name="peralatan" value="ya" />
+                                                        <label class="form-check-label fw-semibold text-black" for="peralatanYa">Ya</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="peralatanTidak" name="peralatan" value="tidak" />
+                                                        <label class="form-check-label fw-semibold text-black" for="peralatanTidak">Tidak</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>PERAWAT :</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Apakah sudah mengecek sterilisasi alat (melalui indikator sterilisasi)?</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="sterilisasiYa" name="sterilisasi" value="ya" />
+                                                        <label class="form-check-label fw-semibold text-black" for="sterilisasiYa">Ya</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="sterilisasiTidak" name="sterilisasi" value="tidak" />
+                                                        <label class="form-check-label fw-semibold text-black" for="sterilisasiTidak">Tidak</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Apakah ada kesiapan peralatan yang harus diperhatikan?</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="peralatanKesiapanYa" name="kesiapan_peralatan" value="ya" onchange="toggleKeterangan(this)" />
+                                                        <label class="form-check-label fw-semibold text-black" for="peralatanKesiapanYa">Ya</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="peralatanKesiapanTidak" name="kesiapan_peralatan" value="tidak" onchange="toggleKeterangan(this)" />
+                                                        <label class="form-check-label fw-semibold text-black" for="peralatanKesiapanTidak">Tidak</label>
+                                                    </div>
+                                                    <div id="keteranganField" style="display:none; margin-top: 10px;">
+                                                        <label for="keterangan" class="form-label fw-semibold text-black">Keterangan:</label>
+                                                        <textarea class="form-control" id="keterangan" name="keterangan" rows="3"></textarea>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        
+                                            <tr>
+                                                <td><strong>ANTIBIOTIK PROPHYLAXIS</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Apakah sudah diberikan dalam waktu sekurangnya 60 menit sebelum tindakan?</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="antibiotikYa" name="antibiotik" value="ya" />
+                                                        <label class="form-check-label fw-semibold text-black" for="antibiotikYa">Ya</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="antibiotikTidak" name="antibiotik" value="tidak" />
+                                                        <label class="form-check-label fw-semibold text-black" for="antibiotikTidak">Tidak</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nama Obat</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="nama_obat" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nama Obat">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Dosis Obat</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="dosis_obat" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Dosis Obat">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Jam diberikan</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="jam_diberikan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jam">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>FOTO PEMERIKSAAN RADIOLOGI YANG DIPERLUKAN</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="radiologiDipasan" name="radiologi" value="dipasang" />
+                                                        <label class="form-check-label fw-semibold text-black" for="radiologiDipasan">Dipasang</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="radiologiTidakDipasan" name="radiologi" value="tidak_dipasang" />
+                                                        <label class="form-check-label fw-semibold text-black" for="radiologiTidakDipasan">Tidak dipasang</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Yang Bertandatangan</td>
+                                                <td class="d-flex">:&nbsp;
+                                                    <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                        <input type="text" value="{{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}" name="nama" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nama">
+                                                        <!-- <input type="text" name="umur" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Umur">
+                                                        <input type="text" name="jenis_kelamin" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jenis Kelamin">
+                                                        <input type="text" name="alamat" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alamat"> -->
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td style="width:20%;">Tanda Tangan:</td>
+                                                <td class="d-flex">:&nbsp;
+                                                    <div class="d-flex gap-3 flex-column w-100">
+                                                        <canvas id="signature-pad" name="signature" style="border:1px solid #000; width: 100%; max-width: 300px; height: auto; max-height: 100px;"></canvas>
+                                                        <input type="hidden" name="signature" id="signature-data">
+                                                        <div class="d-flex justify-content-between mt-2">
+                                                            <button id="clear" class="btn btn-secondary" type="button">Clear</button>
+                                                            <button id="save" class="btn btn-primary" type="submit">Save</button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <h3 class="fs-3 fw-bold"> SIGN OUT ( Sebelum pasien keluar kamar tindakan )</h3>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Secara Verbal Perawat Memastikan : </strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nama Tindakan</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="nama_tindakan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nama Tindakan">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Kelengkapan Alat :</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="alatInstrument" name="kelengkapan_alat[]" value="instrument" />
+                                                        <label class="form-check-label fw-semibold text-black" for="alatInstrument">Instrument</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="alatKasa" name="kelengkapan_alat[]" value="kasa" />
+                                                        <label class="form-check-label fw-semibold text-black" for="alatKasa">Kasa</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="alatJarum" name="kelengkapan_alat[]" value="jarum" />
+                                                        <label class="form-check-label fw-semibold text-black" for="alatJarum">Jarum</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="alatDll" name="kelengkapan_alat[]" value="dll" onchange="toggleKeterangan(this)" />
+                                                        <label class="form-check-label fw-semibold text-black" for="alatDll">DLL</label>
+                                                    </div>
+                                                    <div id="keteranganField" style="display:none; margin-top: 10px;">
+                                                        <label for="keterangan" class="form-label fw-semibold text-black">Keterangan:</label>
+                                                        <textarea class="form-control" id="keterangan" name="keterangan" rows="3"></textarea>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        
+                                            <tr>
+                                                <td><strong>Pelabelan specimen</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="pelabelanSpecimenYa" name="pelabelan_specimen" value="ya" onchange="toggleKeterangan(this)" />
+                                                        <label class="form-check-label fw-semibold text-black" for="pelabelanSpecimenYa">Ya</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="pelabelanSpecimenTidak" name="pelabelan_specimen" value="tidak" onchange="toggleKeterangan(this)" />
+                                                        <label class="form-check-label fw-semibold text-black" for="pelabelanSpecimenTidak">Tidak</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="pelabelanSpecimenPA" name="pelabelan_specimen" value="pa" />
+                                                        <label class="form-check-label fw-semibold text-black" for="pelabelanSpecimenPA">PA</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="pelabelanSpecimenKultur" name="pelabelan_specimen" value="kultur" />
+                                                        <label class="form-check-label fw-semibold text-black" for="pelabelanSpecimenKultur">Kultur</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="pelabelanSpecimenSitologi" name="pelabelan_specimen" value="sitologi" />
+                                                        <label class="form-check-label fw-semibold text-black" for="pelabelanSpecimenSitologi">Sitologi</label>
+                                                    </div>
+                                                    <div id="keteranganField" style="display:none; margin-top: 10px;">
+                                                        <label for="keterangan" class="form-label fw-semibold text-black">Keterangan:</label>
+                                                        <textarea class="form-control" id="keterangan" name="keterangan" rows="3"></textarea>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                        
+                                            <tr>
+                                                <td><strong>Apakah ada masalah peralatan yang perlu disampaikan dari dokter Bedah?</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="masalahPeralatanYa" name="masalah_peralatan" value="ya" />
+                                                        <label class="form-check-label fw-semibold text-black" for="masalahPeralatanYa">Ya</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="masalahPeralatanTidak" name="masalah_peralatan" value="tidak" />
+                                                        <label class="form-check-label fw-semibold text-black" for="masalahPeralatanTidak">Tidak</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Formulir permintaan pemeriksaan</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="formulirPemeriksaanYa" name="formulir_pemeriksaan" value="ya" />
+                                                        <label class="form-check-label fw-semibold text-black" for="formulirPemeriksaanYa">Ya</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="formulirPemeriksaanTidak" name="formulir_pemeriksaan" value="tidak" />
+                                                        <label class="form-check-label fw-semibold text-black" for="formulirPemeriksaanTidak">Tidak</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Telah dilengkapi identitas pasien</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="identitasPasienYa" name="identitas_pasien" value="ya" />
+                                                        <label class="form-check-label fw-semibold text-black" for="identitasPasienYa">Ya</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="identitasPasienTidak" name="identitas_pasien" value="tidak" />
+                                                        <label class="form-check-label fw-semibold text-black" for="identitasPasienTidak">Tidak</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>OBAT - OBATAN YANG DIBERIKAN SELAMA OPERASI</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="obatDiberikan" name="obat_operasi" value="diberikan" />
+                                                        <label class="form-check-label fw-semibold text-black" for="obatDiberikan">Diberikan</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="obatTidakDiberikan" name="obat_operasi" value="tidak_diberikan" />
+                                                        <label class="form-check-label fw-semibold text-black" for="obatTidakDiberikan">Tidak Diberikan</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Alasan</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="alasan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alasan">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>PEMERIKSAAN TANDA VITAL </strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Kesadaran</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="kesadaran" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Kesadaran">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tekanan Darah</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="tekanan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Tekanan Darah">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nadi</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="nadi_" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nadi">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Saturasi O2</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="saturasi" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Saturasi O2">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Suhu</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="suhu_" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Suhu">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pernafasan</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="pernafasan_" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Pernafasan">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Skala nyeri</td>
+                                                <td class="d-flex">:&nbsp;<input type="text" name="skala_nyeri" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Skala Nyeri">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Periksa kembali luka operasi</strong></td>
+                                                <td>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="lukaOperasiAdaRembesan" name="luka_operasi" value="ada_rembesan" />
+                                                        <label class="form-check-label fw-semibold text-black" for="lukaOperasiAdaRembesan">Ada rembesan</label>
+                                                    </div>
+                                                    <div class="form-check form-check-custom form-check-solid mb-3">
+                                                        <input class="form-check-input" type="radio" id="lukaOperasiTidakAdaRembesan" name="luka_operasi" value="tidak_ada_rembesan" />
+                                                        <label class="form-check-label fw-semibold text-black" for="lukaOperasiTidakAdaRembesan">Tidak ada rembesan</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+
+                            @csrf
+                            <div class="row">
+                                <button type="submit" class="btn btn-bg-dark text-white">Download PDF</button>
+                            </div>
+                            </form>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -2857,6 +3524,14 @@
                 };
             }
 
+            function getTouchPos(canvas, touch) {
+                var rect = canvas.getBoundingClientRect();
+                return {
+                    x: touch.touches[0].clientX - rect.left,
+                    y: touch.touches[0].clientY - rect.top
+                };
+            }
+
             canvas.addEventListener('mousedown', function(e) {
                 drawing = true;
                 var pos = getMousePos(canvas, e);
@@ -2873,6 +3548,27 @@
             });
 
             canvas.addEventListener('mouseup', function() {
+                drawing = false;
+            });
+
+            canvas.addEventListener('touchstart', function(e) {
+                drawing = true;
+                var pos = getTouchPos(canvas, e);
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+                e.preventDefault(); 
+            });
+
+            canvas.addEventListener('touchmove', function(e) {
+                if (drawing) {
+                    var pos = getTouchPos(canvas, e);
+                    ctx.lineTo(pos.x, pos.y);
+                    ctx.stroke();
+                }
+                e.preventDefault();
+            });
+
+            canvas.addEventListener('touchend', function() {
                 drawing = false;
             });
 
