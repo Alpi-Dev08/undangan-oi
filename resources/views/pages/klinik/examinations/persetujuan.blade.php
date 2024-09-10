@@ -102,7 +102,7 @@
         <tbody>
             <tr>
                 <td style="width:20%;">Nama</td>
-                <td style="width:80%;">: <b>{{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</b></td>
+                <td style="width:80%;">: <b>{{ $data->nama_pasien }}</b></td>
             </tr>
             <tr>
                 <td style="width:20%;">Tempat, Tanggal Lahir</td>
@@ -134,19 +134,19 @@
         <tbody>
             <tr>
                 <td style="width:20%;">Nama</td>
-                <td style="width:80%;">: <b>{{ $data->nama_pasien }}</b></td>
+                <td style="width:80%;">: <b>{{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</b></td>
             </tr>
             <tr>
                 <td style="width:20%;">Tempat, Tanggal Lahir</td>
-                <td style="width:80%;">: <b>{{ $data->tempat_tanggal }}</b></td>
+                <td style="width:80%;">: <b>{{ $info->place_of_birth.', '.$info->date_of_birth }}</b></td>
             </tr>
             <tr>
                 <td style="width:20%;">Jenis Kelamin</td>
-                <td style="width:80%;">: <b>{{ $data->jenis_kelamin }}</b></td>
+                <td style="width:80%;">: <b>{{ isset($info->gender) ? $info->gender->name : '' }}</b></td>
             </tr>
             <tr>
                 <td style="width:20%;">Alamat</td>
-                <td style="width:80%;">: <b>{{ $data->alamat }}</b></td>
+                <td style="width:80%;">: <b>{{ $info->address }}{{ isset($info->subdistrict) ? ', '.$info->subdistrict->name : '' }}{{ isset($info->district) ? ', '.$info->district->name : '' }}{{ isset($info->city) ? ', '.$info->city->name : '' }}{{ isset($info->province) ? ', '.$info->province->name : '' }}{{ isset($info->country) ? ', '.$info->country->name : '' }}{{ $info->postal_code!='' ? $info->postal_code : (isset($info->subdistrict) ? ' - '.$info->subdistrict->postal_code : '') }}</b></td>
             </tr>
             <tr>
                 <td style="width:20%;">Diagnosis (WD & DD)</td>
