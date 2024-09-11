@@ -52,7 +52,6 @@
     use App\Http\Controllers\UsersController;
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\Master\OdontogramSymbolsController;
-    use App\Http\Controllers\PDFUploadController;
 
     /*
     |--------------------------------------------------------------------------
@@ -184,9 +183,9 @@
                  ->name('suket.hakkewajiban');
             Route::post('suket-persetujuan/{id}', [ExaminationsController::class, 'persetujuan'])
                  ->name('suket.persetujuan');
+            Route::post('suket-surgicalsafetychecklist/{id}', [ExaminationsController::class, 'surgicalsafetychecklist'])
+                 ->name('suket.surgicalsafetychecklist');
             Route::post('suket-operasi/{id}', [ExaminationsController::class, 'penandaan_operasi'])->name('suket.operasi');
-            Route::post('/upload-pdf/{patient_code}', [PDFUploadController::class, 'uploadPDF']);
-            Route::get('/patient-pdf/{patient_code}', [PDFUploadController::class, 'getPatientPDF']);
 
             Route::resource('servicecategories', ServiceCategoriesController::class);
             Route::resource('services', ServicesController::class);

@@ -523,6 +523,30 @@
             return $pdf->download('surat_keterangan_persetujuan_' . $user->name . '.pdf');
         }
 
+        public function surgicalsafetychecklist(Request $request)
+        {
+            $examination = Examination::find($request->id);
+            $user        = User::find($examination->user_id);
+            $info        = $user->info;
+
+            // get the default inner page
+            $data = json_decode(json_encode($request->all()));
+            //echo json_encode($data);exit;
+            /* return view('pages.klinik.examinations.surgicalsafetychecklist', compact([
+                 'user', 'info', 'examination', 'data'
+             ]));*/
+
+
+            $pdf = Pdf::loadView('pages.klinik.examinations.surgicalsafetychecklist', compact([
+                'user',
+                'info',
+                'examination',
+                'data',
+            ]));
+
+            return $pdf->download('surat_surgicalsafetychecklist_' . $user->name . '.pdf');
+        }
+
         public function psikososial(Request $request)
         {
             $data        = $request->all();
