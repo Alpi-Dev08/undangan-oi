@@ -78,13 +78,6 @@
             <td style="width: 50%; vertical-align:top">
                 <img src="{{ public_path(theme()->getMediaUrlPath() . 'logos/logo-klinik.png') }}" style="height:50px;">
             </td>
-            <!-- <td style="width: 50%; vertical-align:top; text-align: right;">
-                <p style="font-size:12px; margin: 0; color:#000;">
-                    Nama: <b>{{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</b>
-                    <br>
-                    Tempat, Tanggal Lahir: <b>{{ $data->tempat_tgl }}</b>
-                </p>
-            </td> -->
         </tr>
 
     </table>
@@ -112,11 +105,11 @@
             </tr>
             <tr>
                 <td style="width:20%;">Tempat, Tanggal Lahir</td>
-                <td style="width:80%;">: <b>{{ $data->waktu_tindakan}}</b></td>
+                <td style="width:80%;">: <b>{{ $info->place_of_birth.', '.$info->date_of_birth }}</b></td>
             </tr>
             <tr>
                 <td style="width:20%;">Nomor RM</td>
-                <td style="width:80%;">: <b>{{ $data->no_RM}}</b></td>
+                <td style="width:80%;">: <b>{{ $user->mr->medical_record_code }}</b></td>
             </tr>
         </tbody>
     </table>
@@ -202,23 +195,23 @@
             </tr>
             <tr>
                 <td style="width:20%;"><span style="font-family: DejaVu Sans, sans-serif;">✔</span>Tekanan Darah</td>
-                <td style="width:80%;">: <b>{{ $examination->vitality->blood_pressure ?? "-" }}</b></td>
+                <td style="width:80%;">: <b>{{ $examination->vitality->blood_pressure ?? "-" }} mmHg</b></td>
             </tr>
             <tr>
                 <td style="width:20%;"><span style="font-family: DejaVu Sans, sans-serif;">✔</span>Nadi</td>
-                <td style="width:80%;">: <b>{{ $examination->vitality->heart_rate ?? "-" }}</b></td>
+                <td style="width:80%;">: <b>{{ $examination->vitality->heart_rate ?? "-" }} kali/menit</b></td>
             </tr>
             <tr>
                 <td style="width:20%;"><span style="font-family: DejaVu Sans, sans-serif;">✔</span>Pernafasan</td>
-                <td style="width:80%;">: <b>{{ $data->pernafasan }}</b></td>
+                <td style="width:80%;">: <b>{{ $exam->vitality->respiratory_rate ?? "-" }} kali/menit</b></td>
             </tr>
             <tr>
                 <td style="width:20%;"><span style="font-family: DejaVu Sans, sans-serif;">✔</span>Saturasi O2</td>
-                <td style="width:80%;">: <b>{{ $data->saturasi_o2 }}</b></td>
+                <td style="width:80%;">: <b>{{ $exam->vitality->oxygen_saturation ?? "-" }} %</b></td>
             </tr>
             <tr>
                 <td style="width:20%;"><span style="font-family: DejaVu Sans, sans-serif;">✔</span>Suhu</td>
-                <td style="width:80%;">: <b>{{ $examination->vitality->temperature ?? "-" }}</b></td>
+                <td style="width:80%;">: <b>{{ $examination->vitality->temperature ?? "-" }} °C</b></td>
             </tr>
         </tbody>
     </table>
@@ -289,12 +282,23 @@
     <table class="table"  style="width:100%;">
         <tbody>
             <tr>
+                <td style="width:100%;"></td>
+            </tr>
+            <tr>
                 <td style="width:20%;">TANGGAL VERIFIKASI</td>
-                <td style="width:80%;"> : <b>{{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></td>
+                <td style="width:80%;">:<b>{{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table"  style="width:100%;">
+        <tbody>
+            <tr>
+                <td style="width:100%;"></td>
             </tr>
             <tr>
                 <td style="width:20%;">JAM VERIFIKASI</td>
-                <td style="width:80%;"> : <b>{{ date('H:i:s')  }}</b></td>
+                <td style="width:80%;">:<b>{{ date('H:i:s')  }}</b></td>
             </tr>
         </tbody>
     </table>
@@ -314,7 +318,7 @@
             </tr>
             <tr>
                 <td style="width:20%;"><span style="font-family: DejaVu Sans, sans-serif;">✔</span>Kelengkapan Tim dan Fasilitas Operasi</td>
-                <td style="width:80%;"><b>{{ $data->kelengkapan_tim}}</b></td>
+                <td style="width:80%;"><b>{{ $data->kelengkapan_tim}} {{ $data->alasan_tidak_lengkap}}</b></td>
             </tr>
         </tbody>
     </table>
@@ -339,7 +343,7 @@
             </tr>
             <tr>
                 <td style="width:20%;"></td>
-                <td style="width:80%;"> <b>{{ $data->Keterangan_dll}}</b></td>
+                <td style="width:80%;"> <b>{{ $data->keterangan_dll}}</b></td>
             </tr>
         </tbody>
     </table>
@@ -483,6 +487,9 @@
     </table>
 
     <br>
+    <br>
+    <br>
+    <br>
     <table class="table"  style="width:100%;">
         <tbody>
             <tr>
@@ -585,6 +592,10 @@
                 <td style="width:20%;"></td>
                 <td style="width:80%;"> <b>{{ $data->kelengkapan_alat_jarum}}</b></td>
             </tr>
+            <tr>
+                <td style="width:20%;"></td>
+                <td style="width:80%;"> <b>{{ $data->keterangan_dll1}}</b></td>
+            </tr>
         </tbody>
     </table>
 
@@ -601,14 +612,14 @@
         </tbody>
     </table>
 
-    <table class="table" style="width:100%;">
+    <table class="table"  style="width:100%;">
         <tbody>
             <tr>
                 <td style="width:100%;">Jenis Specimen</td>
             </tr>
             <tr>
                 <td style="width:20%;"></td>
-                <td style="width:80%;"> <b>{{ isset($data->pemeriksaan_pa) ? $data->pemeriksaan_pa : '' }}</b></td>
+                <td style="width:80%;"> <b>{{ isset($data->pemeriksaan_pa) ? $data->pemeriksaan_pa : '-' }}</b></td>
             </tr>
             <tr>
                 <td style="width:20%;"></td>
@@ -671,6 +682,7 @@
     </table>
 
     <br>
+    <br>
     <table class="table"  style="width:100%;">
         <tbody>
             <tr>
@@ -678,16 +690,17 @@
             </tr>
             <tr>
                 <td style="width:20%;"><span style="font-family: DejaVu Sans, sans-serif;">✔</span>Obat-obatan yang diberikan selama Operasi</td>
-                <td style="width:80%;"> <b>{{ $data->obat_operasi}}</b></td>
-            </tr>
-            <tr>
-                <td style="width:20%;">Alasan</td>
-                <td style="width:80%;"> <b>{{ $data->alasan_obat}}</b></td>
+                <td style="width:80%;"> <b>{{ $data->obat_operasi}},{{ $data->alasan_diberikan}} {{ $data->alasan_tidak_diberikan}} </b></td>
             </tr>
         </tbody>
     </table>
 
 
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <br>
     <table class="table"  style="width:100%;">
         <tbody>
@@ -700,23 +713,23 @@
             </tr>
             <tr>
                 <td style="width:20%;"><span style="font-family: DejaVu Sans, sans-serif;">✔</span>Tekanan darah  </td>
-                <td style="width:80%;">: <b>{{ $data->tekanan_1}}</b></td>
+                <td style="width:80%;">: <b>{{ $data->tekanan_1}} mmHg</b></td>
             </tr>
             <tr>
                 <td style="width:20%;"><span style="font-family: DejaVu Sans, sans-serif;">✔</span>Nadi  </td>
-                <td style="width:80%;">: <b>{{ $data->nadi_1}}</b></td>
+                <td style="width:80%;">: <b>{{ $data->nadi_1}} kali/menit</b></td>
             </tr>
             <tr>
                 <td style="width:20%;"><span style="font-family: DejaVu Sans, sans-serif;">✔</span>Saturasi  O2  </td>
-                <td style="width:80%;">: <b>{{ $data->saturasi_1}}</b></td>
+                <td style="width:80%;">: <b>{{ $data->saturasi_1}} %</b></td>
             </tr>
             <tr>
                 <td style="width:20%;"><span style="font-family: DejaVu Sans, sans-serif;">✔</span>Suhu </td>
-                <td style="width:80%;">: <b>{{ $data->suhu_1}}</b></td>
+                <td style="width:80%;">: <b>{{ $data->suhu_1}} °C</b></td>
             </tr>
             <tr>
                 <td style="width:20%;"><span style="font-family: DejaVu Sans, sans-serif;">✔</span>Pernafasan </td>
-                <td style="width:80%;">: <b>{{ $data->pernafasan_1}}</b></td>
+                <td style="width:80%;">: <b>{{ $data->pernafasan_1}} kali/menit</b></td>
             </tr>
             <tr>
                 <td style="width:20%;"><span style="font-family: DejaVu Sans, sans-serif;">✔</span>Skala nyeri   </td>
@@ -737,16 +750,17 @@
         </tbody>
     </table>
 
-    <br>
+    <!-- <br>
     <table class="table"  style="width:100%;">
         <tbody>
             <tr>
                 <td style="width:100%;"> NAMA DAN TANDA TANGAN :</td>
             </tr>
         </tbody>
-    </table>
+    </table> -->
 
-
+    <br>
+    <br>
     <table class="table"  style="width:100%;">
         <tbody>
             <tr>
@@ -770,10 +784,11 @@
                     @if(property_exists($data, 'signature') && !empty($data->signature))
                         <img src="{{ $data->signature }}" alt="Tanda Tangan" style="width: 100%; max-width: 300px; height: auto; max-height: 100px;">
                     @else
-                        <p>No signature</p>
+                        <p>Tertandatangan</p>
                     @endif
                     <br>
-                    <b>{{ (!in_array($user->info->title_prefix, ['','-']) ? $user->info->title_prefix . '. ' : '') . $user->name . (!in_array($user->info->title_suffix, ['','-']) ? ', ' . $user->info->title_suffix : '') }}</b><br>
+                    <b>{{ (!in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.(!in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}</b><br>
+                    <b>{{ $examination->health_profesional->sip_number ? 'SIP.'.$examination->health_profesional->sip_number : '' }}</b>
                 </td>
             </tr>
         </tbody>

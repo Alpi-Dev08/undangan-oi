@@ -2004,13 +2004,11 @@
                                             </tr>
                                             <tr>
                                                 <td>Tempat,Tanggal Lahir</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="tempat_tgl" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Tempat, Tanggal Lahir">
-                                                </td>
+                                                <td>: {{ $info->place_of_birth.', '.$info->date_of_birth }}</td>
                                             </tr>
                                             <tr>
                                                 <td>Nomor RM</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="no_RM" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nomor RM">
-                                                </td>
+                                                <td>: {{ $user->mr->medical_record_code }}</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2">
@@ -2018,7 +2016,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td><strong> VERFIKASI</strong></td>
+                                                <td><strong> VERIFIKASI</strong></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2">
@@ -2117,25 +2115,23 @@
                                             </tr>
                                             <tr>
                                                 <td>Tekanan Darah</td>
-                                                <td>: {{ $examination->vitality->blood_pressure ?? "-" }}</td>
+                                                <td>: {{ $examination->vitality->blood_pressure ?? "-" }} mmHg</td>
                                             </tr>
                                             <tr>
                                                 <td>Nadi</td>
-                                                <td>: {{ $examination->vitality->heart_rate ?? "-" }}</td>
+                                                <td>: {{ $examination->vitality->heart_rate ?? "-" }} kali/menit</td>
                                             </tr>
                                             <tr>
                                                 <td>Pernafasan</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="pernafasan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Pernafasan">
-                                                </td>
+                                                <td>: {{ $exam->vitality->respiratory_rate ?? "-" }} kali/menit</td>
                                             </tr>
                                             <tr>
                                                 <td>Saturasi O2</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="saturasi_o2" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Saturasi O2">
-                                                </td>
+                                                <td>: {{ $exam->vitality->oxygen_saturation ?? "-" }} %</td>
                                             </tr>
                                             <tr>
                                                 <td>Suhu</td>
-                                                <td>: {{ $examination->vitality->temperature ?? "-" }}</td>
+                                                <td>: {{ $examination->vitality->temperature ?? "-" }} °C</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>RIWAYAT ALERGI</strong></td>
@@ -2234,17 +2230,19 @@
                                             <tr>
                                                 <td><strong>KELENGKAPAN TIM DAN FASILITAS OPERASI</strong></td>
                                                 <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="lengkap" name="kelengkapan_tim" value="Lengkap" onchange="toggleAlasan()" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="lengkap">Lengkap</label>
+                                                    <div class="d-flex align-items-center mb-3">
+                                                        <div class="form-check form-check-custom form-check-solid me-3">
+                                                            <input class="form-check-input" type="radio" id="lengkap" name="kelengkapan_tim" value="Lengkap" checked/>
+                                                            <label class="form-check-label fw-semibold text-black" for="lengkap">Lengkap</label>
+                                                        </div>
                                                     </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="tidakLengkap" name="kelengkapan_tim" value="Tidak Lengkap" onchange="toggleAlasan()" />
-                                                        <label class="form-check-label fw-semibold text-black" for="tidakLengkap">Tidak Lengkap</label>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="form-check form-check-custom form-check-solid me-3">
+                                                            <input class="form-check-input" type="radio" id="tidakLengkap" name="kelengkapan_tim" value="Tidak Lengkap" />
+                                                            <label class="form-check-label fw-semibold text-black" for="tidakLengkap">Tidak Lengkap</label>
+                                                        </div>
+                                                        <input type="text" name="alasan_tidak_lengkap" class="form-control form-control-solid border border-gray-300" placeholder="Alasan Tidak Lengkap">
                                                     </div>
-                                                </td>
-                                                <td>Alasan Tidak Lengkap</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="alasan_tidak_lengkap" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alasan">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -2262,12 +2260,15 @@
                                                         <input class="form-check-input" type="checkbox" id="alatJarum" name="kelengkapan_alat_jarum1" value="jarum" checked/>
                                                         <label class="form-check-label fw-semibold text-black" for="alatJarum">Jarum</label>
                                                     </div>
+                                                    <div class="d-flex align-items-center mb-3">
+                                                        <div class="form-check form-check-custom form-check-solid me-3">
+                                                            <input class="form-check-input" type="checkbox" id="alatDll" name="kelengkapan_alat_dll" value="dll"/>
+                                                            <label class="form-check-label fw-semibold text-black" for="alatDll">DLL</label>
+                                                        </div>
+                                                        <input type="text" name="keterangan_dll" class="form-control form-control-solid border border-gray-300" placeholder="Keterangan">
+                                                    </div>
                                                 </td>
-                                                <td>DLL, Keterangan</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="Keterangan_dll" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Keterangan">
-                                                </td>
-                                            </tr>
-                                        
+                                            </tr>                                     
                                             <tr>
                                                 <td><strong>Menyebutkan Nama dan Peran Tim Operasi</strong></td>
                                                 <td>
@@ -2481,9 +2482,13 @@
                                                         <input class="form-check-input" type="checkbox" id="alatJarum" name="kelengkapan_alat_jarum" value="jarum" checked/>
                                                         <label class="form-check-label fw-semibold text-black" for="alatJarum">Jarum</label>
                                                     </div>
-                                                </td>
-                                                <td>DLL, Keterangan</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="Keterangan_dll_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Keterangan">
+                                                    <div class="d-flex align-items-center mb-3">
+                                                        <div class="form-check form-check-custom form-check-solid me-3">
+                                                            <input class="form-check-input" type="checkbox" id="alatDll1" name="kelengkapan_alat_dll1" value="dll"/>
+                                                            <label class="form-check-label fw-semibold text-black" for="alatDll1">DLL</label>
+                                                        </div>
+                                                        <input type="text" name="keterangan_dll1" class="form-control form-control-solid border border-gray-300" placeholder="Keterangan">
+                                                    </div>
                                                 </td>
                                             </tr>
 
@@ -2574,19 +2579,20 @@
                                             <tr>
                                                 <td><strong>OBAT - OBATAN YANG DIBERIKAN SELAMA OPERASI</strong></td>
                                                 <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="obatDiberikan" name="obat_operasi" value="Diberikan" />
-                                                        <label class="form-check-label fw-semibold text-black" for="obatDiberikan">Diberikan</label>
+                                                    <div class="d-flex align-items-center mb-3">
+                                                        <div class="form-check form-check-custom form-check-solid me-3">
+                                                            <input class="form-check-input" type="radio" id="obatDiberikan" name="obat_operasi" value="Diberikan" />
+                                                            <label class="form-check-label fw-semibold text-black" for="obatDiberikan">Diberikan</label>
+                                                        </div>
+                                                        <input type="text" name="alasan_diberikan" class="form-control form-control-solid border border-gray-300" placeholder="Alasan Diberikan">
                                                     </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="obatTidakDiberikan" name="obat_operasi" value="Tidak diberikan" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="obatTidakDiberikan">Tidak Diberikan</label>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="form-check form-check-custom form-check-solid me-3">
+                                                            <input class="form-check-input" type="radio" id="obatTidakDiberikan" name="obat_operasi" value="Tidak diberikan" checked/>
+                                                            <label class="form-check-label fw-semibold text-black" for="obatTidakDiberikan">Tidak Diberikan</label>
+                                                        </div>
+                                                        <input type="text" name="alasan_tidak_diberikan" class="form-control form-control-solid border border-gray-300" placeholder="Alasan Tidak Diberikan">
                                                     </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Alasan</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="alasan_obat" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alasan">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -2599,32 +2605,33 @@
                                             </tr>
                                             <tr>
                                                 <td>Tekanan Darah</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="tekanan_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Tekanan Darah">
+                                                <td class="d-flex">:&nbsp;<input type="text" name="tekanan_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Tekanan Darah (mmHg)">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>Nadi</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="nadi_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nadi">
+                                                <td class="d-flex">:&nbsp;<input type="text" name="nadi_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nadi (kali/menit)">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>Saturasi O2</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="saturasi_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Saturasi O2">
+                                                <td class="d-flex">:&nbsp;<input type="text" name="saturasi_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Saturasi O2 (%)">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>Suhu</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="suhu_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Suhu">
+                                                <td class="d-flex">:&nbsp;<input type="text" name="suhu_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Suhu (°C)">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>Pernafasan</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="pernafasan_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Pernafasan">
+                                                <td class="d-flex">:&nbsp;<input type="text" name="pernafasan_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Pernafasan (kali/menit)">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>Skala nyeri</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="skala_nyeri_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Skala Nyeri">
+                                                <td class="d-flex">:&nbsp;<input type="text" name="skala_nyeri_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Skala Nyeri (Visual Analog Scale-VAS)">
+                                                <!-- <small class="text-muted fst-italic">&nbsp;(Visual Analog Scale-VAS)</small> -->
                                                 </td>
                                             </tr>
                                             <tr>
@@ -3661,77 +3668,6 @@
             });
         </script>
 
-        <script>
-            var canvas = document.getElementById('signature-pad_1');
-            var ctx = canvas.getContext('2d');
-            var drawing = false;
-
-            function getMousePos(canvas, evt) {
-                var rect = canvas.getBoundingClientRect();
-                return {
-                    x: evt.clientX - rect.left,
-                    y: evt.clientY - rect.top
-                };
-            }
-
-            function getTouchPos(canvas, touch) {
-                var rect = canvas.getBoundingClientRect();
-                return {
-                    x: touch.touches[0].clientX - rect.left,
-                    y: touch.touches[0].clientY - rect.top
-                };
-            }
-
-            canvas.addEventListener('mousedown', function(e) {
-                drawing = true;
-                var pos = getMousePos(canvas, e);
-                ctx.beginPath();
-                ctx.moveTo(pos.x, pos.y);
-            });
-
-            canvas.addEventListener('mousemove', function(e) {
-                if (drawing) {
-                    var pos = getMousePos(canvas, e);
-                    ctx.lineTo(pos.x, pos.y);
-                    ctx.stroke();
-                }
-            });
-
-            canvas.addEventListener('mouseup', function() {
-                drawing = false;
-            });
-
-            canvas.addEventListener('touchstart', function(e) {
-                drawing = true;
-                var pos = getTouchPos(canvas, e);
-                ctx.beginPath();
-                ctx.moveTo(pos.x, pos.y);
-                e.preventDefault(); 
-            });
-
-            canvas.addEventListener('touchmove', function(e) {
-                if (drawing) {
-                    var pos = getTouchPos(canvas, e);
-                    ctx.lineTo(pos.x, pos.y);
-                    ctx.stroke();
-                }
-                e.preventDefault();
-            });
-
-            canvas.addEventListener('touchend', function() {
-                drawing = false;
-            });
-
-            document.getElementById('clear').addEventListener('click', function() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-            });
-
-            document.getElementById('save').addEventListener('click', function() {
-                var dataURL = canvas.toDataURL();
-                document.getElementById('signature-data').value = dataURL;
-                console.log("Tanda tangan disimpan sebagai data URL:", dataURL);
-            });
-        </script>
 
         <style>
             .custom-img {
