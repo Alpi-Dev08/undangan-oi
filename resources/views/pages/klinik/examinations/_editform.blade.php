@@ -1940,10 +1940,10 @@
                                             <td class="d-flex">:&nbsp;
                                                 <div class="d-flex gap-3 flex-column w-100">
                                                     <canvas id="signature-pad_1" name="signature" style="border:1px solid #000; width: 100%; max-width: 300px; height: auto; max-height: 100px;"></canvas>
-                                                    <input type="hidden" name="signature" id="signature-data">
+                                                    <input type="hidden" name="signature" id="signature-data1">
                                                     <div class="d-flex justify-content-between mt-2">
-                                                        <button id="clear" class="btn btn-secondary" type="button">Clear</button>
-                                                        <button id="save" class="btn btn-primary" type="submit">Save</button>
+                                                        <button id="clear1" class="btn btn-secondary" type="button">Clear</button>
+                                                        <button id="save1" class="btn btn-primary" type="submit">Save</button>
                                                     </div>
                                                 </div>
                                             </td>
@@ -2649,14 +2649,14 @@
                                             </tr>
 
                                             <tr>
-                                                <td style="width:20%;">Tanda Tangan:</td>
+                                                <td style="width:20%;">Tanda Tangan :</td>
                                                 <td class="d-flex">:&nbsp;
                                                     <div class="d-flex gap-3 flex-column w-100">
-                                                        <canvas id="signature-pad" name="signature" style="border:1px solid #000; width: 100%; max-width: 300px; height: auto; max-height: 100px;"></canvas>
-                                                        <input type="hidden" name="signature" id="signature-data">
+                                                        <canvas id="signature-pad_2" name="signature2" style="border:1px solid #000; width: 100%; max-width: 300px; height: auto; max-height: 100px;"></canvas>
+                                                        <input type="hidden" name="signature2" id="signature-data2">
                                                         <div class="d-flex justify-content-between mt-2">
-                                                            <button id="clear" class="btn btn-secondary" type="button">Clear</button>
-                                                            <button id="save" class="btn btn-primary" type="submit">Save</button>
+                                                            <button id="clear2" class="btn btn-secondary" type="button">Clear</button>
+                                                            <button id="save2" class="btn btn-primary" type="submit">Save</button>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -3597,75 +3597,80 @@
         </script>
 
         <script>
-            var canvas = document.getElementById('signature-pad_1');
-            var ctx = canvas.getContext('2d');
-            var drawing = false;
+            function initializeSignaturePad(canvasId, clearButtonId, saveButtonId, hiddenInputId) {
+                var canvas = document.getElementById(canvasId);
+                var ctx = canvas.getContext('2d');
+                var drawing = false;
 
-            function getMousePos(canvas, evt) {
-                var rect = canvas.getBoundingClientRect();
-                return {
-                    x: evt.clientX - rect.left,
-                    y: evt.clientY - rect.top
-                };
-            }
+                function getMousePos(canvas, evt) {
+                    var rect = canvas.getBoundingClientRect();
+                    return {
+                        x: evt.clientX - rect.left,
+                        y: evt.clientY - rect.top
+                    };
+                }
 
-            function getTouchPos(canvas, touch) {
-                var rect = canvas.getBoundingClientRect();
-                return {
-                    x: touch.touches[0].clientX - rect.left,
-                    y: touch.touches[0].clientY - rect.top
-                };
-            }
+                function getTouchPos(canvas, touch) {
+                    var rect = canvas.getBoundingClientRect();
+                    return {
+                        x: touch.touches[0].clientX - rect.left,
+                        y: touch.touches[0].clientY - rect.top
+                    };
+                }
 
-            canvas.addEventListener('mousedown', function(e) {
-                drawing = true;
-                var pos = getMousePos(canvas, e);
-                ctx.beginPath();
-                ctx.moveTo(pos.x, pos.y);
-            });
-
-            canvas.addEventListener('mousemove', function(e) {
-                if (drawing) {
+                canvas.addEventListener('mousedown', function(e) {
+                    drawing = true;
                     var pos = getMousePos(canvas, e);
-                    ctx.lineTo(pos.x, pos.y);
-                    ctx.stroke();
-                }
-            });
+                    ctx.beginPath();
+                    ctx.moveTo(pos.x, pos.y);
+                });
 
-            canvas.addEventListener('mouseup', function() {
-                drawing = false;
-            });
+                canvas.addEventListener('mousemove', function(e) {
+                    if (drawing) {
+                        var pos = getMousePos(canvas, e);
+                        ctx.lineTo(pos.x, pos.y);
+                        ctx.stroke();
+                    }
+                });
 
-            canvas.addEventListener('touchstart', function(e) {
-                drawing = true;
-                var pos = getTouchPos(canvas, e);
-                ctx.beginPath();
-                ctx.moveTo(pos.x, pos.y);
-                e.preventDefault(); 
-            });
+                canvas.addEventListener('mouseup', function() {
+                    drawing = false;
+                });
 
-            canvas.addEventListener('touchmove', function(e) {
-                if (drawing) {
+                canvas.addEventListener('touchstart', function(e) {
+                    drawing = true;
                     var pos = getTouchPos(canvas, e);
-                    ctx.lineTo(pos.x, pos.y);
-                    ctx.stroke();
-                }
-                e.preventDefault();
-            });
+                    ctx.beginPath();
+                    ctx.moveTo(pos.x, pos.y);
+                    e.preventDefault();
+                });
 
-            canvas.addEventListener('touchend', function() {
-                drawing = false;
-            });
+                canvas.addEventListener('touchmove', function(e) {
+                    if (drawing) {
+                        var pos = getTouchPos(canvas, e);
+                        ctx.lineTo(pos.x, pos.y);
+                        ctx.stroke();
+                    }
+                    e.preventDefault();
+                });
 
-            document.getElementById('clear').addEventListener('click', function() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-            });
+                canvas.addEventListener('touchend', function() {
+                    drawing = false;
+                });
 
-            document.getElementById('save').addEventListener('click', function() {
-                var dataURL = canvas.toDataURL();
-                document.getElementById('signature-data').value = dataURL;
-                console.log("Tanda tangan disimpan sebagai data URL:", dataURL);
-            });
+                document.getElementById(clearButtonId).addEventListener('click', function() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                });
+
+                document.getElementById(saveButtonId).addEventListener('click', function() {
+                    var dataURL = canvas.toDataURL();
+                    document.getElementById(hiddenInputId).value = dataURL;
+                    console.log("Tanda tangan disimpan sebagai data URL:", dataURL);
+                });
+            }
+
+            initializeSignaturePad('signature-pad_1', 'clear1', 'save1', 'signature-data1');
+            initializeSignaturePad('signature-pad_2', 'clear2', 'save2', 'signature-data2');
         </script>
 
 

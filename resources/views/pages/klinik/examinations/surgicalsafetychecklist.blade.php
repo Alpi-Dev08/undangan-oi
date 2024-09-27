@@ -781,8 +781,8 @@
                     <b></b>
                 </td>
                 <td colspan="2" style="text-align: center">
-                    @if(property_exists($data, 'signature') && !empty($data->signature))
-                        <img src="{{ $data->signature }}" alt="Tanda Tangan" style="width: 100%; max-width: 300px; height: auto; max-height: 100px;">
+                    @if(property_exists($data, 'signature2') && !empty($data->signature2))
+                        <img src="{{ $data->signature2 }}" alt="Tanda Tangan" style="width: 100%; max-width: 300px; height: auto; max-height: 100px;">
                     @else
                         <p>Tertandatangan</p>
                     @endif
