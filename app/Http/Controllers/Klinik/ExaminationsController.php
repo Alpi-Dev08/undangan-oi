@@ -35,6 +35,8 @@
     use Illuminate\Support\Facades\Storage;
     use QrCode;
     use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
+    use App\Models\Sbar;
+
 
     class ExaminationsController extends Controller
     {
@@ -176,6 +178,15 @@
             $pemeriksaan_awal = PemeriksaanAwal::where('examination_id', $examination->id)
                                                ->orWhere('user_id', $examination->user_id)
                                                ->first();
+
+            // Ambil data examination berdasarkan ID
+            $examination = Examination::findOrFail($id);
+
+            // Ambil semua data SBAR terkait dengan examination
+            //$sbars = Sbar::where('examination_id', $examination->id)->get();
+
+            // Kirimkan data ke view
+            //return view('pages.klinik.examinations._editform', compact('examination', 'sbars'));                                   
 
             $qr = QrCode::size(150)
                         ->style('square')
@@ -713,5 +724,33 @@
             ]));
 
             return $pdf->download('penandaan_lokasi_operasi' . $user->name . '.pdf');
-        }
+        }        
+
+        public function komunikasi_efektif(Request $request)
+        {
+            // Validasi input
+            $validatedData = $request->validate([
+                'id' => 'required|exists:examinations,id',
+                'health_professional_id' => 'required|exists:health_professionals,id',
+                'situation' => 'required',
+                'background' => 'required',
+                'assessment' => 'required',
+                'recommendation' => 'required',
+            ]);
+        
+            // Simpan data ke dalam database
+            $examination = Examination::find($request->id);
+            $examination->situations()->create([
+                'health_professional_id' => $request->health_professional_id,
+                'situation' => $request->input('situation'),
+                'background' => $request->input('background'),
+                'assessment' => $request->input('assessment'),
+                'recommendation' => $request->input('recommendation'),
+            ]);
+        
+            // Redirect ke halaman list untuk melihat status
+            return redirect()->route('komunikasi.efektif.status', $examination->id)
+                ->with('success', 'Data berhasil disimpan dan bisa dilihat di daftar status.');
+        }                
+                
     }

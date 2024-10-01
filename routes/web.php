@@ -53,6 +53,8 @@
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\Master\OdontogramSymbolsController;
     use App\Http\Controllers\PDFUploadController;
+    use App\Http\Controllers\Klinik\KomunikasiEfektifController;
+    use App\Http\Controllers\Klinik\SbarController;
 
     /*
     |--------------------------------------------------------------------------
@@ -177,7 +179,7 @@
 
             Route::post('examinations-psikososial', [ExaminationsController::class, 'psikososial'])
                  ->name('examination.psikososial');
-
+                 
             Route::post('suket-sehat/{id}', [ExaminationsController::class, 'sehat'])->name('suket.sehat');
             Route::post('suket-sakit/{id}', [ExaminationsController::class, 'sakit'])->name('suket.sakit');
             Route::post('suket-hak-dan-kewajiban/{id}', [ExaminationsController::class, 'hakkewajiban'])
@@ -216,6 +218,17 @@
                  ->name('result.update');
             Route::resource('laboratoryexaminations', LaboratoryExaminationsController::class);
 
+            // Routes for Komunikasi Efektif
+            Route::get('/komunikasi-efektif/form/{examination}', [KomunikasiEfektifController::class, 'showForm'])
+                 ->name('komunikasi.efektif.form');
+            Route::post('/komunikasi-efektif/store', [KomunikasiEfektifController::class, 'store'])
+                ->name('komunikasi.efektif.store');
+            Route::get('/komunikasi-efektif/status/{examination}', [KomunikasiEfektifController::class, 'status'])
+                ->name('komunikasi.efektif.status'); 
+            Route::get('/sbar', [Sbar::class, 'index']); //route ke fungsi index
+            Route::resource('sbar', SbarController::class);
+            Route::post('/sbar/{id}/verify', [SbarController::class, 'verify'])->name('sbar.verify');
+     
             Route::resource('organization', OrganizationController::class);
             Route::resource('locations', LocationsController::class);
 
