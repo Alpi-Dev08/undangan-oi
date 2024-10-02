@@ -604,44 +604,244 @@
                 @if($examination->service_category_id==17)
                     <tr>
                         <td>
-                            <table style="width:100%;">
-                                <tr>
-                                    <td colspan="16" style="font-weight:bold; text-align:center;">Odontogram Images</td>
-                                </tr>
-                                @foreach([18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28] as $i)
-                                    @if($loop->first || $loop->iteration == 9)
-                                        <tr>
-                                            @endif
-                                            <td style="text-align:center;">
-                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram {{ $i }}" style="width:50px;">
-                                                <p style="font-weight:bold;">Gambar {{ $i }}</p>
-                                                <p>Kode: {{ $odontogramsymbols[$loop->index]->code ?? 'Tidak Ada' }}</p>
-                                                <p>Ket: {{ $keterangan[$loop->index] ?? 'Tidak Ada' }}</p>
-                                            </td>
-                                            @if($loop->iteration == 8 || $loop->last)
-                                        </tr>
-                                    @endif
-                                @endforeach
-                                @foreach([48, 47, 46, 45, 44, 43, 42, 41, 31, 32, 33, 34, 35, 36, 37, 38] as $i)
-                                    @if($loop->first || $loop->iteration == 9)
-                                        <tr>
-                                            @endif
-                                            <td style="text-align:center;">
-                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram {{ $i }}" style="width:50px;">
-                                                <p style="font-weight:bold;">Gambar {{ $i }}</p>
-                                                <p>Kode: {{ $odontogramsymbols[$loop->index + 16]->code ?? 'Tidak Ada' }}</p>
-                                                <p>Ket: {{ $keterangan[$loop->index + 16] ?? 'Tidak Ada' }}</p>
-                                            </td>
-                                            @if($loop->iteration == 8 || $loop->last)
-                                        </tr>
-                                    @endif
-                                @endforeach
-                            </table>
+                        <table style="width:100%; margin-top:20px;">
+                            <tr>
+                                <td colspan="3" style="font-weight:bold; text-align:center;">ODONTOGRAM</td>
+                            </tr>
+                            <tr style="page-break-inside: avoid;">
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 18" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 18</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_18 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_18 ?? '' }}</p>
+                                </td>
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 17" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 17</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_17 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_17 ?? '' }}</p>
+                                </td>
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 16" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 16</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_16 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_16 ?? '' }}</p>
+                                </td>
+                            </tr>
+                            <tr style="page-break-inside: avoid;">
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 15" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 15</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_15 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_15 ?? '' }}</p>
+                                </td>
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 14" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 14</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_14 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_14 ?? '' }}</p>
+                                </td>
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 13" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 13</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_13 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_13 ?? '' }}</p>
+                                </td>
+                            </tr>
+                            <tr style="page-break-inside: avoid;">
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 12" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 12</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_12 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_12 ?? '' }}</p>
+                                </td>
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 11" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 11</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_11 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_11 ?? '' }}</p>
+                                </td>
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 21" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 21</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_21 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_21 ?? '' }}</p>
+                                </td>
+                            </tr>
+                            <tr style="page-break-inside: avoid;">
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 22" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 22</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_22 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_22 ?? '' }}</p>
+                                </td>
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 23" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 23</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_23 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_23 ?? '' }}</p>
+                                </td>
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 24" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 24</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_24 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_24 ?? '' }}</p>
+                                </td>
+                            </tr>
+                            <tr style="page-break-inside: avoid;">
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 25" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 25</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_25 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_25 ?? '' }}</p>
+                                </td>
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 26" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 26</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_26 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_26 ?? '' }}</p>
+                                </td>
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 27" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 27</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_27 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_27 ?? '' }}</p>
+                                </td>
+                            </tr>
+                            <tr style="page-break-inside: avoid;">
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 28" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 28</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_28 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_28 ?? '' }}</p>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+
+                            <tr style="page-break-before: always;"></tr>
+
+                            <tr style="page-break-inside: avoid;">
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 48" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 48</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_48 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_48 ?? '' }}</p>
+                                </td>
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 47" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 47</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_47 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_47 ?? '' }}</p>
+                                </td>
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 46" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 46</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_46 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_46 ?? '' }}</p>
+                                </td>
+                            </tr>
+                            <tr style="page-break-inside: avoid;">
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 45" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 45</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_45 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_45 ?? '' }}</p>
+                                </td>
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 44" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 44</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_44 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_44 ?? '' }}</p>
+                                </td>
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 43" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 43</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_43 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_43 ?? '' }}</p>
+                                </td>
+                            </tr>
+                            <tr style="page-break-inside: avoid;">
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 42" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 42</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_42 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_42 ?? '' }}</p>
+                                </td>
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 41" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 41</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_41 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_41 ?? '' }}</p>
+                                </td>
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 31" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 31</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_31 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_31 ?? '' }}</p>
+                                </td>
+                            </tr>
+                            <tr style="page-break-inside: avoid;">
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 32" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 32</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_32 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_32 ?? '' }}</p>
+                                </td>
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 33" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 33</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_33 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_33 ?? '' }}</p>
+                                </td>
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 34" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 34</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_34 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_34 ?? '' }}</p>
+                                </td>
+                            </tr>
+                            <tr style="page-break-inside: avoid;">
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 35" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 35</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_35 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_35 ?? '' }}</p>
+                                </td>
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 36" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 36</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_36 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_36 ?? '' }}</p>
+                                </td>
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 37" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 37</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_37 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_37 ?? '' }}</p>
+                                </td>
+                            </tr>
+                            <tr style="page-break-inside: avoid;">
+                                <td style="text-align:left; padding:10px; width:30%;">
+                                    <img src="{{ public_path('images/gigi.jpg') }}" alt="Gambar Odontogram 38" style="width:40px; display: block; margin-bottom: 5px;">
+                                    <p style="font-weight:bold; margin: 0;">Gambar 38</p>
+                                    <p style="margin: 0;">Kode: {{ $examination->odontogram_symbol_38 ?? '' }}</p>
+                                    <p style="margin: 0;">Ket: {{ $examination->keterangan_38 ?? '' }}</p>
+                                </td>
+                                <td colspan="2" style="width:60%;"></td>
+                            </tr>
+
+                        </table>
+
                         </td>
                     </tr>
                 @endif
+                
                 <tr>
-                    <td style="font-weight:bold">{{ $examination->saran }}</td>
+                    <td style="font-weight:bold">Saran</td>
+                </tr>
+                <tr>
+                    <td>{{ $examination->saran }}</td>
                 </tr>
             </table>
         @endif
