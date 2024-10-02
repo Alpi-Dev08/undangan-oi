@@ -127,7 +127,7 @@
     <p>Rumah sakit rujukan yang bekerjasama dengan Klinik Satriabudi Dharma Medika adalah Rumah Sakit Medika BSD</p>
 
     <div style="width:500px;text-align:center">
-        Kab. Tangerang, {{ Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }}
+        Kab. Tangerang, {{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }}<br>
         Pasien/Keluarga Pasien<br><br>
         <div id="signature"></div>
         <form id="signature_form" method="POST" enctype="multipart/form-data" action="{{ route('buktipenyampaianinformasi.store') }}">
@@ -176,22 +176,19 @@
             $("#sign").val(data);
             $("#reset_signature").show();
             $("#save_signature").show();
-            $("#download_pdf").hide(); 
             $(":submit").attr("disabled", true);
         });
 
         $("#save_signature").click(function () {
             $("canvas").css("pointer-events", "none");
             $("#save_signature").hide();
-            $("#download_pdf").show(); 
             $(":submit").attr("disabled", false);
         });
 
         $("#reset_signature").click(function () {
             $("#signature").jSignature("reset");
             $("#save_signature").hide();
-            $("#reset_signature").hide();
-            $("#download_pdf").hide(); 
+            $("#reset_signature").hide(); 
             $(":submit").attr("disabled", true);
             $("canvas").css("pointer-events", "");
             $("#sign").val("");
@@ -214,12 +211,6 @@
             }
         });
 
-        // Handle Download PDF button click
-        $("#download_pdf").click(function () {
-            const pdfUrl = `/generate-pdf?id=${$('input[name="id"]').val()}`;
-            
-            window.open(pdfUrl, '_blank');
-        });
     });
 </script>
 </body>

@@ -100,12 +100,6 @@
         {
             $examination = Examination::find($request->id);
 
-            $base64_string = $request->signature;
-            $file          = 'storage/signature/bukti_penyampaian_' . $examination->examination_code . '.png';
-            $output_file   = public_path($file);
-            $this->base64_to_jpeg($base64_string, $output_file);
-
-            $examination->bukti_penyampaian_informasi = $file;
             $examination->save();
 
             return response()->json([
@@ -114,45 +108,6 @@
             ]);
         }
 
-        function base64_to_jpeg($base64_string, $output_file)
-        {
-            // open the output file for writing
-            $ifp  = fopen($output_file, 'wb');
-            $data = explode(',', $base64_string);
-            // we could add validation here with ensuring count( $data ) > 1
-            fwrite($ifp, base64_decode($data[1]));
-            // clean up the file resource
-            fclose($ifp);
-            return $output_file;
-        }
-
-        public function generatePDF($id)
-        {
-            $examination = Examination::find($id);
-            if (!$examination) {
-                return response()->json(['message' => 'Examination not found'], 404);
-            }
-
-            $user = User::find($examination->user_id);
-            if (!$user) {
-                return response()->json(['message' => 'User not found'], 404);
-            }
-
-            $info = $user->info;
-            $signature = $examination->signature; // Assuming you have a field for the signature
-
-            $pdf = PDF::loadView('pages.klinik.examinations.hakkewajiban_', compact('user', 'info', 'examination', 'signature'));
-
-            return $pdf->download('Bukti_Penyampaian_Informasi_' . $user->name . '.pdf');
-        }
-
-        public function store(Request $request)
-        {
-            $signature = $request->input('signature');
-            \Log::info('Signature received: ' . $signature);
-
-            return view('pages.klinik.examinations.persetujuan', ['signature' => $signature]);
-        }
 
 
 
