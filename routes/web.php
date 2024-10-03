@@ -88,9 +88,9 @@
     Route::get('bukti-penyampaian/{id}', [PagesController::class, 'get_bukti_penyampaian_informasi'])->name('bukti_penyampaian');
     Route::get('generate-pdf/{id}', [PagesController::class, 'generatePDF'])->name('generate.pdf');
 
-    Route::get('persetujuan-tindakan-medis/{id}', [PagesController::class, 'persetujuan_tindakan_medis'])->name('persetujuantindakanmedis');
-    Route::post('persetujuan-tindakan-medis', [PagesController::class, 'store_persetujuan-tindakan-medis'])->name('persetujuantindakanmedis.store');
-    Route::get('persetujuan-tindakan/{id}', [PagesController::class, 'get_persetujuan-tindakan-medis'])->name('bukti_persetujuan');
+//     Route::get('persetujuan-tindakan-medis/{id}', [PagesController::class, 'persetujuan_tindakan_medis'])->name('persetujuantindakanmedis');
+//     Route::post('persetujuan-tindakan-medis', [PagesController::class, 'store_persetujuan-tindakan-medis'])->name('persetujuantindakanmedis.store');
+//     Route::get('persetujuan-tindakan/{id}', [PagesController::class, 'get_persetujuan-tindakan-medis'])->name('bukti_persetujuan');
 
     // Documentations pages
     Route::prefix('documentation')->group(function () {

@@ -1346,15 +1346,16 @@
                                 <div class="col-lg-12 row justify-content-center g-0">
                         <!-- <div id="odontogram_section" class="container" style="display: none;"> -->
                             <!-- Row 1  -->
-                                @foreach([18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28] as $i)
+                            <div class="row">
+                                <!-- Gigi 18 -->
                                 <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">{{ $i }}</label>
+                                    <label class="col-form-label fw-bold fs-6">18</label>
                                     <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram {{ $i }}" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 18" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
                                     </div>
                                     <div class="d-flex flex-column align-items-center">
                                         <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_id[]" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                            <select name="odontogram_symbol_18" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
                                                 <option value="">{{ __('Select an Odontogram Code...') }}</option>
                                                 @foreach($odontogramsymbols as $odontogramsymbol)
                                                     <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
@@ -1362,24 +1363,340 @@
                                             </select>
                                         </div>
                                         <div style="width: 70px;">
-                                            <input type="text" name="keterangan[]" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                            <input type="text" name="keterangan_18" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
                                         </div>
                                     </div>
                                 </div>
-                                @endforeach
+
+                                <!-- Gigi 17 -->
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">17</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 17" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_17" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_17" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Gigi 16 -->
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">16</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 16" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_16" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_16" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Gigi 15 -->
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">15</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 15" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_15" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_15" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Gigi 14 -->
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">14</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 14" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_14" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_14" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Gigi 13 -->
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">13</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 13" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_13" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_13" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Gigi 12 -->
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">12</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 12" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_12" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_12" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Gigi 11 -->
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">11</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 11" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_11" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_11" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Gigi 21 -->
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">21</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 21" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_21" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_21" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Gigi 22 -->
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">22</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 22" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_22" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_22" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Gigi 23 -->
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">23</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 23" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_23" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_23" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Gigi 24 -->
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">24</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 24" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_24" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_24" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Gigi 25 -->
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">25</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 25" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_25" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_25" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Gigi 26 -->
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">26</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 26" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_26" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_26" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Gigi 27 -->
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">27</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 27" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_27" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_27" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Gigi 28 -->
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">28</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 28" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_28" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_28" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             </div>
 
                             <!-- Row 2  -->
                             <div class="col-lg-12 row justify-content-center g-0">
-                                @foreach([48, 47, 46, 45, 44, 43, 42, 41, 31, 32, 33, 34, 35, 36, 37, 38] as $i)
+                            <div class="row mb-6">
                                 <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">{{ $i }}</label>
+                                    <label class="col-form-label fw-bold fs-6">48</label>
                                     <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram {{ $i }}" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 48" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
                                     </div>
                                     <div class="d-flex flex-column align-items-center">
                                         <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_id[]" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                            <select name="odontogram_symbol_48" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
                                                 <option value="">{{ __('Select an Odontogram Code...') }}</option>
                                                 @foreach($odontogramsymbols as $odontogramsymbol)
                                                     <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
@@ -1387,11 +1704,312 @@
                                             </select>
                                         </div>
                                         <div style="width: 70px;">
-                                            <input type="text" name="keterangan[]" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                            <input type="text" name="keterangan_48" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
                                         </div>
                                     </div>
                                 </div>
-                                @endforeach
+
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">47</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 47" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_47" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_47" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">46</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 46" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_46" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_46" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">45</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 45" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_45" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_45" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">44</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 44" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_44" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_44" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">43</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 43" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_43" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_43" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">42</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 42" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_42" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_42" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">41</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 41" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_41" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_41" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">31</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 31" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_31" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_31" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">32</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 32" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_32" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_32" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">33</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 33" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_33" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_33" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">34</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 34" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_34" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_34" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">35</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 35" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_35" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_35" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">36</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 36" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_36" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_36" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">37</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 37" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_37" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_37" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-auto text-center p-0 m-0">
+                                    <label class="col-form-label fw-bold fs-6">38</label>
+                                    <div>
+                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 38" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                            <select name="odontogram_symbol_38" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                @foreach($odontogramsymbols as $odontogramsymbol)
+                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="width: 70px;">
+                                            <input type="text" name="keterangan_38" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             </div>
                         </div>
                         @endif
@@ -1455,38 +2073,49 @@
                         </div>
                         <!--end::Input group-->
 
+                        @php
+                            $resep = json_decode($examination->resep);
+                            $obat = $resep->obat ?? [];
+                            $keterangan = $resep->keterangan ?? [];
+                            $qty = $resep->qty ?? [];
+                        @endphp
+
                         <div class="row mb-6">
                             <!--begin::Label-->
                             <label class="col-lg-4 col-form-label fw-bold fs-6">Resep</label>
                             <!--end::Label-->
                             <!--begin::Input-->
                             <div class="col-lg-8">
-                                <div class="d-flex flex-row mb-2 align-items-center" id="inputFromRow">
-                                    <select name="resep[obat][]" aria-label="{{ __('Pilih Obat') }}" data-placeholder="{{ __('Pilih Obat...') }}" class="mb-2 form-select form-select-solid form-select-lg fw-bold me-5">
-                                        <option value="">{{ __('Pilih Obat...') }}</option>
-                                        @foreach($drugs as $drug)
-                                            <option value="{{ $drug->id }}">{{  $drug->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <input placeholder="Keterangan" name="resep[keterangan][]" class="w-200px me-5 mb-2 form-control form-control-solid" type="text">
-                                    <input placeholder="Qty" name="resep[qty][]" class="w-100px me-5 mb-2 form-control form-control-solid" type="number" min="1">
-                                    <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" id="remove-item">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
-                                        <span class="svg-icon svg-icon-3">
-																						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-																							<path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor"/>
-																							<path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="currentColor"/>
-																							<path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="currentColor"/>
-																						</svg>
-																					</span>
-                                        <!--end::Svg Icon-->
-                                    </button>
-                                </div>
+                                @foreach($obat as $key => $value)
+                                    <div class="d-flex flex-row mb-2 align-items-center" id="inputFromRow">
+                                        <select name="resep[obat][]" aria-label="{{ __('Pilih Obat') }}" data-placeholder="{{ __('Pilih Obat...') }}" class="mb-2 form-select form-select-solid form-select-lg fw-bold me-5">
+                                            <option value="">{{ __('Pilih Obat...') }} </option>
+                                            @foreach($drugs as $drug)
+                                                <option value="{{ $drug->id }}" {{ $drug->id == $value ? 'selected' : '' }}>
+                                                    {{  $drug->name }} 
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <input placeholder="{{ $keterangan[$key] ?? 'Keterangan' }}" name="resep[keterangan][]" class="w-200px me-5 mb-2 form-control form-control-solid" type="text" value="{{ $keterangan[$key] ?? '' }}">
+                                        <input placeholder="{{ $qty[$key] ?? 'Qty' }}" name="resep[qty][]" class="w-100px me-5 mb-2 form-control form-control-solid" type="number" min="1" value="{{ $qty[$key] ?? '' }}">
+                                        <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" id="remove-item">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
+                                            <span class="svg-icon svg-icon-3">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor"/>
+                                                    <path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="currentColor"/>
+                                                    <path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="currentColor"/>
+                                                </svg>
+                                            </span>
+                                            <!--end::Svg Icon-->
+                                        </button>
+                                    </div>
+                                @endforeach
 
                                 <div class="d-flex flex-column" id="newRow"></div>
                                 <i class="btn btn-primary" id="tambah_obat">Tambah</i>
                                 @error('resep')
-                                <div class="text-danger">{{ $message }}</div>
+                                    <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <!--end::Input-->
