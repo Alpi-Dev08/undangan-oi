@@ -18,6 +18,11 @@
         </a>
     @endif
 
+    <a href="{{ route('komunikasi.efektif.form', ['examination' => $model->id]) }}"
+        class="btn bi bi-telephone-plus-fill btn-bg-light  btn-active-light-primary btn-sm me-1">
+         {!! theme()->getSvgIcon("icons/duotune/bi bi-telephone-plus-fill/med004.svg", "svg-icon-3") !!}
+     </a>         
+
     @if(Auth::user()->can('klinik.delete'))
         {!! Form::open(['method' => 'DELETE','route' => ['patients.destroy', $model->id],'class'=>'']) !!}
         {{ Form::button(theme()->getSvgIcon("icons/duotune/general/gen027.svg", "svg-icon-3"), ['type' => 'submit', 'class' => 'delete btn btn-icon btn-bg-light btn-active-light-danger btn-sm'] )  }}

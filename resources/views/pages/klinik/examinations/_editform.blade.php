@@ -20,6 +20,20 @@
                     <!--end::Bullet-->
                 </a>
             </li>
+
+            <!--begin::Nav item SBAR-->
+            <li class="nav-item p-0 ms-0">
+                <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#sbar">
+                    <!--begin::Title-->
+                    <span class="nav-text fw-semibold fs-4 mb-3">SBAR</span>
+                    <!--end::Title-->
+                    <!--begin::Bullet-->
+                    <span class="bullet-custom position-absolute z-index-2 w-100 h-1px top-100 bottom-n100 bg-primary rounded"></span>
+                    <!--end::Bullet-->
+                </a>
+            </li>
+            <!--end::Nav item-->
+
             <li class="nav-item p-0 ms-0">
                 <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab" data-bs-toggle="tab" href="#medicalrecord">
                     <!--begin::Title-->
@@ -547,9 +561,87 @@
                 </div>
                 <!--end::details View-->
             </div>
-
-
-
+                        
+            <div class="tab-pane fade" id="sbar">
+                <div class="container mt-4">
+                    <div class="col-12 row">
+                        <!-- Tabel SBAR -->
+                        <table class="table table-bordered w-100">
+                            <thead>
+                                <tr>
+                                    <th class="text-center text-nowrap" style="width: 10%;"><strong>Tanggal</strong></th>
+                                    <th class="text-center text-nowrap" style="width: 5%;"><strong>No.RM</strong></th>
+                                    <th class="text-center text-nowrap" style="width: 10%;"><strong>Nama Pasien</strong></th>
+                                    <th class="text-center text-nowrap" style="width: 5%;"><strong>Tanggal SBAR</strong></th>
+                                    <th class="text-center text-nowrap" style="width: 5%;"><strong>Jam SBAR</strong></th>
+                                    <th class="text-center text-nowrap" style="width: 15%;"><strong>Situation (S)</strong></th>
+                                    <th class="text-center text-nowrap" style="width: 15%;"><strong>Background (B)</strong></th>
+                                    <th class="text-center text-nowrap" style="width: 15%;"><strong>Assessment (A)</strong></th>
+                                    <th class="text-center text-nowrap" style="width: 30%;"><strong>Recommendation (R)</strong></th>
+                                    <th class="text-center text-nowrap" style="width: 10%;"><strong>Checklist Verification</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="sbarRow">
+                                    <td class="text-center">{{ \Carbon\Carbon::now()->format('Y-m-d') }}</td>
+                                    <td class="text-center">{{ $user->mr->medical_record_code }}</td>
+                                    <td class="text-center">{{ $user->name }}</td>
+                                    <td class="text-center">{{ \Carbon\Carbon::now()->format('Y-m-d') }}</td>
+                                    <td class="text-center">{{ \Carbon\Carbon::now()->format('H:i') }}</td>
+                                    <td>
+                                        <textarea id="situation" class="form-control" placeholder="Deskripsi Situation" rows="4" disabled>{{ $sbar->situation ?? 'Deskripsi Situation' }}</textarea>
+                                    </td>                                    
+                                    <td>
+                                        <textarea id="background" class="form-control" placeholder="Deskripsi Background" rows="4" disabled>{{ $sbar->situation ?? 'Deskripsi Background' }}</textarea>
+                                    </td>
+                                    <td>
+                                        <textarea id="assessment" class="form-control" placeholder="Deskripsi Assessment" rows="4" disabled>{{ $sbar->situation ?? 'Deskripsi Assessment' }}</textarea>
+                                    </td>
+                                    <td>
+                                        <textarea id="recommendation" class="form-control" placeholder="Deskripsi Recommendation" rows="4" disabled>{{ $sbar->situation ?? 'Deskripsi Recommendation' }}</textarea>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex align-items-center">
+                                            <input type="checkbox" class="form-check-input me-2" id="checklistVerification">
+                                            <button class="btn btn-primary" id="verifySbar">Verifikasi</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <script>
+                document.getElementById('verifySbar').addEventListener('click', function() {
+                    var isChecked = document.getElementById('checklistVerification').checked;
+                    if (isChecked) {
+                        // Disable fields and change the entire row's background to green
+                        var sbarRow = document.getElementById('sbarRow');
+                        sbarRow.querySelectorAll('textarea').forEach(function(element) {
+                            element.disabled = true;
+                        });
+                        sbarRow.style.backgroundColor = 'lightgreen';
+                        
+                        // Disable the checkbox
+                        document.getElementById('checklistVerification').disabled = true;
+            
+                        // Change the Checklist Verification cell to "VERIFIKASI"
+                        var checklistCell = document.querySelector('#checklistVerification').closest('td');
+                        checklistCell.innerHTML = '<strong>SUDAH DIVERIFIKASI</strong>';
+            
+                        // Remove the verification button
+                        var verifyButton = document.getElementById('verifySbar');
+                        verifyButton.style.display = 'none'; // Hide the button
+                        
+                        alert('SBAR telah diverifikasi dan tidak dapat diubah lagi.');
+                    } else {
+                        alert('Checklist Verification harus dicentang untuk menyimpan data.');
+                    }
+                });
+            </script>                                    
+            
             <div class="tab-pane" id="medicalrecord" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
