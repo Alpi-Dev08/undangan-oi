@@ -10,6 +10,7 @@ use App\Models\Klinik\Drug;
 use App\Models\Klinik\Unit;
 use Doctrine\DBAL\Driver\PDO\Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class DrugsController extends Controller
 {
@@ -172,4 +173,171 @@ class DrugsController extends Controller
 
         return redirect()->route('drugs.index');
     }
+
+    public function update1(UpdateDrugRequest $request, Drug $drug)
+    {
+        if (is_null($this->user) || ! $this->user->can('klinik.update1')) {
+            abort(403, 'Sorry !! You are Unauthorized to edit any master date !');
+        }
+
+        // Validation Data
+        $validated = $request->validated();
+
+        // Process Data
+        if ($validated) {
+            // Process Data
+            try {
+                $drug->update1($validated);
+            } catch (Exception $e) {
+                report($e);
+
+                return false;
+            }
+
+            session()->flash('success', 'Drug has been updated !!');
+
+            return redirect()->route('drugs.index');
+        }
+
+        return false;
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Drug  $drug
+     * @return \Illuminate\Http\Response
+     */
+
+    public function detail(Request $request, $id)
+    {
+        $drug = Drug::findOrFail($id);
+    
+        if ($request->isMethod('post')) {
+            $request->validate([
+                'date' => 'required|date',
+                'user_name' => 'required|string|max:255',
+                'quantity' => 'required|integer|min:1',
+                'description' => 'nullable|string|max:500',
+            ]);
+    
+            // Hitung stok baru
+            $drug->stock += $request->quantity; // Tambahkan quantity ke stok saat ini
+            $drug->save(); // Simpan perubahan stok
+    
+            // Buat entri penggunaan obat
+            DrugUsage::create([
+                'drug_id' => $drug->id,
+                'date' => $request->date,
+                'user_name' => $request->user_name,
+                'quantity' => $request->quantity,
+                'description' => $request->description,
+            ]);
+    
+            session()->flash('success', 'Data penggunaan obat berhasil disimpan!');
+    
+            return redirect()->route('drugs.index');
+        }
+    
+        return view('pages.klinik.drugs.addstock', compact('drug'));
+    }
+
+    public function reduceDetail(Request $request, $id)
+    {
+        $drug = Drug::findOrFail($id);
+    
+        if ($request->isMethod('post')) {
+            $request->validate([
+                'date' => 'required|date',
+                'user_name' => 'required|string|max:255',
+                'quantity' => 'required|integer|min:1',
+                'description' => 'nullable|string|max:500',
+            ]);
+    
+            $drug->stock += $request->quantity; 
+            $drug->save(); 
+    
+            DrugUsage::create([
+                'drug_id' => $drug->id,
+                'date' => $request->date,
+                'user_name' => $request->user_name,
+                'quantity' => $request->quantity,
+                'description' => $request->description,
+            ]);
+    
+            session()->flash('success', 'Data penggunaan obat berhasil disimpan!');
+    
+            return redirect()->route('drugs.index');
+        }
+    
+        return view('pages.klinik.drugs.reducestock', compact('drug'));
+    }
+    
+    public function updateDetail(Request $request, Drug $drug)
+    {
+        $validated = $request->validate([
+            'date' => 'required|date',
+            'user_name' => 'required|string|max:255',
+            'quantity' => 'required|integer|min:1',
+            'description' => 'nullable|string|max:500',
+        ]);
+    
+        $drug->increment('stock', $validated['quantity']);
+
+        $history = [
+            'date' => $validated['date'],
+            'user_name' => $validated['user_name'],
+            'quantity' => $validated['quantity'],
+            'description' => $validated['description'],
+        ];
+    
+        $histories = session('histories', []);
+        $histories[] = $history; 
+        session(['histories' => $histories]); 
+
+        session()->flash('success', 'Detail obat berhasil diperbarui.');
+        return redirect()->route('drugs.index');
+    }
+
+    public function showDetail($id)
+    {
+        $drug = Drug::findOrFail($id);
+        $histories = session('histories', []); 
+        return view('pages.klinik.drugs.addstock', compact('drug', 'histories'));
+    }
+    
+    public function updateDetailReduce(Request $request, Drug $drug)
+    {
+
+        $validated = $request->validate([
+            'date' => 'required|date',
+            'user_name' => 'required|string|max:255',
+            'quantity' => 'required|integer|min:1',
+            'description' => 'nullable|string|max:500',
+        ]);
+        
+        $drug->decrement('stock', $validated['quantity']); 
+    
+        $history = [
+            'date' => $validated['date'],
+            'user_name' => $validated['user_name'],
+            'quantity' => $validated['quantity'],
+            'description' => $validated['description'],
+        ];
+    
+        $histories1 = session('histories1', []);
+        $histories1[] = $history; 
+        session(['histories1' => $histories1]); 
+    
+        session()->flash('success', 'Detail obat berhasil diperbarui.');
+        return redirect()->route('drugs.index');
+    }
+
+    public function showDetailReduce($id)
+    {
+        $drug = Drug::findOrFail($id);
+        $histories1 = session('histories1', []);
+        return view('pages.klinik.drugs.reducestock', compact('drug', 'histories1'));
+    }           
+    
 }
