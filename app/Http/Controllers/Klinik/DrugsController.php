@@ -180,12 +180,9 @@ class DrugsController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to edit any master date !');
         }
 
-        // Validation Data
         $validated = $request->validated();
 
-        // Process Data
         if ($validated) {
-            // Process Data
             try {
                 $drug->update1($validated);
             } catch (Exception $e) {
@@ -221,11 +218,9 @@ class DrugsController extends Controller
                 'description' => 'nullable|string|max:500',
             ]);
     
-            // Hitung stok baru
-            $drug->stock += $request->quantity; // Tambahkan quantity ke stok saat ini
-            $drug->save(); // Simpan perubahan stok
+            $drug->stock += $request->quantity;
+            $drug->save(); 
     
-            // Buat entri penggunaan obat
             DrugUsage::create([
                 'drug_id' => $drug->id,
                 'date' => $request->date,
