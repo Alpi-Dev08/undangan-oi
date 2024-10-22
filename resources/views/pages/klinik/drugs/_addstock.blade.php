@@ -5,10 +5,10 @@
     <!--begin::Scroll-->
     <div class="d-flex flex-column flex-row-fluid">
         <div class="row mb-7">
-            <!-- Tanggal Obat Digunakan -->
+            <!-- Tanggal Obat Ditambahkan -->
             <div class="col-md-6">
                 <div class="fv-row">
-                    <label class="required fw-bold fs-6 mb-2">Tanggal Obat Digunakan</label>
+                    <label class="required fw-bold fs-6 mb-2">Tanggal Obat Ditambahkan</label>
                     <div class="input-group input-group-solid has-validation mb-3">
                         <input type="date" name="date" 
                                class="form-control form-control-solid form-control-lg fw-bold" 
@@ -21,14 +21,14 @@
                 </div>
             </div>
 
-            <!-- Nama Pengguna Obat -->
+            <!-- Nama Petugas -->
             <div class="col-md-6">
                 <div class="fv-row">
-                    <label class="required fw-bold fs-6 mb-2">Nama Pengguna Obat</label>
+                    <label class="required fw-bold fs-6 mb-2">Nama Petugas</label>
                     <div class="input-group input-group-solid has-validation mb-3">
                         <input type="text" name="user_name" 
                                class="form-control form-control-solid border border-gray-300 @error('user_name') is-invalid @enderror" 
-                               placeholder="Nama Pengguna Obat" 
+                               placeholder="Nama Petugas" 
                                value="{{ old('user_name') }}"/>
                     </div>
                     @error('user_name')
@@ -42,11 +42,11 @@
             <!-- Jumlah Penambahan Stock -->
             <div class="col-md-6">
                 <div class="fv-row">
-                    <label class="required fw-bold fs-6 mb-2">Jumlah Penambahan Stock</label>
+                    <label class="required fw-bold fs-6 mb-2">Jumlah Penambahan Stok</label>
                     <div class="input-group input-group-solid has-validation mb-3">
                         <input type="number" name="quantity" 
                                class="form-control form-control-solid border border-gray-300 @error('quantity') is-invalid @enderror" 
-                               placeholder="Penambahan Stock" 
+                               placeholder="Jumlah penambahan stok" 
                                value="{{ old('quantity', 0) }}"/>
                     </div>
                     @error('quantity')
@@ -90,8 +90,8 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Tanggal Obat Digunakan</th>
-                <th>Nama Pengguna Obat</th>
+                <th>Tanggal Obat Ditambahkan</th>
+                <th>Nama Petugas</th>
                 <th>Jumlah Penambahan Stok</th>
                 <th>Keterangan</th>
             </tr>
