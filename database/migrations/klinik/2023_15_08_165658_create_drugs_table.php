@@ -18,6 +18,7 @@
                 $table->foreignIdFor(Unit::class);
                 $table->string('name')->nullable();
                 $table->float('price')->nullable();
+                $table->integer('stock')->nullable();
                 $table->timestamps();
                 $table->softDeletes();
             });

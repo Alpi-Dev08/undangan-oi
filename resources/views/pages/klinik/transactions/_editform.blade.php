@@ -81,11 +81,11 @@
                             <button type="button" class="btn btn-link py-1" data-kt-element="add-item">Add item</button>
                         </td>
                     </tr>
-                    <tr class="border-bottom border-bottom-dashed">
+                    <!-- <tr class="border-bottom border-bottom-dashed">
                         <td class="pe-7" colspan="5">
                             RESEP OBAT
                         </td>
-                    </tr>
+                    </tr> -->
 		    @php $totalobat=0; @endphp
 		    @if($examination->resep)
                     @php

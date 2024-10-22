@@ -234,6 +234,16 @@
 
             Route::resource('units', UnitController::class);
             Route::resource('drugs', DrugsController::class);
+            Route::get('drugs/{drug}/detail', [DrugsController::class, 'detail'])->name('drugs.detail');
+            Route::put('drugs/{drug}/detail', [DrugsController::class, 'updateDetail'])->name('drugs.detail');
+            Route::get('klinik/drugs/{drug}/detail', [DrugsController::class, 'showDetail'])->name('drugs.detail');
+            Route::put('klinik/drugs/{drug}/detail', [DrugsController::class, 'updateDetail'])->name('drugs.update1');
+            
+            Route::get('drugs/{drug}/reduceDetail', [DrugsController::class, 'reduceDetail'])->name('drugs.reduceDetail');
+            Route::put('drugs/{drug}/reduceDetail', [DrugsController::class, 'updateDetail'])->name('drugs.reduceDetail');
+            Route::get('klinik/drugs/{drug}/reduceDetail', [DrugsController::class, 'showDetailReduce'])->name('drugs.reduceDetail');
+            Route::put('klinik/drugs/{drug}/reduceDetail', [DrugsController::class, 'updateDetailReduce'])->name('drugs.update1');
+
         });
 
 
