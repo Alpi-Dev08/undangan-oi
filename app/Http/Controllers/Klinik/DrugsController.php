@@ -285,21 +285,32 @@ class DrugsController extends Controller
             'quantity' => $validated['quantity'],
             'description' => $validated['description'],
         ];
-    
-        $histories = session('histories', []);
-        $histories[] = $history; 
-        session(['histories' => $histories]); 
 
+        $histories = session('histories', []);
+    
+       if (!isset($histories[$drug->id])) {
+            $histories[$drug->id] = [];
+        }
+    
+        $histories[$drug->id][] = $history;
+    
+        session(['histories' => $histories]);
+    
         session()->flash('success', 'Detail obat berhasil diperbarui.');
+    
         return redirect()->route('drugs.index');
     }
-
+    
     public function showDetail($id)
     {
         $drug = Drug::findOrFail($id);
-        $histories = session('histories', []); 
-        return view('pages.klinik.drugs.addstock', compact('drug', 'histories'));
-    }
+
+        $histories = session('histories', []);
+
+        $drugHistories = $histories[$drug->id] ?? [];
+
+        return view('pages.klinik.drugs.addstock', compact('drug', 'drugHistories'));
+    }    
     
     public function updateDetailReduce(Request $request, Drug $drug)
     {
@@ -321,18 +332,29 @@ class DrugsController extends Controller
         ];
     
         $histories1 = session('histories1', []);
-        $histories1[] = $history; 
-        session(['histories1' => $histories1]); 
+
+        if (!isset($histories1[$drug->id])) {
+            $histories1[$drug->id] = [];
+        }
+    
+        $histories1[$drug->id][] = $history;
+    
+        session(['histories1' => $histories1]);
     
         session()->flash('success', 'Detail obat berhasil diperbarui.');
+    
         return redirect()->route('drugs.index');
     }
 
     public function showDetailReduce($id)
     {
         $drug = Drug::findOrFail($id);
+
         $histories1 = session('histories1', []);
-        return view('pages.klinik.drugs.reducestock', compact('drug', 'histories1'));
+
+        $drugHistories1 = $histories1[$drug->id] ?? [];
+
+        return view('pages.klinik.drugs.reducestock', compact('drug', 'drugHistories1'));
     }           
     
 }
