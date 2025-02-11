@@ -595,7 +595,7 @@
                                         <textarea id="background" class="form-control" placeholder="Deskripsi Background" rows="4" disabled>{{ $sbar->situation ?? 'Deskripsi Background' }}</textarea>
                                     </td>
                                     <td>
-                                        <textarea id="assessment" class="form-control" placeholder="Deskripsi Assessment" rows="4" disabled>{{ $sbar->situation ?? 'Deskripsi Assessment' }}</textarea>
+                                        <textarea id="deskripsi_assessment" class="form-control" placeholder="Deskripsi Assessment" rows="4" disabled>{{ $sbar->situation ?? 'Deskripsi Assessment' }}</textarea>
                                     </td>
                                     <td>
                                         <textarea id="recommendation" class="form-control" placeholder="Deskripsi Recommendation" rows="4" disabled>{{ $sbar->situation ?? 'Deskripsi Recommendation' }}</textarea>

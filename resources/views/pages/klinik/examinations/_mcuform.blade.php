@@ -1799,7 +1799,9 @@
                                             @if(isset($healthprofesional->user->info))
                                                 {{ ($healthprofesional->user->info->title_prefix !='' ? $healthprofesional->user->info->title_prefix.'. ' : '').$healthprofesional->user->name.($healthprofesional->user->info->title_suffix!='' ? ', '.$healthprofesional->user->info->title_suffix : '') }}
                                             @else
+						@if(isset($healthprofesional->user))
                                                 {{$healthprofesional->user->name}}
+						@endif
                                             @endif
                                         </option>
                                     @endforeach

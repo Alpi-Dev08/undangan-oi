@@ -367,6 +367,7 @@
                                 <select name="health_profesional_id" aria-label="{{ __('Ref Doctor') }}" data-control="select2" data-placeholder="{{ __('Select a Health Profesional...') }}" class="form-select form-select-solid form-select-lg fw-bold">
                                     <option value="">{{ __('Select a Ref Doctor...') }}</option>
                                     @foreach($healthprofesionals as $healthprofesional)
+					@if(isset($healthprofesional->user->name))
                                         <option value="{{ $healthprofesional->id }}" >
                                             @if(isset($healthprofesional->user->info))
                                                 {{ ($healthprofesional->user->info->title_prefix !='' ? $healthprofesional->user->info->title_prefix.'. ' : '').$healthprofesional->user->name.($healthprofesional->user->info->title_suffix!='' ? ', '.$healthprofesional->user->info->title_suffix : '') }}
@@ -374,6 +375,7 @@
                                                 {{$healthprofesional->user->name}}
                                             @endif
                                         </option>
+					@endif
                                     @endforeach
                                 </select>
                             </div>

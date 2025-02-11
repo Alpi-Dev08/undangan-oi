@@ -28,7 +28,10 @@ class DrugsDataTable extends DataTable
             ->rawColumns(['action'])
             ->addIndexColumn()
             ->addColumn('unit', function (Drug $model) {
-                return $model->unit->name;
+		if($model->unit){
+			return $model->unit->name;
+		}
+                return "-";
             })
             ->addColumn('name', function (Drug $model) {
                 return $model->name;

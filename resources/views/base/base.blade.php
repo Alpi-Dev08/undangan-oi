@@ -65,12 +65,47 @@ License: {{ theme()->getOption('product', 'license') }}
             padding-top: 0.25rem !important;
             padding-bottom: 0.25rem !important;
         }
+        .marquee {
+            white-space: nowrap;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+    
+        .marquee span {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 30s linear infinite;
+        }
+    
+        @keyframes marquee {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(-100%, 0);
+            }
+        }
     </style>
 </head>
 {{-- end::Head --}}
 
 {{-- begin::Body --}}
 <body {!! theme()->printHtmlAttributes('body') !!} {!! theme()->printHtmlClasses('body') !!} {!! theme()->printCssVariables('body') !!} data-kt-name="metronic">
+
+    <div class="alert alert-warning p-2 mb-0" style="position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100000; overflow: hidden;">
+        <div class="marquee">
+            <span class="d-flex align-items-center">
+                <span class="svg-icon svg-icon-2hx svg-icon-warning me-4">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path opacity="0.3" d="M12 22C13.6569 22 15 20.6569 15 19C15 17.3431 13.6569 16 12 16C10.3431 16 9 17.3431 9 19C9 20.6569 10.3431 22 12 22Z" fill="currentColor"></path>
+                        <path d="M19 15V18C19 18.6 18.6 19 18 19H6C5.4 19 5 18.6 5 18V15C6.1 15 7 14.1 7 13V10C7 7.6 8.7 5.6 11 5.1V3C11 2.4 11.4 2 12 2C12.6 2 13 2.4 13 3V5.1C15.3 5.6 17 7.6 17 10V13C17 14.1 17.9 15 19 15ZM11 10C11 9.4 11.4 9 12 9C12.6 9 13 9.4 13 10C13 10.6 12.6 11 12 11C11.4 11 11 10.6 11 10ZM12 21C11.4 21 11 20.6 11 20C11 19.4 11.4 19 12 19C12.6 19 13 19.4 13 20C13 20.6 12.6 21 12 21Z" fill="currentColor"></path>
+                    </svg>
+                    <strong class="text-warning me-2">Pemberitahuan Update:</strong>
+                    Akan dilakukan Update Module ICD-10 pukul 21.00, diharapkan semua pekerjaan telah tersimpan sebelum dilakukan update. Terima kasih.
+                </span>
+            </span>
+        </div>
+    </div>
 
     <!--begin::Theme mode setup on page load-->
     <script>

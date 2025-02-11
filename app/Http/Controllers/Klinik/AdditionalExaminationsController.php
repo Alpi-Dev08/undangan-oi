@@ -56,7 +56,7 @@ class AdditionalExaminationsController extends Controller
         }
         $request->additional_value = json_encode($request->additional);
 
-        echo $request->additional_value;exit;
+        //echo $request->additional_value;exit;
         // Validation Data
         $validated = $request->validated();
         $examination = Examination::find($request->examination_id);

@@ -254,7 +254,7 @@
                 </tr>
                 <tr>
                     <td style="font-size:12px;width:35%;padding-left:10px">Sosiologi</td>
-                    <td style="font-size:12px;width:65%">{{ ucwords($psikososial->sosiologi) ?? "-" }}</td>
+                    <td style="font-size:12px;width:65%">{{ isset($psikososial->sosiologi) ? ucwords($psikososial->sosiologi) : "-" }}</td>
                 </tr>
             </table>
 
