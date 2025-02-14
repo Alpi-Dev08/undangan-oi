@@ -15,6 +15,7 @@
     use App\Http\Controllers\Klinik\HealthcareTypesController;
     use App\Http\Controllers\Klinik\HealthProfesionalsController;
     use App\Http\Controllers\Klinik\HealthProfesionalTypesController;
+    use App\Http\Controllers\Klinik\IcdtenController;
     use App\Http\Controllers\Klinik\LaboratoryExaminationsController;
     use App\Http\Controllers\Klinik\LocationsController;
     use App\Http\Controllers\Klinik\OrganizationController;
@@ -179,7 +180,7 @@
 
             Route::post('examinations-psikososial', [ExaminationsController::class, 'psikososial'])
                  ->name('examination.psikososial');
-                 
+
             Route::post('suket-sehat/{id}', [ExaminationsController::class, 'sehat'])->name('suket.sehat');
             Route::post('suket-sakit/{id}', [ExaminationsController::class, 'sakit'])->name('suket.sakit');
             Route::post('suket-hak-dan-kewajiban/{id}', [ExaminationsController::class, 'hakkewajiban'])
@@ -224,11 +225,11 @@
             Route::post('/komunikasi-efektif/store', [KomunikasiEfektifController::class, 'store'])
                 ->name('komunikasi.efektif.store');
             Route::get('/komunikasi-efektif/status/{examination}', [KomunikasiEfektifController::class, 'status'])
-                ->name('komunikasi.efektif.status'); 
+                ->name('komunikasi.efektif.status');
             Route::get('/sbar', [Sbar::class, 'index']); //route ke fungsi index
             Route::resource('sbar', SbarController::class);
             Route::post('/sbar/{id}/verify', [SbarController::class, 'verify'])->name('sbar.verify');
-     
+
             Route::resource('organization', OrganizationController::class);
             Route::resource('locations', LocationsController::class);
 
@@ -238,11 +239,13 @@
             Route::put('drugs/{drug}/detail', [DrugsController::class, 'updateDetail'])->name('drugs.detail');
             Route::get('klinik/drugs/{drug}/detail', [DrugsController::class, 'showDetail'])->name('drugs.detail');
             Route::put('klinik/drugs/{drug}/detail', [DrugsController::class, 'updateDetail'])->name('drugs.update1');
-            
+
             Route::get('drugs/{drug}/reduceDetail', [DrugsController::class, 'reduceDetail'])->name('drugs.reduceDetail');
             Route::put('drugs/{drug}/reduceDetail', [DrugsController::class, 'updateDetail'])->name('drugs.reduceDetail');
             Route::get('klinik/drugs/{drug}/reduceDetail', [DrugsController::class, 'showDetailReduce'])->name('drugs.reduceDetail');
             Route::put('klinik/drugs/{drug}/reduceDetail', [DrugsController::class, 'updateDetailReduce'])->name('drugs.update1');
+
+            Route::resource('icdten', IcdtenController::class);
 
         });
 
