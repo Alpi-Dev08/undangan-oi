@@ -14,7 +14,8 @@ class Drug extends Model
     protected $fillable = [
         'unit_id',
         'name',
-        'price'
+        'price',
+        'stock'
     ];
 
     public function unit()

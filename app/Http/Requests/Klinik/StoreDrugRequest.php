@@ -27,6 +27,7 @@
                 'unit_id' => 'required|exists:units,id',
                 'name'    => 'required|max:100',
                 'price'   => 'nullable|numeric',
+                'stock'   => 'nullable|numeric',
             ];
         }
     }

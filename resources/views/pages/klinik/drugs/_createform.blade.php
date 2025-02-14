@@ -38,6 +38,21 @@
         <!--begin::Input group-->
         <div class="fv-row mb-7">
             <!--begin::Label-->
+            <label class="required fw-bold fs-6 mb-2">Drug Stock</label>
+            <!--end::Label-->
+            <!--begin::Input-->
+            <div class="input-group input-group-solid has-validation mb-3">
+                <input type="number" name="stock" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('stock') is-invalid @enderror" placeholder="Drug stock" value=""/>
+            </div>
+            @error('stock')
+            <div class="text-danger">{{ $message }}</div>
+        @enderror
+        <!--end::Input-->
+        </div>
+        <!--end::Input group-->        
+        <!--begin::Input group-->
+        <div class="fv-row mb-7">
+            <!--begin::Label-->
             <label class="required fw-bold fs-6 mb-2">Drug Price</label>
             <!--end::Label-->
             <!--begin::Input-->

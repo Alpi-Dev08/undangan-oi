@@ -85,8 +85,9 @@
 
 <!--begin::Tabel History-->
 <div class="table-responsive mt-5">
-    <h3 class="mb-4">History Pengurangan Obat</h3>
-    @if($histories1 && count($histories1) > 0)
+    <h3 class="mb-4">History Pengurangan Obat {{  $drug->name }}</h3>
+
+    @if(isset($drugHistories1) && is_array($drugHistories1) && count($drugHistories1) > 0)
     <table class="table table-striped">
         <thead>
             <tr>
@@ -97,20 +98,20 @@
             </tr>
         </thead>
         <tbody>
-            @foreach(array_reverse($histories1) as $history)
+            @foreach(array_reverse($drugHistories1) as $history1)
             <tr>
-                <td>{{ $history['date'] }}</td>
-                <td>{{ $history['user_name'] }}</td>
-                <td>{{ $history['quantity'] }}</td>
-                <td>{{ $history['description'] }}</td>
+                <td>{{ $history1['date'] ?? 'N/A' }}</td>
+                <td>{{ $history1['user_name'] ?? 'N/A' }}</td>
+                <td>{{ $history1['quantity'] ?? 'N/A' }}</td>
+                <td>{{ $history1['description'] ?? 'Tidak ada keterangan' }}</td>
             </tr>
             @endforeach
         </tbody>
     </table>
     @else
-    <tr>
-        <td colspan="4" class="text-center">Tidak ada data history pengurangan obat</td>
-    </tr>
+    <div class="alert alert-info text-center">
+        Tidak ada data history pengurangan obat
+    </div>
     @endif
 </div>
 <!--end::Tabel History-->
