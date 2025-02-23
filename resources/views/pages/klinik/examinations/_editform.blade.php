@@ -1,3 +1,4 @@
+@php use Carbon\Carbon; @endphp
 <div class="card card-xxl-stretch mb-5 mb-xl-8">
     <!--begin::Card body-->
     <!--begin::Card header-->
@@ -561,87 +562,94 @@
                 </div>
                 <!--end::details View-->
             </div>
-                        
+
             <div class="tab-pane fade" id="sbar">
                 <div class="container mt-4">
                     <div class="col-12 row">
                         <!-- Tabel SBAR -->
                         <table class="table table-bordered w-100">
                             <thead>
-                                <tr>
-                                    <th class="text-center text-nowrap" style="width: 10%;"><strong>Tanggal</strong></th>
-                                    <th class="text-center text-nowrap" style="width: 5%;"><strong>No.RM</strong></th>
-                                    <th class="text-center text-nowrap" style="width: 10%;"><strong>Nama Pasien</strong></th>
-                                    <th class="text-center text-nowrap" style="width: 5%;"><strong>Tanggal SBAR</strong></th>
-                                    <th class="text-center text-nowrap" style="width: 5%;"><strong>Jam SBAR</strong></th>
-                                    <th class="text-center text-nowrap" style="width: 15%;"><strong>Situation (S)</strong></th>
-                                    <th class="text-center text-nowrap" style="width: 15%;"><strong>Background (B)</strong></th>
-                                    <th class="text-center text-nowrap" style="width: 15%;"><strong>Assessment (A)</strong></th>
-                                    <th class="text-center text-nowrap" style="width: 30%;"><strong>Recommendation (R)</strong></th>
-                                    <th class="text-center text-nowrap" style="width: 10%;"><strong>Checklist Verification</strong></th>
-                                </tr>
+                            <tr>
+                                <th class="text-center text-nowrap" style="width: 10%;"><strong>Tanggal</strong></th>
+                                <th class="text-center text-nowrap" style="width: 5%;"><strong>No.RM</strong></th>
+                                <th class="text-center text-nowrap" style="width: 10%;"><strong>Nama Pasien</strong>
+                                </th>
+                                <th class="text-center text-nowrap" style="width: 5%;"><strong>Tanggal SBAR</strong>
+                                </th>
+                                <th class="text-center text-nowrap" style="width: 5%;"><strong>Jam SBAR</strong></th>
+                                <th class="text-center text-nowrap" style="width: 15%;"><strong>Situation (S)</strong>
+                                </th>
+                                <th class="text-center text-nowrap" style="width: 15%;"><strong>Background (B)</strong>
+                                </th>
+                                <th class="text-center text-nowrap" style="width: 15%;"><strong>Assessment (A)</strong>
+                                </th>
+                                <th class="text-center text-nowrap" style="width: 30%;">
+                                    <strong>Recommendation (R)</strong></th>
+                                <th class="text-center text-nowrap" style="width: 10%;">
+                                    <strong>Checklist Verification</strong></th>
+                            </tr>
                             </thead>
                             <tbody>
-                                <tr id="sbarRow">
-                                    <td class="text-center">{{ \Carbon\Carbon::now()->format('Y-m-d') }}</td>
-                                    <td class="text-center">{{ $user->mr->medical_record_code }}</td>
-                                    <td class="text-center">{{ $user->name }}</td>
-                                    <td class="text-center">{{ \Carbon\Carbon::now()->format('Y-m-d') }}</td>
-                                    <td class="text-center">{{ \Carbon\Carbon::now()->format('H:i') }}</td>
-                                    <td>
-                                        <textarea id="situation" class="form-control" placeholder="Deskripsi Situation" rows="4" disabled>{{ $sbar->situation ?? 'Deskripsi Situation' }}</textarea>
-                                    </td>                                    
-                                    <td>
-                                        <textarea id="background" class="form-control" placeholder="Deskripsi Background" rows="4" disabled>{{ $sbar->situation ?? 'Deskripsi Background' }}</textarea>
-                                    </td>
-                                    <td>
-                                        <textarea id="deskripsi_assessment" class="form-control" placeholder="Deskripsi Assessment" rows="4" disabled>{{ $sbar->situation ?? 'Deskripsi Assessment' }}</textarea>
-                                    </td>
-                                    <td>
-                                        <textarea id="recommendation" class="form-control" placeholder="Deskripsi Recommendation" rows="4" disabled>{{ $sbar->situation ?? 'Deskripsi Recommendation' }}</textarea>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="d-flex align-items-center">
-                                            <input type="checkbox" class="form-check-input me-2" id="checklistVerification">
-                                            <button class="btn btn-primary" id="verifySbar">Verifikasi</button>
-                                        </div>
-                                    </td>
-                                </tr>
+                            <tr id="sbarRow">
+                                <td class="text-center">{{ Carbon::now()->format('Y-m-d') }}</td>
+                                <td class="text-center">{{ $user->mr->medical_record_code }}</td>
+                                <td class="text-center">{{ $user->name }}</td>
+                                <td class="text-center">{{ Carbon::now()->format('Y-m-d') }}</td>
+                                <td class="text-center">{{ Carbon::now()->format('H:i') }}</td>
+                                <td>
+                                    <textarea id="situation" class="form-control" placeholder="Deskripsi Situation" rows="4" disabled>{{ $sbar->situation ?? 'Deskripsi Situation' }}</textarea>
+                                </td>
+                                <td>
+                                    <textarea id="background" class="form-control" placeholder="Deskripsi Background" rows="4" disabled>{{ $sbar->situation ?? 'Deskripsi Background' }}</textarea>
+                                </td>
+                                <td>
+                                    <textarea id="deskripsi_assessment" class="form-control" placeholder="Deskripsi Assessment" rows="4" disabled>{{ $sbar->situation ?? 'Deskripsi Assessment' }}</textarea>
+                                </td>
+                                <td>
+                                    <textarea id="recommendation" class="form-control" placeholder="Deskripsi Recommendation" rows="4" disabled>{{ $sbar->situation ?? 'Deskripsi Recommendation' }}</textarea>
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex align-items-center">
+                                        <input type="checkbox" class="form-check-input me-2" id="checklistVerification">
+                                        <button class="btn btn-primary" id="verifySbar">Verifikasi</button>
+                                    </div>
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            
+
             <script>
-                document.getElementById('verifySbar').addEventListener('click', function() {
+                document.getElementById('verifySbar').addEventListener('click', function () {
                     var isChecked = document.getElementById('checklistVerification').checked;
                     if (isChecked) {
                         // Disable fields and change the entire row's background to green
                         var sbarRow = document.getElementById('sbarRow');
-                        sbarRow.querySelectorAll('textarea').forEach(function(element) {
+                        sbarRow.querySelectorAll('textarea').forEach(function (element) {
                             element.disabled = true;
                         });
                         sbarRow.style.backgroundColor = 'lightgreen';
-                        
+
                         // Disable the checkbox
                         document.getElementById('checklistVerification').disabled = true;
-            
+
                         // Change the Checklist Verification cell to "VERIFIKASI"
                         var checklistCell = document.querySelector('#checklistVerification').closest('td');
                         checklistCell.innerHTML = '<strong>SUDAH DIVERIFIKASI</strong>';
-            
+
                         // Remove the verification button
                         var verifyButton = document.getElementById('verifySbar');
                         verifyButton.style.display = 'none'; // Hide the button
-                        
+
                         alert('SBAR telah diverifikasi dan tidak dapat diubah lagi.');
                     } else {
                         alert('Checklist Verification harus dicentang untuk menyimpan data.');
                     }
                 });
-            </script>                                    
-            
+            </script>
+
             <div class="tab-pane" id="medicalrecord" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
                 <!--begin::details View-->
                 <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
@@ -691,16 +699,18 @@
                                                 </div>
                                             @endif
                                         </div>
-                                        <div class="col-12 row">
-                                            <div class="col-2 fw-bolder">Jenis Pemeriksaan</div>
-                                            <div class="col-10">: {{ $exam->service_category->name }}
-                                                <ul class="row">
-                                                    @foreach(service_examination($exam->id) as $service)
-                                                        <li class="col-4">{{ $service->service->name }}</li>
-                                                    @endforeach
-                                                </ul>
+                                        @if(isset($exam->service_category))
+                                            <div class="col-12 row">
+                                                <div class="col-2 fw-bolder">Jenis Pemeriksaan</div>
+                                                <div class="col-10">: {{ $exam->service_category->name }}
+                                                    <ul class="row">
+                                                        @foreach(service_examination($exam->id) as $service)
+                                                            <li class="col-4">{{ $service->service->name }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
                                             </div>
-                                        </div>
+                                        @endif
                                     </div>
                                     <hr>
                                     <div class="row p-2 border border-gray-200 bg-gray-100 rounded">
@@ -778,156 +788,158 @@
                                             </div>
                                         </div>
                                         <hr>
-                                        @if($exam->service_category->is_mcu == 1)
-                                            <h5 class="col-12">Check up Result</h5>
-                                            @if(isset($exam->anamnesis->anamnesis_value))
-                                                <h3 class="col-12">1. Anamnesis</h3>
-                                                @php
-                                                    $anamnesis = json_decode($exam->anamnesis->anamnesis_value);
-                                                    $header = '';
-                                                @endphp
-                                                @foreach($anamnesis as $key => $value)
+                                        @if(isset($exam->service_category->is_mcu))
+                                            @if($exam->service_category->is_mcu == 1)
+                                                <h5 class="col-12">Check up Result</h5>
+                                                @if(isset($exam->anamnesis->anamnesis_value))
+                                                    <h3 class="col-12">1. Anamnesis</h3>
                                                     @php
-                                                        $radio = '';
-                                                        if(isset($value->radio)){
-                                                            $radio = json_decode(json_encode($value->radio),true);
-                                                            $radioKeys = array_keys($radio);
-                                                        }
-                                                        $additional = json_decode(json_encode($value->additional),true);
-                                                        $additionalKeys = array_keys($additional);
+                                                        $anamnesis = json_decode($exam->anamnesis->anamnesis_value);
+                                                        $header = '';
                                                     @endphp
+                                                    @foreach($anamnesis as $key => $value)
+                                                        @php
+                                                            $radio = '';
+                                                            if(isset($value->radio)){
+                                                                $radio = json_decode(json_encode($value->radio),true);
+                                                                $radioKeys = array_keys($radio);
+                                                            }
+                                                            $additional = json_decode(json_encode($value->additional),true);
+                                                            $additionalKeys = array_keys($additional);
+                                                        @endphp
 
-                                                    @if($radio && $additional[$additionalKeys[0]])
-                                                        @if($header != getAnamnesis($key)->anamnesis_category_id)
-                                                            <div class="col-12" style="padding-left:35px">{{ getAnamnesisCategory(getAnamnesis($key)->anamnesis_category_id)->name }}</div>
-                                                            @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
+                                                        @if($radio && $additional[$additionalKeys[0]])
+                                                            @if($header != getAnamnesis($key)->anamnesis_category_id)
+                                                                <div class="col-12" style="padding-left:35px">{{ getAnamnesisCategory(getAnamnesis($key)->anamnesis_category_id)->name }}</div>
+                                                                @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
+                                                            @endif
+                                                            <div class="col-12 row">
+                                                                <div class="col-4 fw-bold" style="padding-left:50px">{{getAnamnesis($key)->name }}</div>
+                                                                <div class="col-8">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</div>
+                                                            </div>
+                                                        @elseif($radio)
+                                                            @if($header != getAnamnesis($key)->anamnesis_category_id)
+                                                                <div class="col-12" style="padding-left:35px">{{ getAnamnesisCategory(getAnamnesis($key)->anamnesis_category_id)->name }}</div>
+                                                                @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
+                                                            @endif
+                                                            <div class="col-12 row">
+                                                                <div class="col-4 fw-bold" style="padding-left:50px">{{getAnamnesis($key)->name }}</div>
+                                                                <div class="col-8">: {{ ucwords($radio[$radioKeys[0]])}}</div>
+                                                            </div>
+                                                        @elseif($additional[$additionalKeys[0]])
+                                                            @if($header != getAnamnesis($key)->anamnesis_category_id)
+                                                                <div class="col-12" style="padding-left:35px">{{ getAnamnesisCategory(getAnamnesis($key)->anamnesis_category_id)->name }}</div>
+                                                                @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
+                                                            @endif
+                                                            <div class="col-12 row">
+                                                                <div class="col-4 fw-bold" style="padding-left:50px">{{getAnamnesis($key)->name }}</div>
+                                                                <div class="col-8">: {{$additional[$additionalKeys[0]] }}</div>
+                                                            </div>
                                                         @endif
-                                                        <div class="col-12 row">
-                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getAnamnesis($key)->name }}</div>
-                                                            <div class="col-8">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</div>
-                                                        </div>
-                                                    @elseif($radio)
-                                                        @if($header != getAnamnesis($key)->anamnesis_category_id)
-                                                            <div class="col-12" style="padding-left:35px">{{ getAnamnesisCategory(getAnamnesis($key)->anamnesis_category_id)->name }}</div>
-                                                            @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
-                                                        @endif
-                                                        <div class="col-12 row">
-                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getAnamnesis($key)->name }}</div>
-                                                            <div class="col-8">: {{ ucwords($radio[$radioKeys[0]])}}</div>
-                                                        </div>
-                                                    @elseif($additional[$additionalKeys[0]])
-                                                        @if($header != getAnamnesis($key)->anamnesis_category_id)
-                                                            <div class="col-12" style="padding-left:35px">{{ getAnamnesisCategory(getAnamnesis($key)->anamnesis_category_id)->name }}</div>
-                                                            @php $header = getAnamnesis($key)->anamnesis_category_id; @endphp
-                                                        @endif
-                                                        <div class="col-12 row">
-                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getAnamnesis($key)->name }}</div>
-                                                            <div class="col-8">: {{$additional[$additionalKeys[0]] }}</div>
-                                                        </div>
-                                                    @endif
-                                                @endforeach
-                                            @endif
-                                            @if(isset($exam->physical->physical_value))
-                                                <h3 class="col-12">2. Physical</h3>
-                                                @php
-                                                    $physicals = json_decode($exam->physical->physical_value);
-                                                    $header = '';
-                                                @endphp
-                                                @foreach($physicals as $key => $value)
+                                                    @endforeach
+                                                @endif
+                                                @if(isset($exam->physical->physical_value))
+                                                    <h3 class="col-12">2. Physical</h3>
                                                     @php
-                                                        $radio = '';
-                                                        if(isset($value->radio)){
-                                                            $radio = json_decode(json_encode($value->radio),true);
-                                                            $radioKeys = array_keys($radio);
-                                                        }
-                                                        $additional = json_decode(json_encode($value->additional),true);
-                                                        $additionalKeys = array_keys($additional);
+                                                        $physicals = json_decode($exam->physical->physical_value);
+                                                        $header = '';
                                                     @endphp
+                                                    @foreach($physicals as $key => $value)
+                                                        @php
+                                                            $radio = '';
+                                                            if(isset($value->radio)){
+                                                                $radio = json_decode(json_encode($value->radio),true);
+                                                                $radioKeys = array_keys($radio);
+                                                            }
+                                                            $additional = json_decode(json_encode($value->additional),true);
+                                                            $additionalKeys = array_keys($additional);
+                                                        @endphp
 
-                                                    @if($radio && $additional[$additionalKeys[0]])
-                                                        @if($header != getPhysicals($key)->physical_category_id)
-                                                            <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
-                                                            @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                        @if($radio && $additional[$additionalKeys[0]])
+                                                            @if($header != getPhysicals($key)->physical_category_id)
+                                                                <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                                @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                            @endif
+                                                            <div class="col-12 row">
+                                                                <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                                <div class="col-8">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</div>
+                                                            </div>
+                                                        @elseif($radio)
+                                                            @if($header != getPhysicals($key)->physical_category_id)
+                                                                <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                                @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                            @endif
+                                                            <div class="col-12 row">
+                                                                <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                                <div class="col-8">: {{ ucwords($radio[$radioKeys[0]])}}</div>
+                                                            </div>
+                                                        @elseif($additional[$additionalKeys[0]])
+                                                            @if($header != getPhysicals($key)->physical_category_id)
+                                                                <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                                @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                            @endif
+                                                            <div class="col-12 row">
+                                                                <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                                <div class="col-8">: {{$additional[$additionalKeys[0]] }}</div>
+                                                            </div>
                                                         @endif
-                                                        <div class="col-12 row">
-                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
-                                                            <div class="col-8">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</div>
-                                                        </div>
-                                                    @elseif($radio)
-                                                        @if($header != getPhysicals($key)->physical_category_id)
-                                                            <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
-                                                            @php $header = getPhysicals($key)->physical_category_id; @endphp
-                                                        @endif
-                                                        <div class="col-12 row">
-                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
-                                                            <div class="col-8">: {{ ucwords($radio[$radioKeys[0]])}}</div>
-                                                        </div>
-                                                    @elseif($additional[$additionalKeys[0]])
-                                                        @if($header != getPhysicals($key)->physical_category_id)
-                                                            <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
-                                                            @php $header = getPhysicals($key)->physical_category_id; @endphp
-                                                        @endif
-                                                        <div class="col-12 row">
-                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
-                                                            <div class="col-8">: {{$additional[$additionalKeys[0]] }}</div>
-                                                        </div>
-                                                    @endif
-                                                @endforeach
-                                            @endif
-                                            @if(isset($exam->other->other_value))
-                                                <h3 class="col-12">3. Other</h3>
-                                                @php
-                                                    $others = json_decode($exam->other->other_value);
-                                                    $header = '';
-                                                @endphp
-                                                @foreach($others as $key => $value)
+                                                    @endforeach
+                                                @endif
+                                                @if(isset($exam->other->other_value))
+                                                    <h3 class="col-12">3. Other</h3>
                                                     @php
-                                                        $radio = '';
-                                                        if(isset($value->radio)){
-                                                            $radio = json_decode(json_encode($value->radio),true);
-                                                            $radioKeys = array_keys($radio);
-                                                        }
-                                                        $additional = json_decode(json_encode($value->additional),true);
-                                                        $additionalKeys = array_keys($additional);
+                                                        $others = json_decode($exam->other->other_value);
+                                                        $header = '';
                                                     @endphp
+                                                    @foreach($others as $key => $value)
+                                                        @php
+                                                            $radio = '';
+                                                            if(isset($value->radio)){
+                                                                $radio = json_decode(json_encode($value->radio),true);
+                                                                $radioKeys = array_keys($radio);
+                                                            }
+                                                            $additional = json_decode(json_encode($value->additional),true);
+                                                            $additionalKeys = array_keys($additional);
+                                                        @endphp
 
-                                                    @if($radio && $additional[$additionalKeys[0]])
-                                                        @if($header != getPhysicals($key)->anamnesis_category_id)
-                                                            <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
-                                                            @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                        @if($radio && $additional[$additionalKeys[0]])
+                                                            @if($header != getPhysicals($key)->anamnesis_category_id)
+                                                                <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                                @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                            @endif
+                                                            <div class="col-12 row">
+                                                                <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                                <div class="col-8">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</div>
+                                                            </div>
+                                                        @elseif($radio)
+                                                            @if($header != getPhysicals($key)->physical_category_id)
+                                                                <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                                @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                            @endif
+                                                            <div class="col-12 row">
+                                                                <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                                <div class="col-8">: {{ ucwords($radio[$radioKeys[0]])}}</div>
+                                                            </div>
+                                                        @elseif($additional[$additionalKeys[0]])
+                                                            @if($header != getPhysicals($key)->physical_category_id)
+                                                                <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
+                                                                @php $header = getPhysicals($key)->physical_category_id; @endphp
+                                                            @endif
+                                                            <div class="col-12 row">
+                                                                <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
+                                                                <div class="col-8">: {{$additional[$additionalKeys[0]] }}</div>
+                                                            </div>
                                                         @endif
-                                                        <div class="col-12 row">
-                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
-                                                            <div class="col-8">: {{ ucwords($radio[$radioKeys[0]]).', '.$additional[$additionalKeys[0]] }}</div>
-                                                        </div>
-                                                    @elseif($radio)
-                                                        @if($header != getPhysicals($key)->physical_category_id)
-                                                            <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
-                                                            @php $header = getPhysicals($key)->physical_category_id; @endphp
-                                                        @endif
-                                                        <div class="col-12 row">
-                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
-                                                            <div class="col-8">: {{ ucwords($radio[$radioKeys[0]])}}</div>
-                                                        </div>
-                                                    @elseif($additional[$additionalKeys[0]])
-                                                        @if($header != getPhysicals($key)->physical_category_id)
-                                                            <div class="col-12" style="padding-left:35px">{{ getPhysicalsCategory(getPhysicals($key)->physical_category_id)->name }}</div>
-                                                            @php $header = getPhysicals($key)->physical_category_id; @endphp
-                                                        @endif
-                                                        <div class="col-12 row">
-                                                            <div class="col-4 fw-bold" style="padding-left:50px">{{getPhysicals($key)->name }}</div>
-                                                            <div class="col-8">: {{$additional[$additionalKeys[0]] }}</div>
-                                                        </div>
-                                                    @endif
-                                                @endforeach
-                                                <div class="col-12 row mt-5">
-                                                    <div class="col-4 fw-bold" style="padding-left:35px">Result</div>
-                                                    <div class="col-8">: {{ $exam->other->result  }}</div>
-                                                </div>
-                                                <div class="col-12 row">
-                                                    <div class="col-4 fw-bold" style="padding-left:35px">Description</div>
-                                                    <div class="col-8">: {{$exam->other->description }}</div>
-                                                </div>
+                                                    @endforeach
+                                                    <div class="col-12 row mt-5">
+                                                        <div class="col-4 fw-bold" style="padding-left:35px">Result</div>
+                                                        <div class="col-8">: {{ $exam->other->result  }}</div>
+                                                    </div>
+                                                    <div class="col-12 row">
+                                                        <div class="col-4 fw-bold" style="padding-left:35px">Description</div>
+                                                        <div class="col-8">: {{$exam->other->description }}</div>
+                                                    </div>
+                                                @endif
                                             @endif
                                         @else
                                             <h5 class="col-12">Check up Result</h5>
@@ -996,75 +1008,75 @@
             </div>
 
             <script>
-            document.getElementById('pdfFile').addEventListener('change', function(event) {
-                var file = event.target.files[0];
-                if (file && file.type === "application/pdf") {
-                    var fileURL = URL.createObjectURL(file);
-                    var pdfDisplay = document.getElementById('pdfDisplay');
+                document.getElementById('pdfFile').addEventListener('change', function (event) {
+                    var file = event.target.files[0];
+                    if (file && file.type === "application/pdf") {
+                        var fileURL = URL.createObjectURL(file);
+                        var pdfDisplay = document.getElementById('pdfDisplay');
 
-                    pdfDisplay.innerHTML = '';
+                        pdfDisplay.innerHTML = '';
 
-                    var pdfLink = document.createElement('a');
-                    pdfLink.href = fileURL;
-                    pdfLink.textContent = "Open PDF";
-                    pdfLink.target = "_blank";
-                    pdfLink.classList.add('btn', 'btn-primary');
-                    pdfDisplay.appendChild(pdfLink);
+                        var pdfLink = document.createElement('a');
+                        pdfLink.href = fileURL;
+                        pdfLink.textContent = "Open PDF";
+                        pdfLink.target = "_blank";
+                        pdfLink.classList.add('btn', 'btn-primary');
+                        pdfDisplay.appendChild(pdfLink);
 
-                    var saveButton = document.createElement('button');
-                    saveButton.textContent = "Save PDF";
-                    saveButton.classList.add('btn', 'btn-success', 'ms-2');
-                    saveButton.addEventListener('click', function() {
-                        var formData = new FormData();
-                        formData.append('pdfFile', file);
-                        formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+                        var saveButton = document.createElement('button');
+                        saveButton.textContent = "Save PDF";
+                        saveButton.classList.add('btn', 'btn-success', 'ms-2');
+                        saveButton.addEventListener('click', function () {
+                            var formData = new FormData();
+                            formData.append('pdfFile', file);
+                            formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
 
-                        fetch('/upload-pdf/{{ $user->patient->patient_code }}', {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                pdfLink.href = data.filePath;
+                            fetch('/upload-pdf/{{ $user->patient->patient_code }}', {
+                                method: 'POST',
+                                body: formData
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        pdfLink.href = data.filePath;
 
-                                var successMessage = document.getElementById('successMessage');
-                                successMessage.style.display = 'block';
-                                successMessage.textContent = 'PDF saved successfully!';
-                            } else {
-                                alert('Failed to save the PDF. Please try again.');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
+                                        var successMessage = document.getElementById('successMessage');
+                                        successMessage.style.display = 'block';
+                                        successMessage.textContent = 'PDF saved successfully!';
+                                    } else {
+                                        alert('Failed to save the PDF. Please try again.');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                });
                         });
-                    });
 
-                    pdfDisplay.appendChild(saveButton);
-                } else {
-                    alert('Please upload a valid PDF file.');
-                }
-            });
+                        pdfDisplay.appendChild(saveButton);
+                    } else {
+                        alert('Please upload a valid PDF file.');
+                    }
+                });
             </script>
 
             <style>
-            .pdf-upload input {
-                margin-bottom: 10px;
-            }
+                .pdf-upload input {
+                    margin-bottom: 10px;
+                }
 
-            #pdfDisplay a, #pdfDisplay button {
-                display: inline-block;
-                margin-top: 10px;
-            }
+                #pdfDisplay a, #pdfDisplay button {
+                    display: inline-block;
+                    margin-top: 10px;
+                }
 
-            #successMessage {
-                display: none;
-            }
+                #successMessage {
+                    display: none;
+                }
 
-            #pdfDisplay {
-                position: relative;
-                z-index: 1000;
-            }
+                #pdfDisplay {
+                    position: relative;
+                    z-index: 1000;
+                }
             </style>
 
             @if($examination->is_lab)
@@ -1114,7 +1126,7 @@
                 @endif
             @endif
 
-            
+
             <div class="tab-pane active" id="examination" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
 
 
@@ -1147,16 +1159,19 @@
                             </div>
                             <!--end::Content-->
                         @endif
-                        <!--begin::Title-->
-                        <h5>Jenis Pemeriksaan</h5>
-                        <!--end::Title-->
-                        <div class="col-12">{{ $examination->service_category->name }}
-                            <ul class="row">
-                                @foreach(service_examination($examination->id) as $service)
-                                    <li class="col-4">{{ $service->service->name }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
+
+                        @if(isset($examination->service_category))
+                            <!--begin::Title-->
+                            <h5>Jenis Pemeriksaan</h5>
+                            <!--end::Title-->
+                            <div class="col-12">{{ $examination->service_category->name }}
+                                <ul class="row">
+                                    @foreach(service_examination($examination->id) as $service)
+                                        <li class="col-4">{{ $service->service->name }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                     </div>
                     <!--end::Wrapper-->
 
@@ -1295,14 +1310,14 @@
                             <!--begin::Col-->
                             <div class="col-lg-8">
                                 <input type="hidden" name="user_id" value="{{$user->id}}">
-				<input type="hidden" name="health_profesional_id" value="{{ $examination->health_profesional_id }}">
-				<h5>
-                                @if(isset($examination->health_profesional->user->info))
-                                    {{ ($examination->health_profesional->user->info->title_prefix !='' ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.($examination->health_profesional->user->info->title_suffix!='' ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}
-                                @else
-                                    {{$examination->health_profesional->user->name}}
-                                @endif
-				</h5>
+                                <input type="hidden" name="health_profesional_id" value="{{ $examination->health_profesional_id }}">
+                                <h5>
+                                    @if(isset($examination->health_profesional->user->info))
+                                        {{ ($examination->health_profesional->user->info->title_prefix !='' ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.($examination->health_profesional->user->info->title_suffix!='' ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}
+                                    @else
+                                        {{$examination->health_profesional->user->name}}
+                                    @endif
+                                </h5>
                             </div>
                         </div>
 
@@ -1344,674 +1359,674 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <div class="col-lg-12 row justify-content-center g-0">
-                        <!-- <div id="odontogram_section" class="container" style="display: none;"> -->
-                            <!-- Row 1  -->
-                            <div class="row">
-                                <!-- Gigi 18 -->
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">18</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 18" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_18" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
+                                    <!-- <div id="odontogram_section" class="container" style="display: none;"> -->
+                                    <!-- Row 1  -->
+                                    <div class="row">
+                                        <!-- Gigi 18 -->
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">18</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 18" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_18" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_18" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_18" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+
+                                        <!-- Gigi 17 -->
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">17</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 17" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_17" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_17" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Gigi 16 -->
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">16</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 16" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_16" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_16" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Gigi 15 -->
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">15</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 15" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_15" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_15" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Gigi 14 -->
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">14</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 14" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_14" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_14" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Gigi 13 -->
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">13</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 13" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_13" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_13" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Gigi 12 -->
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">12</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 12" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_12" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_12" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Gigi 11 -->
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">11</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 11" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_11" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_11" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Gigi 21 -->
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">21</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 21" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_21" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_21" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Gigi 22 -->
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">22</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 22" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_22" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_22" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Gigi 23 -->
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">23</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 23" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_23" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_23" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Gigi 24 -->
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">24</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 24" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_24" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_24" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Gigi 25 -->
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">25</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 25" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_25" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_25" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Gigi 26 -->
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">26</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 26" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_26" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_26" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Gigi 27 -->
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">27</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 27" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_27" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_27" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Gigi 28 -->
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">28</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 28" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_28" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_28" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
 
-                                <!-- Gigi 17 -->
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">17</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 17" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_17" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
+                                <!-- Row 2  -->
+                                <div class="col-lg-12 row justify-content-center g-0">
+                                    <div class="row mb-6">
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">48</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 48" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_48" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_48" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_17" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <!-- Gigi 16 -->
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">16</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 16" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_16" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">47</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 47" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_47" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_47" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_16" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <!-- Gigi 15 -->
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">15</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 15" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_15" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">46</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 46" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_46" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_46" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_15" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <!-- Gigi 14 -->
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">14</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 14" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_14" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">45</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 45" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_45" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_45" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_14" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <!-- Gigi 13 -->
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">13</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 13" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_13" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">44</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 44" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_44" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_44" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_13" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <!-- Gigi 12 -->
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">12</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 12" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_12" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">43</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 43" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_43" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_43" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_12" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <!-- Gigi 11 -->
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">11</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 11" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_11" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">42</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 42" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_42" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_42" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_11" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <!-- Gigi 21 -->
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">21</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 21" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_21" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">41</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 41" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_41" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_41" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_21" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <!-- Gigi 22 -->
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">22</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 22" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_22" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">31</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 31" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_31" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_31" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_22" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <!-- Gigi 23 -->
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">23</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 23" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_23" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">32</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 32" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_32" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_32" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_23" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <!-- Gigi 24 -->
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">24</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 24" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_24" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">33</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 33" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_33" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_33" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_24" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <!-- Gigi 25 -->
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">25</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 25" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_25" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">34</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 34" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_34" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_34" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_25" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <!-- Gigi 26 -->
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">26</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 26" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_26" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">35</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 35" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_35" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_35" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_26" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <!-- Gigi 27 -->
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">27</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 27" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_27" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">36</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 36" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_36" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_36" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_27" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <!-- Gigi 28 -->
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">28</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 28" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_28" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">37</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 37" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_37" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_37" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_28" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+
+                                        <div class="col-auto text-center p-0 m-0">
+                                            <label class="col-form-label fw-bold fs-6">38</label>
+                                            <div>
+                                                <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 38" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
+                                                    <select name="odontogram_symbol_38" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
+                                                        <option value="">{{ __('Select an Odontogram Code...') }}</option>
+                                                        @foreach($odontogramsymbols as $odontogramsymbol)
+                                                            <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="width: 70px;">
+                                                    <input type="text" name="keterangan_38" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
-
-                            </div>
-
-                            <!-- Row 2  -->
-                            <div class="col-lg-12 row justify-content-center g-0">
-                            <div class="row mb-6">
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">48</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 48" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_48" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_48" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">47</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 47" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_47" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_47" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">46</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 46" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_46" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_46" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">45</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 45" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_45" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_45" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">44</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 44" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_44" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_44" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">43</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 43" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_43" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_43" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">42</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 42" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_42" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_42" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">41</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 41" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_41" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_41" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">31</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 31" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_31" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_31" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">32</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 32" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_32" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_32" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">33</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 33" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_33" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_33" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">34</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 34" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_34" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_34" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">35</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 35" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_35" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_35" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">36</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 36" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_36" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_36" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">37</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 37" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_37" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_37" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-auto text-center p-0 m-0">
-                                    <label class="col-form-label fw-bold fs-6">38</label>
-                                    <div>
-                                        <img src="{{ asset('images/gigi.jpg') }}" alt="Gambar Odontogram 38" class="img-fluid mb-1 custom-img" style="max-width: 40px;">
-                                    </div>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="input-group input-group-solid has-validation mb-2" style="width: 70px;">
-                                            <select name="odontogram_symbol_38" aria-label="{{ __('Odontogram Code') }}" data-control="select2" data-placeholder="{{ __('Select an Odontogram Code...') }}" class="form-select form-select-solid form-select-sm">
-                                                <option value="">{{ __('Select an Odontogram Code...') }}</option>
-                                                @foreach($odontogramsymbols as $odontogramsymbol)
-                                                    <option value="{{ $odontogramsymbol->id }}">{{ $odontogramsymbol->code }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div style="width: 70px;">
-                                            <input type="text" name="keterangan_38" class="form-control form-control-solid form-control-sm mt-2" placeholder="Ket.">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            </div>
-                        </div>
                         @endif
 
                         <!-- <script>
@@ -2092,7 +2107,7 @@
                                             <option value="">{{ __('Pilih Obat...') }} </option>
                                             @foreach($drugs as $drug)
                                                 <option value="{{ $drug->id }}" {{ $drug->id == $value ? 'selected' : '' }}>
-                                                    {{  $drug->name }} 
+                                                    {{  $drug->name }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -2115,7 +2130,7 @@
                                 <div class="d-flex flex-column" id="newRow"></div>
                                 <i class="btn btn-primary" id="tambah_obat">Tambah</i>
                                 @error('resep')
-                                    <div class="text-danger">{{ $message }}</div>
+                                <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <!--end::Input-->
@@ -2498,7 +2513,7 @@
                                             <td class="d-flex">:&nbsp;<input type="text" name="alamat_pas" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Alamat">
                                             </td>
                                         </tr>
-                                        
+
                                         <tr>
                                             <td>Tindakan Terhadap</td>
                                             <td class="d-flex">:&nbsp;
@@ -2508,7 +2523,7 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        
+
                                         <tr>
                                             <td>Nama</td>
                                             <td>: {{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</td>
@@ -2669,7 +2684,7 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        
+
 
                                         </tbody>
                                     </table>
@@ -2677,35 +2692,35 @@
 
                             @csrf
                             <div class="row">
-                            <div class="form-check form-check-custom form-check-solid mb-3">
-                                <input class="form-check-input" type="radio" id="Setuju" name="persetujuan" value="setuju" onchange="toggleAlasan()" />
-                                <label class="form-check-label fw-semibold text-black" for="Setuju">
-                                    Setuju dengan Tindakan yang telah dijelaskan
-                                </label>
-                            </div>
-                            <div class="form-check form-check-custom form-check-solid mb-3">
-                                <input class="form-check-input" type="radio" id="Tidak Setuju" name="persetujuan" value="Tidak Setuju" onchange="toggleAlasan()" />
-                                <label class="form-check-label fw-semibold text-black" for="Tidak Setuju">
-                                    Tidak Setuju dengan Tindakan yang telah dijelaskan
-                                </label>
-                            </div>
-                            <div id="alasanContainer" style="display: none;" class="mb-10">
-                                <label for="exampleFormControlInput1" class="form-label">Alasan :</label>
-                                <textarea rows="3" class="form-control form-control-solid" placeholder="Alasan" name="description"></textarea>
-                            </div>
-                            <script>
-                            function toggleAlasan() {
-                                const tidakSetujuCheckbox = document.getElementById('Tidak Setuju');
-                                const alasanContainer = document.getElementById('alasanContainer');
+                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                    <input class="form-check-input" type="radio" id="Setuju" name="persetujuan" value="setuju" onchange="toggleAlasan()"/>
+                                    <label class="form-check-label fw-semibold text-black" for="Setuju">
+                                        Setuju dengan Tindakan yang telah dijelaskan
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                    <input class="form-check-input" type="radio" id="Tidak Setuju" name="persetujuan" value="Tidak Setuju" onchange="toggleAlasan()"/>
+                                    <label class="form-check-label fw-semibold text-black" for="Tidak Setuju">
+                                        Tidak Setuju dengan Tindakan yang telah dijelaskan
+                                    </label>
+                                </div>
+                                <div id="alasanContainer" style="display: none;" class="mb-10">
+                                    <label for="exampleFormControlInput1" class="form-label">Alasan :</label>
+                                    <textarea rows="3" class="form-control form-control-solid" placeholder="Alasan" name="description"></textarea>
+                                </div>
+                                <script>
+                                    function toggleAlasan() {
+                                        const tidakSetujuCheckbox = document.getElementById('Tidak Setuju');
+                                        const alasanContainer = document.getElementById('alasanContainer');
 
-                                if (tidakSetujuCheckbox.checked) {
-                                    alasanContainer.style.display = 'block';
-                                } else {
-                                    alasanContainer.style.display = 'none';
-                                }
-                            }
-                            </script>
-                         
+                                        if (tidakSetujuCheckbox.checked) {
+                                            alasanContainer.style.display = 'block';
+                                        } else {
+                                            alasanContainer.style.display = 'none';
+                                        }
+                                    }
+                                </script>
+
                                 <button type="submit" class="btn btn-bg-dark text-white">Download PDF</button>
                             </div>
                             </form>
@@ -2718,670 +2733,679 @@
                                     @csrf <!-- CSRF Token to prevent 419 error -->
                                     <table class="table" style="width:100%">
                                         <tbody>
-                                            
-                                            <tr>
-                                                <td>Nama</td>
-                                                <td>: {{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Tempat,Tanggal Lahir</td>
-                                                <td>: {{ $info->place_of_birth.', '.$info->date_of_birth }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Nomor RM</td>
-                                                <td>: {{ $user->mr->medical_record_code }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2">
-                                                    <h3 class="fs-3 fw-bold">SIGN IN  ( Sebelum induksi anestesi )</h3>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong> VERIFIKASI</strong></td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2">
-                                                    <input type="checkbox" name="identitas_pasien" style="margin-right: 10px;" checked>
-                                                    <span style="font-size: 1em;">Identitas pasien (nama lengkap dan tanggal lahir) dan gelang pasien</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2">
-                                                    <input type="checkbox" name="inform_consnet" style="margin-right: 10px;" checked>
-                                                    <span style="font-size: 1em;">Inform Consent</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Dokter Pelaksana Tindakan</td>
-                                                <td>: {{ (!in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.(!in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}</b>
-                                                    <br>
-                                                    <b>{{ $examination->health_profesional->sip_number ? 'SIP.'.$examination->health_profesional->sip_number : '' }}
-                                                </td>
-                                            </tr>
-                                            <tr>
+
+                                        <tr>
+                                            <td>Nama</td>
+                                            <td>: {{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tempat,Tanggal Lahir</td>
+                                            <td>: {{ $info->place_of_birth.', '.$info->date_of_birth }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nomor RM</td>
+                                            <td>: {{ $user->mr->medical_record_code }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <h3 class="fs-3 fw-bold">SIGN IN ( Sebelum induksi anestesi )</h3>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong> VERIFIKASI</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <input type="checkbox" name="identitas_pasien" style="margin-right: 10px;" checked>
+                                                <span style="font-size: 1em;">Identitas pasien (nama lengkap dan tanggal lahir) dan gelang pasien</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <input type="checkbox" name="inform_consnet" style="margin-right: 10px;" checked>
+                                                <span style="font-size: 1em;">Inform Consent</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Dokter Pelaksana Tindakan</td>
+                                            <td>: {{ (!in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.(!in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}</b>
+                                                <br>
+                                                <b>{{ $examination->health_profesional->sip_number ? 'SIP.'.$examination->health_profesional->sip_number : '' }}
+                                            </td>
+                                        </tr>
+                                        <tr>
                                             <!-- <td> Identitas pasien (nama lengkap dan tanggal lahir) dan gelang pasien</td>
                                                 <td class="d-flex">:&nbsp;
                                                     <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100"> -->
-                                                        <!-- <input type="text" name="prognosis" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi"> -->
-                                                        <!-- <label class="form-check form-switch form-check-custom form-check-solid">
-                                                            <input class="form-check-input" type="checkbox" name="prognosis_check" value="1"/>
-                                                            <span class="form-check-label fw-semibold text-muted">
-                                                                Check
-                                                            </span>
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                            </tr> -->
+                                            <!-- <input type="text" name="prognosis" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi"> -->
+                                            <!-- <label class="form-check form-switch form-check-custom form-check-solid">
+                                                <input class="form-check-input" type="checkbox" name="prognosis_check" value="1"/>
+                                                <span class="form-check-label fw-semibold text-muted">
+                                                    Check
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr> -->
                                             <td>Nama Operator</td>
-                                                <td class="d-flex">:&nbsp;
-                                                    <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
-                                                        <input type="text" name="nama_operator" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
-                                                        <!-- <label class="form-check form-switch form-check-custom form-check-solid">
-                                                            <input class="form-check-input" type="checkbox" name="nama_operator_check" value="1"/>
-                                                            <span class="form-check-label fw-semibold text-muted">
-                                                                Check
-                                                            </span>
-                                                        </label> -->
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td>Nama Tindakan</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="nama_tindakan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nama Tindakan">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Diagnosa</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="diagnosa" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Diagnosa">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td> Pemberian tanda di lokasi operasi</td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="perdarahanYa" name="perdarahan" value="Ya" checked />
-                                                        <label class="form-check-label fw-semibold text-black" for="perdarahanYa">Ya</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="perdarahanTidak" name="perdarahan" value="Tidak perlu" />
-                                                        <label class="form-check-label fw-semibold text-black" for="perdarahanTidak">Tidak perlu</label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>PEMERIKSAAN KELENGKAPAN ANESTESI</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="mesinAnestesi" name="kelengkapan_anestesi_mesin" value="Mesin Anestesi" />
-                                                        <label class="form-check-label fw-semibold text-black" for="mesinAnestesi">Mesin Anestesi</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="obatObatan" name="kelengkapan_anestesi_obat" value="Obat - obatan" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="obatObatan">Obat - obatan</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="laboratorium" name="kelengkapan_anestesi_laboratorium" value="Laboratorium" />
-                                                        <label class="form-check-label fw-semibold text-black" for="laboratorium">Laboratorium</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="ivLine" name="kelengkapan_anestesi_ivline" value="IV Line" />
-                                                        <label class="form-check-label fw-semibold text-black" for="ivLine">IV Line</label>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            <td class="d-flex">:&nbsp;
+                                                <div class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
+                                                    <input type="text" name="nama_operator" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Isi Informasi">
+                                                    <!-- <label class="form-check form-switch form-check-custom form-check-solid">
+                                                        <input class="form-check-input" type="checkbox" name="nama_operator_check" value="1"/>
+                                                        <span class="form-check-label fw-semibold text-muted">
+                                                            Check
+                                                        </span>
+                                                    </label> -->
+                                                </div>
+                                            </td>
+                                        </tr>
 
-                                            <tr>
-                                                <td><strong>PEMERIKSAAN TANDA VITAL</strong></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Tekanan Darah</td>
-                                                <td>: {{ $examination->vitality->blood_pressure ?? "-" }} mmHg</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Nadi</td>
-                                                <td>: {{ $examination->vitality->heart_rate ?? "-" }} kali/menit</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Pernafasan</td>
-                                                <td>: {{ $exam->vitality->respiratory_rate ?? "-" }} kali/menit</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Saturasi O2</td>
-                                                <td>: {{ $exam->vitality->oxygen_saturation ?? "-" }} %</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Suhu</td>
-                                                <td>: {{ $examination->vitality->temperature ?? "-" }} °C</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>RIWAYAT ALERGI</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="alergiAda" name="riwayat_alergi" value="Ada" onchange="toggleKeterangan()" />
-                                                        <label class="form-check-label fw-semibold text-black" for="alergiAda">Ada</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="alergiTidakAda" name="riwayat_alergi" value="Tidak Ada" onchange="toggleKeterangan()" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="alergiTidakAda">Tidak Ada</label>
-                                                    </div>
-                                                    <div id="keteranganContainer" style="display: none; margin-left: 20px;" class="mb-10">
-                                                        <label for="keteranganAlergi" class="form-label">Keterangan :</label>
-                                                        <textarea rows="3" class="form-control form-control-solid" placeholder="Masukkan keterangan" name="keterangan_alergi" id="keteranganAlergi"></textarea>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                        <tr>
+                                            <td>Nama Tindakan</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="nama_tindakan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nama Tindakan">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Diagnosa</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="diagnosa" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Diagnosa">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td> Pemberian tanda di lokasi operasi</td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="perdarahanYa" name="perdarahan" value="Ya" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="perdarahanYa">Ya</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="perdarahanTidak" name="perdarahan" value="Tidak perlu"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="perdarahanTidak">Tidak perlu</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>PEMERIKSAAN KELENGKAPAN ANESTESI</strong></td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="mesinAnestesi" name="kelengkapan_anestesi_mesin" value="Mesin Anestesi"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="mesinAnestesi">Mesin Anestesi</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="obatObatan" name="kelengkapan_anestesi_obat" value="Obat - obatan" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="obatObatan">Obat - obatan</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="laboratorium" name="kelengkapan_anestesi_laboratorium" value="Laboratorium"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="laboratorium">Laboratorium</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="ivLine" name="kelengkapan_anestesi_ivline" value="IV Line"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="ivLine">IV Line</label>
+                                                </div>
+                                            </td>
+                                        </tr>
 
-                                            <script>
-                                                function toggleKeterangan() {
-                                                    var alergiAda = document.getElementById('alergiAda').checked;
-                                                    var keteranganContainer = document.getElementById('keteranganContainer');
+                                        <tr>
+                                            <td><strong>PEMERIKSAAN TANDA VITAL</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tekanan Darah</td>
+                                            <td>: {{ $examination->vitality->blood_pressure ?? "-" }} mmHg</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nadi</td>
+                                            <td>: {{ $examination->vitality->heart_rate ?? "-" }} kali/menit</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Pernafasan</td>
+                                            <td>: {{ $exam->vitality->respiratory_rate ?? "-" }} kali/menit</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Saturasi O2</td>
+                                            <td>: {{ $exam->vitality->oxygen_saturation ?? "-" }} %</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Suhu</td>
+                                            <td>: {{ $examination->vitality->temperature ?? "-" }} °C</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>RIWAYAT ALERGI</strong></td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="alergiAda" name="riwayat_alergi" value="Ada" onchange="toggleKeterangan()"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="alergiAda">Ada</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="alergiTidakAda" name="riwayat_alergi" value="Tidak Ada" onchange="toggleKeterangan()" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="alergiTidakAda">Tidak Ada</label>
+                                                </div>
+                                                <div id="keteranganContainer" style="display: none; margin-left: 20px;" class="mb-10">
+                                                    <label for="keteranganAlergi" class="form-label">Keterangan :</label>
+                                                    <textarea rows="3" class="form-control form-control-solid" placeholder="Masukkan keterangan" name="keterangan_alergi" id="keteranganAlergi"></textarea>
+                                                </div>
+                                            </td>
+                                        </tr>
 
-                                                    if (alergiAda) {
-                                                        keteranganContainer.style.display = 'block';
-                                                    } else {
-                                                        keteranganContainer.style.display = 'none';
-                                                    }
+                                        <script>
+                                            function toggleKeterangan() {
+                                                var alergiAda = document.getElementById('alergiAda').checked;
+                                                var keteranganContainer = document.getElementById('keteranganContainer');
+
+                                                if (alergiAda) {
+                                                    keteranganContainer.style.display = 'block';
+                                                } else {
+                                                    keteranganContainer.style.display = 'none';
                                                 }
-                                            </script>
+                                            }
+                                        </script>
 
-                                        
-                                            <tr>
-                                                <td><strong>RISIKO ASPIRASI ATAU GANGGUAN PERNAFASAN</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="aspirasiTidak" name="aspirasi" value="Tidak" checked />
-                                                        <label class="form-check-label fw-semibold text-black" for="aspirasiTidak">Tidak</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="aspirasiYa" name="aspirasi" value="Ya, dengan alat bantu" />
-                                                        <label class="form-check-label fw-semibold text-black" for="aspirasiYa">Ya, dengan alat bantu</label>
-                                                    </div>
-                                                    
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>RISIKO PERDARAHAN</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="perdarahanTidak" name="resiko_perdarahan" value="Tidak" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="perdarahanTidak">Tidak</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="perdarahanYa" name="resiko_perdarahan" value="Ya, dengan dua IV line atau CVC" />
-                                                        <label class="form-check-label fw-semibold text-black" for="perdarahanYa">Ya, dengan dua IV line atau CVC</label>
-                                                    </div>
-                                                    
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>RISIKO ANESTESI</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="umum" name="risiko_perdarahan_umum" value="Umum" />
-                                                        <label class="form-check-label fw-semibold text-black" for="umum">Umum</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="spinal" name="risiko_perdarahan_spinal" value="Spinal" />
-                                                        <label class="form-check-label fw-semibold text-black" for="spinal">Spinal</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="blok" name="risiko_perdarahan_blok" value="Blok" />
-                                                        <label class="form-check-label fw-semibold text-black" for="blok">Blok</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="lokal" name="risiko_perdarahan_lokal" value="Lokal" checked />
-                                                        <label class="form-check-label fw-semibold text-black" for="lokal">Lokal</label>
-                                                    </div>
-                                                </td>
-                                            </tr>
 
-                                            <tr>
-                                                <td colspan="2">
-                                                    <h3 class="fs-3 fw-bold">TIME OUT ( Sebelum insisi kulit )</h3>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Dokter Pelaksana Tindakan</td>
-                                                <td>: {{ (!in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.(!in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}</b>
-                                                    <br>
-                                                    <b>{{ $examination->health_profesional->sip_number ? 'SIP.'.$examination->health_profesional->sip_number : '' }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>KELENGKAPAN TIM DAN FASILITAS OPERASI</strong></td>
-                                                <td>
-                                                    <div class="d-flex align-items-center mb-3">
-                                                        <div class="form-check form-check-custom form-check-solid me-3">
-                                                            <input class="form-check-input" type="radio" id="lengkap" name="kelengkapan_tim" value="Lengkap" checked/>
-                                                            <label class="form-check-label fw-semibold text-black" for="lengkap">Lengkap</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="form-check form-check-custom form-check-solid me-3">
-                                                            <input class="form-check-input" type="radio" id="tidakLengkap" name="kelengkapan_tim" value="Tidak Lengkap" />
-                                                            <label class="form-check-label fw-semibold text-black" for="tidakLengkap">Tidak Lengkap</label>
-                                                        </div>
-                                                        <input type="text" name="alasan_tidak_lengkap" class="form-control form-control-solid border border-gray-300" placeholder="Alasan Tidak Lengkap">
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>PERIKSA KELENGKAPAN PERALATAN OPERASI</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="alatInstrument" name="kelengkapan_alat_instrument1" value="instrument" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="alatInstrument">Instrument</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="alatKasa" name="kelengkapan_alat_kasa1" value="kasa" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="alatKasa">Kasa</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="alatJarum" name="kelengkapan_alat_jarum1" value="jarum" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="alatJarum">Jarum</label>
-                                                    </div>
-                                                    <div class="d-flex align-items-center mb-3">
-                                                        <div class="form-check form-check-custom form-check-solid me-3">
-                                                            <input class="form-check-input" type="checkbox" id="alatDll" name="kelengkapan_alat_dll" value="dll"/>
-                                                            <label class="form-check-label fw-semibold text-black" for="alatDll">DLL</label>
-                                                        </div>
-                                                        <input type="text" name="keterangan_dll" class="form-control form-control-solid border border-gray-300" placeholder="Keterangan">
-                                                    </div>
-                                                </td>
-                                            </tr>                                     
-                                            <tr>
-                                                <td><strong>Menyebutkan Nama dan Peran Tim Operasi</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="membacakan" name="peran_tim_membacakan" value="Membacakan Secara Verbal" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="membacakan">Membacakan Secara Verbal</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="tanggalTindakan" name="peran_tim_tanggal" value="Tanggal Tindakan" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="tanggalTindakan">Tanggal Tindakan</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="namaPasien" name="peran_tim_nama_pasien" value="Nama Lengkap dan Tgl Lahir Pasien" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="namaPasien">Nama Lengkap dan Tgl Lahir Pasien</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="diagnosa" name="peran_tim_diagnosa" value="Diagnosa" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="diagnosa">Diagnosa</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="namaTindakan" name="peran_tim_nama_tindakan" value="Nama Tindakan" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="namaTindakan">Nama Tindakan</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="prosedurTindakan" name="peran_tim_prosedur" value="Prosedur Tindakan" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="prosedurTindakan">Prosedur Tindakan</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="lokasiTindakan" name="peran_tim_lokasi" value="Lokasi Tindakan" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="lokasiTindakan">Lokasi Tindakan</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="informedConsent" name="peran_tim_consent" value="Informed Consent" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="informedConsent">Informed Consent</label>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                        <tr>
+                                            <td><strong>RISIKO ASPIRASI ATAU GANGGUAN PERNAFASAN</strong></td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="aspirasiTidak" name="aspirasi" value="Tidak" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="aspirasiTidak">Tidak</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="aspirasiYa" name="aspirasi" value="Ya, dengan alat bantu"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="aspirasiYa">Ya, dengan alat bantu</label>
+                                                </div>
 
-                                            <tr>
-                                                <td><strong>DOKTER BEDAH :</strong></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Apakah tindakan yang dilakukan berisiko tinggi?</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="risikoTinggiYa" name="risiko_tinggi" value="Ya" />
-                                                        <label class="form-check-label fw-semibold text-black" for="risikoTinggiYa">Ya</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="risikoTinggiTidak" name="risiko_tinggi" value="Tidak" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="risikoTinggiTidak">Tidak</label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Waktu Tindakan</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="waktu_tindakan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Waktu yang dibutuhkan">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Apakah sudah diantisipasi perdarahan?</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="perdarahanAntisipasiYa" name="perdarahan_antisipasi" value="Ya" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="perdarahanAntisipasiYa">Ya</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="perdarahanAntisipasiTidak" name="perdarahan_antisipasi" value="Tidak" />
-                                                        <label class="form-check-label fw-semibold text-black" for="perdarahanAntisipasiTidak">Tidak</label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>DOKTER ANESTESI : </strong></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Apakah ada perhatian / kekhawatiran pada pasien ini?</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="perhatianYa" name="perhatian" value="Ya" />
-                                                        <label class="form-check-label fw-semibold text-black" for="perhatianYa">Ya</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="perhatianTidak" name="perhatian" value="Tidak" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="perhatianTidak">Tidak</label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Jumlah Pasien ASA</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="jumlah_pasien" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jumlah Pasien ASA">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Apakah ada peralatan yang perlu disediakan (darah)?</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="peralatanYa" name="peralatan" value="Ya" />
-                                                        <label class="form-check-label fw-semibold text-black" for="peralatanYa">Ya</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="peralatanTidak" name="peralatan" value="Tidak" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="peralatanTidak">Tidak</label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>PERAWAT :</strong></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Apakah sudah mengecek sterilisasi alat (melalui indikator sterilisasi)?</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="sterilisasiYa" name="sterilisasi" value="Ya" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="sterilisasiYa">Ya</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="sterilisasiTidak" name="sterilisasi" value="Tidak" />
-                                                        <label class="form-check-label fw-semibold text-black" for="sterilisasiTidak">Tidak</label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Apakah ada kesiapan peralatan yang harus diperhatikan?</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="peralatanKesiapanYa" name="kesiapan_peralatan" value="Ya" onchange="toggleKeterangan(this)" />
-                                                        <label class="form-check-label fw-semibold text-black" for="peralatanKesiapanYa">Ya</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="peralatanKesiapanTidak" name="kesiapan_peralatan" value="Tidak" onchange="toggleKeterangan(this)" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="peralatanKesiapanTidak">Tidak</label>
-                                                    </div>
-                                                    <div id="keteranganField" style="display:none; margin-top: 10px;">
-                                                        <label for="keterangan" class="form-label fw-semibold text-black">Keterangan:</label>
-                                                        <textarea class="form-control" id="keterangan" name="keterangan" rows="3"></textarea>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        
-                                            <tr>
-                                                <td><strong>ANTIBIOTIK PROPHYLAXIS</strong></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Apakah sudah diberikan dalam waktu sekurangnya 60 menit sebelum tindakan?</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="antibiotikYa" name="antibiotik" value="Ya" />
-                                                        <label class="form-check-label fw-semibold text-black" for="antibiotikYa">Ya</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="antibiotikTidak" name="antibiotik" value="Tidak" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="antibiotikTidak">Tidak</label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Nama Obat</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="nama_obat" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nama Obat">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Dosis Obat</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="dosis_obat" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Dosis Obat">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Jam diberikan</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="jam_diberikan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jam">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>FOTO PEMERIKSAAN RADIOLOGI YANG DIPERLUKAN</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="radiologiDipasan" name="radiologi" value="Dipasang" />
-                                                        <label class="form-check-label fw-semibold text-black" for="radiologiDipasan">Dipasang</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="radiologiTidakDipasan" name="radiologi" value="Tidak dipasang" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="radiologiTidakDipasan">Tidak dipasang</label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td colspan="2">
-                                                    <h3 class="fs-3 fw-bold"> SIGN OUT ( Sebelum pasien keluar kamar tindakan )</h3>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Secara Verbal Perawat Memastikan : </strong></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Nama Tindakan</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="nama_tindakan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nama Tindakan">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Kelengkapan Alat :</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="alatInstrument" name="kelengkapan_alat_instrument" value="instrument" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="alatInstrument">Instrument</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="alatKasa" name="kelengkapan_alat_kasa" value="kasa" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="alatKasa">Kasa</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="alatJarum" name="kelengkapan_alat_jarum" value="jarum" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="alatJarum">Jarum</label>
-                                                    </div>
-                                                    <div class="d-flex align-items-center mb-3">
-                                                        <div class="form-check form-check-custom form-check-solid me-3">
-                                                            <input class="form-check-input" type="checkbox" id="alatDll1" name="kelengkapan_alat_dll1" value="dll"/>
-                                                            <label class="form-check-label fw-semibold text-black" for="alatDll1">DLL</label>
-                                                        </div>
-                                                        <input type="text" name="keterangan_dll1" class="form-control form-control-solid border border-gray-300" placeholder="Keterangan">
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>RISIKO PERDARAHAN</strong></td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="perdarahanTidak" name="resiko_perdarahan" value="Tidak" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="perdarahanTidak">Tidak</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="perdarahanYa" name="resiko_perdarahan" value="Ya, dengan dua IV line atau CVC"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="perdarahanYa">Ya, dengan dua IV line atau CVC</label>
+                                                </div>
 
-                                            <tr>
-                                                <td><strong>Pelabelan specimen</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="pelabelanSpecimenYa" name="pelabelan_specimen" value="ya" onchange="toggleKeterangan(this)" />
-                                                        <label class="form-check-label fw-semibold text-black" for="pelabelanSpecimenYa">Ya</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="pelabelanSpecimenTidak" name="pelabelan_specimen" value="tidak" onchange="toggleKeterangan(this)" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="pelabelanSpecimenTidak">Tidak</label>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>RISIKO ANESTESI</strong></td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="umum" name="risiko_perdarahan_umum" value="Umum"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="umum">Umum</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="spinal" name="risiko_perdarahan_spinal" value="Spinal"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="spinal">Spinal</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="blok" name="risiko_perdarahan_blok" value="Blok"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="blok">Blok</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="lokal" name="risiko_perdarahan_lokal" value="Lokal" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="lokal">Lokal</label>
+                                                </div>
+                                            </td>
+                                        </tr>
 
-                                            <tr>
-                                                <td><strong>JENIS SPECIMEN</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="pa" name="pemeriksaan_pa" value="PA" />
-                                                        <label class="form-check-label fw-semibold text-black" for="pa">PA</label>
+                                        <tr>
+                                            <td colspan="2">
+                                                <h3 class="fs-3 fw-bold">TIME OUT ( Sebelum insisi kulit )</h3>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Dokter Pelaksana Tindakan</td>
+                                            <td>: {{ (!in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.(!in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}</b>
+                                                <br>
+                                                <b>{{ $examination->health_profesional->sip_number ? 'SIP.'.$examination->health_profesional->sip_number : '' }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>KELENGKAPAN TIM DAN FASILITAS OPERASI</strong></td>
+                                            <td>
+                                                <div class="d-flex align-items-center mb-3">
+                                                    <div class="form-check form-check-custom form-check-solid me-3">
+                                                        <input class="form-check-input" type="radio" id="lengkap" name="kelengkapan_tim" value="Lengkap" checked/>
+                                                        <label class="form-check-label fw-semibold text-black" for="lengkap">Lengkap</label>
                                                     </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="kultur" name="pemeriksaan_kultur" value="Kultur" />
-                                                        <label class="form-check-label fw-semibold text-black" for="kultur">Kultur</label>
+                                                </div>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="form-check form-check-custom form-check-solid me-3">
+                                                        <input class="form-check-input" type="radio" id="tidakLengkap" name="kelengkapan_tim" value="Tidak Lengkap"/>
+                                                        <label class="form-check-label fw-semibold text-black" for="tidakLengkap">Tidak Lengkap</label>
                                                     </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="checkbox" id="sitologi" name="pemeriksaan_sitologi" value="Sitologi" />
-                                                        <label class="form-check-label fw-semibold text-black" for="sitologi">Sitologi</label>
+                                                    <input type="text" name="alasan_tidak_lengkap" class="form-control form-control-solid border border-gray-300" placeholder="Alasan Tidak Lengkap">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>PERIKSA KELENGKAPAN PERALATAN OPERASI</strong></td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="alatInstrument" name="kelengkapan_alat_instrument1" value="instrument" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="alatInstrument">Instrument</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="alatKasa" name="kelengkapan_alat_kasa1" value="kasa" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="alatKasa">Kasa</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="alatJarum" name="kelengkapan_alat_jarum1" value="jarum" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="alatJarum">Jarum</label>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-3">
+                                                    <div class="form-check form-check-custom form-check-solid me-3">
+                                                        <input class="form-check-input" type="checkbox" id="alatDll" name="kelengkapan_alat_dll" value="dll"/>
+                                                        <label class="form-check-label fw-semibold text-black" for="alatDll">DLL</label>
                                                     </div>
-                                                </td>
-                                            </tr>
-                                        
-                                            <tr>
-                                                <td><strong>Apakah ada masalah peralatan yang perlu disampaikan dari dokter Bedah?</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="masalahPeralatanYa" name="masalah_peralatan" value="Ya" />
-                                                        <label class="form-check-label fw-semibold text-black" for="masalahPeralatanYa">Ya</label>
+                                                    <input type="text" name="keterangan_dll" class="form-control form-control-solid border border-gray-300" placeholder="Keterangan">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Menyebutkan Nama dan Peran Tim Operasi</strong></td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="membacakan" name="peran_tim_membacakan" value="Membacakan Secara Verbal" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="membacakan">Membacakan Secara Verbal</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="tanggalTindakan" name="peran_tim_tanggal" value="Tanggal Tindakan" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="tanggalTindakan">Tanggal Tindakan</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="namaPasien" name="peran_tim_nama_pasien" value="Nama Lengkap dan Tgl Lahir Pasien" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="namaPasien">Nama Lengkap dan Tgl Lahir Pasien</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="diagnosa" name="peran_tim_diagnosa" value="Diagnosa" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="diagnosa">Diagnosa</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="namaTindakan" name="peran_tim_nama_tindakan" value="Nama Tindakan" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="namaTindakan">Nama Tindakan</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="prosedurTindakan" name="peran_tim_prosedur" value="Prosedur Tindakan" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="prosedurTindakan">Prosedur Tindakan</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="lokasiTindakan" name="peran_tim_lokasi" value="Lokasi Tindakan" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="lokasiTindakan">Lokasi Tindakan</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="informedConsent" name="peran_tim_consent" value="Informed Consent" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="informedConsent">Informed Consent</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>DOKTER BEDAH :</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Apakah tindakan yang dilakukan berisiko tinggi?</strong></td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="risikoTinggiYa" name="risiko_tinggi" value="Ya"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="risikoTinggiYa">Ya</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="risikoTinggiTidak" name="risiko_tinggi" value="Tidak" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="risikoTinggiTidak">Tidak</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Waktu Tindakan</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="waktu_tindakan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Waktu yang dibutuhkan">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Apakah sudah diantisipasi perdarahan?</strong></td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="perdarahanAntisipasiYa" name="perdarahan_antisipasi" value="Ya" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="perdarahanAntisipasiYa">Ya</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="perdarahanAntisipasiTidak" name="perdarahan_antisipasi" value="Tidak"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="perdarahanAntisipasiTidak">Tidak</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>DOKTER ANESTESI : </strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Apakah ada perhatian / kekhawatiran pada pasien ini?</strong>
+                                            </td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="perhatianYa" name="perhatian" value="Ya"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="perhatianYa">Ya</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="perhatianTidak" name="perhatian" value="Tidak" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="perhatianTidak">Tidak</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Jumlah Pasien ASA</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="jumlah_pasien" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jumlah Pasien ASA">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Apakah ada peralatan yang perlu disediakan (darah)?</strong>
+                                            </td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="peralatanYa" name="peralatan" value="Ya"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="peralatanYa">Ya</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="peralatanTidak" name="peralatan" value="Tidak" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="peralatanTidak">Tidak</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>PERAWAT :</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Apakah sudah mengecek sterilisasi alat (melalui indikator sterilisasi)?</strong>
+                                            </td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="sterilisasiYa" name="sterilisasi" value="Ya" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="sterilisasiYa">Ya</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="sterilisasiTidak" name="sterilisasi" value="Tidak"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="sterilisasiTidak">Tidak</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Apakah ada kesiapan peralatan yang harus diperhatikan?</strong>
+                                            </td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="peralatanKesiapanYa" name="kesiapan_peralatan" value="Ya" onchange="toggleKeterangan(this)"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="peralatanKesiapanYa">Ya</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="peralatanKesiapanTidak" name="kesiapan_peralatan" value="Tidak" onchange="toggleKeterangan(this)" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="peralatanKesiapanTidak">Tidak</label>
+                                                </div>
+                                                <div id="keteranganField" style="display:none; margin-top: 10px;">
+                                                    <label for="keterangan" class="form-label fw-semibold text-black">Keterangan:</label>
+                                                    <textarea class="form-control" id="keterangan" name="keterangan" rows="3"></textarea>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>ANTIBIOTIK PROPHYLAXIS</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Apakah sudah diberikan dalam waktu sekurangnya 60 menit sebelum tindakan?</strong>
+                                            </td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="antibiotikYa" name="antibiotik" value="Ya"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="antibiotikYa">Ya</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="antibiotikTidak" name="antibiotik" value="Tidak" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="antibiotikTidak">Tidak</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nama Obat</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="nama_obat" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nama Obat">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Dosis Obat</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="dosis_obat" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Dosis Obat">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Jam diberikan</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="jam_diberikan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Jam">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>FOTO PEMERIKSAAN RADIOLOGI YANG DIPERLUKAN</strong></td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="radiologiDipasan" name="radiologi" value="Dipasang"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="radiologiDipasan">Dipasang</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="radiologiTidakDipasan" name="radiologi" value="Tidak dipasang" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="radiologiTidakDipasan">Tidak dipasang</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td colspan="2">
+                                                <h3 class="fs-3 fw-bold"> SIGN OUT ( Sebelum pasien keluar kamar tindakan )</h3>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Secara Verbal Perawat Memastikan : </strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nama Tindakan</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="nama_tindakan" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nama Tindakan">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Kelengkapan Alat :</strong></td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="alatInstrument" name="kelengkapan_alat_instrument" value="instrument" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="alatInstrument">Instrument</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="alatKasa" name="kelengkapan_alat_kasa" value="kasa" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="alatKasa">Kasa</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="alatJarum" name="kelengkapan_alat_jarum" value="jarum" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="alatJarum">Jarum</label>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-3">
+                                                    <div class="form-check form-check-custom form-check-solid me-3">
+                                                        <input class="form-check-input" type="checkbox" id="alatDll1" name="kelengkapan_alat_dll1" value="dll"/>
+                                                        <label class="form-check-label fw-semibold text-black" for="alatDll1">DLL</label>
                                                     </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="masalahPeralatanTidak" name="masalah_peralatan" value="Tidak" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="masalahPeralatanTidak">Tidak</label>
+                                                    <input type="text" name="keterangan_dll1" class="form-control form-control-solid border border-gray-300" placeholder="Keterangan">
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>Pelabelan specimen</strong></td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="pelabelanSpecimenYa" name="pelabelan_specimen" value="ya" onchange="toggleKeterangan(this)"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="pelabelanSpecimenYa">Ya</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="pelabelanSpecimenTidak" name="pelabelan_specimen" value="tidak" onchange="toggleKeterangan(this)" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="pelabelanSpecimenTidak">Tidak</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>JENIS SPECIMEN</strong></td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="pa" name="pemeriksaan_pa" value="PA"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="pa">PA</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="kultur" name="pemeriksaan_kultur" value="Kultur"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="kultur">Kultur</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="sitologi" name="pemeriksaan_sitologi" value="Sitologi"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="sitologi">Sitologi</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <strong>Apakah ada masalah peralatan yang perlu disampaikan dari dokter Bedah?</strong>
+                                            </td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="masalahPeralatanYa" name="masalah_peralatan" value="Ya"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="masalahPeralatanYa">Ya</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="masalahPeralatanTidak" name="masalah_peralatan" value="Tidak" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="masalahPeralatanTidak">Tidak</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Formulir permintaan pemeriksaan</strong></td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="formulirPemeriksaanYa" name="formulir_pemeriksaan" value="Ya"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="formulirPemeriksaanYa">Ya</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="formulirPemeriksaanTidak" name="formulir_pemeriksaan" value="Tidak" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="formulirPemeriksaanTidak">Tidak</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Telah dilengkapi identitas pasien</strong></td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="identitasPasienYa" name="identitas_pasien" value="Ya" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="identitasPasienYa">Ya</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="identitasPasienTidak" name="identitas_pasien" value="Tidak"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="identitasPasienTidak">Tidak</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Penjelasan oleh operator kepada keluarga pasien</strong></td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="penjelasanYa" name="penjelasan_operator" value="Ya" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="penjelasanYa">Ya</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="penjelasanTidak" name="penjelasan_operator" value="Tidak"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="penjelasanTidak">Tidak</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>OBAT - OBATAN YANG DIBERIKAN SELAMA OPERASI</strong></td>
+                                            <td>
+                                                <div class="d-flex align-items-center mb-3">
+                                                    <div class="form-check form-check-custom form-check-solid me-3">
+                                                        <input class="form-check-input" type="radio" id="obatDiberikan" name="obat_operasi" value="Diberikan"/>
+                                                        <label class="form-check-label fw-semibold text-black" for="obatDiberikan">Diberikan</label>
                                                     </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Formulir permintaan pemeriksaan</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="formulirPemeriksaanYa" name="formulir_pemeriksaan" value="Ya" />
-                                                        <label class="form-check-label fw-semibold text-black" for="formulirPemeriksaanYa">Ya</label>
+                                                    <input type="text" name="alasan_diberikan" class="form-control form-control-solid border border-gray-300" placeholder="Alasan Diberikan">
+                                                </div>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="form-check form-check-custom form-check-solid me-3">
+                                                        <input class="form-check-input" type="radio" id="obatTidakDiberikan" name="obat_operasi" value="Tidak diberikan" checked/>
+                                                        <label class="form-check-label fw-semibold text-black" for="obatTidakDiberikan">Tidak Diberikan</label>
                                                     </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="formulirPemeriksaanTidak" name="formulir_pemeriksaan" value="Tidak" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="formulirPemeriksaanTidak">Tidak</label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Telah dilengkapi identitas pasien</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="identitasPasienYa" name="identitas_pasien" value="Ya" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="identitasPasienYa">Ya</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="identitasPasienTidak" name="identitas_pasien" value="Tidak" />
-                                                        <label class="form-check-label fw-semibold text-black" for="identitasPasienTidak">Tidak</label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Penjelasan oleh operator kepada keluarga pasien</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="penjelasanYa" name="penjelasan_operator" value="Ya" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="penjelasanYa">Ya</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="penjelasanTidak" name="penjelasan_operator" value="Tidak" />
-                                                        <label class="form-check-label fw-semibold text-black" for="penjelasanTidak">Tidak</label>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>OBAT - OBATAN YANG DIBERIKAN SELAMA OPERASI</strong></td>
-                                                <td>
-                                                    <div class="d-flex align-items-center mb-3">
-                                                        <div class="form-check form-check-custom form-check-solid me-3">
-                                                            <input class="form-check-input" type="radio" id="obatDiberikan" name="obat_operasi" value="Diberikan" />
-                                                            <label class="form-check-label fw-semibold text-black" for="obatDiberikan">Diberikan</label>
-                                                        </div>
-                                                        <input type="text" name="alasan_diberikan" class="form-control form-control-solid border border-gray-300" placeholder="Alasan Diberikan">
-                                                    </div>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="form-check form-check-custom form-check-solid me-3">
-                                                            <input class="form-check-input" type="radio" id="obatTidakDiberikan" name="obat_operasi" value="Tidak diberikan" checked/>
-                                                            <label class="form-check-label fw-semibold text-black" for="obatTidakDiberikan">Tidak Diberikan</label>
-                                                        </div>
-                                                        <input type="text" name="alasan_tidak_diberikan" class="form-control form-control-solid border border-gray-300" placeholder="Alasan Tidak Diberikan">
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>PEMERIKSAAN TANDA VITAL </strong></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Kesadaran</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="kesadaran_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Kesadaran">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Tekanan Darah</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="tekanan_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Tekanan Darah (mmHg)">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Nadi</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="nadi_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nadi (kali/menit)">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Saturasi O2</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="saturasi_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Saturasi O2 (%)">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Suhu</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="suhu_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Suhu (°C)">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Pernafasan</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="pernafasan_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Pernafasan (kali/menit)">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Skala nyeri</td>
-                                                <td class="d-flex">:&nbsp;<input type="text" name="skala_nyeri_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Skala Nyeri (Visual Analog Scale-VAS)">
+                                                    <input type="text" name="alasan_tidak_diberikan" class="form-control form-control-solid border border-gray-300" placeholder="Alasan Tidak Diberikan">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>PEMERIKSAAN TANDA VITAL </strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Kesadaran</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="kesadaran_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Kesadaran">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tekanan Darah</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="tekanan_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Tekanan Darah (mmHg)">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nadi</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="nadi_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Nadi (kali/menit)">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Saturasi O2</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="saturasi_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Saturasi O2 (%)">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Suhu</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="suhu_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Suhu (°C)">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Pernafasan</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="pernafasan_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Pernafasan (kali/menit)">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Skala nyeri</td>
+                                            <td class="d-flex">:&nbsp;<input type="text" name="skala_nyeri_1" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Skala Nyeri (Visual Analog Scale-VAS)">
                                                 <!-- <small class="text-muted fst-italic">&nbsp;(Visual Analog Scale-VAS)</small> -->
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Periksa kembali luka operasi</strong></td>
-                                                <td>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="lukaOperasiAdaRembesan" name="luka_operasi" value="Ada rembesan" />
-                                                        <label class="form-check-label fw-semibold text-black" for="lukaOperasiAdaRembesan">Ada rembesan</label>
-                                                    </div>
-                                                    <div class="form-check form-check-custom form-check-solid mb-3">
-                                                        <input class="form-check-input" type="radio" id="lukaOperasiTidakAdaRembesan" name="luka_operasi" value="Tidak ada rembesan" checked/>
-                                                        <label class="form-check-label fw-semibold text-black" for="lukaOperasiTidakAdaRembesan">Tidak ada rembesan</label>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Periksa kembali luka operasi</strong></td>
+                                            <td>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="lukaOperasiAdaRembesan" name="luka_operasi" value="Ada rembesan"/>
+                                                    <label class="form-check-label fw-semibold text-black" for="lukaOperasiAdaRembesan">Ada rembesan</label>
+                                                </div>
+                                                <div class="form-check form-check-custom form-check-solid mb-3">
+                                                    <input class="form-check-input" type="radio" id="lukaOperasiTidakAdaRembesan" name="luka_operasi" value="Tidak ada rembesan" checked/>
+                                                    <label class="form-check-label fw-semibold text-black" for="lukaOperasiTidakAdaRembesan">Tidak ada rembesan</label>
+                                                </div>
+                                            </td>
+                                        </tr>
 
-                                            <tr>
-                                                <td style="width:20%;">Tanda Tangan :</td>
-                                                <td class="d-flex">:&nbsp;
-                                                    <div class="d-flex gap-3 flex-column w-100">
-                                                        <canvas id="signature-pad_2" name="signature2" style="border:1px solid #000; width: 100%; max-width: 300px; height: auto; max-height: 100px;"></canvas>
-                                                        <input type="hidden" name="signature2" id="signature-data2">
-                                                        <div class="d-flex justify-content-between mt-2">
-                                                            <button id="clear2" class="btn btn-secondary" type="button">Clear</button>
-                                                            <button id="save2" class="btn btn-primary" type="submit">Save</button>
-                                                        </div>
+                                        <tr>
+                                            <td style="width:20%;">Tanda Tangan :</td>
+                                            <td class="d-flex">:&nbsp;
+                                                <div class="d-flex gap-3 flex-column w-100">
+                                                    <canvas id="signature-pad_2" name="signature2" style="border:1px solid #000; width: 100%; max-width: 300px; height: auto; max-height: 100px;"></canvas>
+                                                    <input type="hidden" name="signature2" id="signature-data2">
+                                                    <div class="d-flex justify-content-between mt-2">
+                                                        <button id="clear2" class="btn btn-secondary" type="button">Clear</button>
+                                                        <button id="save2" class="btn btn-primary" type="submit">Save</button>
                                                     </div>
-                                                </td>
-                                            </tr>
+                                                </div>
+                                            </td>
+                                        </tr>
                                         </tbody>
                                     </table>
                             </div>
@@ -3392,7 +3416,7 @@
                             </div>
                             </form>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -4131,8 +4155,8 @@
             });
 
             setInterval(function () {
-                 $.ajax({
-                     url: '{{ route('bukti_penyampaian', $examination->id) }}',
+                $.ajax({
+                    url: '{{ route('bukti_penyampaian', $examination->id) }}',
                     type: 'GET',
                     success: function (data) {
                         if (data.status == 'success') {
@@ -4169,84 +4193,157 @@
     </script>
 
     <script>
-            document.getElementById('add-column').addEventListener('click', function () {
-                var container = document.getElementById('input-container');
+        document.getElementById('add-column').addEventListener('click', function () {
+            var container = document.getElementById('input-container');
 
-                var row = document.createElement('div');
-                row.className = 'row mb-5';
+            var row = document.createElement('div');
+            row.className = 'row mb-5';
 
-                var col1 = document.createElement('div');
-                col1.className = 'col-lg-4';
+            var col1 = document.createElement('div');
+            col1.className = 'col-lg-4';
 
-                var label1 = document.createElement('label');
-                label1.className = 'col-form-label fw-bold fs-6';
+            var label1 = document.createElement('label');
+            label1.className = 'col-form-label fw-bold fs-6';
 
-                var input1 = document.createElement('input');
-                input1.type = 'text';
-                input1.name = 'gambar[]';
-                input1.className = 'form-control form-control-solid mb-3';
-                input1.placeholder = 'Gambar';
+            var input1 = document.createElement('input');
+            input1.type = 'text';
+            input1.name = 'gambar[]';
+            input1.className = 'form-control form-control-solid mb-3';
+            input1.placeholder = 'Gambar';
 
-                col1.appendChild(label1);
-                col1.appendChild(input1);
+            col1.appendChild(label1);
+            col1.appendChild(input1);
 
-                var col2 = document.createElement('div');
-                col2.className = 'col-lg-4';
+            var col2 = document.createElement('div');
+            col2.className = 'col-lg-4';
 
-                var label2 = document.createElement('label');
-                label2.className = 'col-form-label fw-bold fs-6';
+            var label2 = document.createElement('label');
+            label2.className = 'col-form-label fw-bold fs-6';
 
-                var inputGroup = document.createElement('div');
-                inputGroup.className = 'input-group input-group-solid has-validation mb-3';
+            var inputGroup = document.createElement('div');
+            inputGroup.className = 'input-group input-group-solid has-validation mb-3';
 
-                var select = document.createElement('select');
-                select.name = 'odontogram_symbol_id[]';
-                select.ariaLabel = '{{ __('Odontogram Code') }}';
-                select.dataset.control = 'select2';
-                select.dataset.placeholder = '{{ __('Select an Odontogram Code...') }}';
-                select.className = 'form-select form-select-solid form-select-lg';
+            var select = document.createElement('select');
+            select.name = 'odontogram_symbol_id[]';
+            select.ariaLabel = '{{ __('Odontogram Code') }}';
+            select.dataset.control = 'select2';
+            select.dataset.placeholder = '{{ __('Select an Odontogram Code...') }}';
+            select.className = 'form-select form-select-solid form-select-lg';
 
-                var option = document.createElement('option');
-                option.value = '';
-                option.textContent = '{{ __('Select an Odontogram Code...') }}';
-                select.appendChild(option);
+            var option = document.createElement('option');
+            option.value = '';
+            option.textContent = '{{ __('Select an Odontogram Code...') }}';
+            select.appendChild(option);
 
-                @foreach($odontogramsymbols as $odontogramsymbol)
-                var option = document.createElement('option');
-                option.value = '{{ $odontogramsymbol->id }}';
-                option.textContent = '{{ $odontogramsymbol->code }}';
-                select.appendChild(option);
-                @endforeach
+            @foreach($odontogramsymbols as $odontogramsymbol)
+            var option = document.createElement('option');
+            option.value = '{{ $odontogramsymbol->id }}';
+            option.textContent = '{{ $odontogramsymbol->code }}';
+            select.appendChild(option);
+            @endforeach
 
-                inputGroup.appendChild(select);
-                col2.appendChild(label2);
-                col2.appendChild(inputGroup);
+            inputGroup.appendChild(select);
+            col2.appendChild(label2);
+            col2.appendChild(inputGroup);
 
-                var col3 = document.createElement('div');
-                col3.className = 'col-lg-4';
+            var col3 = document.createElement('div');
+            col3.className = 'col-lg-4';
 
-                var label3 = document.createElement('label');
-                label3.className = 'col-form-label fw-bold fs-6';
+            var label3 = document.createElement('label');
+            label3.className = 'col-form-label fw-bold fs-6';
 
-                var input3 = document.createElement('input');
-                input3.type = 'text';
-                input3.name = 'keterangan[]';
-                input3.className = 'form-control form-control-solid mb-3';
-                input3.placeholder = 'Keterangan';
+            var input3 = document.createElement('input');
+            input3.type = 'text';
+            input3.name = 'keterangan[]';
+            input3.className = 'form-control form-control-solid mb-3';
+            input3.placeholder = 'Keterangan';
 
-                col3.appendChild(label3);
-                col3.appendChild(input3);
+            col3.appendChild(label3);
+            col3.appendChild(input3);
 
-                row.appendChild(col1);
-                row.appendChild(col2);
-                row.appendChild(col3);
+            row.appendChild(col1);
+            row.appendChild(col2);
+            row.appendChild(col3);
 
-                container.appendChild(row);
-            });
-        </script>
+            container.appendChild(row);
+        });
+    </script>
 
-        <script>
-            var canvas = document.getElementById('signature-pad');
+    <script>
+        var canvas = document.getElementById('signature-pad');
+        var ctx = canvas.getContext('2d');
+        var drawing = false;
+
+        function getMousePos(canvas, evt) {
+            var rect = canvas.getBoundingClientRect();
+            return {
+                x: evt.clientX - rect.left,
+                y: evt.clientY - rect.top
+            };
+        }
+
+        function getTouchPos(canvas, touch) {
+            var rect = canvas.getBoundingClientRect();
+            return {
+                x: touch.touches[0].clientX - rect.left,
+                y: touch.touches[0].clientY - rect.top
+            };
+        }
+
+        canvas.addEventListener('mousedown', function (e) {
+            drawing = true;
+            var pos = getMousePos(canvas, e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        });
+
+        canvas.addEventListener('mousemove', function (e) {
+            if (drawing) {
+                var pos = getMousePos(canvas, e);
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+            }
+        });
+
+        canvas.addEventListener('mouseup', function () {
+            drawing = false;
+        });
+
+        canvas.addEventListener('touchstart', function (e) {
+            drawing = true;
+            var pos = getTouchPos(canvas, e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+            e.preventDefault();
+        });
+
+        canvas.addEventListener('touchmove', function (e) {
+            if (drawing) {
+                var pos = getTouchPos(canvas, e);
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+            }
+            e.preventDefault();
+        });
+
+        canvas.addEventListener('touchend', function () {
+            drawing = false;
+        });
+
+        document.getElementById('clear').addEventListener('click', function () {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+
+        document.getElementById('save').addEventListener('click', function () {
+            var dataURL = canvas.toDataURL();
+            document.getElementById('signature-data').value = dataURL;
+            console.log("Tanda tangan disimpan sebagai data URL:", dataURL);
+        });
+    </script>
+
+    <script>
+        function initializeSignaturePad(canvasId, clearButtonId, saveButtonId, hiddenInputId) {
+            var canvas = document.getElementById(canvasId);
             var ctx = canvas.getContext('2d');
             var drawing = false;
 
@@ -4266,14 +4363,14 @@
                 };
             }
 
-            canvas.addEventListener('mousedown', function(e) {
+            canvas.addEventListener('mousedown', function (e) {
                 drawing = true;
                 var pos = getMousePos(canvas, e);
                 ctx.beginPath();
                 ctx.moveTo(pos.x, pos.y);
             });
 
-            canvas.addEventListener('mousemove', function(e) {
+            canvas.addEventListener('mousemove', function (e) {
                 if (drawing) {
                     var pos = getMousePos(canvas, e);
                     ctx.lineTo(pos.x, pos.y);
@@ -4281,19 +4378,19 @@
                 }
             });
 
-            canvas.addEventListener('mouseup', function() {
+            canvas.addEventListener('mouseup', function () {
                 drawing = false;
             });
 
-            canvas.addEventListener('touchstart', function(e) {
+            canvas.addEventListener('touchstart', function (e) {
                 drawing = true;
                 var pos = getTouchPos(canvas, e);
                 ctx.beginPath();
                 ctx.moveTo(pos.x, pos.y);
-                e.preventDefault(); 
+                e.preventDefault();
             });
 
-            canvas.addEventListener('touchmove', function(e) {
+            canvas.addEventListener('touchmove', function (e) {
                 if (drawing) {
                     var pos = getTouchPos(canvas, e);
                     ctx.lineTo(pos.x, pos.y);
@@ -4302,121 +4399,48 @@
                 e.preventDefault();
             });
 
-            canvas.addEventListener('touchend', function() {
+            canvas.addEventListener('touchend', function () {
                 drawing = false;
             });
 
-            document.getElementById('clear').addEventListener('click', function() {
+            document.getElementById(clearButtonId).addEventListener('click', function () {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
             });
 
-            document.getElementById('save').addEventListener('click', function() {
+            document.getElementById(saveButtonId).addEventListener('click', function () {
                 var dataURL = canvas.toDataURL();
-                document.getElementById('signature-data').value = dataURL;
+                document.getElementById(hiddenInputId).value = dataURL;
                 console.log("Tanda tangan disimpan sebagai data URL:", dataURL);
             });
-        </script>
+        }
 
-        <script>
-            function initializeSignaturePad(canvasId, clearButtonId, saveButtonId, hiddenInputId) {
-                var canvas = document.getElementById(canvasId);
-                var ctx = canvas.getContext('2d');
-                var drawing = false;
-
-                function getMousePos(canvas, evt) {
-                    var rect = canvas.getBoundingClientRect();
-                    return {
-                        x: evt.clientX - rect.left,
-                        y: evt.clientY - rect.top
-                    };
-                }
-
-                function getTouchPos(canvas, touch) {
-                    var rect = canvas.getBoundingClientRect();
-                    return {
-                        x: touch.touches[0].clientX - rect.left,
-                        y: touch.touches[0].clientY - rect.top
-                    };
-                }
-
-                canvas.addEventListener('mousedown', function(e) {
-                    drawing = true;
-                    var pos = getMousePos(canvas, e);
-                    ctx.beginPath();
-                    ctx.moveTo(pos.x, pos.y);
-                });
-
-                canvas.addEventListener('mousemove', function(e) {
-                    if (drawing) {
-                        var pos = getMousePos(canvas, e);
-                        ctx.lineTo(pos.x, pos.y);
-                        ctx.stroke();
-                    }
-                });
-
-                canvas.addEventListener('mouseup', function() {
-                    drawing = false;
-                });
-
-                canvas.addEventListener('touchstart', function(e) {
-                    drawing = true;
-                    var pos = getTouchPos(canvas, e);
-                    ctx.beginPath();
-                    ctx.moveTo(pos.x, pos.y);
-                    e.preventDefault();
-                });
-
-                canvas.addEventListener('touchmove', function(e) {
-                    if (drawing) {
-                        var pos = getTouchPos(canvas, e);
-                        ctx.lineTo(pos.x, pos.y);
-                        ctx.stroke();
-                    }
-                    e.preventDefault();
-                });
-
-                canvas.addEventListener('touchend', function() {
-                    drawing = false;
-                });
-
-                document.getElementById(clearButtonId).addEventListener('click', function() {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                });
-
-                document.getElementById(saveButtonId).addEventListener('click', function() {
-                    var dataURL = canvas.toDataURL();
-                    document.getElementById(hiddenInputId).value = dataURL;
-                    console.log("Tanda tangan disimpan sebagai data URL:", dataURL);
-                });
-            }
-
-            initializeSignaturePad('signature-pad_1', 'clear1', 'save1', 'signature-data1');
-            initializeSignaturePad('signature-pad_2', 'clear2', 'save2', 'signature-data2');
-        </script>
+        initializeSignaturePad('signature-pad_1', 'clear1', 'save1', 'signature-data1');
+        initializeSignaturePad('signature-pad_2', 'clear2', 'save2', 'signature-data2');
+    </script>
 
 
-        <style>
-            .custom-img {
+    <style>
+        .custom-img {
             max-width: 100%;
             height: auto;
             max-height: 400px;
         }
-        </style>
+    </style>
 
-        <script>
-            function tampilkanPeranTim() {
-                let checkboxes = document.querySelectorAll('input[name="peran_tim[]"]:checked');
-                let hasil = [];
+    <script>
+        function tampilkanPeranTim() {
+            let checkboxes = document.querySelectorAll('input[name="peran_tim[]"]:checked');
+            let hasil = [];
 
-                checkboxes.forEach((checkbox) => {
-                    hasil.push(checkbox.value);
-                });
-
-                sessionStorage.setItem('peranTim', JSON.stringify(hasil));
-            }
-
-            document.querySelectorAll('input[name="peran_tim[]"]').forEach((checkbox) => {
-                checkbox.addEventListener('change', tampilkanPeranTim);
+            checkboxes.forEach((checkbox) => {
+                hasil.push(checkbox.value);
             });
-        </script>
+
+            sessionStorage.setItem('peranTim', JSON.stringify(hasil));
+        }
+
+        document.querySelectorAll('input[name="peran_tim[]"]').forEach((checkbox) => {
+            checkbox.addEventListener('change', tampilkanPeranTim);
+        });
+    </script>
 @endpush
