@@ -221,12 +221,12 @@
                     'action'     => $request->isConsent == "ya" ? "OPTIN" : "OPTOUT",
                     'agent'      => auth()->user()->name,
                 ];
-                /*$consent = satu_sehat_consent($data);
+                $consent = satu_sehat_consent($data);
 
                 if($consent) {
                     $examination->is_consent   = $request->isConsent == "ya" ? 1 : 0;
                     $examination->consent_data = $consent;
-                }*/
+                }
             }
 
             if(getenv('SATUSEHAT_ENV') == 'STG'){
