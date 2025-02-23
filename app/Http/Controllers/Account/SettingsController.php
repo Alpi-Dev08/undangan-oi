@@ -267,8 +267,8 @@
 
                 $encounter->addRegistrationId($examination_code); // unique string free text (increments / UUID)
                 $encounter->setConsultationMethod('RAJAL'); // RAJAL, IGD, RANAP, HOMECARE, TELEKONSULTASI
-                //$encounter->setSubject($user->patient->his_number, $user->name); // ID SATUSEHAT Pasien dan Nama SATUSEHAT
-                $encounter->setSubject('P02478375538','Ardianto Putra'); // For Test Only
+                $encounter->setSubject($user->patient->his_number, $user->name); // ID SATUSEHAT Pasien dan Nama SATUSEHAT
+                //$encounter->setSubject('P02478375538','Ardianto Putra'); // For Test Only
                 $encounter->addParticipant($reference,$reference_name); // ID SATUSEHAT Dokter, Nama Dokter
                 $encounter->addLocation($location->location_id, $location->name); // ID SATUSEHAT Location, Nama Poli
                 //$encounter = $encounter->json();
