@@ -604,110 +604,62 @@
 
             $encounter  = json_decode($examination->encounter, true);
             $encounter_ = '';
-            if ($examination->encounter_id && $examination->encounter_status != "finished" && !empty($validated['assessment'])) {
-                $assessment  = explode(' | ', $validated['assessment']);
-                $assessment_ = [];
-                $n           = 1;
+            if ($examination->encounter_id && $examination->encounter_status == "in-progress" && !empty($validated['assessment'])) {
+                $assessment = explode(' | ', $validated['assessment']);
+
+                $_encounter  = json_decode($examination->encounter);
+                $location    = $_encounter->location[0]->location;
+                $participant = $_encounter->participant[0]->individual;
+
+                $encounter = new Encounter;
+
                 foreach ($assessment as $row) {
                     $row_ = explode(' - ', $row);
                     if (isset($row_[1])) {
+                        $condition = new Condition;
+                        $condition->addClinicalStatus('active'); // active, inactive, resolved. Default bila tidak dideklarasi = active
+                        $condition->addCategory('diagnosis');    // Diagnosis, Keluhan. Default : Diagnosis
+                        $condition->addCode($row_[0]);           // Kode ICD10
+                        $condition->setSubject(str_replace('Patient/', '', $_encounter->subject->reference), $_encounter->subject->display);
+                        $condition->setEncounter($examination->encounter_id);     // ID SATUSEHAT Encounter
+                        $condition->setOnsetDateTime(Carbon::now()
+                                                           ->toDateTimeString()); // timestamp onset. Timestamp sekarang
+                        $condition->setRecordedDate(Carbon::now()
+                                                          ->toDateTimeString());  // timestamp recorded. Timestamp sekarang
+                        [$statusC, $resC] = $condition->post();
 
-                        $reqCondition = [
-                            "resourceType"   => "Condition",
-                            "clinicalStatus" => [
-                                "coding" => [
-                                    [
-                                        "system"  => "http://terminology.hl7.org/CodeSystem/condition-clinical",
-                                        "code"    => "active",
-                                        "display" => "Active",
-                                    ],
-                                ],
-                            ],
-                            "category"       => [
-                                [
-                                    "coding" => [
-                                        [
-                                            "system"  => "http://terminology.hl7.org/CodeSystem/condition-category",
-                                            "code"    => "encounter-diagnosis",
-                                            "display" => "Encounter Diagnosis",
-                                        ],
-                                    ],
-                                ],
-                            ],
-                            "code"           => [
-                                "coding" => [
-                                    [
-                                        "system"  => "http://hl7.org/fhir/sid/icd-10",
-                                        "code"    => $row_[0],
-                                        "display" => $row_[1],
-                                    ],
-                                ],
-                            ],
-                            "subject"        => [
-                                "reference" => "Patient/" . $examination->patient->his_number,
-                                "display"   => $examination->patient->user->name,
-                            ],
-                            "encounter"      => [
-                                "reference" => "Encounter/" . $examination->encounter_id,
-                            ],
-                            "onsetDateTime"  => date('Y-m-d\TH:i:sP'),
-                            "recordedDate"   => date('Y-m-d\TH:i:sP')
-                        ];
+                        $encounter->addDiagnosis($resC->id, $row_[0]);
+                    }
+                }
 
-                        $condition = satu_sehat('create', 'Condition', $reqCondition);
 
-                        $condition = json_decode($condition);
-                        if (isset($condition->id)) {
-                            $encounter["diagnosis"][] = [
-                                "condition" => [
-                                    "reference" => "Condition/" . $condition->id,
-                                    "display"   => trim(str_replace('|', '', $row_[1])),
-                                ],
-                                "use"       => [
-                                    "coding" => [
-                                        [
-                                            "system"  => "http://terminology.hl7.org/CodeSystem/diagnosis-role",
-                                            "code"    => "DD",
-                                            "display" => "Discharge diagnosis",
-                                        ],
-                                    ],
-                                ],
-                                "rank"      => $n,
-                            ];
+                foreach ($_encounter->identifier as $identifier) {
+                    $encounter->addRegistrationId($identifier->value); // e.g., http://sys-ids.kemkes.go.id/patient/P02478375538
+                }
 
-                            $n++;
+                foreach ($_encounter->statusHistory as $history) {
+                    if ($_encounter->status == "in-progress") {
+                        if ($history->status == "arrived") {
+                            $encounter->setArrived($history->period->start);
                         }
 
+                        if ($history->status == "in-progress") {
+                            $encounter->setInProgress($history->period->start, Carbon::now()->toDateTimeString());
+                            $encounter->setFinished(Carbon::now()->toDateTimeString());
+                        }
                     }
                 }
 
-                if ($encounter['status'] == 'in-progress') {
-                    $encounter['status'] = 'finished';
+                $encounter->setConsultationMethod('RAJAL'); // RAJAL, IGD, RANAP, HOMECARE, TELEKONSULTASI
+                $encounter->setSubject(str_replace('Patient/', '', $_encounter->subject->reference), $_encounter->subject->display);
+                $encounter->addParticipant(str_replace('Practitioner/', '', $participant->reference), $participant->display); // ID SATUSEHAT Dokter, Nama Dokter
+                $encounter->addLocation(str_replace('Location/', '', $location->reference), $location->display);              // ID SATUSEHAT Location, Nama Poli
 
-                    $encounter['statusHistory'][] = [
-                        "status" => "finished",
-                        "period" => [
-                            "start" => date('Y-m-d\TH:i:sP'),
-                            "end"   => date('Y-m-d\TH:i:sP')
-                        ]
-                    ];
-
-                    foreach ($encounter['statusHistory'] as $key => $value) {
-                        if(isset($value['status'])){
-			if ($value['status'] == 'in-progress') {
-                            $encounter['statusHistory'][$key]['period']['end'] = date('Y-m-d\TH:i:sP');
-                        }}
-                    }
-                }
-
-                $encounter_ = satu_sehat('update', 'Encounter', $encounter, $examination->encounter_id);
-                //echo json_encode($encounter_);exit;
-		if (isset($encounter_)) {
-                    if ($encounter_ != null || $encounter_ != "") {
-                        $encounter_                    = json_decode($encounter_);
-                        $validated['encounter_status'] = $encounter_->status;
-                        $validated['encounter']        = json_encode($encounter_);
-                    }
+                [$status, $res] = $encounter->put($examination->encounter_id);
+                if ($status == 200) {
+                    $encounter                     = json_encode($res);
+                    $validated['encounter']        = $encounter;
+                    $validated['encounter_status'] = $res->status;
                 }
             }
 
@@ -716,7 +668,7 @@
                 // Process Data
                 try {
                     $validated['status'] = 'done';
-                    $validated['resep'] = json_encode($request->resep);
+                    $validated['resep']  = json_encode($request->resep);
                     $examination->update($validated);
                 } catch (Exception $e) {
                     report($e);
@@ -758,33 +710,33 @@
             ]));
 
             return $pdf->download('penandaan_lokasi_operasi' . $user->name . '.pdf');
-        }        
+        }
 
         public function komunikasi_efektif(Request $request)
         {
             // Validasi input
             $validatedData = $request->validate([
-                'id' => 'required|exists:examinations,id',
+                'id'                     => 'required|exists:examinations,id',
                 'health_professional_id' => 'required|exists:health_professionals,id',
-                'situation' => 'required',
-                'background' => 'required',
-                'assessment' => 'required',
-                'recommendation' => 'required',
+                'situation'              => 'required',
+                'background'             => 'required',
+                'assessment'             => 'required',
+                'recommendation'         => 'required',
             ]);
-        
+
             // Simpan data ke dalam database
             $examination = Examination::find($request->id);
             $examination->situations()->create([
                 'health_professional_id' => $request->health_professional_id,
-                'situation' => $request->input('situation'),
-                'background' => $request->input('background'),
-                'assessment' => $request->input('assessment'),
-                'recommendation' => $request->input('recommendation'),
+                'situation'              => $request->input('situation'),
+                'background'             => $request->input('background'),
+                'assessment'             => $request->input('assessment'),
+                'recommendation'         => $request->input('recommendation'),
             ]);
-        
+
             // Redirect ke halaman list untuk melihat status
             return redirect()->route('komunikasi.efektif.status', $examination->id)
-                ->with('success', 'Data berhasil disimpan dan bisa dilihat di daftar status.');
-        }                
-                
+                             ->with('success', 'Data berhasil disimpan dan bisa dilihat di daftar status.');
+        }
+
     }
