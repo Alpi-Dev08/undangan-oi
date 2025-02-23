@@ -29,13 +29,15 @@
     use App\Models\Master\OdontogramSymbol;
     use App\Models\User;
     use Barryvdh\DomPDF\Facade\Pdf;
+    use Carbon\Carbon;
     use Doctrine\DBAL\Driver\PDO\Exception;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\Storage;
     use QrCode;
+    use Satusehat\Integration\FHIR\Condition;
+    use Satusehat\Integration\FHIR\Encounter;
     use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
-    use App\Models\Sbar;
 
 
     class ExaminationsController extends Controller
@@ -151,11 +153,13 @@
             $otherscategories       = [];
             $additionalsscategories = [];
             $laboratoryexamination  = null;
-            if ($examination->service_category->is_mcu == 1) {
-                $anamnesiscategories    = AnamnesisCategory::all();
-                $physicalscategories    = PhysicalCategory::where('id', '<>', 15)->get();
-                $otherscategories       = PhysicalCategory::where('id', 15)->get();
-                $additionalsscategories = AdditionalCategory::all();
+            if (isset($examination->service_category->is_mcu)) {
+                if ($examination->service_category->is_mcu == 1) {
+                    $anamnesiscategories    = AnamnesisCategory::all();
+                    $physicalscategories    = PhysicalCategory::where('id', '<>', 15)->get();
+                    $otherscategories       = PhysicalCategory::where('id', 15)->get();
+                    $additionalsscategories = AdditionalCategory::all();
+                }
             }
 
             if ($examination->is_lab) {
@@ -186,17 +190,17 @@
             //$sbars = Sbar::where('examination_id', $examination->id)->get();
 
             // Kirimkan data ke view
-            //return view('pages.klinik.examinations._editform', compact('examination', 'sbars'));                                   
+            //return view('pages.klinik.examinations._editform', compact('examination', 'sbars'));
 
             $qr = QrCode::size(150)
                         ->style('square')
                         ->generate('https://klinik.dharma.or.id/bukti-penyampaian-informasi/' . $examination->id);
 
             $qr_persetujuan_tindakan_medis = QrCode::size(150)
-                        ->style('square')
-                        ->generate('https://klinik.dharma.or.id/persetujuan-tindakan-medis/' . $examination->id);
+                                                   ->style('square')
+                                                   ->generate('https://klinik.dharma.or.id/persetujuan-tindakan-medis/' . $examination->id);
 
-            return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories', 'anamnesisexamination', 'examinations', 'physicalscategories', 'physicalexamination', 'otherscategories', 'otherexamination', 'additionalsscategories', 'additionalexamination', 'laboratoryexamination', 'pemeriksaan_awal', 'drugs', 'qr','qr_persetujuan_tindakan_medis', 'odontogramsymbols'));
+            return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories', 'anamnesisexamination', 'examinations', 'physicalscategories', 'physicalexamination', 'otherscategories', 'otherexamination', 'additionalsscategories', 'additionalexamination', 'laboratoryexamination', 'pemeriksaan_awal', 'drugs', 'qr', 'qr_persetujuan_tindakan_medis', 'odontogramsymbols'));
         }
 
         /**
@@ -357,35 +361,41 @@
             $examination         = Examination::find($id);
             $vitalityexamination = VitalityExamination::where('examination_id', $examination->id)->first();
 
-            if ($examination->encounter_id && $examination->encounter_status != "finished") {
-                $encounter = json_decode($examination->encounter, true);
+            if ($examination->encounter_id && $examination->encounter_status == "arrived") {
+                $_encounter  = json_decode($examination->encounter);
+                $location    = $_encounter->location[0]->location;
+                $participant = $_encounter->participant[0]->individual;
 
-                if ($encounter['status'] == 'arrived') {
-                    $encounter['status']          = 'in-progress';
-                    $encounter['statusHistory'][] = [
-                        "status" => "in-progress",
-                        "period" => [
-                            "start" => date('Y-m-d\TH:i:sP') //"2024-05-29T20:43:24+00:00"
-                        ]
-                    ];
 
-                    foreach ($encounter['statusHistory'] as $key => $value) {
-                        if(isset($value['status'])){
-			if ($value['status'] == 'arrived') {
-                            $encounter['statusHistory'][$key]['period']['end'] = date('Y-m-d\TH:i:sP');
+                $encounter = new Encounter;
+                foreach ($_encounter->identifier as $identifier) {
+                    $encounter->addRegistrationId($identifier->value); // e.g., http://sys-ids.kemkes.go.id/patient/P02478375538
+                }
+
+                foreach ($_encounter->statusHistory as $history) {
+                    if ($_encounter->status == "arrived") {
+                        if ($history->status == "arrived") {
+                            $encounter->setArrived($history->period->start);
+                            $encounter->setInProgress(Carbon::now()->toDateTimeString(), Carbon::now()
+                                                                                               ->toDateTimeString());
                         }
-			}
                     }
                 }
 
-                $encounter_ = satu_sehat('update', 'Encounter', $encounter, $examination->encounter_id);
+                $encounter->setConsultationMethod('RAJAL'); // RAJAL, IGD, RANAP, HOMECARE, TELEKONSULTASI
+                $encounter->setSubject(str_replace('Patient/', '', $_encounter->subject->reference), $_encounter->subject->display);
+                $encounter->addParticipant(str_replace('Practitioner/', '', $participant->reference), $participant->display); // ID SATUSEHAT Dokter, Nama Dokter
+                $encounter->addLocation(str_replace('Location/', '', $location->reference), $location->display);              // ID SATUSEHAT Location, Nama Poli
 
-                $encounter_ = json_decode($encounter_);
+                [$status, $res] = $encounter->put($examination->encounter_id);
+                if ($status == 200) {
+                    $encounter = json_encode($res);
 
-                $examination->encounter        = json_encode($encounter_);
-                $examination->encounter_status = $encounter_->status;
+                    $examination->encounter        = $encounter;
+                    $examination->encounter_status = $res->status;
 
-                $examination->save();
+                    $examination->save();
+                }
             }
 
             $user             = User::find($examination->user_id);
