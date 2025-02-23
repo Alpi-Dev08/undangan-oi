@@ -33,10 +33,15 @@
     use App\Models\Master\OdontogramSymbol;
     use App\Models\User;
     use App\Models\UserInfo;
+    use Carbon\Carbon;
+    use Exception;
     use Haruncpi\LaravelIdGenerator\IdGenerator;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Hash;
     use Illuminate\Support\Facades\Storage;
+    use Ramsey\Uuid\Uuid;
+    use Satusehat\Integration\FHIR\Encounter;
+    use Str;
 
     class SettingsController extends Controller
     {
@@ -216,108 +221,72 @@
                     'action'     => $request->isConsent == "ya" ? "OPTIN" : "OPTOUT",
                     'agent'      => auth()->user()->name,
                 ];
-                $consent = satu_sehat_consent($data);
+                /*$consent = satu_sehat_consent($data);
 
                 if($consent) {
                     $examination->is_consent   = $request->isConsent == "ya" ? 1 : 0;
                     $examination->consent_data = $consent;
-                }
+                }*/
             }
 
-            $location = Location::find($request->location_id);
+            if(getenv('SATUSEHAT_ENV') == 'STG'){
+                $location = (object) [
+                    'location_id' => '9252e3e6-f0e9-4076-9a4f-91c0a24a8b25',
+                    'name' => 'Ruang Poli Umum'
+                ];
 
-            if ($location->location_id) {
-                $reference      = "Location/" . $location->location_id;
-                $reference_name = $location->name;
             } else {
-                $reference      = "Location/b6442053-e8f1-4944-b349-316b3f59aef1";
-                $location       = Location::where('location_id', 'b6442053-e8f1-4944-b349-316b3f59aef1')->first();
-                $reference_name = $location->name;
+                $location = Location::find($request->location_id);
             }
-
 
             $healthprofesional = HealthProfesional::find($request->health_profesional_id);
 
             if ($healthprofesional->his_number) {
-                $reference      = "Practitioner/" . $healthprofesional->his_number;
+                $reference      = $healthprofesional->his_number;
                 $reference_name = $healthprofesional->user->name;
             } else {
-                $reference         = "Practitioner/10000571263";
+                $reference         = "10000571263";
                 $healthprofesional = HealthProfesional::where('his_number', '10000571263')->first();
                 $reference_name    = $healthprofesional->user->name;
             }
 
+            if(getenv('SATUSEHAT_ENV') == 'STG'){
+                $reference = '10009880728';
+                $reference_name = 'dr. Alexander';
+            }
+
+
             if ($user->patient->his_number) {
-                $jayParsedAry = [
-                    "resourceType"    => "Encounter",
-                    "identifier"      => [
-                        [
-                            "system" => "http://sys-ids.kemkes.go.id/encounter/" . env('SATU_SEHAT_ORGANIZATION_ID'),
-                            "use"    => "official",
-                            "value"  => $examination_code
-                        ]
-                    ],
-                    "status"          => "arrived",
-                    "class"           => [
-                        "system"  => "http://terminology.hl7.org/CodeSystem/v3-ActCode",
-                        "code"    => "AMB",
-                        "display" => "ambulatory"
-                    ],
-                    "subject"         => [
-                        "reference" => "Patient/" . $user->patient->his_number,
-                        "display"   => $user->name
-                    ],
-                    "participant"     => [
-                        [
-                            "type"       => [
-                                [
-                                    "coding" => [
-                                        [
-                                            "system"  => "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
-                                            "code"    => "ATND",
-                                            "display" => "attender"
-                                        ]
-                                    ]
-                                ]
-                            ],
-                            "individual" => [
-                                "reference" => $reference,
-                                "display"   => $reference_name
-                            ]
-                        ]
-                    ],
-                    "period"          => [
-                        "start" => date('Y-m-d\TH:i:sP'),
-                    ],
-                    "location"        => [
-                        [
-                            "location" => [
-                                "reference" => "Location/b6442053-e8f1-4944-b349-316b3f59aef1",
-                                "display"   => "Poli Umum"
-                            ]
-                        ]
-                    ],
-                    "statusHistory"   => [
-                        [
-                            "status" => "arrived",
-                            "period" => [
-                                "start" => date('Y-m-d\TH:i:sP'),
-                                "end"   => date('Y-m-d\TH:i:sP'),
-                            ]
-                        ]
-                    ],
-                    "serviceProvider" => [
-                        "reference" => "Organization/" . env('SATU_SEHAT_ORGANIZATION_ID'),
-                    ]
-                ];
+                $encounter = new Encounter;
+                $uuid = Uuid::uuid4()->toString();
+                $encounter->addRegistrationId($uuid); // unique string free text (increments / UUID)
 
-                $encounter                 = satu_sehat('create', 'Encounter', $jayParsedAry);
+                $encounter->setArrived(Carbon::now()->subMinutes(15)->toDateTimeString());
+                //$encounter->setInProgress(Carbon::now()->subMinutes(5)->toDateTimeString(), Carbon::now()->toDateTimeString());
+                //$encounter->setFinished(Carbon::now()->toDateTimeString());
 
-                $encounter = json_decode($encounter);
-                if(isset($encounter->id)) {
-                    $examination->encounter_id = $encounter->id;
-                    $examination->encounter    = json_encode($encounter);
-                    $examination->encounter_status = $encounter->status;
+                $encounter->addRegistrationId($examination_code); // unique string free text (increments / UUID)
+                $encounter->setConsultationMethod('RAJAL'); // RAJAL, IGD, RANAP, HOMECARE, TELEKONSULTASI
+                //$encounter->setSubject($user->patient->his_number, $user->name); // ID SATUSEHAT Pasien dan Nama SATUSEHAT
+                $encounter->setSubject('P02478375538','Ardianto Putra'); // For Test Only
+                $encounter->addParticipant($reference,$reference_name); // ID SATUSEHAT Dokter, Nama Dokter
+                $encounter->addLocation($location->location_id, $location->name); // ID SATUSEHAT Location, Nama Poli
+                //$encounter = $encounter->json();
+                //dd($encounter);
+                try {
+                    // Contoh POST
+                    [$encounter, $res] = $encounter->post();
+
+                    $encounter = json_encode($res, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+                } catch (Exception $e) {
+                   dd($e->getMessage());
+                }
+
+
+                if(isset($res->id)) {
+                    $examination->encounter_id = $res->id;
+                    $examination->encounter    = $encounter;
+                    $examination->encounter_status = $res->status;
                 }
             }
             $examination->save();
