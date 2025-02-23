@@ -41,7 +41,9 @@
             'bukti_penyampaian_informasi',
             'bukti_persetujuan_tindakan_medis',
             'psikososial',
-            'encounter_id'
+            'encounter_id',
+            'encounter',
+            'encounter_status'
         ];
 
         public function user()
