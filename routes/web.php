@@ -31,6 +31,7 @@
     use App\Http\Controllers\Klinik\TransactionsController;
     use App\Http\Controllers\Klinik\UnitController;
     use App\Http\Controllers\Klinik\VitalityExaminationsController;
+    use App\Http\Controllers\KycController;
     use App\Http\Controllers\Logs\AuditLogsController;
     use App\Http\Controllers\Logs\SystemLogsController;
     use App\Http\Controllers\Master\BloodTypesController;
@@ -99,6 +100,8 @@
     });
 
     Route::middleware('auth')->group(function () {
+
+        Route::get('/kyc_url', [KycController::class,'index'])->name('kycurl');
         // Account pages
         Route::prefix('account')->group(function () {
             Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');

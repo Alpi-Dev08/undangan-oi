@@ -28,7 +28,9 @@
                 } else {
                     $user = Auth::user();
                 }
-                return view('pages.' . $view, compact('user'));
+                $kyc_iframe = true;
+
+                return view('pages.' . $view, compact('user','kyc_iframe'));
             }
 
             // Get the default inner page
