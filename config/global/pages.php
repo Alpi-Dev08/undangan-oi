@@ -712,6 +712,21 @@ return [
                 ],
             ],
         ],
+        'jenis-pasien' => [
+            '*' => [
+                'title' => 'Jenis Pasien',
+            ],
+            'assets' => [
+                'custom' => [
+                    'css' => [
+                        'plugins/custom/datatables/datatables.bundle.css',
+                    ],
+                    'js' => [
+                        'plugins/custom/datatables/datatables.bundle.js',
+                    ],
+                ],
+            ],
+        ],
 
         'units' => [
             '*' => [

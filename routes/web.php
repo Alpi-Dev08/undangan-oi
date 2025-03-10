@@ -16,6 +16,7 @@
     use App\Http\Controllers\Klinik\HealthProfesionalsController;
     use App\Http\Controllers\Klinik\HealthProfesionalTypesController;
     use App\Http\Controllers\Klinik\IcdtenController;
+    use App\Http\Controllers\Klinik\JenisPasienController;
     use App\Http\Controllers\Klinik\LaboratoryExaminationsController;
     use App\Http\Controllers\Klinik\LocationsController;
     use App\Http\Controllers\Klinik\OrganizationController;
@@ -249,6 +250,8 @@
             Route::put('klinik/drugs/{drug}/reduceDetail', [DrugsController::class, 'updateDetailReduce'])->name('drugs.update1_');
 
             Route::resource('icdten', IcdtenController::class);
+            Route::resource('jenis-pasien', JenisPasienController::class);
+
 
         });
 
