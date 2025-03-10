@@ -7,6 +7,7 @@
     use App\Http\Requests\Account\SettingsInfoRequest;
     use App\Http\Requests\Account\SettingsNakesRequest;
     use App\Http\Requests\Account\SettingsPasswordRequest;
+    use App\Models\JenisPasien;
     use App\Models\Klinik\Examination;
     use App\Models\Klinik\HealthProfesional;
     use App\Models\Klinik\HealthProfesionalType;
@@ -26,11 +27,11 @@
     use App\Models\Master\Education;
     use App\Models\Master\Gender;
     use App\Models\Master\MaritalStatus;
+    use App\Models\Master\OdontogramSymbol;
     use App\Models\Master\Province;
     use App\Models\Master\Religion;
     use App\Models\Master\SubDistrict;
     use App\Models\Master\Work;
-    use App\Models\Master\OdontogramSymbol;
     use App\Models\User;
     use App\Models\UserInfo;
     use Carbon\Carbon;
@@ -41,7 +42,6 @@
     use Illuminate\Support\Facades\Storage;
     use Ramsey\Uuid\Uuid;
     use Satusehat\Integration\FHIR\Encounter;
-    use Str;
 
     class SettingsController extends Controller
     {
@@ -64,14 +64,14 @@
             $subdistricts = $info->district_id != null ? SubDistrict::where('district_id', $info->district_id)
                                                                     ->get() : null;
 
-            $cards      = CardType::all();
-            $bloods     = BloodType::all();
-            $religions  = Religion::all();
-            $genders    = Gender::all();
-            $works      = Work::all();
-            $maritals   = MaritalStatus::all();
-            $educations = Education::all();
-            $odontogramsymbols  = OdontogramSymbol::all();
+            $cards             = CardType::all();
+            $bloods            = BloodType::all();
+            $religions         = Religion::all();
+            $genders           = Gender::all();
+            $works             = Work::all();
+            $maritals          = MaritalStatus::all();
+            $educations        = Education::all();
+            $odontogramsymbols = OdontogramSymbol::all();
 
             $specialities = Speciality::all();
             $types        = HealthProfesionalType::all();
@@ -139,6 +139,7 @@
             $pemeriksaan_awal  = PemeriksaanAwal::where(['user_id' => null, 'patient_id' => null])->latest()->first();
             $packages          = Package::all();
             $locations         = Location::all();
+            $jenisPasien       = JenisPasien::all();
 
             $info = $user->info;
 
@@ -150,7 +151,8 @@
                 'servicecategories',
                 'locations',
                 'packages',
-                'pemeriksaan_awal'
+                'pemeriksaan_awal',
+                'jenisPasien'
             ]));
         }
 
@@ -181,19 +183,21 @@
         {
             $user = User::find($request->user_id);
 
-            $examination_code = IdGenerator::generate(['table'  => 'examinations',
-                                                       'field'  => 'examination_code',
-                                                       'length' => 12,
-                                                       'prefix' => 'E' . date('Ymd')
+            $examination_code = IdGenerator::generate([
+                'table'  => 'examinations',
+                'field'  => 'examination_code',
+                'length' => 12,
+                'prefix' => 'E' . date('Ymd')
             ]);
             $medical_record   = MedicalRecord::where('user_id', $request->user_id)->first();
             if ($medical_record) {
                 $medical_record_id = $medical_record->medical_record_code;
             } else {
-                $medical_record_id = IdGenerator::generate(['table'  => 'medical_records',
-                                                            'field'  => 'medical_record_code',
-                                                            'length' => 13,
-                                                            'prefix' => 'MR' . date('Ymd')
+                $medical_record_id = IdGenerator::generate([
+                    'table'  => 'medical_records',
+                    'field'  => 'medical_record_code',
+                    'length' => 13,
+                    'prefix' => 'MR' . date('Ymd')
                 ]);
 
                 $medical_record                      = new MedicalRecord();
@@ -205,6 +209,7 @@
             $examination                        = new Examination();
             $examination->user_id               = $user->id;
             $examination->patient_id            = $user->patient->id;
+            $examination->jenis_pasien_id       = $request->jenis_pasien_id;
             $examination->medical_record_id     = $medical_record->id;
             $examination->examination_code      = $examination_code;
             $examination->health_profesional_id = $request->health_profesional_id;
@@ -215,7 +220,7 @@
             $examination->total                 = 0;
             $examination->status                = 'waiting payment';
 
-            if($user->patient->his_number){
+            if ($user->patient->his_number) {
                 $data    = [
                     'patient_id' => $user->patient->his_number,
                     'action'     => $request->isConsent == "ya" ? "OPTIN" : "OPTOUT",
@@ -223,16 +228,16 @@
                 ];
                 $consent = satu_sehat_consent($data);
 
-                if($consent) {
+                if ($consent) {
                     $examination->is_consent   = $request->isConsent == "ya" ? 1 : 0;
                     $examination->consent_data = $consent;
                 }
             }
 
-            if(getenv('SATUSEHAT_ENV') == 'STG'){
+            if (getenv('SATUSEHAT_ENV') == 'STG') {
                 $location = (object) [
                     'location_id' => '9252e3e6-f0e9-4076-9a4f-91c0a24a8b25',
-                    'name' => 'Ruang Poli Umum'
+                    'name'        => 'Ruang Poli Umum'
                 ];
 
             } else {
@@ -250,26 +255,26 @@
                 $reference_name    = $healthprofesional->user->name;
             }
 
-            if(getenv('SATUSEHAT_ENV') == 'STG'){
-                $reference = '10009880728';
+            if (getenv('SATUSEHAT_ENV') == 'STG') {
+                $reference      = '10009880728';
                 $reference_name = 'dr. Alexander';
             }
 
 
             if ($user->patient->his_number) {
                 $encounter = new Encounter;
-                $uuid = Uuid::uuid4()->toString();
+                $uuid      = Uuid::uuid4()->toString();
                 $encounter->addRegistrationId($uuid); // unique string free text (increments / UUID)
 
                 $encounter->setArrived(Carbon::now()->subMinutes(15)->toDateTimeString());
                 //$encounter->setInProgress(Carbon::now()->subMinutes(5)->toDateTimeString(), Carbon::now()->toDateTimeString());
                 //$encounter->setFinished(Carbon::now()->toDateTimeString());
 
-                $encounter->addRegistrationId($examination_code); // unique string free text (increments / UUID)
-                $encounter->setConsultationMethod('RAJAL'); // RAJAL, IGD, RANAP, HOMECARE, TELEKONSULTASI
-                $encounter->setSubject($user->patient->his_number, $user->name); // ID SATUSEHAT Pasien dan Nama SATUSEHAT
+                $encounter->addRegistrationId($examination_code);                 // unique string free text (increments / UUID)
+                $encounter->setConsultationMethod('RAJAL');                       // RAJAL, IGD, RANAP, HOMECARE, TELEKONSULTASI
+                $encounter->setSubject($user->patient->his_number, $user->name);  // ID SATUSEHAT Pasien dan Nama SATUSEHAT
                 //$encounter->setSubject('P02478375538','Ardianto Putra'); // For Test Only
-                $encounter->addParticipant($reference,$reference_name); // ID SATUSEHAT Dokter, Nama Dokter
+                $encounter->addParticipant($reference, $reference_name);          // ID SATUSEHAT Dokter, Nama Dokter
                 $encounter->addLocation($location->location_id, $location->name); // ID SATUSEHAT Location, Nama Poli
                 //$encounter = $encounter->json();
                 //dd($encounter);
@@ -279,13 +284,13 @@
 
                     $encounter = json_encode($res, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
                 } catch (Exception $e) {
-                   dd($e->getMessage());
+                    dd($e->getMessage());
                 }
 
 
-                if(isset($res->id)) {
-                    $examination->encounter_id = $res->id;
-                    $examination->encounter    = $encounter;
+                if (isset($res->id)) {
+                    $examination->encounter_id     = $res->id;
+                    $examination->encounter        = $encounter;
                     $examination->encounter_status = $res->status;
                 }
             }
@@ -299,10 +304,11 @@
                 $pemeriksaan_awal->save();
             }
 
-            $inv = IdGenerator::generate(['table'  => 'transactions',
-                                          'field'  => 'invoice_number',
-                                          'length' => 14,
-                                          'prefix' => 'INV' . date('Ymd')
+            $inv = IdGenerator::generate([
+                'table'  => 'transactions',
+                'field'  => 'invoice_number',
+                'length' => 14,
+                'prefix' => 'INV' . date('Ymd')
             ]);
 
             $transactions                 = new Transaction();
@@ -331,19 +337,21 @@
         public function createAppointment(Request $request)
         {
             $user             = User::find($request->user_id);
-            $examination_code = IdGenerator::generate(['table'  => 'examinations',
-                                                       'field'  => 'examination_code',
-                                                       'length' => 12,
-                                                       'prefix' => 'E' . date('Ymd')
+            $examination_code = IdGenerator::generate([
+                'table'  => 'examinations',
+                'field'  => 'examination_code',
+                'length' => 12,
+                'prefix' => 'E' . date('Ymd')
             ]);
             $medical_record   = MedicalRecord::where('user_id', $request->user_id)->first();
             if ($medical_record) {
                 $medical_record_id = $medical_record->medical_record_code;
             } else {
-                $medical_record_id = IdGenerator::generate(['table'  => 'medical_records',
-                                                            'field'  => 'medical_record_code',
-                                                            'length' => 13,
-                                                            'prefix' => 'MR' . date('Ymd')
+                $medical_record_id = IdGenerator::generate([
+                    'table'  => 'medical_records',
+                    'field'  => 'medical_record_code',
+                    'length' => 13,
+                    'prefix' => 'MR' . date('Ymd')
                 ]);
 
                 $medical_record                      = new MedicalRecord();
@@ -368,10 +376,11 @@
             $examination->status                = 'waiting payment';
             $examination->save();
 
-            $inv = IdGenerator::generate(['table'  => 'transactions',
-                                          'field'  => 'invoice_number',
-                                          'length' => 14,
-                                          'prefix' => 'INV' . date('Ymd')
+            $inv = IdGenerator::generate([
+                'table'  => 'transactions',
+                'field'  => 'invoice_number',
+                'length' => 14,
+                'prefix' => 'INV' . date('Ymd')
             ]);
 
             $transactions                 = new Transaction();
@@ -382,6 +391,58 @@
             $transactions->save();
 
             return redirect()->route('appointments.index');
+        }
+
+        /**
+         * Update the specified resource in storage.
+         *
+         * @param \Illuminate\Http\Request $request
+         * @param int                      $user
+         *
+         * @return \Illuminate\Http\RedirectResponse
+         */
+        public function nakes(SettingsNakesRequest $request)
+        {
+            // save on user info
+            $healthprofesional = HealthProfesional::where('user_id', auth()->user()->id)->first();
+
+            if ($healthprofesional === null) {
+                // create new model
+                $healthprofesional = new HealthProfesional();
+            }
+
+            // attach this info to the current user
+            $healthprofesional->user()->associate(auth()->user());
+
+            foreach ($request->only(array_keys($request->rules())) as $key => $value) {
+                if (is_array($value)) {
+                    $value = serialize($value);
+                }
+                $healthprofesional->$key = $value;
+            }
+
+            $healthprofesional->save();
+
+            return redirect()->intended('account/settings');
+        }
+
+        /**
+         * Function to accept request for change email
+         */
+        public function changeEmail(SettingsEmailRequest $request)
+        {
+            // prevent change email for demo account
+            if ($request->input('current_email') === 'demo@demo.com') {
+                return redirect()->intended('account/settings');
+            }
+
+            auth()->user()->update(['email' => $request->input('email')]);
+
+            if ($request->expectsJson()) {
+                return response()->json($request->all());
+            }
+
+            return redirect()->intended('account/settings');
         }
 
         /**
@@ -437,39 +498,6 @@
         }
 
         /**
-         * Update the specified resource in storage.
-         *
-         * @param \Illuminate\Http\Request $request
-         * @param int                      $user
-         *
-         * @return \Illuminate\Http\RedirectResponse
-         */
-        public function nakes(SettingsNakesRequest $request)
-        {
-            // save on user info
-            $healthprofesional = HealthProfesional::where('user_id', auth()->user()->id)->first();
-
-            if ($healthprofesional === null) {
-                // create new model
-                $healthprofesional = new HealthProfesional();
-            }
-
-            // attach this info to the current user
-            $healthprofesional->user()->associate(auth()->user());
-
-            foreach ($request->only(array_keys($request->rules())) as $key => $value) {
-                if (is_array($value)) {
-                    $value = serialize($value);
-                }
-                $healthprofesional->$key = $value;
-            }
-
-            $healthprofesional->save();
-
-            return redirect()->intended('account/settings');
-        }
-
-        /**
          * Function for upload avatar image
          *
          * @param string $folder
@@ -488,25 +516,6 @@
             }
 
             return $file;
-        }
-
-        /**
-         * Function to accept request for change email
-         */
-        public function changeEmail(SettingsEmailRequest $request)
-        {
-            // prevent change email for demo account
-            if ($request->input('current_email') === 'demo@demo.com') {
-                return redirect()->intended('account/settings');
-            }
-
-            auth()->user()->update(['email' => $request->input('email')]);
-
-            if ($request->expectsJson()) {
-                return response()->json($request->all());
-            }
-
-            return redirect()->intended('account/settings');
         }
 
         /**

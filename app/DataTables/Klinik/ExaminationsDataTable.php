@@ -18,7 +18,7 @@
         public function dataTable($query)
         {
             $query = $query->where('appointment_status',null)->orWhere('appointment_status',1)->orderBy('created_at', 'desc');
-            
+
 		return datatables()
                 ->eloquent($query)
                 ->rawColumns(['action'])
@@ -37,6 +37,10 @@
                 })
                 ->addColumn('status', function (Examination $model) {
                     return $model->status;
+                })
+                ->addColumn('jenis_pasien', function (Examination $model) {
+                    $jenisPasien = $model->jenis_pasien->nama ?? "Umum";
+                    return "Pasien ".$jenisPasien;
                 })
                 ->addColumn('action', function (Examination $model) {
                     return view('pages.klinik.examinations._action', compact('model'));
@@ -87,6 +91,7 @@
             return [
                 Column::make('DT_RowIndex')->title('No')->orderable(false)->searchable(false),
                 Column::make('examination_code')->title(__('Examination Code'))->searchable(true),
+                Column::make('jenis_pasien')->title(__('Jenis Pasien'))->searchable(true),
                 Column::make('service')->title(__('Service'))->searchable(true),
                 Column::make('name')->title(__('Name'))->searchable(true),
                 Column::make('register_date')->title(__('Examination Date'))->searchable(true),
