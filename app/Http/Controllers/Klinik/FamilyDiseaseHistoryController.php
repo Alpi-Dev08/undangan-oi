@@ -35,7 +35,8 @@ class FamilyDiseaseHistoryController extends Controller
 
     public function edit(FamilyDiseaseHistory $familyDiseaseHistory)
     {
-        return view('pages.klinik.family_disease_histories.edit', compact('familyDiseaseHistory'));
+        $family_disease_history =$familyDiseaseHistory;
+        return view('pages.klinik.family_disease_histories.edit', compact(['familyDiseaseHistory','family_disease_history']));
     }
 
     public function update(UpdateFamilyDiseaseHistoryRequest $request, FamilyDiseaseHistory $familyDiseaseHistory)

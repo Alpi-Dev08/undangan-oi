@@ -14,7 +14,7 @@ class StoreFamilyDiseaseHistoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'required|string|max:255',
+            'code' => 'required|string|max:255|unique:family_disease_histories',
             'name' => 'required|string|max:255',
             'code_system' => 'required|string|max:255',
             'value_set' => 'nullable|string',
