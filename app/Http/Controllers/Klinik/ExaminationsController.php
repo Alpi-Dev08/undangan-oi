@@ -12,12 +12,14 @@
     use App\Models\Klinik\AnamnesisExamination;
     use App\Models\Klinik\Drug;
     use App\Models\Klinik\Examination;
+    use App\Models\Klinik\FamilyDiseaseHistory;
     use App\Models\Klinik\HealthProfesional;
     use App\Models\Klinik\Icdten;
     use App\Models\Klinik\LaboratoryExamination;
     use App\Models\Klinik\OtherExamination;
     use App\Models\Klinik\Package;
     use App\Models\Klinik\PemeriksaanAwal;
+    use App\Models\Klinik\PersonalDiseaseHistory;
     use App\Models\Klinik\PhysicalCategory;
     use App\Models\Klinik\PhysicalExamination;
     use App\Models\Klinik\Plan;
@@ -148,6 +150,8 @@
             $plans                  = Plan::all();
             $drugs                  = Drug::all();
             $icdtens                = Icdten::all();
+            $personaldiseasehistories = PersonalDiseaseHistory::all();
+            $familydiseasehistories   = FamilyDiseaseHistory::all();
             $anamnesiscategories    = [];
             $physicalscategories    = [];
             $otherscategories       = [];
@@ -200,7 +204,7 @@
                                                    ->style('square')
                                                    ->generate('https://klinik.dharma.or.id/persetujuan-tindakan-medis/' . $examination->id);
 
-            return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories', 'anamnesisexamination', 'examinations', 'physicalscategories', 'physicalexamination', 'otherscategories', 'otherexamination', 'additionalsscategories', 'additionalexamination', 'laboratoryexamination', 'pemeriksaan_awal', 'drugs', 'qr', 'qr_persetujuan_tindakan_medis', 'odontogramsymbols'));
+            return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories', 'anamnesisexamination', 'examinations', 'physicalscategories', 'physicalexamination', 'otherscategories', 'otherexamination', 'additionalsscategories', 'additionalexamination', 'laboratoryexamination', 'pemeriksaan_awal', 'drugs', 'qr', 'qr_persetujuan_tindakan_medis', 'odontogramsymbols', 'personaldiseasehistories', 'familydiseasehistories'));
         }
 
         /**
