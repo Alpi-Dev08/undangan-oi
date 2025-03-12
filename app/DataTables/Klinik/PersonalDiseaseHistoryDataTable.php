@@ -39,7 +39,7 @@ class PersonalDiseaseHistoryDataTable extends DataTable
                 return $model->value_set;
             })
             ->addColumn('action', function (PersonalDiseaseHistory $model) {
-                return view('pages.klinik.personal_disease_history._action', compact('model'));
+                return view('pages.klinik.personal_disease_histories._action', compact('model'));
             });
     }
 
@@ -51,7 +51,7 @@ class PersonalDiseaseHistoryDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('personal-disease-history-table')
+                    ->setTableId('personal-disease-histories-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->orderBy(1,'asc')

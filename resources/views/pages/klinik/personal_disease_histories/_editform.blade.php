@@ -6,13 +6,29 @@
         <!--begin::Input group-->
         <div class="fv-row mb-7">
             <!--begin::Label-->
+            <label class="required fw-bold fs-6 mb-2">Kode</label>
+            <!--end::Label-->
+            <!--begin::Input-->
+            <div class="input-group input-group-solid has-validation mb-3">
+                <input type="text" name="code" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('code') is-invalid @enderror" placeholder="Kode penyakit" value="{{ old('code', $personal_disease_history->code) }}"/>
+            </div>
+            @error('code')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+            <!--end::Input-->
+        </div>
+        <!--end::Input group-->
+
+        <!--begin::Input group-->
+        <div class="fv-row mb-7">
+            <!--begin::Label-->
             <label class="required fw-bold fs-6 mb-2">Nama Penyakit</label>
             <!--end::Label-->
             <!--begin::Input-->
             <div class="input-group input-group-solid has-validation mb-3">
-                <input type="text" name="disease_name" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('disease_name') is-invalid @enderror" placeholder="Nama penyakit" value="{{ old('disease_name', $personal_disease_history->disease_name) }}"/>
+                <input type="text" name="name" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('name') is-invalid @enderror" placeholder="Nama penyakit" value="{{ old('name', $personal_disease_history->name) }}"/>
             </div>
-            @error('disease_name')
+            @error('name')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
             <!--end::Input-->
@@ -22,13 +38,13 @@
         <!--begin::Input group-->
         <div class="fv-row mb-7">
             <!--begin::Label-->
-            <label class="required fw-bold fs-6 mb-2">Tanggal Diagnosis</label>
+            <label class="required fw-bold fs-6 mb-2">Sistem Kode</label>
             <!--end::Label-->
             <!--begin::Input-->
             <div class="input-group input-group-solid has-validation mb-3">
-                <input type="date" name="diagnosis_date" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('diagnosis_date') is-invalid @enderror" value="{{ old('diagnosis_date', $personal_disease_history->diagnosis_date->format('Y-m-d')) }}"/>
+                <input type="text" name="code_system" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('code_system') is-invalid @enderror" placeholder="Sistem kode" value="{{ old('code_system', $personal_disease_history->code_system) }}"/>
             </div>
-            @error('diagnosis_date')
+            @error('code_system')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
             <!--end::Input-->
@@ -38,29 +54,13 @@
         <!--begin::Input group-->
         <div class="fv-row mb-7">
             <!--begin::Label-->
-            <label class="fw-bold fs-6 mb-2">Detail Pengobatan</label>
+            <label class="fw-bold fs-6 mb-2">Set Nilai</label>
             <!--end::Label-->
             <!--begin::Input-->
             <div class="input-group input-group-solid has-validation mb-3">
-                <textarea name="treatment_details" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('treatment_details') is-invalid @enderror" placeholder="Detail pengobatan">{{ old('treatment_details', $personal_disease_history->treatment_details) }}</textarea>
+                <textarea name="value_set" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('value_set') is-invalid @enderror" placeholder="Set nilai">{{ old('value_set', $personal_disease_history->value_set) }}</textarea>
             </div>
-            @error('treatment_details')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-            <!--end::Input-->
-        </div>
-        <!--end::Input group-->
-
-        <!--begin::Input group-->
-        <div class="fv-row mb-7">
-            <!--begin::Label-->
-            <label class="fw-bold fs-6 mb-2">Catatan Tambahan</label>
-            <!--end::Label-->
-            <!--begin::Input-->
-            <div class="input-group input-group-solid has-validation mb-3">
-                <textarea name="additional_notes" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('additional_notes') is-invalid @enderror" placeholder="Catatan tambahan">{{ old('additional_notes', $personal_disease_history->additional_notes) }}</textarea>
-            </div>
-            @error('additional_notes')
+            @error('value_set')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
             <!--end::Input-->

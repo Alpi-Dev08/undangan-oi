@@ -30,7 +30,7 @@
                         form.submit();
                         Swal.fire(
                             'Deleted!',
-                            'Personal disease history has been deleted.',
+                            'Disease has been deleted.',
                             'success'
                         )
                     }
@@ -47,3 +47,4 @@
         }
     </style>
 @endsection
+
