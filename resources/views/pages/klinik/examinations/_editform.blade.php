@@ -3746,91 +3746,20 @@
                                     <div class="d-flex flex-column flex-row-auto w-200px">
                                         <label for="pulse" class="form-label">Riwayat Penyakit Dahulu :</label>
                                     </div>
-                                    <div class="d-flex flex-row flex-row-fluid">
-                                        <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            <input value="Hipertensi" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_5" {{ isset($psikososial->riwayat_kesehatan) && isset($psikososial->riwayat_kesehatan->penyakit_dahulu) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Hipertensi" ? 'checked' : '' }}/>
-                                            <label class="form-check-label" for="riwayat_kesehatan_5">
-                                                Hipertensi
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            <input value="DM" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_6" {{ isset($psikososial->riwayat_kesehatan) && isset($psikososial->riwayat_kesehatan->penyakit_dahulu) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "DM" ? 'checked' : '' }}/>
-                                            <label class="form-check-label" for="riwayat_kesehatan_6">
-                                                DM
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            <input value="PJK" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_7" {{ isset($psikososial->riwayat_kesehatan) && isset($psikososial->riwayat_kesehatan->penyakit_dahulu) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "PJK" ? 'checked' : '' }}/>
-                                            <label class="form-check-label" for="riwayat_kesehatan_7">
-                                                PJK
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            <input value="Asm" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_8" {{ isset($psikososial->riwayat_kesehatan) && isset($psikososial->riwayat_kesehatan->penyakit_dahulu) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Asm" ? 'checked' : '' }}/>
-                                            <label class="form-check-label" for="riwayat_kesehatan_8">
-                                                Asm
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex flex-row mt-5">
-                                    <div class="d-flex flex-column flex-row-auto w-200px">
-                                        <label for="pulse" class="form-label">&nbsp;</label>
-                                    </div>
-                                    <div class="d-flex flex-row flex-row-fluid">
-                                        <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            <input value="Stroke" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_9" {{ isset($psikososial->riwayat_kesehatan) && isset($psikososial->riwayat_kesehatan->penyakit_dahulu) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Stroke" ? 'checked' : '' }}/>
-                                            <label class="form-check-label" for="riwayat_kesehatan_9">
-                                                Stroke
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            <input value="Liver" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_10" {{ isset($psikososial->riwayat_kesehatan) && isset($psikososial->riwayat_kesehatan->penyakit_dahulu) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Liver" ? 'checked' : '' }}/>
-                                            <label class="form-check-label" for="riwayat_kesehatan_10">
-                                                Liver
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            <input value="Ginjal" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_11" {{ isset($psikososial->riwayat_kesehatan) && isset($psikososial->riwayat_kesehatan->penyakit_dahulu) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Ginjal" ? 'checked' : '' }}/>
-                                            <label class="form-check-label" for="riwayat_kesehatan_11">
-                                                Ginjal
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            <input value="TB Paru" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_12" {{ isset($psikososial->riwayat_kesehatan) && isset($psikososial->riwayat_kesehatan->penyakit_dahulu) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "TB Paru" ? 'checked' : '' }}/>
-                                            <label class="form-check-label" for="riwayat_kesehatan_12">
-                                                TB Paru
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex flex-row mt-5">
-                                    <div class="d-flex flex-column flex-row-auto w-200px">
-                                        <label for="pulse" class="form-label">&nbsp;</label>
-                                    </div>
-                                    <div class="d-flex flex-row flex-row-fluid">
-                                        <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            <input value="Hepatitis" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_13" {{ isset($psikososial->riwayat_kesehatan) && isset($psikososial->riwayat_kesehatan->penyakit_dahulu) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Hepatitis" ? 'checked' : '' }}/>
-                                            <label class="form-check-label" for="riwayat_kesehatan_13">
-                                                Hepatitis
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-switch form-check-custom form-check-solid me-10 w-200px">
-                                            <input value="Tidak Ada" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_14" {{ isset($psikososial->riwayat_kesehatan) && isset($psikososial->riwayat_kesehatan->penyakit_dahulu) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Tidak Ada" ? 'checked' : '' }}/>
-                                            <label class="form-check-label" for="riwayat_kesehatan_14">
-                                                Tidak Ada
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-switch form-check-custom form-check-solid me-10 w-400px">
-                                            <input value="Lain-lain" class="form-check-input h-20px w-30px me-5" type="radio" name="riwayat_kesehatan[penyakit_dahulu]" id="riwayat_kesehatan_15" {{ isset($psikososial->riwayat_kesehatan) && isset($psikososial->riwayat_kesehatan->penyakit_dahulu) && $psikososial->riwayat_kesehatan->penyakit_dahulu == "Lain-lain" ? 'checked' : '' }}/>
-                                            <label class="form-check-label w-150px" for="riwayat_kesehatan_15">
-                                                Lain-lain
-                                            </label>
-                                            <input class="form-control form-control-sm me-5" name="riwayat_penyakit_dahulu" value="{{ isset($psikososial->riwayat_kesehatan) && isset($psikososial->riwayat_kesehatan->penyakit_dahulu) && $psikososial->riwayat_kesehatan->penyakit_dahulu == 'Lain-lain' ? $psikososial->riwayat_penyakit_dahulu : '' }}"/>
-                                        </div>
-                                    </div>
-                                </div>
 
+                                    <div class="d-flex flex-row flex-row-fluid">
+                                        <select class="form-select form-select-solid" data-control="select2" data-placeholder="Pilih Riwayat Penyakit" data-allow-clear="true" multiple="multiple" name="riwayat_kesehatan[penyakit_dahulu][]" id="previous_disease">
+                                            <option></option>
+                                            @foreach($personaldiseasehistories as $disease)
+                                                <option value="{{ $disease->code }}"
+                                                    {{ (is_array($psikososial->riwayat_kesehatan->penyakit_dahulu ?? null) && in_array($disease->code, $psikososial->riwayat_kesehatan->penyakit_dahulu))
+                                                        || ($psikososial->riwayat_kesehatan->penyakit_dahulu ?? '') == $disease->code ? 'selected' : '' }}>
+                                                    {{ $disease->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="d-flex flex-row mt-5">
                                     <div class="d-flex flex-column flex-row-auto w-200px">
                                         <label for="pulse" class="form-label">Riwayat Penyakit Dalam Keluarga :</label>

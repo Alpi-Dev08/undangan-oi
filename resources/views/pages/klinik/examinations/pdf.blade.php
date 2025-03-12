@@ -295,10 +295,6 @@
                 <h4 style="font-weight: bolder;color:#436ba4;font-size:12px;margin:0px;margin-top:10px;text-transform: uppercase">Riwayat Kesehatan</h4>
                 <table style="width:100%;font-size:12px;">
                     @foreach($psikososial->riwayat_kesehatan as $key => $value)
-                        <tr>
-                            <td style="font-size:12px;width:35%;padding-left:10px">{{ ucwords(str_replace('_',' ',$key)) }}</td>
-                            <td style="font-size:12px;width:65%">{{ ucwords($value) ?? "-" }}</td>
-                        </tr>
                         @if($key =='alergi_obat' && $value == 'Ada')
                             <tr>
                                 <td style="font-size:12px;width:35%;padding-left:10px">Alergi Obat</td>
@@ -309,15 +305,36 @@
                                 <td style="font-size:12px;width:35%;padding-left:10px">Makanan Alergi</td>
                                 <td style="font-size:12px;width:65%">{{ ucwords($psikososial->riwayat_alergi_makanan) ?? "-" }}</td>
                             </tr>
+                        @elseif($key =='penyakit_dahulu' && $value !== 'Lain-lain')
+                            <tr>
+                                <td style="font-size:12px;width:35%;padding-left:10px">Penyakit Dahulu</td>
+                                <td style="font-size:12px;width:65%">
+                                    @if(is_array($value))
+                                        @php
+                                            $diseases = \App\Models\Klinik\PersonalDiseaseHistory::whereIn('code', $value)->pluck('name')->toArray();
+                                            echo implode(', ', $diseases);
+                                        @endphp
+                                    @else
+                                        {{ ucwords($value) ?? "-" }}
+                                    @endif
+                                </td>
+                            </tr>
                         @elseif($key =='penyakit_dahulu' && $value == 'Lain-lain')
                             <tr>
                                 <td style="font-size:12px;width:35%;padding-left:10px">Penyakit Dahulu</td>
-                                <td style="font-size:12px;width:65%">{{ ucwords($psikososial->riwayat_penyakit_dahulu) ?? "-" }}</td>
+                                <td style="font-size:12px;width:65%">
+                                    {{ ucwords($psikososial->riwayat_penyakit_dahulu) ?? "-" }}
+                                </td>
                             </tr>
                         @elseif($key =='penyakit_keluarga' && $value == 'Lain-lain')
                             <tr>
                                 <td style="font-size:12px;width:35%;padding-left:10px">Penyakit Keluarga</td>
                                 <td style="font-size:12px;width:65%">{{ ucwords($psikososial->riwayat_penyakit_keluarga) ?? "-" }}</td>
+                            </tr>
+                        @else
+                            <tr>
+                                <td style="font-size:12px;width:35%;padding-left:10px">{{ ucwords(str_replace('_',' ',$key)) }}</td>
+                                <td style="font-size:12px;width:65%">{{ ucwords($value) ?? "-" }}</td>
                             </tr>
                         @endif
                     @endforeach
@@ -836,7 +853,7 @@
                         </td>
                     </tr>
                 @endif
-                
+
                 <tr>
                     <td style="font-weight:bold">Saran</td>
                 </tr>
