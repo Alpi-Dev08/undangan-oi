@@ -742,6 +742,21 @@ return [
                 ],
             ],
         ],
+        'family-disease-histories' => [
+            '*' => [
+                'title' => 'Jenis Riwayat Penyakit Keluarga',
+            ],
+            'assets' => [
+                'custom' => [
+                    'css' => [
+                        'plugins/custom/datatables/datatables.bundle.css',
+                    ],
+                    'js' => [
+                        'plugins/custom/datatables/datatables.bundle.js',
+                    ],
+                ],
+            ],
+        ],
 
         'units' => [
             '*' => [

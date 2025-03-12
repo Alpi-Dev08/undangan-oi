@@ -10,6 +10,7 @@
     use App\Http\Controllers\Klinik\DiseasesController;
     use App\Http\Controllers\Klinik\DrugsController;
     use App\Http\Controllers\Klinik\ExaminationsController;
+    use App\Http\Controllers\Klinik\FamilyDiseaseHistoryController;
     use App\Http\Controllers\Klinik\HealthcareCategoriesController;
     use App\Http\Controllers\Klinik\HealthcaresController;
     use App\Http\Controllers\Klinik\HealthcareTypesController;
@@ -17,15 +18,18 @@
     use App\Http\Controllers\Klinik\HealthProfesionalTypesController;
     use App\Http\Controllers\Klinik\IcdtenController;
     use App\Http\Controllers\Klinik\JenisPasienController;
+    use App\Http\Controllers\Klinik\KomunikasiEfektifController;
     use App\Http\Controllers\Klinik\LaboratoryExaminationsController;
     use App\Http\Controllers\Klinik\LocationsController;
     use App\Http\Controllers\Klinik\OrganizationController;
     use App\Http\Controllers\Klinik\OtherExaminationsController;
     use App\Http\Controllers\Klinik\PackagesController;
     use App\Http\Controllers\Klinik\PatientsController;
+    use App\Http\Controllers\Klinik\PersonalDiseaseHistoryController;
     use App\Http\Controllers\Klinik\PhysicalCategoriesController;
     use App\Http\Controllers\Klinik\PhysicalExaminationsController;
     use App\Http\Controllers\Klinik\PhysicalsController;
+    use App\Http\Controllers\Klinik\SbarController;
     use App\Http\Controllers\Klinik\ServiceCategoriesController;
     use App\Http\Controllers\Klinik\ServicesController;
     use App\Http\Controllers\Klinik\SpecialitiesController;
@@ -43,22 +47,17 @@
     use App\Http\Controllers\Master\EducationsController;
     use App\Http\Controllers\Master\GendersController;
     use App\Http\Controllers\Master\MaritalStatusesController;
+    use App\Http\Controllers\Master\OdontogramSymbolsController;
     use App\Http\Controllers\Master\ProvincesController;
     use App\Http\Controllers\Master\RelationshipStatusesController;
     use App\Http\Controllers\Master\ReligionsController;
     use App\Http\Controllers\Master\SubDistrictsController;
     use App\Http\Controllers\Master\WorksController;
     use App\Http\Controllers\PagesController;
-    use App\Http\Controllers\GlobalController;
     use App\Http\Controllers\PermissionsController;
-    use App\Http\Controllers\PersonalDiseaseHistoryController;
     use App\Http\Controllers\RolesController;
     use App\Http\Controllers\UsersController;
     use Illuminate\Support\Facades\Route;
-    use App\Http\Controllers\Master\OdontogramSymbolsController;
-    use App\Http\Controllers\PDFUploadController;
-    use App\Http\Controllers\Klinik\KomunikasiEfektifController;
-    use App\Http\Controllers\Klinik\SbarController;
 
     /*
     |--------------------------------------------------------------------------
@@ -253,6 +252,7 @@
             Route::resource('icdten', IcdtenController::class);
             Route::resource('jenis-pasien', JenisPasienController::class);
             Route::resource('personal-disease-histories', PersonalDiseaseHistoryController::class);
+            Route::resource('family-disease-histories', FamilyDiseaseHistoryController::class);
 
 
         });
