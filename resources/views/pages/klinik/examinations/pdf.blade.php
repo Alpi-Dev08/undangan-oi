@@ -326,6 +326,21 @@
                                     {{ ucwords($psikososial->riwayat_penyakit_dahulu) ?? "-" }}
                                 </td>
                             </tr>
+                        @elseif($key =='penyakit_keluarga' && $value !== 'Lain-lain')
+                            <tr>
+                                <td style="font-size:12px;width:35%;padding-left:10px">Penyakit Keluarga</td>
+                                <td style="font-size:12px;width:65%">
+                                    @if(is_array($value))
+                                        @php
+                                            $diseases = \App\Models\Klinik\FamilyDiseaseHistory::whereIn('code', $value)->pluck('name')->toArray();
+                                            echo implode(', ', $diseases);
+                                        @endphp
+                                    @else
+                                        {{ ucwords($value) ?? "-" }}
+                                    @endif
+                                </td>
+                            </tr>
+
                         @elseif($key =='penyakit_keluarga' && $value == 'Lain-lain')
                             <tr>
                                 <td style="font-size:12px;width:35%;padding-left:10px">Penyakit Keluarga</td>
