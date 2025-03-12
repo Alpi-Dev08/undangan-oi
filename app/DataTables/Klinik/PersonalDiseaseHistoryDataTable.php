@@ -72,7 +72,7 @@ class PersonalDiseaseHistoryDataTable extends DataTable
             Column::make('code')->title(__('Code'))->searchable(true),
             Column::make('name')->title(__('Name'))->searchable(true),
             Column::make('code_system')->title(__('Code System'))->searchable(true),
-            Column::make('value_set')->title(__('Value Set'))->searchable(true),
+            Column::make('value_set')->title(__('Source Code'))->searchable(true),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
