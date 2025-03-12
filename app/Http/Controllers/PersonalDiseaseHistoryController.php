@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Klinik\StorePersonalDiseaseHistoryRequest;
 use App\Http\Requests\Klinik\UpdatePersonalDiseaseHistoryRequest;
 use App\Models\Klinik\PersonalDiseaseHistory;
+use App\DataTables\Klinik\PersonalDiseaseHistoryDataTable;
 use Illuminate\Http\Request;
 
 class PersonalDiseaseHistoryController extends Controller
 {
-    public function index()
+    public function index(PersonalDiseaseHistoryDataTable $dataTable)
     {
-        $histories = PersonalDiseaseHistory::all();
-        return view('personal_disease_histories.index', compact('histories'));
+        return $dataTable->render('personal_disease_histories.index');
     }
 
     public function create()
