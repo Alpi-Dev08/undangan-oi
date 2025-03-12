@@ -264,6 +264,12 @@
                             'path' => 'klinik/jenis-pasien',
                             'bullet' => '<span class="bullet bullet-dot"></span>',
                             'permission' => ['klinik.read'],
+                        ],
+                        [
+                            'title' => 'Jenis Riwayat Penyakit Pribadi',
+                            'path' => 'klinik/personal-disease-histories',
+                            'bullet' => '<span class="bullet bullet-dot"></span>',
+                            'permission' => ['klinik.read'],
                         ]
                     ],
                 ],

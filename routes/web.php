@@ -51,6 +51,7 @@
     use App\Http\Controllers\PagesController;
     use App\Http\Controllers\GlobalController;
     use App\Http\Controllers\PermissionsController;
+    use App\Http\Controllers\PersonalDiseaseHistoryController;
     use App\Http\Controllers\RolesController;
     use App\Http\Controllers\UsersController;
     use Illuminate\Support\Facades\Route;
@@ -251,6 +252,7 @@
 
             Route::resource('icdten', IcdtenController::class);
             Route::resource('jenis-pasien', JenisPasienController::class);
+            Route::resource('personal-disease-histories', PersonalDiseaseHistoryController::class);
 
 
         });
