@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Klinik\StorePersonalDiseaseHistoryRequest;
+use App\Http\Requests\Klinik\UpdatePersonalDiseaseHistoryRequest;
 use App\Models\Klinik\PersonalDiseaseHistory;
 use Illuminate\Http\Request;
 
@@ -18,14 +20,9 @@ class PersonalDiseaseHistoryController extends Controller
         return view('personal_disease_histories.create');
     }
 
-    public function store(Request $request)
+    public function store(StorePersonalDiseaseHistoryRequest $request)
     {
-        $validated = $request->validate([
-            'code' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'code_system' => 'required|string|max:255',
-            'value_set' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         PersonalDiseaseHistory::create($validated);
 
@@ -38,14 +35,9 @@ class PersonalDiseaseHistoryController extends Controller
         return view('personal_disease_histories.edit', compact('personalDiseaseHistory'));
     }
 
-    public function update(Request $request, PersonalDiseaseHistory $personalDiseaseHistory)
+    public function update(UpdatePersonalDiseaseHistoryRequest $request, PersonalDiseaseHistory $personalDiseaseHistory)
     {
-        $validated = $request->validate([
-            'code' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'code_system' => 'required|string|max:255',
-            'value_set' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         $personalDiseaseHistory->update($validated);
 
