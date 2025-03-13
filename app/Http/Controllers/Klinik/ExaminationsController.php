@@ -605,10 +605,15 @@
                 abort(403, 'Sorry !! You are Unauthorized to edit any master date !');
             }
 
+
             // Validation Data
             $validated = $request->validated();
 
-            $riwayat_kesehatan = json_decode($examination->psikososial)->riwayat_kesehatan;
+            $riwayat_kesehatan = "";
+            if(isset($examination->psikososial)){
+                $riwayat_kesehatan = json_decode($examination->psikososial);
+                $riwayat_kesehatan = $riwayat_kesehatan->riwayat_kesehatan ?? "";
+            }
 
             $encounter  = json_decode($examination->encounter, true);
             $encounter_ = '';
