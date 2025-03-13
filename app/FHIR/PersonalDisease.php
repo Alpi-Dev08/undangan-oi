@@ -13,7 +13,7 @@ class PersonalDisease extends Condition
         $this->condition['category'][] = [
             'coding' => [
                 [
-                    'system' => 'http://terminology.hl7.org/CodeSystem/condition-category',
+                    'system' => 'http://terminology.kemkes.go.id',
                     'code' => $category,
                     'display' => ucfirst($category),
                 ],
