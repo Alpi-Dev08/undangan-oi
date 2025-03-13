@@ -3,6 +3,7 @@
     namespace App\Http\Controllers\Klinik;
 
     use App\DataTables\Klinik\ExaminationsDataTable;
+    use App\FHIR\PersonalDisease;
     use App\Http\Controllers\Controller;
     use App\Http\Requests\Klinik\StoreExaminationRequest;
     use App\Http\Requests\Klinik\UpdateExaminationRequest;
@@ -606,6 +607,8 @@
             // Validation Data
             $validated = $request->validated();
 
+            $riwayat_kesehatan = json_decode($examination->psikososial)->riwayat_kesehatan;
+            
             $encounter  = json_decode($examination->encounter, true);
             $encounter_ = '';
             if ($examination->encounter_id && $examination->encounter_status == "in-progress" && !empty($validated['assessment'])) {
@@ -615,8 +618,23 @@
                 $location    = $_encounter->location[0]->location;
                 $participant = $_encounter->participant[0]->individual;
 
-                $encounter = new Encounter;
+                if(isset($riwayat_kesehatan->penyakit_dahulu) && is_array($riwayat_kesehatan->penyakit_dahulu)) {
+                    foreach ($riwayat_kesehatan->penyakit_dahulu as $key => $value) {
+                        $condition = new PersonalDisease;
+                        $condition->addClinicalStatus('active');                  // active, inactive, resolved. Default bila tidak dideklarasi = active
+                        $condition->addCategory('previous-condition');            // Diagnosis, Keluhan. Default : Diagnosis
+                        $condition->addCode($value);                              // Kode ICD10
+                        $condition->setOnsetDateTime(Carbon::now()
+                                                           ->toDateTimeString()); // timestamp onset. Timestamp sekarang
+                        $condition->setSubject(str_replace('Patient/', '', $_encounter->subject->reference), $_encounter->subject->display);
+                        $condition->setRecordedDate(Carbon::now()
+                                                          ->toDateTimeString());  // timestamp recorded. Timestamp sekarang
+                        $condition->setEncounter($examination->encounter_id);
+                        $condition->post();
+                    }
+                }
 
+                $encounter = new Encounter;
                 foreach ($assessment as $row) {
                     $row_ = explode(' - ', $row);
                     if (isset($row_[1])) {
