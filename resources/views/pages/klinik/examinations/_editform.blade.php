@@ -120,64 +120,7 @@
         <div class="tab-content">
             <!--begin::Tab pane-->
             @include('pages.klinik.examinations.partials._profile')
-
-            <div class="tab-pane fade" id="sbar">
-                <div class="container mt-4">
-                    <div class="col-12 row">
-                        <!-- Tabel SBAR -->
-                        <table class="table table-bordered w-100">
-                            <thead>
-                            <tr>
-                                <th class="text-center text-nowrap" style="width: 10%;"><strong>Tanggal</strong></th>
-                                <th class="text-center text-nowrap" style="width: 5%;"><strong>No.RM</strong></th>
-                                <th class="text-center text-nowrap" style="width: 10%;"><strong>Nama Pasien</strong>
-                                </th>
-                                <th class="text-center text-nowrap" style="width: 5%;"><strong>Tanggal SBAR</strong>
-                                </th>
-                                <th class="text-center text-nowrap" style="width: 5%;"><strong>Jam SBAR</strong></th>
-                                <th class="text-center text-nowrap" style="width: 15%;"><strong>Situation (S)</strong>
-                                </th>
-                                <th class="text-center text-nowrap" style="width: 15%;"><strong>Background (B)</strong>
-                                </th>
-                                <th class="text-center text-nowrap" style="width: 15%;"><strong>Assessment (A)</strong>
-                                </th>
-                                <th class="text-center text-nowrap" style="width: 30%;">
-                                    <strong>Recommendation (R)</strong></th>
-                                <th class="text-center text-nowrap" style="width: 10%;">
-                                    <strong>Checklist Verification</strong></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr id="sbarRow">
-                                <td class="text-center">{{ Carbon::now()->format('Y-m-d') }}</td>
-                                <td class="text-center">{{ $user->mr->medical_record_code }}</td>
-                                <td class="text-center">{{ $user->name }}</td>
-                                <td class="text-center">{{ Carbon::now()->format('Y-m-d') }}</td>
-                                <td class="text-center">{{ Carbon::now()->format('H:i') }}</td>
-                                <td>
-                                    <textarea id="situation" class="form-control" placeholder="Deskripsi Situation" rows="4" disabled>{{ $sbar->situation ?? 'Deskripsi Situation' }}</textarea>
-                                </td>
-                                <td>
-                                    <textarea id="background" class="form-control" placeholder="Deskripsi Background" rows="4" disabled>{{ $sbar->situation ?? 'Deskripsi Background' }}</textarea>
-                                </td>
-                                <td>
-                                    <textarea id="deskripsi_assessment" class="form-control" placeholder="Deskripsi Assessment" rows="4" disabled>{{ $sbar->situation ?? 'Deskripsi Assessment' }}</textarea>
-                                </td>
-                                <td>
-                                    <textarea id="recommendation" class="form-control" placeholder="Deskripsi Recommendation" rows="4" disabled>{{ $sbar->situation ?? 'Deskripsi Recommendation' }}</textarea>
-                                </td>
-                                <td class="text-center">
-                                    <div class="d-flex align-items-center">
-                                        <input type="checkbox" class="form-check-input me-2" id="checklistVerification">
-                                        <button class="btn btn-primary" id="verifySbar">Verifikasi</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            @include('pages.klinik.examinations.partials._sbar')
 
             <script>
                 document.getElementById('verifySbar').addEventListener('click', function () {
