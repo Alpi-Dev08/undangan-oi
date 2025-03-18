@@ -52,3 +52,33 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    document.getElementById('verifySbar').addEventListener('click', function () {
+        var isChecked = document.getElementById('checklistVerification').checked;
+        if (isChecked) {
+            // Disable fields and change the entire row's background to green
+            var sbarRow = document.getElementById('sbarRow');
+            sbarRow.querySelectorAll('textarea').forEach(function (element) {
+                element.disabled = true;
+            });
+            sbarRow.style.backgroundColor = 'lightgreen';
+
+            // Disable the checkbox
+            document.getElementById('checklistVerification').disabled = true;
+
+            // Change the Checklist Verification cell to "VERIFIKASI"
+            var checklistCell = document.querySelector('#checklistVerification').closest('td');
+            checklistCell.innerHTML = '<strong>SUDAH DIVERIFIKASI</strong>';
+
+            // Remove the verification button
+            var verifyButton = document.getElementById('verifySbar');
+            verifyButton.style.display = 'none'; // Hide the button
+
+            alert('SBAR telah diverifikasi dan tidak dapat diubah lagi.');
+        } else {
+            alert('Checklist Verification harus dicentang untuk menyimpan data.');
+        }
+    });
+</script>
