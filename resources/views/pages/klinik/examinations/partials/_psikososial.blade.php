@@ -148,6 +148,108 @@
                 </div>
                 <!--end::Riwayat Pekerjaan-->
 
+                <!--begin::Riwayat Kesehatan-->
+                <div class="card card-custom gutter-b shadow-sm mb-5">
+                    <div class="card-header bg-light">
+                        <h3 class="card-title">Riwayat Kesehatan</h3>
+                    </div>
+                    <div class="card-body">
+                        <!--begin::Riwayat Alergi Obat-->
+                        <div class="row mb-5">
+                            <label class="col-md-3 col-form-label">Riwayat Alergi Obat</label>
+                            <div class="col-md-9">
+                                <div class="row g-5">
+                                    <div class="col-md-4">
+                                        <label class="form-check form-check-custom form-check-solid">
+                                            <input class="form-check-input" type="radio" name="riwayat_kesehatan[alergi_obat]" id="riwayat_kesehatan_satu" value="Tidak Ada"
+                                                {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_obat == "Tidak Ada" ? 'checked' : '' }}>
+                                            <span class="form-check-label">Tidak Ada</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-check form-check-custom form-check-solid">
+                                            <input class="form-check-input" type="radio" name="riwayat_kesehatan[alergi_obat]" id="riwayat_kesehatan_dua" value="Ada"
+                                                {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_obat == "Ada" ? 'checked' : '' }}>
+                                            <span class="form-check-label">Ada</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mt-2" id="alergi_obat_detail" style="{{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_obat == 'Ada' ? '' : 'display: none;' }}">
+                                    <input type="text" class="form-control" name="riwayat_alergi_obat" placeholder="Sebutkan alergi obat"
+                                           value="{{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_obat == 'Ada' ? $psikososial->riwayat_alergi_obat : '' }}">
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Riwayat Alergi Obat-->
+
+                        <!--begin::Riwayat Alergi Makanan-->
+                        <div class="row mb-5">
+                            <label class="col-md-3 col-form-label">Riwayat Alergi Makanan</label>
+                            <div class="col-md-9">
+                                <div class="row g-5">
+                                    <div class="col-md-4">
+                                        <label class="form-check form-check-custom form-check-solid">
+                                            <input class="form-check-input" type="radio" name="riwayat_kesehatan[alergi_makanan]" id="riwayat_kesehatan_tiga" value="Tidak Ada"
+                                                {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_makanan == "Tidak Ada" ? 'checked' : '' }}>
+                                            <span class="form-check-label">Tidak Ada</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-check form-check-custom form-check-solid">
+                                            <input class="form-check-input" type="radio" name="riwayat_kesehatan[alergi_makanan]" id="riwayat_kesehatan_empat" value="Ada"
+                                                {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_makanan == "Ada" ? 'checked' : '' }}>
+                                            <span class="form-check-label">Ada</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mt-2" id="alergi_makanan_detail" style="{{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_makanan == 'Ada' ? '' : 'display: none;' }}">
+                                    <input type="text" class="form-control" name="riwayat_alergi_makanan" placeholder="Sebutkan alergi makanan"
+                                           value="{{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_makanan == 'Ada' ? $psikososial->riwayat_alergi_makanan : '' }}">
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Riwayat Alergi Makanan-->
+
+                        <!--begin::Riwayat Penyakit Dahulu-->
+                        <div class="row mb-5">
+                            <label class="col-md-3 col-form-label">Riwayat Penyakit Dahulu</label>
+                            <div class="col-md-9">
+                                <select class="form-select form-select-solid" data-control="select2" data-placeholder="Pilih Riwayat Penyakit" data-allow-clear="true" multiple="multiple" name="riwayat_kesehatan[penyakit_dahulu][]" id="previous_disease">
+                                    <option></option>
+                                    @foreach($personaldiseasehistories as $disease)
+                                        <option value="{{ $disease->code }}"
+                                            {{ (is_array($psikososial->riwayat_kesehatan->penyakit_dahulu ?? null) && in_array($disease->code, $psikososial->riwayat_kesehatan->penyakit_dahulu))
+                                            || ($psikososial->riwayat_kesehatan->penyakit_dahulu ?? '') == $disease->code ? 'selected' : '' }}>
+                                            {{ $disease->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <!--end::Riwayat Penyakit Dahulu-->
+
+                        <!--begin::Riwayat Penyakit Dalam Keluarga-->
+                        <div class="row mb-5">
+                            <label class="col-md-3 col-form-label">Riwayat Penyakit Dalam Keluarga</label>
+                            <div class="col-md-9">
+                                <select class="form-select form-select-solid" data-control="select2" data-placeholder="Pilih Riwayat Penyakit Keluarga" data-allow-clear="true" multiple="multiple" name="riwayat_kesehatan[penyakit_keluarga][]">
+                                    <option></option>
+                                    @foreach($familydiseasehistories as $disease)
+                                        <option value="{{ $disease->code }}"
+                                            {{ (is_array($psikososial->riwayat_kesehatan->penyakit_keluarga ?? null) && in_array($disease->code, $psikososial->riwayat_kesehatan->penyakit_keluarga))
+                                            || ($psikososial->riwayat_kesehatan->penyakit_keluarga ?? '') == $disease->code ? 'selected' : '' }}>
+                                            {{ $disease->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <!--end::Riwayat Penyakit Dalam Keluarga-->
+                    </div>
+                </div>
+                <!--end::Riwayat Kesehatan-->
+
+
 
                 <!--begin::Actions-->
                 <div class="d-flex justify-content-end">
