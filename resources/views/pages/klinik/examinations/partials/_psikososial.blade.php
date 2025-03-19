@@ -249,6 +249,141 @@
                 </div>
                 <!--end::Riwayat Kesehatan-->
 
+                <!--begin::Pola Kebiasaan-->
+                <div class="card card-custom gutter-b shadow-sm mb-5">
+                    <div class="card-header bg-light">
+                        <h3 class="card-title">
+                            Pola Kebiasaan
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <!--begin::Nutrisi-->
+                        <div class="row mb-5">
+                            <label class="col-md-3 col-form-label">Nutrisi</label>
+                            <div class="col-md-9">
+                                <div class="row g-5">
+                                    <div class="col-md-4">
+                                        <label class="form-check form-check-custom form-check-solid">
+                                            <input class="form-check-input" type="radio" name="pola_kebiasaan[nutrisi]" id="nutrisi_satu" value="Cukup makan sayur/buah"
+                                                {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->nutrisi == "Cukup makan sayur/buah" ? 'checked' : '' }}>
+                                            <span class="form-check-label">Cukup makan sayur/buah</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-check form-check-custom form-check-solid">
+                                            <input class="form-check-input" type="radio" name="pola_kebiasaan[nutrisi]" id="nutrisi_dua" value="Kurang makan sayur/buah"
+                                                {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->nutrisi == "Kurang makan sayur/buah" ? 'checked' : '' }}>
+                                            <span class="form-check-label">Kurang makan sayur/buah</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-check form-check-custom form-check-solid">
+                                            <input class="form-check-input" type="radio" name="pola_kebiasaan[nutrisi]" id="nutrisi_tiga" value="Tidak makan sayur/buah"
+                                                {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->nutrisi == "Tidak makan sayur/buah" ? 'checked' : '' }}>
+                                            <span class="form-check-label">Tidak makan sayur/buah</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Nutrisi-->
+
+                        <!--begin::Istirahat Cukup-->
+                        <div class="row mb-5">
+                            <label class="col-md-3 col-form-label">Istirahat Cukup</label>
+                            <div class="col-md-9">
+                                <div class="row g-5">
+                                    <div class="col-md-4">
+                                        <label class="form-check form-check-custom form-check-solid">
+                                            <input class="form-check-input" type="radio" name="pola_kebiasaan[istirahat]" id="istirahat_satu" value="Tidak ada kelainan"
+                                                {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->istirahat == "Tidak ada kelainan" ? 'checked' : '' }}>
+                                            <span class="form-check-label">Tidak ada kelainan</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-check form-check-custom form-check-solid">
+                                            <input class="form-check-input" type="radio" name="pola_kebiasaan[istirahat]" id="istirahat_dua" value="Insomnia"
+                                                {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->istirahat == "Insomnia" ? 'checked' : '' }}>
+                                            <span class="form-check-label">Insomnia</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Istirahat Cukup-->
+
+                        <!--begin::Aktivitas-->
+                        <div class="row mb-5">
+                            <label class="col-md-3 col-form-label">Aktivitas</label>
+                            <div class="col-md-9">
+                                <div class="row g-5">
+                                    <div class="col-md-4">
+                                        <label class="form-check form-check-custom form-check-solid">
+                                            <input class="form-check-input" type="radio" name="pola_kebiasaan[aktivitas]" id="aktivitas_satu" value="30 menit/hari"
+                                                {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->aktivitas == "30 menit/hari" ? 'checked' : '' }}>
+                                            <span class="form-check-label">30 menit/hari</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-check form-check-custom form-check-solid">
+                                            <input class="form-check-input" type="radio" name="pola_kebiasaan[aktivitas]" id="aktivitas_dua" value="<30 menit/hari"
+                                                {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->aktivitas == "<30 menit/hari" ? 'checked' : '' }}>
+                                            <span class="form-check-label"><30 menit/hari</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Aktivitas-->
+
+                        <!--begin::Faktor risiko asap rokok-->
+                        <div class="row mb-5">
+                            <label class="col-md-3 col-form-label">Faktor risiko asap rokok</label>
+                            <div class="col-md-9">
+                                <div class="row g-5">
+                                    @php
+                                        $rokokOptions = ['Ya', 'Tidak', 'Perokok aktif', 'Perokok pasif'];
+                                    @endphp
+                                    @foreach($rokokOptions as $option)
+                                        <div class="col-md-4">
+                                            <label class="form-check form-check-custom form-check-solid">
+                                                <input class="form-check-input" type="radio" name="pola_kebiasaan[rokok]"
+                                                       value="{{ $option }}"
+                                                    {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->rokok == $option ? 'checked' : '' }}>
+                                                <span class="form-check-label">{{ $option }}</span>
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Faktor risiko asap rokok-->
+
+                        <!--begin::Minum alkohol-->
+                        <div class="row mb-5">
+                            <label class="col-md-3 col-form-label">Minum alkohol</label>
+                            <div class="col-md-9">
+                                <div class="row g-5">
+                                    @php
+                                        $alkoholOptions = ['Ya', 'Tidak'];
+                                    @endphp
+                                    @foreach($alkoholOptions as $option)
+                                        <div class="col-md-4">
+                                            <label class="form-check form-check-custom form-check-solid">
+                                                <input class="form-check-input" type="radio" name="pola_kebiasaan[alkohol]"
+                                                       value="{{ $option }}"
+                                                    {{ isset($psikososial->pola_kebiasaan) && $psikososial->pola_kebiasaan->alkohol == $option ? 'checked' : '' }}>
+                                                <span class="form-check-label">{{ $option }}</span>
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Minum alkohol-->
+                    </div>
+                </div>
+                <!--end::Pola Kebiasaan-->
 
 
                 <!--begin::Actions-->
