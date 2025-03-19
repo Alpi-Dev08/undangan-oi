@@ -83,7 +83,71 @@
                 </div>
                 <!--end::Data Psikologi Dan Sosial-->
 
-                
+                <!--begin::Riwayat Pekerjaan-->
+                <div class="card card-custom gutter-b shadow-sm mb-5">
+                    <div class="card-header bg-light">
+                        <h3 class="card-title">Riwayat Pekerjaan</h3>
+                    </div>
+                    <div class="card-body">
+                        <!--begin::Zat Berbahaya-->
+                        <div class="row mb-5">
+                            <label class="col-md-3 col-form-label">Apakah pekerjaan pasien berhubungan dengan zat berbahaya<br>(misal: kimia, gas, dll)</label>
+                            <div class="col-md-9">
+                                <div class="row g-5">
+                                    <div class="col-md-4">
+                                        <label class="form-check form-check-custom form-check-solid">
+                                            <input class="form-check-input" type="radio" name="riwayat_pekerjaan[zat_bahaya]" id="riwayat_pekerjaan_tidak" value="Tidak"
+                                                {{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->zat_bahaya == "Tidak" ? 'checked' : '' }}>
+                                            <span class="form-check-label">Tidak</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-check form-check-custom form-check-solid">
+                                            <input class="form-check-input" type="radio" name="riwayat_pekerjaan[zat_bahaya]" id="riwayat_pekerjaan_ya" value="Ya"
+                                                {{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->zat_bahaya == "Ya" ? 'checked' : '' }}>
+                                            <span class="form-check-label">Ya</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mt-2" id="zat_bahaya_detail" style="{{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->zat_bahaya == 'Ya' ? '' : 'display: none;' }}">
+                                    <input type="text" class="form-control" name="riwayat_pekerjaan_bahaya" placeholder="Sebutkan zat berbahaya"
+                                           value="{{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->zat_bahaya == 'Ya' ? $psikososial->riwayat_pekerjaan_bahaya : '' }}">
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Zat Berbahaya-->
+
+                        <!--begin::Riwayat Bepergian-->
+                        <div class="row mb-5">
+                            <label class="col-md-3 col-form-label">Riwayat bepergian dalam satu bulan terakhir</label>
+                            <div class="col-md-9">
+                                <div class="row g-5">
+                                    <div class="col-md-4">
+                                        <label class="form-check form-check-custom form-check-solid">
+                                            <input class="form-check-input" type="radio" name="riwayat_pekerjaan[berpergian]" id="riwayat_bepergian_tidak" value="Tidak"
+                                                {{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->berpergian == "Tidak" ? 'checked' : '' }}>
+                                            <span class="form-check-label">Tidak</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-check form-check-custom form-check-solid">
+                                            <input class="form-check-input" type="radio" name="riwayat_pekerjaan[berpergian]" id="riwayat_bepergian_ya" value="Ya"
+                                                {{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->berpergian == "Ya" ? 'checked' : '' }}>
+                                            <span class="form-check-label">Ya</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mt-2" id="bepergian_detail" style="{{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->berpergian == 'Ya' ? '' : 'display: none;' }}">
+                                    <input type="text" class="form-control" name="riwayat_pekerjaan_berpergian" placeholder="Sebutkan riwayat bepergian"
+                                           value="{{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->berpergian == 'Ya' ? $psikososial->riwayat_pekerjaan_berpergian : '' }}">
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Riwayat Bepergian-->
+                    </div>
+                </div>
+                <!--end::Riwayat Pekerjaan-->
+
 
                 <!--begin::Actions-->
                 <div class="d-flex justify-content-end">
