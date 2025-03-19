@@ -122,6 +122,7 @@
             @include('pages.klinik.examinations.partials._profile')
             @include('pages.klinik.examinations.partials._sbar')
             @include('pages.klinik.examinations.partials._medicalrecord')
+            @include('pages.klinik.examinations.partials._lab')
 
             <div class="tab-pane" id="other" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
                 <!-- PDF Upload Section -->
@@ -211,53 +212,6 @@
                     z-index: 1000;
                 }
             </style>
-
-            @if($examination->is_lab)
-                @if($laboratoryexamination->hasil)
-                    <div class="tab-pane" id="lab" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
-                        <!--begin::details View-->
-                        <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
-                            <div class="row">
-                                <div class="col-3 fw-bolder">Laboratory Name</div>
-                                <div class="col-9">: {{ $laboratoryexamination->laboratory_name }}</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-3 fw-bolder">Tanggal Pemeriksaan</div>
-                                <div class="col-9">: {{ $laboratoryexamination->updated_at->format('d M Y H:i:s') }}</div>
-                            </div>
-                            <table class="table table-striped table-bordered border">
-                                <thead>
-                                <thead>
-                                <tr class="table-primary border">
-                                    <th class="text-center fw-bolder" width="50">No</th>
-                                    <th class="fw-bolder">Jenis Pemeriksaan</th>
-                                    <th class="text-center fw-bolder">Hasil</th>
-                                    <th class="fw-bolder">Nilai Rujukan</th>
-                                    <th class="fw-bolder">Satuan</th>
-                                    <th class="fw-bolder">Keterangan</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @php $no=1; @endphp
-                                @foreach(json_decode($laboratoryexamination->hasil) as $row)
-                                    @if($row->ItemName!='Hematologi')
-                                        <tr class="border">
-                                            <td class="text-center">{{ $no }}</td>
-                                            <td>{{ $row->ItemName }}</td>
-                                            <td class="text-center">{{ $row->hasil }}</td>
-                                            <td>{{ $row->nilai_rujukan }}</td>
-                                            <td>{{ $row->satuan ?? '' }}</td>
-                                            <td>{{ $row->keterangan ?? '' }}</td>
-                                        </tr>
-                                        @php $no++; @endphp
-                                    @endif
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                @endif
-            @endif
 
 
             <div class="tab-pane active" id="examination" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
