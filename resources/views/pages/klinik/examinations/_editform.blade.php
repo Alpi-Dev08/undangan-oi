@@ -2576,11 +2576,11 @@
             $('#signature_bukti_penyampaian').show();
             @endif
                 $assesment = $("#assessment").html();
-            $("#icdtens").change(function () {
+            $("#icdtens").on('change',function () {
                 $("#assessment").append($(this).find("option:selected").text() + ' | ');
             });
 
-            $("#tambah_obat").click(function () {
+            $("#tambah_obat").on('click',function () {
                 $('#newRow').append($('#resep').html());
             });
 

@@ -34,7 +34,7 @@
                                 <textarea id="background" class="form-control" placeholder="Deskripsi Background" rows="3" readonly>{{ $sbar->background ?? '' }}</textarea>
                             </td>
                             <td>
-                                <textarea id="assessment" class="form-control" placeholder="Deskripsi Assessment" rows="3" readonly>{{ $sbar->assessment ?? '' }}</textarea>
+                                <textarea id="assessment_sbar" class="form-control" placeholder="Deskripsi Assessment" rows="3" readonly>{{ $sbar->assessment ?? '' }}</textarea>
                             </td>
                             <td>
                                 <textarea id="recommendation" class="form-control" placeholder="Deskripsi Recommendation" rows="3" readonly>{{ $sbar->recommendation ?? '' }}</textarea>
