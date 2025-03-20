@@ -1139,10 +1139,6 @@
                             <!--begin::Input-->
                             <div class="col-lg-8">
                                 <select id="icdtens" aria-label="{{ __('Select a Diagnosa') }}" data-control="select2" data-placeholder="{{ __('Select a Diagnosa...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                                    <option value="">{{ __('Select a Diagnosa...') }}</option>
-                                    @foreach($icdtens as $icdten)
-                                        <option value="{{ $icdten->id }}">{{  $icdten->code.' - '.$icdten->name }}</option>
-                                    @endforeach
                                 </select>
                                 <div class="input-group input-group-solid has-validation mb-3 mt-3">
                                     <textarea name="assessment" id="assessment" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('assessment') is-invalid @enderror" placeholder="Assessment">{{ $examination->assessment }}</textarea>
@@ -2575,10 +2571,6 @@
             $('#button_bukti_penyampaian').hide();
             $('#signature_bukti_penyampaian').show();
             @endif
-                $assesment = $("#assessment").html();
-            $("#icdtens").on('change',function () {
-                $("#assessment").append($(this).find("option:selected").text() + ' | ');
-            });
 
             $("#tambah_obat").on('click',function () {
                 $('#newRow').append($('#resep').html());
@@ -2875,6 +2867,67 @@
 
         document.querySelectorAll('input[name="peran_tim[]"]').forEach((checkbox) => {
             checkbox.addEventListener('change', tampilkanPeranTim);
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('#icdtens').select2({
+                ajax: {
+                    url: '{{ route("icdten.search") }}', // Make sure to create this route
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+
+                        return {
+                            results: data.items,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: '{{ __("Select a Diagnosa...") }}',
+                minimumInputLength: 1,
+                templateResult: formatRepo,
+                templateSelection: formatRepoSelection
+            });
+
+            function formatRepo (repo) {
+                if (repo.loading) {
+                    return repo.text;
+                }
+
+                var $container = $(
+                    "<div class='select2-result-repository clearfix'>" +
+                    "<div class='select2-result-repository__title'></div>" +
+                    "</div>"
+                );
+
+                $container.find(".select2-result-repository__title").text(repo.code + ' - ' + repo.text);
+
+                return $container;
+            }
+
+            function formatRepoSelection (repo) {
+                return repo.code + ' - ' + repo.text || repo.code + ' - ' + repo.text;
+            }
+        });
+
+        // Modified event handler for change event
+        $("#icdtens").on('change', function () {
+            var selectedOption = $(this).select2('data')[0];
+            if (selectedOption) {
+                $("#assessment").append(selectedOption.code + ' - ' + selectedOption.text + ' | ');
+            }
         });
     </script>
 @endpush
