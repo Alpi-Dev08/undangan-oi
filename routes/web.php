@@ -249,7 +249,9 @@
             Route::get('klinik/drugs/{drug}/reduceDetail', [DrugsController::class, 'showDetailReduce'])->name('drugs.reduceDetail__');
             Route::put('klinik/drugs/{drug}/reduceDetail', [DrugsController::class, 'updateDetailReduce'])->name('drugs.update1_');
 
+            Route::get('icdten/search', [IcdtenController::class,'search'])->name('icdten.search');
             Route::resource('icdten', IcdtenController::class);
+
             Route::resource('jenis-pasien', JenisPasienController::class);
             Route::resource('personal-disease-histories', PersonalDiseaseHistoryController::class);
             Route::resource('family-disease-histories', FamilyDiseaseHistoryController::class);
