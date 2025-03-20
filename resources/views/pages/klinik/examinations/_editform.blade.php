@@ -2249,11 +2249,36 @@
         });
 
         // Modified event handler for change event
-        $("#icdtens").on('change', function () {
-            var selectedOption = $(this).select2('data')[0];
-            if (selectedOption) {
-                $("#assessment").append(selectedOption.code + ' - ' + selectedOption.text + ' | ');
-            }
+        $("#icdtens").on('select2:select', function (e) {
+            var data = e.params.data;
+            selectedDiagnoses.push(data);
+            updateAssessment();
+        });
+
+        $("#icdtens").on('select2:unselect', function (e) {
+            var data = e.params.data;
+            selectedDiagnoses = selectedDiagnoses.filter(function(diagnosis) {
+                return diagnosis.id !== data.id;
+            });
+            updateAssessment();
+        });
+
+        function updateAssessment() {
+            var assessmentText = selectedDiagnoses.map(function(diagnosis) {
+                return diagnosis.code + ' - ' + diagnosis.text;
+            }).join(' | ');
+            $("#assessment").val(assessmentText);
+        }
+
+        // Handle manual changes to #assessment
+        $("#assessment").on('input', function() {
+            var currentText = $(this).val();
+            selectedDiagnoses = currentText.split(' | ').map(function(item) {
+                var parts = item.split(' - ');
+                return {code: parts[0], text: parts[1]};
+            }).filter(function(item) {
+                return item.code && item.text;
+            });
         });
     </script>
 @endpush
