@@ -155,4 +155,26 @@ class IcdtenController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+    public function search(Request $request)
+    {
+        $term = $request->input('q');
+        $page = $request->input('page', 1);
+        $perPage = 30;
+
+        $results = Icdten::where('code', 'LIKE', "%$term%")
+                        ->orWhere('name', 'LIKE', "%$term%")
+                        ->paginate($perPage, ['*'], 'page', $page);
+
+        return response()->json([
+            'total_count' => $results->total(),
+            'items' => $results->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'text' => $item->name,
+                    'code' => $item->code
+                ];
+            })
+        ]);
+    }
 }
