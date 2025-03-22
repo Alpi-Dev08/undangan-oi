@@ -1,455 +1,223 @@
-<!--begin::Basic info-->
 <div class="card {{ $class }}">
-    <!--begin::Card header-->
-    <div class="card-header border-0 cursor-pointer" role="button" data-bs-toggle="collapse" data-bs-target="#kt_account_profile_details" aria-expanded="true" aria-controls="kt_account_profile_details">
-        <!--begin::Card title-->
-        <div class="card-title m-0">
-            <h3 class="fw-bolder m-0">{{ __('Profile Details') }}</h3>
-        </div>
-        <!--end::Card title-->
+    <div class="card-header border-0">
+        <h3 class="card-title align-items-start flex-column">
+            <span class="card-label fw-bolder text-dark">{{ __('Profile Details') }}</span>
+            <span class="text-muted mt-1 fw-bold fs-7">{{ __('Update your personal information') }}</span>
+        </h3>
     </div>
-    <!--begin::Card header-->
 
-    <!--begin::Content-->
-    <div id="kt_account_profile_details" class="collapse show">
-        <!--begin::Form-->
+    <div class="card-body">
         <form id="kt_account_profile_details_form" class="form" method="POST" action="{{ route('settings.update') }}" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
-        <!--begin::Card body-->
-            <div class="card-body border-top p-9">
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <input type="hidden" name="user_id" value="{{$user->id}}">
-                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Photo') }}</label>
-                    <!--end::Label-->
+            @csrf
+            @method('PUT')
+            <input type="hidden" name="user_id" value="{{$user->id}}">
 
-                    <!--begin::Col-->
-                    <div class="col-lg-8">
-                        <!--begin::Image input-->
-                        <div class="image-input image-input-outline {{ isset($info) && $info->photo ? '' : 'image-input-empty' }}" data-kt-image-input="true" style="background-image: url({{ asset(theme()->getMediaUrlPath() . 'photos/blank.png') }})">
-                            <!--begin::Preview existing avatar-->
-                            <div class="image-input-wrapper w-125px h-125px" style="background-image: {{ isset($info) && $info->photo ? 'url('.asset('storage/'.$info->photo).')' : 'none' }};"></div>
-                            <!--end::Preview existing avatar-->
+            <div class="row g-9 mb-8">
+                <!-- Photo Upload -->
+                <div class="col-12 col-md-4">
+                    <div class="image-input image-input-outline" data-kt-image-input="true" style="background-image: url({{ asset(theme()->getMediaUrlPath() . 'photos/blank.png') }})">
+                        <div class="image-input-wrapper w-150px h-150px" style="background-image: {{ isset($info) && $info->photo ? 'url('.asset('storage/'.$info->photo).')' : 'none' }};"></div>
 
-                            <!--begin::Label-->
-                            <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Change avatar">
-                                <i class="bi bi-pencil-fill fs-7"></i>
+                        <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Change avatar">
+                            <i class="bi bi-pencil-fill fs-7"></i>
+                            <input type="file" name="photo" accept=".png, .jpg, .jpeg"/>
+                            <input type="hidden" name="avatar_remove"/>
+                        </label>
 
-                                <!--begin::Inputs-->
-                                <input type="file" name="photo" accept=".png, .jpg, .jpeg"/>
-                                <input type="hidden" name="avatar_remove"/>
-                                <!--end::Inputs-->
-                            </label>
-                            <!--end::Label-->
+                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="Cancel avatar">
+                            <i class="bi bi-x fs-2"></i>
+                        </span>
 
-                            <!--begin::Cancel-->
-                            <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="Cancel avatar">
-                                <i class="bi bi-x fs-2"></i>
-                            </span>
-                            <!--end::Cancel-->
-
-                            <!--begin::Remove-->
-                            <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="Remove avatar">
-                                <i class="bi bi-x fs-2"></i>
-                            </span>
-                            <!--end::Remove-->
-                        </div>
-                        <!--end::Image input-->
-
-                        <!--begin::Hint-->
-                        <div class="form-text">Allowed file types: png, jpg, jpeg.</div>
-                        <!--end::Hint-->
+                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="Remove avatar">
+                            <i class="bi bi-x fs-2"></i>
+                        </span>
                     </div>
-                    <!--end::Col-->
+                    <div class="form-text">Allowed file types: png, jpg, jpeg.</div>
                 </div>
-                <!--end::Input group-->
 
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('ID Card') }}</label>
-                    <!--end::Label-->
+                <!-- Basic Info -->
+                <div class="col-12 col-md-8">
+                    <div class="row g-9">
+                        <div class="col-md-6 fv-row">
+                            <label class="fs-6 fw-bold mb-2">{{ __('First Name') }}</label>
+                            <input type="text" class="form-control form-control-solid" placeholder="First name" name="first_name" value="{{ old('first_name', $user->first_name ?? '') }}"/>
+                        </div>
+                        <div class="col-md-6 fv-row">
+                            <label class="fs-6 fw-bold mb-2">{{ __('Last Name') }}</label>
+                            <input type="text" class="form-control form-control-solid" placeholder="Last name" name="last_name" value="{{ old('last_name', $user->last_name ?? '') }}"/>
+                        </div>
+                        <div class="col-md-6 fv-row">
+                            <label class="fs-6 fw-bold mb-2">{{ __('Phone') }}</label>
+                            <input type="tel" class="form-control form-control-solid" placeholder="Phone number" name="phone" value="{{ old('phone', $user->phone ?? '') }}"/>
+                        </div>
+                        <div class="col-md-6 fv-row">
+                            <label class="fs-6 fw-bold mb-2">{{ __('Date of Birth') }}</label>
+                            <input type="date" class="form-control form-control-solid" placeholder="Date of Birth" name="date_of_birth" value="{{ old('date_of_birth', $info->date_of_birth ?? '') }}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                    <!--begin::Col-->
-                    <div class="col-lg-8">
-                        <!--begin::Row-->
-                        <div class="row">
-                            <!--begin::Col-->
-                            <div class="col-lg-4 fv-row">
-                                <select name="card_type_id" aria-label="{{ __('Select a Card Type') }}" data-control="select2" data-placeholder="{{ __('Select a Card...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                                    <option value="">{{ __('Select a Card Type...') }}</option>
-                                    @foreach($cards as $card)
-                                        <option value="{{ $card->id }}" {{  $card->id === old('card_type_id', $info->card_type_id ?? '') ? 'selected' :'' }}>{{  $card->name }}</option>
+            <!-- Additional Info -->
+            <div class="row g-9 mb-8">
+                <!-- Left Column -->
+                <div class="col-12 col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            <h3 class="card-title">Personal Details</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-5">
+                                <label class="fs-6 fw-bold mb-2">{{ __('Gender') }}</label>
+                                <select name="gender_id" class="form-select form-select-solid" data-control="select2" data-placeholder="{{ __('Select Gender') }}">
+                                    <option value="">{{ __('Select Gender') }}</option>
+                                    @foreach($genders as $gender)
+                                        <option value="{{ $gender->id }}" {{ $gender->id === old('gender_id', $info->gender_id ?? '') ? 'selected' : '' }}>{{ $gender->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <!--end::Col-->
-
-                            <!--begin::Col-->
-                            <div class="col-lg-8 fv-row">
-                                <input type="text" name="card_number" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Card Number" value="{{ old('card_number', $info->card_number ?? '') }}"/>
+                            <div class="mb-5">
+                                <label class="fs-6 fw-bold mb-2">{{ __('Marital Status') }}</label>
+                                <select name="marital_status_id" class="form-select form-select-solid" data-control="select2" data-placeholder="{{ __('Select Marital Status') }}">
+                                    <option value="">{{ __('Select Marital Status') }}</option>
+                                    @foreach($maritals as $marital)
+                                        <option value="{{ $marital->id }}" {{ $marital->id === old('marital_id', $info->marital_status_id ?? '') ? 'selected' : '' }}>{{ $marital->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <!--end::Col-->
+                            <div class="mb-5">
+                                <label class="fs-6 fw-bold mb-2">{{ __('Blood Type') }}</label>
+                                <select name="blood_type_id" class="form-select form-select-solid" data-control="select2" data-placeholder="{{ __('Select Blood Type') }}">
+                                    <option value="">{{ __('Select Blood Type') }}</option>
+                                    @foreach($bloods as $blood)
+                                        <option value="{{ $blood->id }}" {{ $blood->id === old('blood_type_id', $info->blood_type_id ?? '') ? 'selected' : '' }}>{{ $blood->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                        <!--end::Row-->
                     </div>
-                    <!--end::Col-->
                 </div>
-                <!--end::Input group-->
 
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Title') }}</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8">
-                        <!--begin::Row-->
-                        <div class="row">
-                            <!--begin::Col-->
-                            <div class="col-lg-6 fv-row">
-                                <input type="text" name="title_prefix" class="form-control form-control-lg form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Prefix" value="{{ old('title_prefix', $info->title_prefix ?? '') }}"/>
-                            </div>
-                            <!--end::Col-->
-
-                            <!--begin::Col-->
-                            <div class="col-lg-6 fv-row">
-                                <input type="text" name="title_suffix" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Suffix" value="{{ old('title_suffix', $info->title_suffix ?? '') }}"/>
-                            </div>
-                            <!--end::Col-->
+                <!-- Right Column -->
+                <div class="col-12 col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            <h3 class="card-title">Additional Information</h3>
                         </div>
-                        <!--end::Row-->
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Full Name') }}</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8">
-                        <!--begin::Row-->
-                        <div class="row">
-                            <!--begin::Col-->
-                            <div class="col-lg-6 fv-row">
-                                <input type="text" name="first_name" class="form-control form-control-lg form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="First name" value="{{ old('first_name', $user->first_name ?? '') }}"/>
+                        <div class="card-body">
+                            <div class="mb-5">
+                                <label class="fs-6 fw-bold mb-2">{{ __('Education') }}</label>
+                                <select name="education_id" class="form-select form-select-solid" data-control="select2" data-placeholder="{{ __('Select Education') }}">
+                                    <option value="">{{ __('Select Education') }}</option>
+                                    @foreach($educations as $education)
+                                        <option value="{{ $education->id }}" {{ $education->id === old('education_id', $info->education_id ?? '') ? 'selected' : '' }}>{{ $education->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <!--end::Col-->
-
-                            <!--begin::Col-->
-                            <div class="col-lg-6 fv-row">
-                                <input type="text" name="last_name" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Last name" value="{{ old('last_name', $user->last_name ?? '') }}"/>
+                            <div class="mb-5">
+                                <label class="fs-6 fw-bold mb-2">{{ __('Work') }}</label>
+                                <select name="work_id" class="form-select form-select-solid" data-control="select2" data-placeholder="{{ __('Select Work') }}">
+                                    <option value="">{{ __('Select Work') }}</option>
+                                    @foreach($works as $work)
+                                        <option value="{{ $work->id }}" {{ $work->id === old('work_id', $info->work_id ?? '') ? 'selected' : '' }}>{{ $work->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <!--end::Col-->
+                            <div class="mb-5">
+                                <label class="fs-6 fw-bold mb-2">{{ __('Religion') }}</label>
+                                <select name="religion_id" class="form-select form-select-solid" data-control="select2" data-placeholder="{{ __('Select Religion') }}">
+                                    <option value="">{{ __('Select Religion') }}</option>
+                                    @foreach($religions as $religion)
+                                        <option value="{{ $religion->id }}" {{ $religion->id === old('religion_id', $info->religion_id ?? '') ? 'selected' : '' }}>{{ $religion->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                        <!--end::Row-->
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-bold fs-6">
-                        <span class="required">{{ __('Contact Phone') }}</span>
-                    </label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="tel" name="phone" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Phone number" value="{{ old('phone', $user->phone ?? '') }}"/>
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Place and Date of Birth') }}</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8">
-                        <!--begin::Row-->
-                        <div class="row">
-                            <!--begin::Col-->
-                            <div class="col-lg-6 fv-row">
-                                <input type="text" name="place_of_birth" class="form-control form-control-lg form-control-solid border border-gray-300 mb-3 mb-lg-0" placeholder="Place of Birth" value="{{ old('place_of_birth', $info->place_of_birth ?? '') }}"/>
-                            </div>
-                            <!--end::Col-->
-
-                            <!--begin::Col-->
-                            <div class="col-lg-6 fv-row">
-                                <input type="date" name="date_of_birth" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Date of Birth" value="{{ old('date_of_birth', $info->date_of_birth ?? '') }}"/>
-                            </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Row-->
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Religion') }}</label>
-                    <!--end::Label-->
-                    <!--begin::Col-->
-                    <div class="col-lg-8">
-                        <select name="religion_id" aria-label="{{ __('Religion') }}" data-control="select2" data-placeholder="{{ __('Select a Religion...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                            <option value="">{{ __('Select a Religion...') }}</option>
-                            @foreach($religions as $religion)
-                                <option value="{{ $religion->id }}" {{  $religion->id === old('religion_id', $info->religion_id ?? '') ? 'selected' :'' }}>{{  $religion->name }}</option>
-                            @endforeach
-                        </select>
                     </div>
                 </div>
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Gender') }}</label>
-                    <!--end::Label-->
-                    <!--begin::Col-->
-                    <div class="col-lg-3">
-                        <select name="gender_id" aria-label="{{ __('Gender') }}" data-control="select2" data-placeholder="{{ __('Select a Gender...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                            <option value="">{{ __('Select a Gender...') }}</option>
-                            @foreach($genders as $gender)
-                                <option value="{{ $gender->id }}" {{  $gender->id === old('gender_id', $info->gender_id ?? '') ? 'selected' :'' }}>{{  $gender->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <!--begin::Label-->
-                    <label class="col-lg-2 col-form-label required fw-bold fs-6">{{ __('Marital Status') }}</label>
-                    <!--end::Label-->
-                    <!--begin::Col-->
-                    <div class="col-lg-3">
-                        <select name="marital_status_id" aria-label="{{ __('Marital Status') }}" data-control="select2" data-placeholder="{{ __('Select a Marital Status...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                            <option value="">{{ __('Select a Marital Status...') }}</option>
-                            @foreach($maritals as $marital)
-                                <option value="{{ $marital->id }}" {{  $marital->id === old('marital_id', $info->marital_status_id ?? '') ? 'selected' :'' }}>{{  $marital->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Blood Type') }}</label>
-                    <!--end::Label-->
-                    <!--begin::Col-->
-                    <div class="col-lg-8">
-                        <select name="blood_type_id" aria-label="{{ __('Blood Type') }}" data-control="select2" data-placeholder="{{ __('Select a Blood Type...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                            <option value="">{{ __('Select a Blood Type...') }}</option>
-                            @foreach($bloods as $blood)
-                                <option value="{{ $blood->id }}" {{  $blood->id === old('blood_type_id', $info->blood_type_id ?? '') ? 'selected' :'' }}>{{  $blood->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Education') }}</label>
-                    <!--end::Label-->
-                    <!--begin::Col-->
-                    <div class="col-lg-3">
-                        <select name="education_id" aria-label="{{ __('Education') }}" data-control="select2" data-placeholder="{{ __('Select a Education...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                            <option value="">{{ __('Select a Education...') }}</option>
-                            @foreach($educations as $education)
-                                <option value="{{ $education->id }}" {{  $education->id === old('education_id', $info->education_id ?? '') ? 'selected' :'' }}>{{  $education->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <!--begin::Label-->
-                    <label class="col-lg-1 col-form-label required fw-bold fs-6">{{ __('Work') }}</label>
-                    <!--end::Label-->
-                    <!--begin::Col-->
-                    <div class="col-lg-4">
-                        <select name="work_id" aria-label="{{ __('Work') }}" data-control="select2" data-placeholder="{{ __('Select a Work...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                            <option value="">{{ __('Select a Work...') }}</option>
-                            @foreach($works as $work)
-                                <option value="{{ $work->id }}" {{  $work->id === old('work_id', $info->work_id ?? '') ? 'selected' :'' }}>{{  $work->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-bold fs-6">
-                        <span>{{ __('Country') }}</span>
-
-                    </label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <select name="country_id" aria-label="{{ __('Select a Country') }}" data-control="select2" data-placeholder="{{ __('Select a country...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                            <option value="">{{ __('Select a Country...') }}</option>
-                            @foreach($countries as $country)
-                                <option value="{{ $country->id }}" {{  $country->id === old('country', $info->country_id ?? '') ? 'selected' :'' }}>{{  $country->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-bold fs-6">
-                        <span>{{ __('Province') }}</span>
-                    </label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <select id="province" name="province_id" aria-label="{{ __('Select a Province') }}" data-control="select2" data-placeholder="{{ __('Select a province...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                            <option value="">{{ __('Select a Province...') }}</option>
-                            @if(isset($provinces))
-                                @foreach($provinces as $province)
-                                    <option value="{{ $province->id }}" {{ $province->id === old('province_id', $info->province_id ?? '') ? 'selected' :'' }}>{{ $province->name }}</option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-bold fs-6">
-                        <span>{{ __('City') }}</span>
-                    </label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <select id="city" name="city_id" aria-label="{{ __('Select a City') }}" data-control="select2" data-placeholder="{{ __('Select a city...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                            <option value="">{{ __('Select a City...') }}</option>
-                            @if(isset($cities))
-                                @foreach($cities as $city)
-                                    <option value="{{ $city->id }}" {{ $city->id === old('city_id', $info->city_id ?? '') ? 'selected' :'' }}>{{ $city->name }}</option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-bold fs-6">
-                        <span>{{ __('District') }}</span>
-                    </label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <select id="district" name="district_id" aria-label="{{ __('Select a District') }}" data-control="select2" data-placeholder="{{ __('Select a district...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                            <option value="">{{ __('Select a District...') }}</option>
-                            @if(isset($districts))
-                                @foreach($districts as $key => $value)
-                                    <option value="{{ $value['id'] }}" {{ $value['id'] === old('district_id', $info->district_id ?? '') ? 'selected' :'' }}>{{ $value['name'] }}</option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-bold fs-6">
-                        <span>{{ __('Sub District') }}</span>
-                    </label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <select id="subdistrict" name="sub_district_id" aria-label="{{ __('Select a Sub District') }}" data-control="select2" data-placeholder="{{ __('Select a Sub District...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                            <option value="">{{ __('Select a Sub District...') }}</option>
-                            @if(isset($subdistricts))
-                                @foreach($subdistricts as $key => $value)
-                                    <option value="{{ $value['id'] }}" {{ $value['id'] === old('sub_district_id', $info->sub_district_id ?? '') ? 'selected' :'' }}>{{ $value['name'] }}</option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Address') }}</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="text" name="address" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Address" value="{{ old('address', $info->address ?? '') }}"/>
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="row mb-6">
-                    <!--begin::Label-->
-                    <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Postal Code') }}</label>
-                    <!--end::Label-->
-
-                    <!--begin::Col-->
-                    <div class="col-lg-8 fv-row">
-                        <input type="number" name="postal_code" class="form-control form-control-lg form-control-solid border border-gray-300" placeholder="Postal Code" value="{{ old('postal_code', $info->postal_code ?? '') }}"/>
-                    </div>
-                    <!--end::Col-->
-                </div>
-                <!--end::Input group-->
             </div>
-            <!--end::Card body-->
+
+            <!-- Address Information -->
+            <div class="card shadow-sm mb-8">
+                <div class="card-header">
+                    <h3 class="card-title">Address Information</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row g-9">
+                        <div class="col-md-6 fv-row">
+                            <label class="fs-6 fw-bold mb-2">{{ __('Country') }}</label>
+                            <select name="country_id" class="form-select form-select-solid" data-control="select2" data-placeholder="{{ __('Select Country') }}">
+                                <option value="">{{ __('Select Country') }}</option>
+                                @foreach($countries as $country)
+                                    <option value="{{ $country->id }}" {{ $country->id === old('country', $info->country_id ?? '') ? 'selected' : '' }}>{{ $country->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6 fv-row">
+                            <label class="fs-6 fw-bold mb-2">{{ __('Province') }}</label>
+                            <select id="province" name="province_id" class="form-select form-select-solid" data-control="select2" data-placeholder="{{ __('Select Province') }}">
+                                <option value="">{{                                __('Select Province') }}</option>
+                                @foreach($provinces as $province)
+                                    <option value="{{ $province->id }}" {{ $province->id === old('province_id', $info->province_id ?? '') ? 'selected' : '' }}>{{ $province->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6 fv-row">
+                            <label class="fs-6 fw-bold mb-2">{{ __('City') }}</label>
+                            <select id="city" name="city_id" class="form-select form-select-solid" data-control="select2" data-placeholder="{{ __('Select City') }}">
+                                <option value="">{{ __('Select City') }}</option>
+                                @if(isset($cities))
+                                    @foreach($cities as $city)
+                                        <option value="{{ $city->id }}" {{ $city->id === old('city_id', $info->city_id ?? '') ? 'selected' : '' }}>{{ $city->name }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+                        <div class="col-md-6 fv-row">
+                            <label class="fs-6 fw-bold mb-2">{{ __('District') }}</label>
+                            <select id="district" name="district_id" class="form-select form-select-solid" data-control="select2" data-placeholder="{{ __('Select District') }}">
+                                <option value="">{{ __('Select District') }}</option>
+                                @if(isset($districts))
+                                    @foreach($districts as $district)
+                                        <option value="{{ $district->id }}" {{ $district->id === old('district_id', $info->district_id ?? '') ? 'selected' : '' }}>{{ $district->name }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+                        <div class="col-md-6 fv-row">
+                            <label class="fs-6 fw-bold mb-2">{{ __('Village') }}</label>
+                            <select id="village" name="sub_district_id" class="form-select form-select-solid" data-control="select2" data-placeholder="{{ __('Select Village') }}">
+                                <option value="">{{ __('Select Village') }}</option>
+                                @if(isset($subdistricts))
+                                    @foreach($subdistricts as $village)
+                                        <option value="{{ $village->id }}" {{ $village->id === old('sub_district_id', $info->sub_district_id ?? '') ? 'selected' : '' }}>{{ $village->name }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+                        <div class="col-md-6 fv-row">
+                            <label class="fs-6 fw-bold mb-2">{{ __('Postal Code') }}</label>
+                            <input type="text" class="form-control form-control-solid" placeholder="{{ __('Postal Code') }}" name="postal_code" value="{{ old('postal_code', $info->postal_code ?? '') }}"/>
+                        </div>
+                        <div class="col-12 fv-row">
+                            <label class="fs-6 fw-bold mb-2">{{ __('Address') }}</label>
+                            <textarea class="form-control form-control-solid" rows="3" name="address" placeholder="{{ __('Enter your address') }}">{{ old('address', $info->address ?? '') }}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!--begin::Actions-->
             <div class="card-footer d-flex justify-content-end py-6 px-9">
-                <button type="reset" class="btn btn-white btn-active-light-primary me-2">{{ __('Discard') }}</button>
-
+                <button type="reset" class="btn btn-light btn-active-light-primary me-2">{{ __('Discard') }}</button>
                 <button type="submit" class="btn btn-primary" id="kt_account_profile_details_submit">
                     @include('partials.general._button-indicator', ['label' => __('Save Changes')])
                 </button>
             </div>
             <!--end::Actions-->
         </form>
-        <!--end::Form-->
     </div>
-    <!--end::Content-->
 </div>
-<!--end::Basic info-->
 
 @push('customscript')
     <script type="text/javascript">
@@ -468,7 +236,7 @@
             url : "/masters/district-city"
         });
 
-        $("#subdistrict").remoteChained({
+        $("#village").remoteChained({
             parents : "#district",
             url : "/masters/district-sub"
         });
