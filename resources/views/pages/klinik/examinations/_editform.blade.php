@@ -2197,6 +2197,8 @@
     </script>
 
     <script>
+        var selectedDiagnoses = [];
+
         $(document).ready(function() {
             $('#icdtens').select2({
                 ajax: {
@@ -2248,11 +2250,22 @@
             }
         });
 
+        // Inisialisasi selectedDiagnoses dari nilai awal textarea
+        var initialAssessment = $("#assessment").val();
+        if (initialAssessment) {
+            selectedDiagnoses = initialAssessment.split(' | ').map(function(item) {
+                var parts = item.split(' - ');
+                return {code: parts[0], text: parts.slice(1).join(' - ')};
+            });
+        }
+
         // Modified event handler for change event
         $("#icdtens").on('select2:select', function (e) {
             var data = e.params.data;
-            selectedDiagnoses.push(data);
-            updateAssessment();
+            if (!selectedDiagnoses.some(d => d.code === data.code)) {
+                selectedDiagnoses.push(data);
+                updateAssessment();
+            }
         });
 
         $("#icdtens").on('select2:unselect', function (e) {
@@ -2264,10 +2277,15 @@
         });
 
         function updateAssessment() {
-            var assessmentText = selectedDiagnoses.map(function(diagnosis) {
-                return diagnosis.code + ' - ' + diagnosis.text;
-            }).join(' | ');
-            $("#assessment").val(assessmentText);
+            var currentText = $("#assessment").val();
+            var newDiagnosis = selectedDiagnoses[selectedDiagnoses.length - 1];
+            var newText = newDiagnosis.code + ' - ' + newDiagnosis.text;
+
+            if (currentText) {
+                $("#assessment").val(currentText + ' | ' + newText);
+            } else {
+                $("#assessment").val(newText);
+            }
         }
 
         // Handle manual changes to #assessment
