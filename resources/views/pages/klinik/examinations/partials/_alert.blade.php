@@ -110,6 +110,58 @@
                 </div>
             </div>
         @endif
+        @if(isset($examination->psikososial))
+            @php $psikososial = json_decode($examination->psikososial,true); @endphp
+
+            @if(isset($psikososial['riwayat_kesehatan']))
+                <div class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-history me-2"></i>Riwayat Kesehatan
+                            </h5>
+                            <div class="row g-3">
+                                @php $riwayat_kesehatan = $psikososial['riwayat_kesehatan']; @endphp
+                                @if(is_array($riwayat_kesehatan))
+                                    @foreach($riwayat_kesehatan as $key => $value)
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col-6">{{ ucwords(str_replace('_', ' ', $key)) }}</div>
+                                                <div class="col-6 fw-bold">
+                                                    @if($key=="alergi_obat" && $value=="Ada")
+                                                        : {{ $psikososial['riwayat_alergi_obat'] }}
+                                                    @elseif($key=="alergi_makanan" && $value=="Ada")
+                                                        : {{ $psikososial['riwayat_alergi_makanan'] }}
+                                                    @elseif($key=="penyakit_dahulu")
+                                                        @if(is_array($value))
+                                                            : {{ implode(', ', array_map(function($item) { return getPenyakitdahulu($item)->name; }, $value)) }}
+                                                        @else
+                                                            : {{ getPenyakitdahulu($value)->name }}
+                                                        @endif
+                                                    @elseif($key=="penyakit_keluarga")
+                                                        @if(is_array($value))
+                                                            : {{ implode(', ', array_map(function($item) { return getPenyakitKeluarga($item)->name; }, $value)) }}
+                                                        @else
+                                                            : {{ getPenyakitKeluarga($value)->name }}
+                                                        @endif
+                                                    @else
+                                                        : {{ $value }}
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <div class="col-12">
+                                        <p>{{ $riwayat_kesehatan }}</p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        @endif
     </div>
 </div>
 <!--end::Alert-->
