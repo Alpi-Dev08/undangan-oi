@@ -376,3 +376,13 @@
     function cekNIK($str) {
         return ctype_digit($str) && strlen($str) === 16;
     }
+
+    function getPenyakitDahulu($id) {
+        $penyakit = \App\Models\Klinik\PersonalDiseaseHistory::where('code',$id)->first();
+        return $penyakit;
+    }
+
+    function getPenyakitKeluarga($id) {
+        $penyakit = \App\Models\Klinik\FamilyDiseaseHistory::where('code',$id)->first();
+        return $penyakit;
+    }
