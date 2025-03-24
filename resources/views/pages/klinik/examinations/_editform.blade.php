@@ -214,379 +214,8 @@
                 }
             </style>
 
+            @include('pages.klinik.examinations.partials._examination')
 
-            <div class="tab-pane active" id="examination" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
-
-
-                <!--begin::Alert-->
-                <div class="alert alert-dismissible bg-light-primary border border-primary d-flex flex-column flex-sm-row p-5 mb-10 mx-0 row">
-                    <!--begin::Close-->
-                    <button type="button" class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto" data-bs-dismiss="alert">
-                        <!--begin::Svg Icon | path: /var/www/preview.keenthemes.com/keenthemes/metronic/docs/core/html/src/media/icons/duotune/arrows/arr088.svg-->
-                        <span class="svg-icon svg-icon-muted svg-icon-2hx"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect opacity="0.5" x="7.05025" y="15.5356" width="12" height="2" rx="1" transform="rotate(-45 7.05025 15.5356)" fill="currentColor"/>
-<rect x="8.46447" y="7.05029" width="12" height="2" rx="1" transform="rotate(45 8.46447 7.05029)" fill="currentColor"/>
-</svg></span>
-                        <!--end::Svg Icon-->
-                    </button>
-                    <!--end::Close-->
-                    <!--begin::Wrapper-->
-                    <div class="row col-12 pe-0 pe-sm-10">
-                        @if(isset($pemeriksaan_awal))
-                            <h5>Pemeriksaan Awal</h5>
-                            @if($pemeriksaan_awal->kriteria_satu=='ya' && $pemeriksaan_awal->kriteria_dua=='ya')
-                                @php $text_class = 'text-danger'; @endphp
-                            @elseif($pemeriksaan_awal->kriteria_satu=='ya' || $pemeriksaan_awal->kriteria_dua=='ya')
-                                @php $text_class = 'text-warning'; @endphp
-                            @else
-                                @php $text_class = 'text-success'; @endphp
-                            @endif
-                            <!--begin::Content-->
-                            <div class="col-12 {{ $text_class }} fw-bolder mb-5">
-                                <span>{{ $pemeriksaan_awal->interpretasi  }} / {{ ucwords($pemeriksaan_awal->tindakan)  }}</span>
-                            </div>
-                            <!--end::Content-->
-                        @endif
-
-                        @if(isset($examination->service_category))
-                            <!--begin::Title-->
-                            <h5>Jenis Pemeriksaan</h5>
-                            <!--end::Title-->
-                            <div class="col-12">{{ $examination->service_category->name }}
-                                <ul class="row">
-                                    @foreach(service_examination($examination->id) as $service)
-                                        <li class="col-4">{{ $service->service->name }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-                    </div>
-                    <!--end::Wrapper-->
-
-                    <div class="row col-12 pe-0 pe-sm-10">
-                        <h5 class="mb-1">Vital Sign & BMI</h5>
-                        <div class="row col-12">
-                            <div class="row col-6">
-                                <div class="col-12 row">
-                                    <div class="col-4">Weight</div>
-                                    <div class="col-8">: {{ $examination->vitality->weight ?? "-" }} Kg</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Height</div>
-                                    <div class="col-8">: {{ $examination->vitality->height ?? "-" }} cm</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Body Mass Index</div>
-                                    <div class="col-8">: {{ $examination->vitality->body_mass_index ?? "-" }}</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Ideal Weight</div>
-                                    <div class="col-8">: {{ $examination->vitality->ideal_weight ?? "-" }} Kg</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Body Fat</div>
-                                    <div class="col-8">: {{ $examination->vitality->body_fat ?? "-" }}</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">BMI Conclusion</div>
-                                    <div class="col-8">: {{ $examination->vitality->bmi_conclusion ?? "-" }}</div>
-                                </div>
-                                <div class="col-12">&nbsp;</div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Arm Circumference</div>
-                                    <div class="col-8">: {{ $examination->vitality->arm_circumference ?? "-" }}</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Abdominal Circumference</div>
-                                    <div class="col-8">: {{ $examination->vitality->adbdominal_circumference ?? "-" }}</div>
-                                </div>
-                            </div>
-                            <div class="row col-6">
-                                <div class="col-12 row">
-                                    <div class="col-4">Blood Pressure</div>
-                                    <div class="col-8">: {{ $examination->vitality->blood_pressure ?? "-" }}</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Heart Rate</div>
-                                    <div class="col-8">: {{ $examination->vitality->heart_rate ?? "-" }}</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Respiratory Rate</div>
-                                    <div class="col-8">: {{ $examination->vitality->respiratory_rate ?? "-" }}</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Temperature</div>
-                                    <div class="col-8">: {{ $examination->vitality->temperature ?? "-" }}</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Oxygen Saturation</div>
-                                    <div class="col-8">: {{ $examination->vitality->oxygen_saturation ?? "-" }}</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Waist Circumference</div>
-                                    <div class="col-8">: {{ $examination->vitality->waist_circumferennce ?? "-" }}</div>
-                                </div>
-                                <div class="col-12">&nbsp;</div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Neck Circumference</div>
-                                    <div class="col-8">: {{ $examination->vitality->neck_circumference ?? "-" }}</div>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col-4">Chest Size</div>
-                                    <div class="col-8">: {{ $examination->vitality->chest_size ?? "-" }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <!--end::Alert-->
-
-                @if(isset($examination->vitality->skrining))
-                    <!--begin::Alert-->
-                    <div class="alert alert-dismissible bg-light-success d-flex flex-column flex-sm-row p-5 mb-10">
-                        <!--begin::Icon-->
-                        <i class="ki-duotone ki-notification-bing fs-2hx text-primary me-4 mb-5 mb-sm-0"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
-                        <!--end::Icon-->
-
-                        <!--begin::Wrapper-->
-                        <div class="d-flex flex-column pe-0 pe-sm-10">
-                            <!--begin::Title-->
-                            <h4 class="fw-bold">Skrining Awal</h4>
-                            <!--end::Title-->
-
-                            <!--begin::Content-->
-                            <div class="row">
-                                @php $skrining = json_decode($examination->vitality->skrining); @endphp
-                                @foreach($skrining as $key => $value)
-                                    <div class="col-6">
-                                        <div class="row">
-                                            <div class="col-4 fw-bolder">{{ ucwords(str_replace('_',' ',$key)) }}</div>
-                                            <div class="col-8">: {{ $value }}</div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                            <!--end::Content-->
-                        </div>
-                        <!--end::Wrapper-->
-
-                        <!--begin::Close-->
-                        <button type="button" class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto" data-bs-dismiss="alert">
-                            <span class="svg-icon svg-icon-muted svg-icon-2hx"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect opacity="0.5" x="7.05025" y="15.5356" width="12" height="2" rx="1" transform="rotate(-45 7.05025 15.5356)" fill="currentColor"/>
-                            <rect x="8.46447" y="7.05029" width="12" height="2" rx="1" transform="rotate(45 8.46447 7.05029)" fill="currentColor"/>
-                            </svg></span>
-                            <!--end::Svg Icon-->
-                        </button>
-                        <!--end::Close-->
-
-                    </div>
-                    <!--end::Alert-->
-                @endif
-
-                <form id="kt_modal_add_examinations_form" method="POST" class="form" action="{{ route('examinations.update',['examination' => $examination->id]) }}">
-                    @method('PUT')
-                    {{ csrf_field() }}
-                    <!--begin::Scroll-->
-                    <div class="d-flex flex-column flex-row-fluid">
-                        <!--begin::Input group-->
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label required fw-bold fs-6">{{ __('Health Profesional') }}</label>
-                            <!--end::Label-->
-                            <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <input type="hidden" name="user_id" value="{{$user->id}}">
-                                <input type="hidden" name="health_profesional_id" value="{{ $examination->health_profesional_id }}">
-                                <h5>
-                                    @if(isset($examination->health_profesional->user->info))
-                                        {{ ($examination->health_profesional->user->info->title_prefix !='' ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.($examination->health_profesional->user->info->title_suffix!='' ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}
-                                    @else
-                                        {{$examination->health_profesional->user->name}}
-                                    @endif
-                                </h5>
-                            </div>
-                        </div>
-
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Subjective</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <div class="col-lg-8">
-                                <div class="input-group input-group-solid has-validation mb-3">
-                                    <textarea name="subjective" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('subjective') is-invalid @enderror" placeholder="Subjective">{{ $examination->subjective }}</textarea>
-                                </div>
-                                @error('subjective')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <!--end::Input-->
-                        </div>
-
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Objective</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <div class="col-lg-8">
-                                <div class="input-group input-group-solid has-validation mb-3">
-                                    <textarea name="objective" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('objective') is-invalid @enderror" placeholder="Objective">{{ $examination->objective }}</textarea>
-                                </div>
-                                @error('objective')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <!--end::Input-->
-                        </div>
-
-                        @include('pages.klinik.examinations.partials._odontogram')
-
-                        <!-- <script>
-                            document.getElementById('health_profesional_select').addEventListener('change', function () {
-                                var selectedOption = this.options[this.selectedIndex];
-                                var odontogramSection = document.getElementById('odontogram_section');
-
-                                if (selectedOption.getAttribute('data-type') === 'dokter gigi') {
-                                    odontogramSection.style.display = 'block';
-                                } else {
-                                    odontogramSection.style.display = 'none';
-                                }
-                            });
-
-                            document.getElementById('health_profesional_select').dispatchEvent(new Event('change'));
-                        </script> -->
-
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Assessment</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <div class="col-lg-8">
-                                <select id="icdtens" aria-label="{{ __('Select a Diagnosa') }}" data-control="select2" data-placeholder="{{ __('Select a Diagnosa...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                                </select>
-                                <div class="input-group input-group-solid has-validation mb-3 mt-3">
-                                    <textarea name="assessment" id="assessment" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('assessment') is-invalid @enderror" placeholder="Assessment">{{ $examination->assessment }}</textarea>
-                                </div>
-                                @error('assessment')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <!--end::Input-->
-                        </div>
-
-                        <!--begin::Input group-->
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">
-                                <span>{{ __('Plan') }}</span>
-
-                            </label>
-                            <!--end::Label-->
-
-                            <!--begin::Col-->
-                            <div class="col-lg-8">
-                                <select name="plan_id" aria-label="{{ __('Select a Plan') }}" data-control="select2" data-placeholder="{{ __('Select a Plan...') }}" class="form-select form-select-solid form-select-lg fw-bold">
-                                    <option value="">{{ __('Select a Plan...') }}</option>
-                                    @foreach($plans as $plan)
-                                        <option value="{{ $plan->id }}" {{  $plan->id === old('plan_id', $examination->plan_id ?? '') ? 'selected' :'' }}>{{  $plan->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Input group-->
-
-                        @php
-                            $resep = json_decode($examination->resep);
-                            $obat = $resep->obat ?? [];
-                            $keterangan = $resep->keterangan ?? [];
-                            $qty = $resep->qty ?? [];
-                        @endphp
-
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Resep</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <div class="col-lg-8">
-                                @foreach($obat as $key => $value)
-                                    <div class="d-flex flex-row mb-2 align-items-center" id="inputFromRow">
-                                        <select name="resep[obat][]" aria-label="{{ __('Pilih Obat') }}" data-placeholder="{{ __('Pilih Obat...') }}" class="mb-2 form-select form-select-solid form-select-lg fw-bold me-5">
-                                            <option value="">{{ __('Pilih Obat...') }} </option>
-                                            @foreach($drugs as $drug)
-                                                <option value="{{ $drug->id }}" {{ $drug->id == $value ? 'selected' : '' }}>
-                                                    {{  $drug->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <input placeholder="{{ $keterangan[$key] ?? 'Keterangan' }}" name="resep[keterangan][]" class="w-200px me-5 mb-2 form-control form-control-solid" type="text" value="{{ $keterangan[$key] ?? '' }}">
-                                        <input placeholder="{{ $qty[$key] ?? 'Qty' }}" name="resep[qty][]" class="w-100px me-5 mb-2 form-control form-control-solid" type="number" min="1" value="{{ $qty[$key] ?? '' }}">
-                                        <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" id="remove-item">
-                                            <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
-                                            <span class="svg-icon svg-icon-3">
-                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor"/>
-                                                    <path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="currentColor"/>
-                                                    <path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="currentColor"/>
-                                                </svg>
-                                            </span>
-                                            <!--end::Svg Icon-->
-                                        </button>
-                                    </div>
-                                @endforeach
-
-                                <div class="d-flex flex-column" id="newRow"></div>
-                                <i class="btn btn-primary" id="tambah_obat">Tambah</i>
-                                @error('resep')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <!--end::Input-->
-                        </div>
-
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-4 col-form-label fw-bold fs-6">Saran</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <div class="col-lg-8">
-                                <div class="input-group input-group-solid has-validation mb-3">
-                                    <textarea name="saran" class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0 @error('saran') is-invalid @enderror" placeholder="Saran">{{ $examination->saran }}</textarea>
-                                </div>
-                                @error('saran')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <!--end::Input-->
-                        </div>
-                    </div>
-                    <!--end::Scroll-->
-                    <!--begin::Actions-->
-                    <div class="text-center pt-15">
-                        <a href="{{ route('examinations.index')  }}" class="btn btn-sm btn-light-primary">
-                            <!--begin::Svg Icon | path: assets/media/icons/duotune/arrows/arr079.svg-->
-                            <span class="svg-icon svg-icon-muted svg-icon-2hx">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path opacity="0.5" d="M14.2657 11.4343L18.45 7.25C18.8642 6.83579 18.8642 6.16421 18.45 5.75C18.0358 5.33579 17.3642 5.33579 16.95 5.75L11.4071 11.2929C11.0166 11.6834 11.0166 12.3166 11.4071 12.7071L16.95 18.25C17.3642 18.6642 18.0358 18.6642 18.45 18.25C18.8642 17.8358 18.8642 17.1642 18.45 16.75L14.2657 12.5657C13.9533 12.2533 13.9533 11.7467 14.2657 11.4343Z" fill="currentColor"/>
-                            <path d="M8.2657 11.4343L12.45 7.25C12.8642 6.83579 12.8642 6.16421 12.45 5.75C12.0358 5.33579 11.3642 5.33579 10.95 5.75L5.40712 11.2929C5.01659 11.6834 5.01659 12.3166 5.40712 12.7071L10.95 18.25C11.3642 18.6642 12.0358 18.6642 12.45 18.25C12.8642 17.8358 12.8642 17.1642 12.45 16.75L8.2657 12.5657C7.95328 12.2533 7.95328 11.7467 8.2657 11.4343Z" fill="currentColor"/>
-                        </svg>
-                    </span>
-                            <!--end::Svg Icon-->
-                            Cancel
-                        </a>
-                        <button type="submit" class="btn btn-primary" data-kt-examinations-modal-action="submit">
-                            <span class="indicator-label">Submit</span>
-                            <span class="indicator-progress">Please wait...
-                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-            </span>
-                        </button>
-                    </div>
-                    <!--end::Actions-->
-                </form>
-
-            </div>
             <div class="tab-pane" id="suratketerangan" role="tabpanel" aria-labelledby="all-tab" data-kt-timeline-widget-4-blockui="true">
                 <div class="d-flex flex-column flex-md-row rounded border p-10">
                     <ul class="nav nav-tabs nav-pills flex-row border-0 flex-md-column me-5 mb-3 mb-md-0 fs-6 min-w-lg-200px">
@@ -1898,10 +1527,6 @@
             $('#signature_bukti_penyampaian').show();
             @endif
 
-            $("#tambah_obat").on('click',function () {
-                $('#newRow').append($('#resep').html());
-            });
-
             $(document).on('click', '#remove-item', function () {
                 $(this).closest('#inputFromRow').remove();
             });
@@ -2199,7 +1824,7 @@
     <script>
         var selectedDiagnoses = [];
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#icdtens').select2({
                 ajax: {
                     url: '{{ route("icdten.search") }}', // Make sure to create this route
@@ -2229,7 +1854,7 @@
                 templateSelection: formatRepoSelection
             });
 
-            function formatRepo (repo) {
+            function formatRepo(repo) {
                 if (repo.loading) {
                     return repo.text;
                 }
@@ -2245,7 +1870,7 @@
                 return $container;
             }
 
-            function formatRepoSelection (repo) {
+            function formatRepoSelection(repo) {
                 return repo.code + ' - ' + repo.text || repo.code + ' - ' + repo.text;
             }
         });
@@ -2253,7 +1878,7 @@
         // Inisialisasi selectedDiagnoses dari nilai awal textarea
         var initialAssessment = $("#assessment").val();
         if (initialAssessment) {
-            selectedDiagnoses = initialAssessment.split(' | ').map(function(item) {
+            selectedDiagnoses = initialAssessment.split(' | ').map(function (item) {
                 var parts = item.split(' - ');
                 return {code: parts[0], text: parts.slice(1).join(' - ')};
             });
@@ -2270,7 +1895,7 @@
 
         $("#icdtens").on('select2:unselect', function (e) {
             var data = e.params.data;
-            selectedDiagnoses = selectedDiagnoses.filter(function(diagnosis) {
+            selectedDiagnoses = selectedDiagnoses.filter(function (diagnosis) {
                 return diagnosis.id !== data.id;
             });
             updateAssessment();
@@ -2289,12 +1914,12 @@
         }
 
         // Handle manual changes to #assessment
-        $("#assessment").on('input', function() {
+        $("#assessment").on('input', function () {
             var currentText = $(this).val();
-            selectedDiagnoses = currentText.split(' | ').map(function(item) {
+            selectedDiagnoses = currentText.split(' | ').map(function (item) {
                 var parts = item.split(' - ');
                 return {code: parts[0], text: parts[1]};
-            }).filter(function(item) {
+            }).filter(function (item) {
                 return item.code && item.text;
             });
         });
