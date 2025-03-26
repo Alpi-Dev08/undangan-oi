@@ -70,6 +70,12 @@
                 'icon' => theme()->getSvgIcon('assets/media/icons/duotune/general/gen005.svg', 'svg-icon-2'),
             ],
             [
+                'title' => 'Pcare',
+                'path' => 'pcare',
+                'role' => ['dokter', 'administrator'],
+                'icon' => theme()->getSvgIcon('assets/media/icons/duotune/general/gen005.svg', 'svg-icon-2'),
+            ],
+            [
                 'title' => 'Laboratorium Examination',
                 'path' => 'klinik/laboratoryexaminations',
                 'role' => ['laboran', 'administrator'],

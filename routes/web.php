@@ -54,6 +54,7 @@
     use App\Http\Controllers\Master\SubDistrictsController;
     use App\Http\Controllers\Master\WorksController;
     use App\Http\Controllers\PagesController;
+    use App\Http\Controllers\PcareController;
     use App\Http\Controllers\PermissionsController;
     use App\Http\Controllers\RolesController;
     use App\Http\Controllers\UsersController;
@@ -264,6 +265,14 @@
         Route::prefix('log')->name('log.')->group(function () {
             Route::resource('system', SystemLogsController::class)->only(['index', 'destroy']);
             Route::resource('audit', AuditLogsController::class)->only(['index', 'destroy']);
+        });
+
+
+        Route::prefix('pcare')->group(function () {
+            Route::get('/', [PcareController::class, 'index'])->name('pcare.index');
+            Route::get('/dokter', [PcareController::class, 'getDokter']);
+            Route::get('/peserta/{noKartu}', [PcareController::class, 'getPeserta']);
+            // Tambahkan rute lain sesuai kebutuhan
         });
     });
     /**
