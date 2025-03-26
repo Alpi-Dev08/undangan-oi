@@ -30,11 +30,17 @@ class PcareController extends Controller
         }
     }
 
-    public function getPeserta($noKartu)
+    public function getPeserta(Request $request, $nomorPencarian)
     {
+        $jenisId = $request->query('jenisId', 'noPeserta');
+
         try {
             $response = new PCare\Peserta(config('bpjs.pcare'));
-            $response = $response->keyword($noKartu)->show();
+            if($jenisId==='nik'){
+                $response = $response->jenisKartu($jenisId);
+            }
+            $response = $response->keyword($nomorPencarian)->show();
+
             return response()->json($response);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);

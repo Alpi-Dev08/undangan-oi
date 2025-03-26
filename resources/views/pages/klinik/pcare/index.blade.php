@@ -17,38 +17,29 @@
                         </div>
 
                         <div class="mb-5">
-                            <label class="form-label">Pendaftaran</label>
-                            <div class="form-check">
+                            <label class="form-label">Pendaftaran</label><br>
+                            <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="jenis_pendaftaran" id="baru" value="baru" checked>
                                 <label class="form-check-label" for="baru">Baru</label>
                             </div>
-                            <div class="form-check">
+                            <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="jenis_pendaftaran" id="rujukan" value="rujukan">
                                 <label class="form-check-label" for="rujukan">Rujukan</label>
                             </div>
                         </div>
 
                         <div class="mb-5">
-                            <label for="noKartu" class="form-label">No. Kartu BPJS</label>
+                            <label for="nomorPencarian" class="form-label">Pencarian Peserta</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="noKartu" name="noKartu">
+                                <select class="form-select" id="jenisPencarian" name="jenis_pencarian" style="max-width: 150px;">
+                                    <option value="noPeserta" selected>No. Peserta</option>
+                                    <option value="nik">NIK</option>
+                                </select>
+                                <input type="text" class="form-control" id="nomorPencarian" name="nomorPencarian" placeholder="Masukkan nomor...">
                                 <button type="button" class="btn btn-primary" id="cekPeserta">Cek Peserta</button>
                             </div>
                         </div>
-
                         <div id="pesertaInfo" class="mt-5"></div>
-
-                        <div class="mb-5">
-                            <label for="no_handphone" class="form-label">No Handphone</label>
-                            <input type="text" class="form-control" id="no_handphone" name="no_handphone">
-                        </div>
-
-                        <div class="mb-5">
-                            <label for="no_rekam_medis" class="form-label">No Rekam Medis</label>
-                            <input type="text" class="form-control" id="no_rekam_medis" name="no_rekam_medis">
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">Simpan</button>
                     </form>
                 </div>
             </div>
@@ -58,8 +49,15 @@
     @push('customscript')
         <script>
             document.getElementById('cekPeserta').addEventListener('click', function () {
-                const noKartu = document.getElementById('noKartu').value;
-                fetch(`/pcare/peserta/${noKartu}`)
+                const jenisPencarian = document.getElementById('jenisPencarian').value;
+                const nomorPencarian = document.getElementById('nomorPencarian').value;
+                let url = `/pcare/peserta/${nomorPencarian}`;
+
+                if (jenisPencarian === 'nik') {
+                    url += '?jenisId=nik';
+                }
+
+                fetch(url)
                     .then(response => response.json())
                     .then(data => {
                         const pesertaInfo = document.getElementById('pesertaInfo');
