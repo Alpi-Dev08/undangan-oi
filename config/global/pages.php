@@ -385,6 +385,10 @@ return [
         ],
     ],
 
+    'pcare' => [
+        'title' => 'PCare',
+    ],
+
     'klinik' => [
         'healthprofesionals' => [
             'title' => 'Health Profesional',
