@@ -9,61 +9,128 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <div class="mb-5">
-                        <label for="noKartu" class="form-label">Nomor Kartu BPJS</label>
-                        <input type="text" class="form-control" id="noKartu" name="noKartu">
-                    </div>
-                    <button type="button" class="btn btn-primary" id="cekPeserta">Cek Peserta</button>
-                    <div id="pesertaInfo" class="mt-5"></div>
+                    <h3 class="text-lg font-semibold mb-4">Pendaftaran Pasien</h3>
+                    <form id="pendaftaranForm">
+                        <div class="mb-5">
+                            <label for="tanggal" class="form-label">Tanggal</label>
+                            <input type="date" class="form-control" id="tanggal" name="tanggal" value="{{ date('Y-m-d') }}">
+                        </div>
 
-                    <hr class="my-5">
+                        <div class="mb-5">
+                            <label class="form-label">Pendaftaran</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="jenis_pendaftaran" id="baru" value="baru" checked>
+                                <label class="form-check-label" for="baru">Baru</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="jenis_pendaftaran" id="rujukan" value="rujukan">
+                                <label class="form-check-label" for="rujukan">Rujukan</label>
+                            </div>
+                        </div>
 
-                    <button type="button" class="btn btn-secondary" id="getDokter">Daftar Dokter</button>
-                    <div id="dokterInfo" class="mt-5"></div>
+                        <div class="mb-5">
+                            <label for="noKartu" class="form-label">No. Kartu BPJS</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="noKartu" name="noKartu">
+                                <button type="button" class="btn btn-primary" id="cekPeserta">Cek Peserta</button>
+                            </div>
+                        </div>
+
+                        <div id="pesertaInfo" class="mt-5"></div>
+
+                        <div class="mb-5">
+                            <label for="no_handphone" class="form-label">No Handphone</label>
+                            <input type="text" class="form-control" id="no_handphone" name="no_handphone">
+                        </div>
+
+                        <div class="mb-5">
+                            <label for="no_rekam_medis" class="form-label">No Rekam Medis</label>
+                            <input type="text" class="form-control" id="no_rekam_medis" name="no_rekam_medis">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 
     @push('customscript')
-    <script>
-        document.getElementById('cekPeserta').addEventListener('click', function() {
-            const noKartu = document.getElementById('noKartu').value;
-            fetch(`/pcare/peserta/${noKartu}`)
-                .then(response => response.json())
-                .then(data => {
-                    const pesertaInfo = document.getElementById('pesertaInfo');
-                    pesertaInfo.innerHTML = `
-                        <h4>Informasi Peserta:</h4>
-                        <p>Nama: ${data.response.nama}</p>
-                        <p>NIK: ${data.response.nik}</p>
-                        <p>Jenis Kelamin: ${data.response.sex}</p>
-                        <!-- Tambahkan informasi lain sesuai kebutuhan -->
+        <script>
+            document.getElementById('cekPeserta').addEventListener('click', function () {
+                const noKartu = document.getElementById('noKartu').value;
+                fetch(`/pcare/peserta/${noKartu}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const pesertaInfo = document.getElementById('pesertaInfo');
+                        if (data.metaData.code === 200) {
+                            const peserta = data.response;
+                            pesertaInfo.innerHTML = `
+                        <h4 class="font-semibold text-lg mb-3">Informasi Peserta:</h4>
+                        <table class="table table-bordered">
+                            <tr><td class="font-semibold">No. Kartu</td><td>${peserta.noKartu}</td></tr>
+                            <tr><td class="font-semibold">Nama</td><td>${peserta.nama}</td></tr>
+                            <tr><td class="font-semibold">Hubungan Keluarga</td><td>${peserta.hubunganKeluarga}</td></tr>
+                            <tr><td class="font-semibold">Jenis Kelamin</td><td>${peserta.sex}</td></tr>
+                            <tr><td class="font-semibold">Tanggal Lahir</td><td>${peserta.tglLahir}</td></tr>
+                            <tr><td class="font-semibold">Tanggal Mulai Aktif</td><td>${peserta.tglMulaiAktif}</td></tr>
+                            <tr><td class="font-semibold">Tanggal Akhir Berlaku</td><td>${peserta.tglAkhirBerlaku}</td></tr>
+                            <tr><td class="font-semibold">Provider PST</td><td>${peserta.kdProviderPst.kdProvider} - ${peserta.kdProviderPst.nmProvider}</td></tr>
+                            <tr><td class="font-semibold">Provider Gigi</td><td>${peserta.kdProviderGigi.kdProvider ? peserta.kdProviderGigi.kdProvider + ' - ' + peserta.kdProviderGigi.nmProvider : 'Tidak ada'}</td></tr>
+                            <tr><td class="font-semibold">Jenis Kelas</td><td>${peserta.jnsKelas.nama} (${peserta.jnsKelas.kode})</td></tr>
+                            <tr><td class="font-semibold">Jenis Peserta</td><td>${peserta.jnsPeserta.nama} (${peserta.jnsPeserta.kode})</td></tr>
+                            <tr><td class="font-semibold">Golongan Darah</td><td>${peserta.golDarah}</td></tr>
+                            <tr><td class="font-semibold">No. HP</td><td>${peserta.noHP || 'Tidak ada'}</td></tr>
+                            <tr><td class="font-semibold">No. KTP</td><td>${peserta.noKTP}</td></tr>
+                            <tr><td class="font-semibold">PST PROL</td><td>${peserta.pstProl || 'Tidak ada'}</td></tr>
+                            <tr><td class="font-semibold">PST PRB</td><td>${peserta.pstPrb || 'Tidak ada'}</td></tr>
+                            <tr><td class="font-semibold">Status</td><td>${peserta.aktif ? 'Aktif' : 'Tidak Aktif'}</td></tr>
+                            <tr><td class="font-semibold">Keterangan Aktif</td><td>${peserta.ketAktif}</td></tr>
+                            <tr><td class="font-semibold">Asuransi</td><td>${peserta.asuransi.nmAsuransi ? peserta.asuransi.nmAsuransi + ' (' + peserta.asuransi.noAsuransi + ')' : 'Tidak ada'}</td></tr>
+                            <tr><td class="font-semibold">COB</td><td>${peserta.asuransi.cob ? 'Ya' : 'Tidak'}</td></tr>
+                            <tr><td class="font-semibold">Tunggakan</td><td>${peserta.tunggakan}</td></tr>
+                        </table>
+                        <input type="hidden" id="nama" name="nama" value="${peserta.nama}">
+                        <input type="hidden" id="nik" name="nik" value="${peserta.noKTP}">
+                        <input type="hidden" id="jenis_kelamin" name="jenis_kelamin" value="${peserta.sex}">
+                        <input type="hidden" id="tanggal_lahir" name="tanggal_lahir" value="${peserta.tglLahir}">
+                        <input type="hidden" id="status_peserta" name="status_peserta" value="${peserta.ketAktif}">
+                        <input type="hidden" id="jenis_peserta" name="jenis_peserta" value="${peserta.jnsPeserta.nama}">
                     `;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Terjadi kesalahan saat mengambil data peserta');
-                });
-        });
-
-        document.getElementById('getDokter').addEventListener('click', function() {
-            fetch('/pcare/dokter')
-                .then(response => response.json())
-                .then(data => {
-                    const dokterInfo = document.getElementById('dokterInfo');
-                    let dokterList = '<h4>Daftar Dokter:</h4><ul>';
-                    data.response.list.forEach(dokter => {
-                        dokterList += `<li>${dokter.nmDokter} (${dokter.kdDokter})</li>`;
+                        } else {
+                            pesertaInfo.innerHTML = `<p class="text-danger">Error: ${data.metaData.message}</p>`;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan saat mengambil data peserta');
                     });
-                    dokterList += '</ul>';
-                    dokterInfo.innerHTML = dokterList;
+            });
+
+            document.getElementById('pendaftaranForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                fetch('/pcare/pendaftaran', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Terjadi kesalahan saat mengambil data dokter');
-                });
-        });
-    </script>
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Pendaftaran berhasil disimpan');
+                            // Reset form atau redirect ke halaman lain jika diperlukan
+                        } else {
+                            alert('Gagal menyimpan pendaftaran: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan saat menyimpan pendaftaran');
+                    });
+            });
+        </script>
     @endpush
 </x-base-layout>
