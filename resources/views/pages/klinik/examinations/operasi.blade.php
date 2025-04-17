@@ -82,10 +82,7 @@
             </td>
             <td style="width: 50%; vertical-align:top">
                 <p style="margin:0px; margin-top:10px; font-size:12px;text-align: right;color:#000;">
-                    Ruko C17, Pasar Intermoda BSD<br>
-                    Sampora, Cisauk, Kab. Tangerang, Banten - 15414<br>
-                    +62 21 5020 8805 - klinik@dharma.or.id<br>
-                    https://klinik.dharma.or.id
+                    {!! organizationInfo('full') !!}
                 </p>
             </td>
         </tr>
