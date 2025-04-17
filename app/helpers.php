@@ -4,6 +4,7 @@
     use App\Core\Adapters\Util;
     use App\Models\Klinik\Additionals;
     use App\Models\Klinik\Anamnesis;
+    use App\Models\Klinik\Organization;
     use App\Models\Klinik\Physical;
     use App\Models\Klinik\Service;
     use App\Models\Klinik\Transaction;
@@ -385,4 +386,39 @@
     function getPenyakitKeluarga($id) {
         $penyakit = \App\Models\Klinik\FamilyDiseaseHistory::where('code',$id)->first();
         return $penyakit;
+    }
+
+    function organization() {
+        $organization = Organization::with(['province','city','district','sub_district'])->first();
+        return $organization;
+    }
+
+    /**
+     * Get formatted organization address and contact information
+     *
+     * @param string $format Format type ('full', 'compact', 'minimal')
+     * @return string Formatted organization information
+     */
+    function organizationInfo($format = 'full')
+    {
+        $org = organization();
+
+        switch ($format) {
+            case 'compact':
+                return $org->address . ', ' . $org->sub_district->name . '<br>' .
+                    $org->city->name . ', ' . $org->province->name . ' ' . $org->postal_code . '<br>' .
+                    $org->phone . ' | ' . $org->email . ' | ' . $org->url;
+
+            case 'minimal':
+                return $org->address . '<br>' .
+                    $org->city->name . ', ' . $org->province->name . '<br>' .
+                    $org->phone . ' | ' . $org->email;
+
+            case 'full':
+            default:
+                return $org->address . '<br>' .
+                    $org->sub_district->name . ', ' . $org->district->name . ', ' . $org->city->name . ', ' . $org->province->name . ' - ' . $org->postal_code . '<br>' .
+                    $org->phone . ' - ' . $org->email . '<br>' .
+                    $org->url;
+        }
     }
