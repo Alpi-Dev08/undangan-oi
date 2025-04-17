@@ -10,10 +10,7 @@
                 </div>
                 <td style="width: 50%; vertical-align:top">
                     <p style="margin:0px; margin-top:10px; font-size:12px;text-align: right;color:#000;">
-                        Ruko C17, Pasar Intermoda BSD<br>
-                        Sampora, Cisauk, Kab. Tangerang, Banten - 15414<br>
-                        Wa.+62 21 5886 8769 - Telp. 021 5569 8265<br>
-                        https://kliniksatriabudi.com-klinik.satriabudi
+                        {!! organizationInfo('full') !!}
                     </p>
                 </td>
             </tr>
@@ -53,7 +50,7 @@
                     <table class="table align-middle table-row-dashed fs-6 gy-5 mb-0">
                         <tbody class="fw-semibold text-gray-600">
                         <!--begin::Products-->
-                        
+
                         @php $total_resep = 0; @endphp
                         @if($examination->resep)
                         <thead>
@@ -123,7 +120,7 @@
             <h4 style="font-weight: bolder;color:#436ba4;font-size:12px;margin:0px;margin-top:10px;text-transform: uppercase;text-align: center;">
                 Obat tsb, tidak boleh diganti tanpa sepengetahuan dokter
             </h4>
-            
+
         </div>
         <!--end::Wrapper-->
     </div>
