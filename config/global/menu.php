@@ -100,7 +100,11 @@
                             'path'   => 'pcare/kesadaran',
                             'bullet' => '<span class="bullet bullet-dot"></span>'
                         ],
-
+                        [
+                            'title'  => 'Poli',
+                            'path'   => 'pcare/poli',
+                            'bullet' => '<span class="bullet bullet-dot"></span>'
+                        ],
                     ]
                 ]
             ],

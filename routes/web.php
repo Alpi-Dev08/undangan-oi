@@ -280,6 +280,9 @@
 
             Route::get('/kesadaran', [PcareController::class, 'getKesadaran'])->name('kesadaran');
             Route::get('/get-kesadaran', [PcareController::class, 'getKesadaran'])->name('get-kesadaran');
+
+            Route::get('/poli', [PcareController::class, 'getPoli'])->name('poli');
+            Route::get('/get-poli', [PcareController::class, 'getPoli'])->name('get-poli');
         });
     });
     /**

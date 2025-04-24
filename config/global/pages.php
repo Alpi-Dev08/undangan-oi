@@ -395,6 +395,9 @@ return [
         ],
         'kesadaran' => [
             'title' => 'Kesadaran'
+        ],
+        'poli' => [
+            'title' => 'Poli'
         ]
     ],
 
