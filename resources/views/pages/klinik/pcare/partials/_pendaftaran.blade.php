@@ -88,7 +88,7 @@
                         <input type="hidden" id="jenis_peserta" name="jenis_peserta" value="${peserta.jnsPeserta.nama}">
                     `;
                     } else {
-                        pesertaInfo.innerHTML = `<p class="text-danger">Error: ${data.metaData.message}</p>`;
+                        pesertaInfo.innerHTML = `<p class="text-danger">Error: Pencarian ${jenisPencarian=='nik' ? 'NIK' : 'No Kartu'} Tidak Ditemukan</p>`;
                     }
                 })
                 .catch(error => {
