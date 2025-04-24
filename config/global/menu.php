@@ -95,6 +95,11 @@
                             'path'   => 'pcare/dokter',
                             'bullet' => '<span class="bullet bullet-dot"></span>'
                         ],
+                        [
+                            'title'  => 'Kesadaran',
+                            'path'   => 'pcare/kesadaran',
+                            'bullet' => '<span class="bullet bullet-dot"></span>'
+                        ],
 
                     ]
                 ]

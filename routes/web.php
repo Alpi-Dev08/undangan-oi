@@ -277,6 +277,9 @@
 
             Route::get('/diagnosa', [PcareController::class, 'getDiagnosa'])->name('diagnosa');
             Route::get('/get-diagnosa', [PcareController::class, 'getDiagnosa'])->name('get-diagnosa');
+
+            Route::get('/kesadaran', [PcareController::class, 'getKesadaran'])->name('kesadaran');
+            Route::get('/get-kesadaran', [PcareController::class, 'getKesadaran'])->name('get-kesadaran');
         });
     });
     /**

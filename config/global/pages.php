@@ -393,6 +393,9 @@ return [
         'dokter' => [
             'title' => 'Dokter'
         ],
+        'kesadaran' => [
+            'title' => 'Kesadaran'
+        ]
     ],
 
     'klinik' => [
