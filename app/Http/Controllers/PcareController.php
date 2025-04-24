@@ -19,23 +19,52 @@ class PcareController extends Controller
         return view('pages.klinik.pcare.index');
     }
 
-    public function getDokter()
+    // API untuk mendapatkan data dokter
+    public function getDokter(Request $request)
     {
-        try {
-            $response = new PCare\Dokter(config('bpjs.pcare'));
-            $response = $response->index(0, 10);
-            return response()->json($response);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+        if(request()->ajax()) {
+            try {
+                $keyword = $request->input('keyword', '');
+                $start   = $request->input('start', 0);
+                $limit   = $request->input('limit', 10);
+
+                $response = new PCare\Dokter(config('bpjs.pcare'));
+                $response = $response->index($start, $limit);
+
+                return response()->json($response);
+            } catch (\Exception $e) {
+                Log::error('PCare Dokter Error: ' . $e->getMessage());
+                return response()->json([
+                    'status'  => false,
+                    'message' => 'Terjadi kesalahan saat mengambil data dokter: ' . $e->getMessage()
+                ], 500);
+            }
         }
+        return view('pages.klinik.pcare.dokter');
     }
 
     public function getDiagnosa(Request $request)
     {
         if(request()->ajax()) {
             try {
+                $keyword = $request->keyword;
+                $start = $request->input('start', 0);
+                $limit = $request->input('limit', 10);
+
                 $response = new PCare\Diagnosa(config('bpjs.pcare'));
-                $response = $response->keyword($request->keyword)->index(0, 10);
+                $response = $response->keyword($keyword)->index($start, $limit);
+
+                // Add pagination metadata if available
+                if (isset($response->response) && isset($response->response->list)) {
+                    $response->pagination = [
+                        'start' => $start,
+                        'limit' => $limit,
+                        'total' => isset($response->response->total) ? $response->response->total : count($response->response->list),
+                        'currentPage' => floor($start / $limit) + 1,
+                        'totalPages' => isset($response->response->total) ? ceil($response->response->total / $limit) : 1
+                    ];
+                }
+
                 return response()->json($response);
             } catch (\Exception $e) {
                 return response()->json(['error' => $e->getMessage()], 500);
