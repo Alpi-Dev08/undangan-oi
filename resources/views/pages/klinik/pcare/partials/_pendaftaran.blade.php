@@ -44,6 +44,12 @@
             const jenisPencarian = document.getElementById('jenisPencarian').value;
             const nomorPencarian = document.getElementById('nomorPencarian').value;
 
+            // Validate input is numeric only
+            if (!/^\d+$/.test(nomorPencarian)) {
+                pesertaInfo.innerHTML = `<p class="text-danger">Error: ${jenisPencarian === 'nik' ? 'NIK' : 'Nomor Peserta'} hanya boleh berisi angka.</p>`;
+                return;
+            }
+            
             // Validate input based on search type
             if (jenisPencarian === 'nik') {
                 if (nomorPencarian.length < 16) {
