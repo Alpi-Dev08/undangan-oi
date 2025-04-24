@@ -32,7 +32,6 @@
                     <button type="button" class="btn btn-primary" id="cekPeserta">Cek Peserta</button>
                 </div>
             </div>
-            <div id="pesertaInfo" class="mt-5"></div>
         </form>
     </div>
 </div>
@@ -49,7 +48,7 @@
                 pesertaInfo.innerHTML = `<p class="text-danger">Error: ${jenisPencarian === 'nik' ? 'NIK' : 'Nomor Peserta'} hanya boleh berisi angka.</p>`;
                 return;
             }
-            
+
             // Validate input based on search type
             if (jenisPencarian === 'nik') {
                 if (nomorPencarian.length < 16) {
@@ -82,30 +81,37 @@
                     if (data.metaData.code === 200) {
                         const peserta = data.response;
                         pesertaInfo.innerHTML = `
-                        <h4 class="font-semibold text-lg mb-3">Informasi Peserta:</h4>
-                        <table class="table table-bordered">
-                            <tr><td class="font-semibold">No. Kartu</td><td>${peserta.noKartu}</td></tr>
-                            <tr><td class="font-semibold">Nama</td><td>${peserta.nama}</td></tr>
-                            <tr><td class="font-semibold">Hubungan Keluarga</td><td>${peserta.hubunganKeluarga}</td></tr>
-                            <tr><td class="font-semibold">Jenis Kelamin</td><td>${peserta.sex}</td></tr>
-                            <tr><td class="font-semibold">Tanggal Lahir</td><td>${peserta.tglLahir}</td></tr>
-                            <tr><td class="font-semibold">Tanggal Mulai Aktif</td><td>${peserta.tglMulaiAktif}</td></tr>
-                            <tr><td class="font-semibold">Tanggal Akhir Berlaku</td><td>${peserta.tglAkhirBerlaku}</td></tr>
-                            <tr><td class="font-semibold">Provider PST</td><td>${peserta.kdProviderPst.kdProvider} - ${peserta.kdProviderPst.nmProvider}</td></tr>
-                            <tr><td class="font-semibold">Provider Gigi</td><td>${peserta.kdProviderGigi.kdProvider ? peserta.kdProviderGigi.kdProvider + ' - ' + peserta.kdProviderGigi.nmProvider : 'Tidak ada'}</td></tr>
-                            <tr><td class="font-semibold">Jenis Kelas</td><td>${peserta.jnsKelas.nama} (${peserta.jnsKelas.kode})</td></tr>
-                            <tr><td class="font-semibold">Jenis Peserta</td><td>${peserta.jnsPeserta.nama} (${peserta.jnsPeserta.kode})</td></tr>
-                            <tr><td class="font-semibold">Golongan Darah</td><td>${peserta.golDarah}</td></tr>
-                            <tr><td class="font-semibold">No. HP</td><td>${peserta.noHP || 'Tidak ada'}</td></tr>
-                            <tr><td class="font-semibold">No. KTP</td><td>${peserta.noKTP}</td></tr>
-                            <tr><td class="font-semibold">PST PROL</td><td>${peserta.pstProl || 'Tidak ada'}</td></tr>
-                            <tr><td class="font-semibold">PST PRB</td><td>${peserta.pstPrb || 'Tidak ada'}</td></tr>
-                            <tr><td class="font-semibold">Status</td><td>${peserta.aktif ? 'Aktif' : 'Tidak Aktif'}</td></tr>
-                            <tr><td class="font-semibold">Keterangan Aktif</td><td>${peserta.ketAktif}</td></tr>
-                            <tr><td class="font-semibold">Asuransi</td><td>${peserta.asuransi.nmAsuransi ? peserta.asuransi.nmAsuransi + ' (' + peserta.asuransi.noAsuransi + ')' : 'Tidak ada'}</td></tr>
-                            <tr><td class="font-semibold">COB</td><td>${peserta.asuransi.cob ? 'Ya' : 'Tidak'}</td></tr>
-                            <tr><td class="font-semibold">Tunggakan</td><td>${peserta.tunggakan}</td></tr>
-                        </table>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table table-bordered">
+                                    <tr><td class="font-semibold">No. Kartu</td><td>${peserta.noKartu}</td></tr>
+                                    <tr><td class="font-semibold">Nama</td><td>${peserta.nama}</td></tr>
+                                    <tr><td class="font-semibold">Hubungan Keluarga</td><td>${peserta.hubunganKeluarga}</td></tr>
+                                    <tr><td class="font-semibold">Jenis Kelamin</td><td>${peserta.sex}</td></tr>
+                                    <tr><td class="font-semibold">Tanggal Lahir</td><td>${peserta.tglLahir}</td></tr>
+                                    <tr><td class="font-semibold">Tanggal Mulai Aktif</td><td>${peserta.tglMulaiAktif}</td></tr>
+                                    <tr><td class="font-semibold">Tanggal Akhir Berlaku</td><td>${peserta.tglAkhirBerlaku}</td></tr>
+                                    <tr><td class="font-semibold">Provider PST</td><td>${peserta.kdProviderPst.kdProvider} - ${peserta.kdProviderPst.nmProvider}</td></tr>
+                                    <tr><td class="font-semibold">Provider Gigi</td><td>${peserta.kdProviderGigi.kdProvider ? peserta.kdProviderGigi.kdProvider + ' - ' + peserta.kdProviderGigi.nmProvider : 'Tidak ada'}</td></tr>
+                                    <tr><td class="font-semibold">Jenis Kelas</td><td>${peserta.jnsKelas.nama} (${peserta.jnsKelas.kode})</td></tr>
+                                    <tr><td class="font-semibold">Jenis Peserta</td><td>${peserta.jnsPeserta.nama} (${peserta.jnsPeserta.kode})</td></tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="table table-bordered">
+                                    <tr><td class="font-semibold">Golongan Darah</td><td>${peserta.golDarah}</td></tr>
+                                    <tr><td class="font-semibold">No. HP</td><td>${peserta.noHP || 'Tidak ada'}</td></tr>
+                                    <tr><td class="font-semibold">No. KTP</td><td>${peserta.noKTP}</td></tr>
+                                    <tr><td class="font-semibold">PST PROL</td><td>${peserta.pstProl || 'Tidak ada'}</td></tr>
+                                    <tr><td class="font-semibold">PST PRB</td><td>${peserta.pstPrb || 'Tidak ada'}</td></tr>
+                                    <tr><td class="font-semibold">Status</td><td>${peserta.aktif ? 'Aktif' : 'Tidak Aktif'}</td></tr>
+                                    <tr><td class="font-semibold">Keterangan Aktif</td><td>${peserta.ketAktif}</td></tr>
+                                    <tr><td class="font-semibold">Asuransi</td><td>${peserta.asuransi.nmAsuransi ? peserta.asuransi.nmAsuransi + ' (' + peserta.asuransi.noAsuransi + ')' : 'Tidak ada'}</td></tr>
+                                    <tr><td class="font-semibold">COB</td><td>${peserta.asuransi.cob ? 'Ya' : 'Tidak'}</td></tr>
+                                    <tr><td class="font-semibold">Tunggakan</td><td>${peserta.tunggakan}</td></tr>
+                                </table>
+                            </div>
+                        </div>
                         <input type="hidden" id="nama" name="nama" value="${peserta.nama}">
                         <input type="hidden" id="nik" name="nik" value="${peserta.noKTP}">
                         <input type="hidden" id="jenis_kelamin" name="jenis_kelamin" value="${peserta.sex}">
