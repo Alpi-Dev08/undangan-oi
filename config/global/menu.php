@@ -105,6 +105,11 @@
                             'path'   => 'pcare/poli',
                             'bullet' => '<span class="bullet bullet-dot"></span>'
                         ],
+                        [
+                            'title'  => 'Provider',
+                            'path'   => 'pcare/provider',
+                            'bullet' => '<span class="bullet bullet-dot"></span>'
+                        ],
                     ]
                 ]
             ],

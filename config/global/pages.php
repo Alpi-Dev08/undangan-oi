@@ -398,7 +398,10 @@ return [
         ],
         'poli' => [
             'title' => 'Poli'
-        ]
+        ],
+        'provider' => [
+            'title' => 'Provider'
+        ],
     ],
 
     'klinik' => [
