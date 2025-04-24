@@ -105,6 +105,37 @@ class PcareController extends Controller
         return view('pages.klinik.pcare.kesadaran');
     }
 
+    public function getPoli(Request $request)
+    {
+        if(request()->ajax()) {
+            try {
+                $keyword = $request->keyword;
+                $start = $request->input('start', 0);
+                $limit = $request->input('limit', 10);
+
+                $response = new PCare\Poli(config('bpjs.pcare'));
+                $response = $response->fktp()->index($start, $limit);
+
+                // Add pagination metadata if available
+                if (isset($response->response) && isset($response->response->list)) {
+                    $response->pagination = [
+                        'start' => $start,
+                        'limit' => $limit,
+                        'total' => isset($response->response->total) ? $response->response->total : count($response->response->list),
+                        'currentPage' => floor($start / $limit) + 1,
+                        'totalPages' => isset($response->response->total) ? ceil($response->response->total / $limit) : 1
+                    ];
+                }
+
+                return response()->json($response);
+            } catch (\Exception $e) {
+                return response()->json(['error' => $e->getMessage()], 500);
+            }
+        }
+
+        return view('pages.klinik.pcare.poli');
+    }
+
     public function getPeserta(Request $request, $nomorPencarian)
     {
         $jenisId = $request->query('jenisId', 'noPeserta');
