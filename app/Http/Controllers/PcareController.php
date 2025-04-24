@@ -30,6 +30,21 @@ class PcareController extends Controller
         }
     }
 
+    public function getDiagnosa(Request $request)
+    {
+        if(request()->ajax()) {
+            try {
+                $response = new PCare\Diagnosa(config('bpjs.pcare'));
+                $response = $response->keyword($request->keyword)->index(0, 10);
+                return response()->json($response);
+            } catch (\Exception $e) {
+                return response()->json(['error' => $e->getMessage()], 500);
+            }
+        }
+
+        return view('pages.klinik.pcare.diagnosa');
+    }
+
     public function getPeserta(Request $request, $nomorPencarian)
     {
         $jenisId = $request->query('jenisId', 'noPeserta');
