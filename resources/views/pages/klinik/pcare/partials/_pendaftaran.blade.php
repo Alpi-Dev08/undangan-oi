@@ -43,6 +43,26 @@
         document.getElementById('cekPeserta').addEventListener('click', function () {
             const jenisPencarian = document.getElementById('jenisPencarian').value;
             const nomorPencarian = document.getElementById('nomorPencarian').value;
+
+            // Validate input based on search type
+            if (jenisPencarian === 'nik') {
+                if (nomorPencarian.length < 16) {
+                    pesertaInfo.innerHTML = `<p class="text-danger">Error: NIK kurang dari 16 digit.</p>`;
+                    return;
+                }else if (nomorPencarian.length > 16) {
+                    pesertaInfo.innerHTML = `<p class="text-danger">Error: NIK lebih dari 16 digit.</p>`;
+                    return;
+                }
+            } else { // noPeserta
+                if (nomorPencarian.length < 13) {
+                    pesertaInfo.innerHTML = `<p class="text-danger">Error: Nomor Peserta kurang dari 13 digit.</p>`;
+                    return;
+                } else if(nomorPencarian.length > 13){
+                    pesertaInfo.innerHTML = `<p class="text-danger">Error: Nomor Peserta lebih dari 13 digit.</p>`;
+                    return;
+                }
+            }
+
             let url = `/pcare/peserta/${nomorPencarian}`;
 
             if (jenisPencarian === 'nik') {
