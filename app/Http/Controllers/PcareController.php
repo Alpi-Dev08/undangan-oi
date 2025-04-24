@@ -47,5 +47,18 @@ class PcareController extends Controller
         }
     }
 
+    public function getRiwayatPendaftaran(Request $request,$tanggalPendaftaran = null){
+
+        $start = $request->query('start', 0);
+        $limit = $request->query('limit', 10);
+
+        $tglDaftar = date('Y-m-d');
+        if($tanggalPendaftaran) {
+            $tglDaftar = $tanggalPendaftaran;
+        }
+        $bpjs = new PCare\Pendaftaran(config('bpjs.pcare'));
+        return $bpjs->tanggalDaftar($tglDaftar)->index($start, $limit);
+    }
+
     // Tambahkan metode lain sesuai kebutuhan
 }
