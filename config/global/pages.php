@@ -389,7 +389,10 @@ return [
         'title' => 'PCare',
         'diagnosa' => [
             'title' => 'Diagnosa'
-        ]
+        ],
+        'dokter' => [
+            'title' => 'Dokter'
+        ],
     ],
 
     'klinik' => [

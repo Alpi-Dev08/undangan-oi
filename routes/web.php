@@ -270,7 +270,7 @@
 
         Route::prefix('pcare')->name('pcare.')->group(function () {
             Route::get('/', [PcareController::class, 'index'])->name('index');
-            Route::get('/dokter', [PcareController::class, 'getDokter']);
+            Route::get('/dokter', [PcareController::class, 'getDokter'])->name('dokter');
             Route::get('/peserta/{noKartu}', [PcareController::class, 'getPeserta']);
             Route::get('/riwayat-pendaftaran', [PcareController::class, 'getRiwayatPendaftaran'])->name('riwayat-pendaftaran');
             // Tambahkan rute lain sesuai kebutuhan

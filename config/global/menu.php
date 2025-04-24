@@ -90,6 +90,12 @@
                             'path'   => 'pcare/diagnosa',
                             'bullet' => '<span class="bullet bullet-dot"></span>'
                         ],
+                        [
+                            'title'  => 'Dokter',
+                            'path'   => 'pcare/dokter',
+                            'bullet' => '<span class="bullet bullet-dot"></span>'
+                        ],
+
                     ]
                 ]
             ],
