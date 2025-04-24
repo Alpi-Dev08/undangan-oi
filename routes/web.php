@@ -268,10 +268,11 @@
         });
 
 
-        Route::prefix('pcare')->group(function () {
-            Route::get('/', [PcareController::class, 'index'])->name('pcare.index');
+        Route::prefix('pcare')->name('pcare.')->group(function () {
+            Route::get('/', [PcareController::class, 'index'])->name('index');
             Route::get('/dokter', [PcareController::class, 'getDokter']);
             Route::get('/peserta/{noKartu}', [PcareController::class, 'getPeserta']);
+            Route::get('/pcare/riwayat-pendaftaran', [PcareController::class, 'getRiwayatPendaftaran'])->name('riwayat-pendaftaran');
             // Tambahkan rute lain sesuai kebutuhan
         });
     });

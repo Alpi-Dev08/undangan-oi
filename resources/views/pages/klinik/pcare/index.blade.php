@@ -10,7 +10,7 @@
             <div class="row">
                 <!-- Pendaftaran Pasien Card -->
                 <div class="col-md-4">
-                    @include('pages.klinik.partials._pendaftaran')
+                    @include('pages.klinik.pcare.partials._pendaftaran')
                 </div>
 
                 <!-- Riwayat Pendaftaran Peserta Card -->
