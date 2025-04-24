@@ -387,6 +387,9 @@ return [
 
     'pcare' => [
         'title' => 'PCare',
+        'diagnosa' => [
+            'title' => 'Diagnosa'
+        ]
     ],
 
     'klinik' => [

@@ -272,8 +272,11 @@
             Route::get('/', [PcareController::class, 'index'])->name('index');
             Route::get('/dokter', [PcareController::class, 'getDokter']);
             Route::get('/peserta/{noKartu}', [PcareController::class, 'getPeserta']);
-            Route::get('/pcare/riwayat-pendaftaran', [PcareController::class, 'getRiwayatPendaftaran'])->name('riwayat-pendaftaran');
+            Route::get('/riwayat-pendaftaran', [PcareController::class, 'getRiwayatPendaftaran'])->name('riwayat-pendaftaran');
             // Tambahkan rute lain sesuai kebutuhan
+
+            Route::get('/diagnosa', [PcareController::class, 'getDiagnosa'])->name('diagnosa');
+            Route::get('/get-diagnosa', [PcareController::class, 'getDiagnosa'])->name('get-diagnosa');
         });
     });
     /**

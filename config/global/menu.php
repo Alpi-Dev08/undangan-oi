@@ -71,9 +71,27 @@
             ],
             [
                 'title' => 'Pcare&nbsp;&nbsp;<span class="badge badge-warning badge-sm ml-5">DEV</span>',
-                'path'  => 'pcare',
                 'role'  => ['dokter', 'administrator'],
                 'icon'  => theme()->getSvgIcon('assets/media/icons/duotune/general/gen005.svg', 'svg-icon-2'),
+                'classes'    => ['item' => 'menu-accordion'],
+                'attributes' => [
+                    'data-kt-menu-trigger' => 'click',
+                ],
+                'sub'        => [
+                    'class' => 'menu-sub-accordion menu-active-bg',
+                    'items' => [
+                        [
+                            'title'  => 'Pendaftaran',
+                            'path'   => 'pcare',
+                            'bullet' => '<span class="bullet bullet-dot"></span>'
+                        ],
+                        [
+                            'title'  => 'Diagnosa',
+                            'path'   => 'pcare/diagnosa',
+                            'bullet' => '<span class="bullet bullet-dot"></span>'
+                        ],
+                    ]
+                ]
             ],
             [
                 'title' => 'Laboratorium Examination',
