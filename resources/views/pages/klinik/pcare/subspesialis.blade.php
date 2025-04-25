@@ -123,7 +123,6 @@
                             keyword: kodeSpesialis
                         },
                         success: function (response) {
-                            console.log(response);
                             var tbody = $('#subSpesialisBody');
                             tbody.empty();
 

@@ -89,7 +89,6 @@
                             limit: limit
                         },
                         success: function (response) {
-                            console.log(response);
                             var tbody = $('#spesialisBody');
                             tbody.empty();
 
