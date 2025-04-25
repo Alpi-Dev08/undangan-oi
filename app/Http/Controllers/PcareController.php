@@ -227,6 +227,30 @@ class PcareController extends Controller
         return view('pages.klinik.pcare.subspesialis');
     }
 
+    public function getSarana(Request $request)
+    {
+        if(request()->ajax()) {
+            try {
+                $response = new PCare\Spesialis(config('bpjs.pcare'));
+                $response = $response->sarana()->index();
+
+                // Log response
+                \Log::info('PCare Sarana Response', ['response' => $response]);
+
+                return response()->json($response);
+            } catch (\Exception $e) {
+                \Log::error('PCare Sarana Error', ['error' => $e->getMessage()]);
+                return response()->json([
+                    'status'  => false,
+                    'message' => 'Terjadi kesalahan saat mengambil data sarana: ' . $e->getMessage(),
+                    'error'   => $e->getMessage()
+                ], 500);
+            }
+        }
+
+        return view('pages.klinik.pcare.sarana');
+    }
+
 
     public function getPeserta(Request $request, $nomorPencarian)
     {
