@@ -404,7 +404,11 @@ return [
         ],
         'spesialis' => [
             'title' => 'Spesialis'
-        ]
+        ],
+        'subspesialis' => [
+            'title' => 'Sub Spesialis'
+        ],
+
     ],
 
     'klinik' => [

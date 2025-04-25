@@ -288,7 +288,10 @@
             Route::get('/get-provider', [PcareController::class, 'getProvider'])->name('get-provider');
 
             Route::get('/spesialis', [PcareController::class, 'getSpesialis'])->name('spesialis');
-            Route::get('/api/spesialis', [PcareController::class, 'getSpesialis'])->name('get-spesialis');
+            Route::get('/getspesialis', [PcareController::class, 'getSpesialis'])->name('get-spesialis');
+
+            Route::get('/subspesialis', [PcareController::class, 'getSubSpesialis'])->name('subspesialis');
+            Route::get('/get-subspesialis', [PcareController::class, 'getSubSpesialis'])->name('get-subspesialis');
 
         });
     });

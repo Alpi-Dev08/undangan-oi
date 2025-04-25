@@ -115,6 +115,11 @@
                             'path'   => 'pcare/spesialis',
                             'bullet' => '<span class="bullet bullet-dot"></span>'
                         ],
+                        [
+                            'title'  => 'Sub Spesialis',
+                            'path'   => 'pcare/subspesialis',
+                            'bullet' => '<span class="bullet bullet-dot"></span>'
+                        ],
                     ]
                 ]
             ],
