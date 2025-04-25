@@ -7,7 +7,7 @@ return [
         'view' => 'index',
         'layout' => [
             'page-title' => [
-                'description' => true,
+                'description' => false,
                 'breadcrumb' => false,
             ],
         ],
@@ -407,6 +407,9 @@ return [
         ],
         'subspesialis' => [
             'title' => 'Sub Spesialis'
+        ],
+        'sarana' => [
+            'title' => 'Sarana'
         ],
 
     ],

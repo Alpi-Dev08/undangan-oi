@@ -120,6 +120,11 @@
                             'path'   => 'pcare/subspesialis',
                             'bullet' => '<span class="bullet bullet-dot"></span>'
                         ],
+                        [
+                            'title'  => 'Sarana',
+                            'path'   => 'pcare/sarana',
+                            'bullet' => '<span class="bullet bullet-dot"></span>'
+                        ],
                     ]
                 ]
             ],

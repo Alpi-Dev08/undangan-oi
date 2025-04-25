@@ -293,6 +293,9 @@
             Route::get('/subspesialis', [PcareController::class, 'getSubSpesialis'])->name('subspesialis');
             Route::get('/get-subspesialis', [PcareController::class, 'getSubSpesialis'])->name('get-subspesialis');
 
+            Route::get('/sarana', [PcareController::class, 'getSarana'])->name('sarana');
+            Route::get('/get-sarana', [PcareController::class, 'getSarana'])->name('get-sarana');
+
         });
     });
     /**
