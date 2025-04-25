@@ -298,6 +298,10 @@
 
             Route::get('/khusus', [PcareController::class, 'getKhusus'])->name('get-khusus');
 
+            // PCare Rujukan Subspesialis routes
+            Route::get('/rujukan-subspesialis', [PcareController::class, 'rujukanSubspesialis'])->name('rujukan-subspesialis');
+            Route::post('/filter-rujukan-subspesialis', [PcareController::class, 'rujukanSubspesialis'])->name('filter-rujukan-subspesialis');
+
         });
     });
     /**

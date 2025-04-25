@@ -129,6 +129,11 @@
                             'title'  => 'Khusus',
                             'path'   => 'pcare/khusus',
                             'bullet' => '<span class="bullet bullet-dot"></span>'
+                        ],
+                        [
+                            'title'  => 'Rujukan Subspesialis',
+                            'path'   => 'pcare/rujukan-subspesialis',
+                            'bullet' => '<span class="bullet bullet-dot"></span>'
                         ]
                     ]
                 ]

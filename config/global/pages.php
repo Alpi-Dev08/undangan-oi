@@ -413,6 +413,11 @@ return [
         ],
         'khusus' => [
             'title' => 'Khusus'
+        ],
+        [
+            'rujukan-subspesialis' => [
+            'title' => 'Rujukan Sub Spesialis'
+            ]
         ]
     ],
 
