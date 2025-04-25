@@ -196,6 +196,37 @@ class PcareController extends Controller
         return view('pages.klinik.pcare.spesialis');
     }
 
+    /**
+     * API untuk mendapatkan data sub spesialis
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getSubSpesialis(Request $request)
+    {
+        if(request()->ajax()) {
+            try {
+                $keyword = $request->keyword;
+
+                $response = new PCare\Spesialis(config('bpjs.pcare'));
+                $response = $response->subSpesialis($keyword)->index();
+                // Log response
+                \Log::info('PCare Sub Spesialis Response', ['response' => $response]);
+
+                return response()->json($response);
+            } catch (\Exception $e) {
+                \Log::error('PCare Sub Spesialis Error', ['error' => $e->getMessage()]);
+                return response()->json([
+                    'status'  => false,
+                    'message' => 'Terjadi kesalahan saat mengambil data sub spesialis: ' . $e->getMessage(),
+                    'error'   => $e->getMessage()
+                ], 500);
+            }
+        }
+
+        return view('pages.klinik.pcare.subspesialis');
+    }
+
 
     public function getPeserta(Request $request, $nomorPencarian)
     {
