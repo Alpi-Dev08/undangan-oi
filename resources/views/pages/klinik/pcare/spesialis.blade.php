@@ -34,6 +34,7 @@
                                     <tr class="fw-bold text-muted bg-light">
                                         <th class="min-w-150px ps-4">Kode Spesialis</th>
                                         <th class="min-w-250px">Nama Spesialis</th>
+                                        <th class="min-w-100px text-center">Sub Spesialis</th>
                                         <th class="min-w-150px text-end pe-4">Aksi</th>
                                     </tr>
                                     </thead>
@@ -104,6 +105,11 @@
                                     var row = '<tr>' +
                                         '<td class="ps-4"><span class="badge badge-light-primary fw-bold">' + item.kdSpesialis + '</span></td>' +
                                         '<td><span class="text-dark fw-semibold">' + item.nmSpesialis + '</span></td>' +
+                                        '<td class="text-center">' +
+                                        '<a href="{{ route("pcare.subspesialis") }}?kodeSpesialis=' + item.kdSpesialis + '" class="btn btn-sm btn-icon btn-light-info" data-bs-toggle="tooltip" title="Lihat Sub Spesialis">' +
+                                        '<i class="fas fa-list-ul"></i>' +
+                                        '</a>' +
+                                        '</td>' +
                                         '<td class="text-end pe-4">' +
                                         '<div class="btn-group">' +
                                         '<button type="button" class="btn btn-sm btn-icon btn-light-primary copy-spesialis" data-bs-toggle="tooltip" title="Salin Data Spesialis" data-kode="' + item.kdSpesialis + '" data-nama="' + item.nmSpesialis + '">' +

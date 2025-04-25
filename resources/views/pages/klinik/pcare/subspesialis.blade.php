@@ -83,6 +83,17 @@
     @push('customscript')
         <script>
             $(document).ready(function () {
+                // Check if kodeSpesialis is in URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const kodeSpesialis = urlParams.get('kodeSpesialis');
+
+                if (kodeSpesialis) {
+                    // Set the value in the search input
+                    $('#searchKodeSpesialis').val(kodeSpesialis);
+                    // Trigger search
+                    fetchSubSpesialis(kodeSpesialis);
+                }
+
                 // Search button click handler
                 $('#searchButton').click(function() {
                     const kodeSpesialis = $('#searchKodeSpesialis').val().trim();
