@@ -209,7 +209,7 @@ class PcareController extends Controller
                 $keyword = $request->keyword;
 
                 $response = new PCare\Spesialis(config('bpjs.pcare'));
-                $response = $response->subSpesialis($keyword)->index();
+                $response = $response->getSubSpesialis($keyword)->index();
                 // Log response
                 \Log::info('PCare Sub Spesialis Response', ['response' => $response]);
 
@@ -273,6 +273,25 @@ class PcareController extends Controller
         }
 
         return view('pages.klinik.pcare.khusus');
+    }
+
+    public function rujukanSubspesialis(Request $request){
+        if(request()->ajax()) {
+            try {
+                $kodeSarana = $request->kodeSarana;
+                $kodeSubSpesialis = $request->kodeSubSpesialis;
+                $tanggalRujuk = "25-04-2025";
+
+
+                $response = new PCare\Spesialis(config('bpjs.pcare'));
+                $response = $response->rujuk()->subSpesialis($kodeSubSpesialis)->sarana($kodeSarana)->tanggalRujuk($tanggalRujuk)->index();
+
+                return response()->json($response);
+            } catch (\Exception $e) {
+                return response()->json(['error' => $e->getMessage()], 500);
+            }
+        }
+        return view('pages.klinik.pcare.rujukansubspesialis');
     }
 
 
