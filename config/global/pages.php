@@ -402,6 +402,9 @@ return [
         'provider' => [
             'title' => 'Provider'
         ],
+        'spesialis' => [
+            'title' => 'Spesialis'
+        ]
     ],
 
     'klinik' => [

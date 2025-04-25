@@ -286,6 +286,10 @@
 
             Route::get('/provider', [PcareController::class, 'getProvider'])->name('provider');
             Route::get('/get-provider', [PcareController::class, 'getProvider'])->name('get-provider');
+
+            Route::get('/spesialis', [PcareController::class, 'getSpesialis'])->name('spesialis');
+            Route::get('/api/spesialis', [PcareController::class, 'getSpesialis'])->name('get-spesialis');
+
         });
     });
     /**

@@ -110,6 +110,11 @@
                             'path'   => 'pcare/provider',
                             'bullet' => '<span class="bullet bullet-dot"></span>'
                         ],
+                        [
+                            'title'  => 'Spesialis',
+                            'path'   => 'pcare/spesialis',
+                            'bullet' => '<span class="bullet bullet-dot"></span>'
+                        ],
                     ]
                 ]
             ],
