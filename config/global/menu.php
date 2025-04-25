@@ -125,6 +125,11 @@
                             'path'   => 'pcare/sarana',
                             'bullet' => '<span class="bullet bullet-dot"></span>'
                         ],
+                        [
+                            'title'  => 'Khusus',
+                            'path'   => 'pcare/khusus',
+                            'bullet' => '<span class="bullet bullet-dot"></span>'
+                        ]
                     ]
                 ]
             ],

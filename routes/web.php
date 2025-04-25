@@ -296,6 +296,8 @@
             Route::get('/sarana', [PcareController::class, 'getSarana'])->name('sarana');
             Route::get('/get-sarana', [PcareController::class, 'getSarana'])->name('get-sarana');
 
+            Route::get('/khusus', [PcareController::class, 'getKhusus'])->name('get-khusus');
+
         });
     });
     /**

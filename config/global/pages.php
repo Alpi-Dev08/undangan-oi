@@ -411,7 +411,9 @@ return [
         'sarana' => [
             'title' => 'Sarana'
         ],
-
+        'khusus' => [
+            'title' => 'Khusus'
+        ]
     ],
 
     'klinik' => [
