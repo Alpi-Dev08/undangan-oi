@@ -1,123 +1,161 @@
 <?php
 
-    namespace App\Http\Controllers\Account;
+    namespace App\Http\Controllers;
 
-    use App\Http\Controllers\Controller;
-    use App\Http\Requests\Account\SettingsEmailRequest;
-    use App\Http\Requests\Account\SettingsInfoRequest;
-    use App\Http\Requests\Account\SettingsNakesRequest;
-    use App\Http\Requests\Account\SettingsPasswordRequest;
+    use App\Http\Requests\SettingsEmailRequest;
+    use App\Http\Requests\SettingsNakesRequest;
+    use App\Models\BloodType;
+    use App\Models\CardType;
+    use App\Models\City;
+    use App\Models\Country;
+    use App\Models\District;
+    use App\Models\Education;
+    use App\Models\Examination;
+    use App\Models\Gender;
+    use App\Models\HealthProfesional;
+    use App\Models\HealthProfesionalType;
     use App\Models\JenisPasien;
-    use App\Models\Klinik\Examination;
-    use App\Models\Klinik\HealthProfesional;
-    use App\Models\Klinik\HealthProfesionalType;
-    use App\Models\Klinik\Location;
-    use App\Models\Klinik\MedicalRecord;
-    use App\Models\Klinik\Package;
-    use App\Models\Klinik\PackageDetail;
-    use App\Models\Klinik\PemeriksaanAwal;
-    use App\Models\Klinik\ServiceCategory;
-    use App\Models\Klinik\Speciality;
-    use App\Models\Klinik\Transaction;
-    use App\Models\Master\BloodType;
-    use App\Models\Master\CardType;
-    use App\Models\Master\City;
-    use App\Models\Master\Country;
-    use App\Models\Master\District;
-    use App\Models\Master\Education;
-    use App\Models\Master\Gender;
-    use App\Models\Master\MaritalStatus;
-    use App\Models\Master\OdontogramSymbol;
-    use App\Models\Master\Province;
-    use App\Models\Master\Religion;
-    use App\Models\Master\SubDistrict;
-    use App\Models\Master\Work;
+    use App\Models\Location;
+    use App\Models\MaritalStatus;
+    use App\Models\MedicalRecord;
+    use App\Models\OdontogramSymbol;
+    use App\Models\Package;
+    use App\Models\PackageDetail;
+    use App\Models\Patient;
+    use App\Models\PemeriksaanAwal;
+    use App\Models\Province;
+    use App\Models\Religion;
+    use App\Models\ServiceCategory;
+    use App\Models\Speciality;
+    use App\Models\SubDistrict;
+    use App\Models\Transaction;
     use App\Models\User;
-    use App\Models\UserInfo;
+    use App\Models\Work;
+    use App\Services\SatuSehatService;
     use Carbon\Carbon;
     use Exception;
     use Haruncpi\LaravelIdGenerator\IdGenerator;
+    use Illuminate\Contracts\View\View;
+    use Illuminate\Http\RedirectResponse;
     use Illuminate\Http\Request;
-    use Illuminate\Support\Facades\Hash;
-    use Illuminate\Support\Facades\Storage;
+    use Log;
     use Ramsey\Uuid\Uuid;
-    use Satusehat\Integration\FHIR\Encounter;
+    use Satusehat\Integration\Encounter;
 
     class SettingsController extends Controller
     {
         /**
-         * Display a listing of the resource.
-         *
-         * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+         * Konstruktor dengan dependency injection SatuSehatService
+         */
+        protected $satuSehatService;
+
+        public function __construct(SatuSehatService $satuSehatService)
+        {
+            $this->satuSehatService = $satuSehatService;
+        }
+
+        /**
+         * Menampilkan halaman pengaturan
          */
         public function index(Request $request)
+        : View
         {
-            $id        = $request->id;
-            $user      = $id != '' ? User::find($id) : auth()->user();
-            $info      = $user->info;
-            $countries = Country::all();
+            $user = $this->getUserFromRequest($request);
+            $info = $user->info;
 
-            $provinces    = $info->country_id != null ? Province::where('country_id', $info->country_id)
-                                                                ->get() : Province::all();
-            $cities       = $info->province_id != null ? City::where('province_id', $info->province_id)->get() : null;
-            $districts    = $info->city_id != null ? District::where('city_id', $info->city_id)->get() : null;
-            $subdistricts = $info->district_id != null ? SubDistrict::where('district_id', $info->district_id)
-                                                                    ->get() : null;
+            // Load reference data
+            $data = [
+                'user'              => $user,
+                'info'              => $info,
+                'countries'         => Country::all(),
+                'provinces'         => $this->getProvincesByCountry($info->country_id),
+                'cities'            => $this->getCitiesByProvince($info->province_id),
+                'districts'         => $this->getDistrictsByCity($info->city_id),
+                'subdistricts'      => $this->getSubDistrictsByDistrict($info->district_id),
+                'cards'             => CardType::all(),
+                'bloods'            => BloodType::all(),
+                'religions'         => Religion::all(),
+                'genders'           => Gender::all(),
+                'works'             => Work::all(),
+                'maritals'          => MaritalStatus::all(),
+                'educations'        => Education::all(),
+                'odontogramsymbols' => OdontogramSymbol::all(),
+                'specialities'      => Speciality::all(),
+                'types'             => HealthProfesionalType::all(),
+                'nakes'             => HealthProfesional::where('user_id', auth()->user()->id)->first(),
+            ];
 
-            $cards             = CardType::all();
-            $bloods            = BloodType::all();
-            $religions         = Religion::all();
-            $genders           = Gender::all();
-            $works             = Work::all();
-            $maritals          = MaritalStatus::all();
-            $educations        = Education::all();
-            $odontogramsymbols = OdontogramSymbol::all();
-
-            $specialities = Speciality::all();
-            $types        = HealthProfesionalType::all();
-            $nakes        = HealthProfesional::where('user_id', auth()->user()->id)->first();
-
-            // get the default inner page
-            return view('pages.account.settings.settings', compact([
-                'user',
-                'info',
-                'countries',
-                'provinces',
-                'cities',
-                'districts',
-                'subdistricts',
-                'cards',
-                'bloods',
-                'religions',
-                'genders',
-                'works',
-                'maritals',
-                'educations',
-                'specialities',
-                'types',
-                'nakes',
-                'odontogramsymbols',
-            ]));
+            return view('pages.account.settings.settings', compact(array_keys($data)));
         }
 
+        /**
+         * Metode helper untuk mendapatkan user dari request
+         */
+        private function getUserFromRequest(Request $request)
+        : User
+        {
+            $id = $request->id;
+            return $id ? User::findOrFail($id) : auth()->user();
+        }
+
+        /**
+         * Metode helper untuk mendapatkan provinsi berdasarkan negara
+         */
+        private function getProvincesByCountry(?int $countryId)
+        : mixed
+        {
+            if ($countryId) {
+                return Province::where('country_id', $countryId)->get();
+            }
+
+            return Province::all();
+        }
+
+        /**
+         * Metode helper untuk mendapatkan kota berdasarkan provinsi
+         */
+        private function getCitiesByProvince(?int $provinceId)
+        : mixed
+        {
+            return $provinceId ? City::where('province_id', $provinceId)->get() : null;
+        }
+
+        /**
+         * Metode helper untuk mendapatkan kecamatan berdasarkan kota
+         */
+        private function getDistrictsByCity(?int $cityId)
+        : mixed
+        {
+            return $cityId ? District::where('city_id', $cityId)->get() : null;
+        }
+
+        /**
+         * Metode helper untuk mendapatkan kelurahan berdasarkan kecamatan
+         */
+        private function getSubDistrictsByDistrict(?int $districtId)
+        : mixed
+        {
+            return $districtId ? SubDistrict::where('district_id', $districtId)->get() : null;
+        }
+
+        /**
+         * Menampilkan halaman pembayaran
+         */
         public function payments(Request $request)
+        : View
         {
-            $id          = $request->id;
-            $user        = $id != '' ? User::find($id) : auth()->user();
+            $user        = $this->getUserFromRequest($request);
             $examination = Examination::find($request->examination);
-            $info        = $user->info;
 
-            // get the default inner page
-            return view('pages.account.payments.payments', compact([
-                'user',
-                'info',
-                'examination',
-            ]));
+            return view('pages.account.payments.payments', compact('user', 'info', 'examination'));
         }
 
+        /**
+         * Memproses pembuatan pembayaran
+         */
         public function createPayment(Request $request)
+        : RedirectResponse
         {
-            $id                  = $request->id;
             $examination         = Examination::find($request->id);
             $examination->status = $request->status;
             $examination->save();
@@ -126,126 +164,173 @@
         }
 
         /**
-         * Display a listing of the resource.
-         *
-         * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+         * Menampilkan halaman pemeriksaan
          */
         public function examinations(Request $request)
+        : View
         {
-            $id                = $request->id;
-            $user              = $id != '' ? User::find($id) : auth()->user();
-            $healthprofesional = HealthProfesional::all();
-            $servicecategories = ServiceCategory::where('is_global', 0)->get();
-            $pemeriksaan_awal  = PemeriksaanAwal::where(['user_id' => null, 'patient_id' => null])->latest()->first();
-            $packages          = Package::all();
-            $locations         = Location::all();
-            $jenisPasien       = JenisPasien::all();
+            $user = $this->getUserFromRequest($request);
 
-            $info = $user->info;
+            $data = [
+                'user'              => $user,
+                'info'              => $user->info,
+                'healthprofesional' => HealthProfesional::all(),
+                'servicecategories' => ServiceCategory::where('is_global', 0)->get(),
+                'pemeriksaan_awal'  => PemeriksaanAwal::where(['user_id' => null, 'patient_id' => null])
+                                                      ->latest()
+                                                      ->first(),
+                'packages'          => Package::all(),
+                'locations'         => Location::all(),
+                'jenisPasien'       => JenisPasien::all(),
+            ];
 
-            // get the default inner page
-            return view('pages.account.examinations.examinations', compact([
-                'user',
-                'info',
-                'healthprofesional',
-                'servicecategories',
-                'locations',
-                'packages',
-                'pemeriksaan_awal',
-                'jenisPasien'
-            ]));
+            return view('pages.account.examinations.examinations', compact(array_keys($data)));
         }
 
         /**
-         * Display a listing of the resource.
-         *
-         * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+         * Menampilkan halaman janji temu
          */
         public function appointments(Request $request)
+        : View
         {
-            $id                = $request->id;
-            $user              = $id != '' ? User::find($id) : auth()->user();
-            $healthprofesional = HealthProfesional::all();
-            $servicecategories = ServiceCategory::where('is_global', 0)->get();
+            $user = $this->getUserFromRequest($request);
 
-            $info = $user->info;
+            $data = [
+                'user'              => $user,
+                'info'              => $user->info,
+                'healthprofesional' => HealthProfesional::all(),
+                'servicecategories' => ServiceCategory::where('is_global', 0)->get(),
+            ];
 
-            // get the default inner page
-            return view('pages.account.examinations.appointments', compact([
-                'user',
-                'info',
-                'healthprofesional',
-                'servicecategories',
-            ]));
+            return view('pages.account.examinations.appointments', compact(array_keys($data)));
         }
 
+        /**
+         * Membuat pemeriksaan baru
+         */
         public function createExamination(Request $request)
+        : RedirectResponse
         {
-            $user = User::find($request->user_id);
+            $user             = User::find($request->user_id);
+            $examination_code = $this->generateCode('examinations', 'examination_code', 12, 'E' . date('Ymd'));
 
-            $examination_code = IdGenerator::generate([
-                'table'  => 'examinations',
-                'field'  => 'examination_code',
-                'length' => 12,
-                'prefix' => 'E' . date('Ymd')
+            // Mencari atau membuat medical record
+            $medical_record = $this->findOrCreateMedicalRecord($user);
+
+            // Membuat objek examination baru
+            $examination = new Examination();
+            $examination->fill([
+                'user_id'               => $user->id,
+                'patient_id'            => $user->patient->id,
+                'jenis_pasien_id'       => $request->jenis_pasien_id,
+                'medical_record_id'     => $medical_record->id,
+                'examination_code'      => $examination_code,
+                'health_profesional_id' => $request->health_profesional_id,
+                'service_category_id'   => $request->service_category_id,
+                'package_id'            => $request->package_id,
+                'location_id'           => $request->location_id,
+                'examination_date'      => date('Y-m-d H:i:s'),
+                'total'                 => 0,
+                'status'                => 'waiting payment'
             ]);
-            $medical_record   = MedicalRecord::where('user_id', $request->user_id)->first();
-            if ($medical_record) {
-                $medical_record_id = $medical_record->medical_record_code;
-            } else {
-                $medical_record_id = IdGenerator::generate([
-                    'table'  => 'medical_records',
-                    'field'  => 'medical_record_code',
-                    'length' => 13,
-                    'prefix' => 'MR' . date('Ymd')
-                ]);
 
-                $medical_record                      = new MedicalRecord();
-                $medical_record->medical_record_code = $medical_record_id;
-                $medical_record->user_id             = $user->id;
-                $medical_record->save();
-            }
-
-            $examination                        = new Examination();
-            $examination->user_id               = $user->id;
-            $examination->patient_id            = $user->patient->id;
-            $examination->jenis_pasien_id       = $request->jenis_pasien_id;
-            $examination->medical_record_id     = $medical_record->id;
-            $examination->examination_code      = $examination_code;
-            $examination->health_profesional_id = $request->health_profesional_id;
-            $examination->service_category_id   = $request->service_category_id;
-            $examination->package_id            = $request->package_id;
-            $examination->location_id           = $request->location_id;
-            $examination->examination_date      = date('Y-m-d H:i:s');
-            $examination->total                 = 0;
-            $examination->status                = 'waiting payment';
-
+            // Menangani consent jika pasien memiliki his_number
             if ($user->patient->his_number) {
-                $data    = [
-                    'patient_id' => $user->patient->his_number,
-                    'action'     => $request->isConsent == "ya" ? "OPTIN" : "OPTOUT",
-                    'agent'      => auth()->user()->name,
-                ];
-                $consent = satu_sehat_consent($data);
-
-                if ($consent) {
-                    $examination->is_consent   = $request->isConsent == "ya" ? 1 : 0;
-                    $examination->consent_data = $consent;
-                }
+                $this->handleConsent($examination, $user, $request);
             }
 
-            if (getenv('SATUSEHAT_ENV') == 'STG') {
-                $location = (object) [
-                    'location_id' => '9252e3e6-f0e9-4076-9a4f-91c0a24a8b25',
-                    'name'        => 'Ruang Poli Umum'
-                ];
-
-            } else {
-                $location = Location::find($request->location_id);
+            // Menangani encounter untuk SATU Sehat
+            if ($user->patient->his_number) {
+                $this->createSatuSehatEncounter($examination, $user, $request);
             }
 
+            $examination->save();
+
+            // Menangani pemeriksaan awal jika tersedia
+            if ($request->pemeriksaan_awal) {
+                $this->handlePemeriksaanAwal($request, $examination, $user);
+            }
+
+            // Membuat transaksi untuk pemeriksaan
+            $this->createTransaction($examination);
+
+            // Menangani paket jika ada
+            if ($examination->package_id != null) {
+                $package            = Package::find($examination->package_id);
+                $packageDetails     = PackageDetail::where('package_id', $package->id)->get();
+                $service_categories = ServiceCategory::all();
+
+                return view('examinations.package', compact('examination', 'package', 'packageDetails', 'service_categories'));
+            }
+
+            return redirect()->route('examinations.services', ['id' => $examination->id]);
+        }
+
+        /**
+         * Metode helper untuk generate kode
+         */
+        private function generateCode(string $table, string $field, int $length, string $prefix)
+        : string
+        {
+            return IdGenerator::generate([
+                'table'  => $table,
+                'field'  => $field,
+                'length' => $length,
+                'prefix' => $prefix
+            ]);
+        }
+
+        /**
+         * Metode helper untuk mencari atau membuat medical record
+         */
+        private function findOrCreateMedicalRecord(User $user)
+        : MedicalRecord
+        {
+            $medical_record = MedicalRecord::where('user_id', $user->id)->first();
+
+            if ($medical_record) {
+                return $medical_record;
+            }
+
+            $medical_record_id                   = $this->generateCode('medical_records', 'medical_record_code', 13, 'MR' . date('Ymd'));
+            $medical_record                      = new MedicalRecord();
+            $medical_record->medical_record_code = $medical_record_id;
+            $medical_record->user_id             = $user->id;
+            $medical_record->save();
+
+            return $medical_record;
+        }
+
+        /**
+         * Metode helper untuk menangani consent
+         */
+        private function handleConsent(Examination $examination, User $user, Request $request)
+        : void
+        {
+            $data = [
+                'patient_id' => $user->patient->his_number,
+                'action'     => $request->isConsent == "ya" ? "OPTIN" : "OPTOUT",
+                'agent'      => auth()->user()->name,
+            ];
+
+            $consent = satu_sehat_consent($data);
+
+            if ($consent) {
+                $examination->is_consent   = $request->isConsent == "ya" ? 1 : 0;
+                $examination->consent_data = $consent;
+            }
+        }
+
+        /**
+         * Metode helper untuk membuat encounter SATU Sehat
+         */
+        private function createSatuSehatEncounter(Examination $examination, User $user, Request $request)
+        : void
+        {
+            $location          = $this->getLocationForSatuSehat($request->location_id);
             $healthprofesional = HealthProfesional::find($request->health_profesional_id);
 
+            // Menentukan ID referensi tenaga kesehatan
             if ($healthprofesional->his_number) {
                 $reference      = $healthprofesional->his_number;
                 $reference_name = $healthprofesional->user->name;
@@ -255,163 +340,134 @@
                 $reference_name    = $healthprofesional->user->name;
             }
 
+            // Override untuk environment staging
             if (getenv('SATUSEHAT_ENV') == 'STG') {
                 $reference      = '10009880728';
                 $reference_name = 'dr. Alexander';
             }
 
-
-            if ($user->patient->his_number) {
+            try {
                 $encounter = new Encounter;
                 $uuid      = Uuid::uuid4()->toString();
-                $encounter->addRegistrationId($uuid); // unique string free text (increments / UUID)
 
+                $encounter->addRegistrationId($uuid);
                 $encounter->setArrived(Carbon::now()->subMinutes(15)->toDateTimeString());
-                //$encounter->setInProgress(Carbon::now()->subMinutes(5)->toDateTimeString(), Carbon::now()->toDateTimeString());
-                //$encounter->setFinished(Carbon::now()->toDateTimeString());
+                $encounter->addRegistrationId($examination->examination_code);
+                $encounter->setConsultationMethod('RAJAL');
+                $encounter->setSubject($user->patient->his_number, $user->name);
+                $encounter->addParticipant($reference, $reference_name);
+                $encounter->addLocation($location->location_id, $location->name);
 
-                $encounter->addRegistrationId($examination_code);                 // unique string free text (increments / UUID)
-                $encounter->setConsultationMethod('RAJAL');                       // RAJAL, IGD, RANAP, HOMECARE, TELEKONSULTASI
-                $encounter->setSubject($user->patient->his_number, $user->name);  // ID SATUSEHAT Pasien dan Nama SATUSEHAT
-                //$encounter->setSubject('P02478375538','Ardianto Putra'); // For Test Only
-                $encounter->addParticipant($reference, $reference_name);          // ID SATUSEHAT Dokter, Nama Dokter
-                $encounter->addLocation($location->location_id, $location->name); // ID SATUSEHAT Location, Nama Poli
-                //$encounter = $encounter->json();
-                //dd($encounter);
-                try {
-                    // Contoh POST
-                    [$encounter, $res] = $encounter->post();
-
-                    $encounter = json_encode($res, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
-                } catch (Exception $e) {
-                    dd($e->getMessage());
-                }
-
+                [$encounterData, $res] = $encounter->post();
+                $encounterJson = json_encode($res, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
 
                 if (isset($res->id)) {
                     $examination->encounter_id     = $res->id;
-                    $examination->encounter        = $encounter;
+                    $examination->encounter        = $encounterJson;
                     $examination->encounter_status = $res->status;
                 }
+            } catch (Exception $e) {
+                // Log error instead of dd()
+                Log::error('SATU Sehat Encounter Error: ' . $e->getMessage());
             }
-            $examination->save();
-
-            if ($request->pemeriksaan_awal) {
-                $pemeriksaan_awal                 = PemeriksaanAwal::find($request->pemeriksaan_awal);
-                $pemeriksaan_awal->examination_id = $examination->id;
-                $pemeriksaan_awal->user_id        = $request->user_id;
-                $pemeriksaan_awal->patient_id     = $user->patient->id;
-                $pemeriksaan_awal->save();
-            }
-
-            $inv = IdGenerator::generate([
-                'table'  => 'transactions',
-                'field'  => 'invoice_number',
-                'length' => 14,
-                'prefix' => 'INV' . date('Ymd')
-            ]);
-
-            $transactions                 = new Transaction();
-            $transactions->examination_id = $examination->id;
-            $transactions->invoice_number = $inv;
-            $transactions->amount         = $examination->total;
-            $transactions->status         = 'waiting payment';
-            $transactions->save();
-            if ($examination->package_id != null) {
-                $package            = Package::find($examination->package_id);
-                $packageDetails     = PackageDetail::where('package_id', $package->id)->get();
-                $service_categories = ServiceCategory::all();
-
-                return view('examinations.package', compact([
-                    'examination',
-                    'package',
-                    'packageDetails',
-                    'service_categories',
-                ]));
-            }
-
-
-            return redirect()->route('examinations.services', ['id' => $examination->id]);
         }
 
-        public function createAppointment(Request $request)
+        /**
+         * Metode helper untuk mendapatkan lokasi SATU Sehat
+         */
+        private function getLocationForSatuSehat(?int $locationId)
+        : object
         {
-            $user             = User::find($request->user_id);
-            $examination_code = IdGenerator::generate([
-                'table'  => 'examinations',
-                'field'  => 'examination_code',
-                'length' => 12,
-                'prefix' => 'E' . date('Ymd')
-            ]);
-            $medical_record   = MedicalRecord::where('user_id', $request->user_id)->first();
-            if ($medical_record) {
-                $medical_record_id = $medical_record->medical_record_code;
-            } else {
-                $medical_record_id = IdGenerator::generate([
-                    'table'  => 'medical_records',
-                    'field'  => 'medical_record_code',
-                    'length' => 13,
-                    'prefix' => 'MR' . date('Ymd')
-                ]);
-
-                $medical_record                      = new MedicalRecord();
-                $medical_record->medical_record_code = $medical_record_id;
-                $medical_record->user_id             = $user->id;
-                $medical_record->save();
+            if (getenv('SATUSEHAT_ENV') == 'STG') {
+                return (object) [
+                    'location_id' => '9252e3e6-f0e9-4076-9a4f-91c0a24a8b25',
+                    'name'        => 'Ruang Poli Umum'
+                ];
             }
 
-            $examination                        = new Examination();
-            $examination->user_id               = $user->id;
-            $examination->patient_id            = $user->patient->id;
-            $examination->medical_record_id     = $medical_record->id;
-            $examination->examination_code      = $examination_code;
-            $examination->health_profesional_id = $request->health_profesional_id;
-            $examination->service_category_id   = $request->service_category_id;
-            $examination->location_id           = $request->location_id;
-            $examination->examination_date      = date('Y-m-d H:i:s');
-            $examination->appointment_date      = $request->appointment_date;
-            $examination->appointment_status    = '0';
-            $examination->is_appointment        = '1';
-            $examination->total                 = 0;
-            $examination->status                = 'waiting payment';
-            $examination->save();
+            return Location::find($locationId);
+        }
 
-            $inv = IdGenerator::generate([
-                'table'  => 'transactions',
-                'field'  => 'invoice_number',
-                'length' => 14,
-                'prefix' => 'INV' . date('Ymd')
+        /**
+         * Metode helper untuk menangani pemeriksaan awal
+         */
+        private function handlePemeriksaanAwal(Request $request, Examination $examination, User $user)
+        : void
+        {
+            $pemeriksaan_awal                 = PemeriksaanAwal::find($request->pemeriksaan_awal);
+            $pemeriksaan_awal->examination_id = $examination->id;
+            $pemeriksaan_awal->user_id        = $request->user_id;
+            $pemeriksaan_awal->patient_id     = $user->patient->id;
+            $pemeriksaan_awal->save();
+        }
+
+        /**
+         * Metode helper untuk membuat transaksi
+         */
+        private function createTransaction(Examination $examination)
+        : void
+        {
+            $invoiceNumber = $this->generateCode('transactions', 'invoice_number', 14, 'INV' . date('Ymd'));
+
+            $transaction                 = new Transaction();
+            $transaction->examination_id = $examination->id;
+            $transaction->invoice_number = $invoiceNumber;
+            $transaction->amount         = $examination->total;
+            $transaction->status         = 'waiting payment';
+            $transaction->save();
+        }
+
+        /**
+         * Membuat janji temu baru
+         */
+        public function createAppointment(Request $request)
+        : RedirectResponse
+        {
+            $user             = User::find($request->user_id);
+            $examination_code = $this->generateCode('examinations', 'examination_code', 12, 'E' . date('Ymd'));
+
+            // Mencari atau membuat medical record
+            $medical_record = $this->findOrCreateMedicalRecord($user);
+
+            // Membuat objek examination baru untuk janji temu
+            $examination = new Examination();
+            $examination->fill([
+                'user_id'               => $user->id,
+                'patient_id'            => $user->patient->id,
+                'medical_record_id'     => $medical_record->id,
+                'examination_code'      => $examination_code,
+                'health_profesional_id' => $request->health_profesional_id,
+                'service_category_id'   => $request->service_category_id,
+                'location_id'           => $request->location_id,
+                'examination_date'      => date('Y-m-d H:i:s'),
+                'appointment_date'      => $request->appointment_date,
+                'appointment_status'    => '0',
+                'is_appointment'        => '1',
+                'total'                 => 0,
+                'status'                => 'waiting payment'
             ]);
 
-            $transactions                 = new Transaction();
-            $transactions->examination_id = $examination->id;
-            $transactions->invoice_number = $inv;
-            $transactions->amount         = $examination->total;
-            $transactions->status         = 'waiting payment';
-            $transactions->save();
+            $examination->save();
+
+            // Membuat transaksi untuk janji temu
+            $this->createTransaction($examination);
 
             return redirect()->route('appointments.index');
         }
 
         /**
-         * Update the specified resource in storage.
-         *
-         * @param \Illuminate\Http\Request $request
-         * @param int                      $user
-         *
-         * @return \Illuminate\Http\RedirectResponse
+         * Memperbarui data tenaga kesehatan
          */
         public function nakes(SettingsNakesRequest $request)
+        : RedirectResponse
         {
-            // save on user info
             $healthprofesional = HealthProfesional::where('user_id', auth()->user()->id)->first();
 
             if ($healthprofesional === null) {
-                // create new model
                 $healthprofesional = new HealthProfesional();
             }
 
-            // attach this info to the current user
+            // Menghubungkan dengan user saat ini
             $healthprofesional->user()->associate(auth()->user());
 
             foreach ($request->only(array_keys($request->rules())) as $key => $value) {
@@ -427,108 +483,17 @@
         }
 
         /**
-         * Function to accept request for change email
+         * Mengubah email user
          */
         public function changeEmail(SettingsEmailRequest $request)
+        : RedirectResponse
         {
-            // prevent change email for demo account
+            // Mencegah perubahan email untuk akun demo
             if ($request->input('current_email') === 'demo@demo.com') {
                 return redirect()->intended('account/settings');
             }
 
             auth()->user()->update(['email' => $request->input('email')]);
-
-            if ($request->expectsJson()) {
-                return response()->json($request->all());
-            }
-
-            return redirect()->intended('account/settings');
-        }
-
-        /**
-         * Update the specified resource in storage.
-         *
-         * @param \Illuminate\Http\Request $request
-         * @param int                      $user
-         *
-         * @return \Illuminate\Http\RedirectResponse
-         */
-        public function update(SettingsInfoRequest $request)
-        {
-            // save user name
-            $validated = $request->validate([
-                'first_name' => 'required|string|max:255',
-                'last_name'  => 'required|string|max:255',
-                'phone'      => 'string',
-            ]);
-            $user      = User::find($request->user_id);
-            $user->update($validated);
-
-            // save on user info
-            $info = UserInfo::where('user_id', $user->id)->first();
-
-            if ($info === null) {
-                // create new model
-                $info = new UserInfo();
-            }
-
-            // attach this info to the current user
-            $info->user()->associate($user);
-
-            foreach ($request->only(array_keys($request->rules())) as $key => $value) {
-                if (is_array($value)) {
-                    $value = serialize($value);
-                }
-                $info->$key = $value;
-            }
-
-            // include to save avatar
-            if ($avatar = $this->upload()) {
-                $info->photo = $avatar;
-            }
-
-            if ($request->boolean('avatar_remove')) {
-                Storage::delete($info->avatar);
-                $info->photo = null;
-            }
-
-            $info->save();
-
-            return redirect()->intended('account/settings');
-        }
-
-        /**
-         * Function for upload avatar image
-         *
-         * @param string $folder
-         * @param string $key
-         * @param string $validation
-         *
-         * @return false|string|null
-         */
-        public function upload($folder = 'images', $key = 'photo', $validation = 'image|mimes:jpeg,png,jpg,gif,svg|max:2048|sometimes')
-        {
-            request()->validate([$key => $validation]);
-
-            $file = null;
-            if (request()->hasFile($key)) {
-                $file = Storage::disk('public')->putFile($folder, request()->file($key), 'public');
-            }
-
-            return $file;
-        }
-
-        /**
-         * Function to accept request for change password
-         */
-        public function changePassword(SettingsPasswordRequest $request)
-        {
-            // prevent change password for demo account
-            if ($request->input('current_email') === 'demo@demo.com') {
-                return redirect()->intended('account/settings');
-            }
-
-            auth()->user()->update(['password' => Hash::make($request->input('password'))]);
 
             if ($request->expectsJson()) {
                 return response()->json($request->all());
