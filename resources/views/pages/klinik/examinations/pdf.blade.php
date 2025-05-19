@@ -239,19 +239,19 @@
             <table style="width:100%;font-size:12px;">
                 <tr>
                     <td style="font-size:12px;width:35%;padding-left:10px">Bicara</td>
-                    <td style="font-size:12px;width:65%">{{ ucwords($psikososial->bicara) ?? "-" }}</td>
+                    <td style="font-size:12px;width:65%">{{ !isset($psikososial->bicara) ? ucwords($psikososial->bicara) : "-" }}</td>
                 </tr>
                 <tr>
                     <td style="font-size:12px;width:35%;padding-left:10px">Komunikasi</td>
-                    <td style="font-size:12px;width:65%">{{ ucwords($psikososial->komunikasi) ?? "-" }}</td>
+                    <td style="font-size:12px;width:65%">{{ !isset($psikososial->komunikasi) ? ucwords($psikososial->komunikasi) : "-" }}</td>
                 </tr>
                 <tr>
                     <td style="font-size:12px;width:35%;padding-left:10px">Status Emosional</td>
-                    <td style="font-size:12px;width:65%">{{ ucwords($psikososial->emosional) ?? "-" }}</td>
+                    <td style="font-size:12px;width:65%">{{ !isset($psikososial->emosional) ? ucwords($psikososial->emosional) : "-" }}</td>
                 </tr>
                 <tr>
                     <td style="font-size:12px;width:35%;padding-left:10px">Sosiologi</td>
-                    <td style="font-size:12px;width:65%">{{ isset($psikososial->sosiologi) ? ucwords($psikososial->sosiologi) : "-" }}</td>
+                    <td style="font-size:12px;width:65%">{{ !isset($psikososial->sosiologi) ? ucwords($psikososial->sosiologi) : "-" }}</td>
                 </tr>
             </table>
 
