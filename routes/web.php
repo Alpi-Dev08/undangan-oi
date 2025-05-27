@@ -302,6 +302,8 @@
             Route::get('/rujukan-subspesialis', [PcareController::class, 'rujukanSubspesialis'])->name('rujukan-subspesialis');
             Route::post('/filter-rujukan-subspesialis', [PcareController::class, 'rujukanSubspesialis'])->name('filter-rujukan-subspesialis');
 
+            Route::post('/pendaftaran',[PcareController::class, 'submitPendaftaran'])->name('pendaftaran');
+
         });
     });
     /**
