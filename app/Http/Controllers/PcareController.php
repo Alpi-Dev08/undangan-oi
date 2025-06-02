@@ -139,6 +139,53 @@
             return view('pages.klinik.pcare.poli');
         }
 
+        public function getPoli2(Request $request)
+        {
+            try {
+                    $keyword = $request->keyword;
+
+                    $start   = $request->input('start', 0);
+                    $limit   = $request->input('limit', 10);
+
+                    $response = new PCare\Poli(config('bpjs.pcare'));
+                    $response = $response->fktp()->index($start, $limit);
+
+                    // Add pagination metadata if available
+                    $response = json_decode(json_encode($response),false);
+                    if (isset($response->response) && isset($response->response->list)) {
+                        // Create collection from response list
+                        $collection = collect($response->response->list);
+
+                        // Filter by keyword if provided
+                        if (!empty($request->keyword)) {
+                            $collection = $collection->filter(function($item) use ($request) {
+                                // Search across all item properties
+                                return collect($item)->filter(function($value) use ($request) {
+                                    return stripos($value, $request->keyword) !== false;
+                                })->isNotEmpty();
+                            });
+                        }
+
+                        // Add pagination metadata
+                        $response->pagination = [
+                            'start'       => $start,
+                            'limit'       => $limit,
+                            'total'       => $collection->count(),
+                            'currentPage' => floor($start / $limit) + 1,
+                            'totalPages'  => ceil($collection->count() / $limit)
+                        ];
+
+                        // Update response list with filtered collection
+                        $response->response->count =$collection->count();
+                        $response->response->list = $collection->values()->all();
+                    }
+                     return response()->json($response);
+                } catch (Exception $e) {
+                    return response()->json(['error' => $e->getMessage()], 500);
+                }
+        }
+
+
         public function getProvider(Request $request)
         {
             if (request()->ajax()) {

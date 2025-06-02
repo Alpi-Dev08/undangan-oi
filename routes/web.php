@@ -283,6 +283,7 @@
 
             Route::get('/poli', [PcareController::class, 'getPoli'])->name('poli');
             Route::get('/get-poli', [PcareController::class, 'getPoli'])->name('get-poli');
+            Route::get('/cek-poli', [PcareController::class, 'getPoli2'])->name('cek-poli');
 
             Route::get('/provider', [PcareController::class, 'getProvider'])->name('provider');
             Route::get('/get-provider', [PcareController::class, 'getProvider'])->name('get-provider');
