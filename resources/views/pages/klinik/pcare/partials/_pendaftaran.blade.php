@@ -14,12 +14,12 @@
                 <label class="form-label">Pendaftaran</label><br>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="jenis_pendaftaran" id="baru"
-                           value="baru" checked>
+                        value="baru" checked>
                     <label class="form-check-label" for="baru">Baru</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="jenis_pendaftaran" id="rujukan"
-                           value="rujukan">
+                        value="rujukan">
                     <label class="form-check-label" for="rujukan">Rujukan</label>
                 </div>
             </div>
@@ -32,7 +32,7 @@
                         <option value="nik">NIK</option>
                     </select>
                     <input type="text" class="form-control" id="nomorPencarian" name="nomorPencarian"
-                           placeholder="Masukkan nomor...">
+                        placeholder="Masukkan nomor...">
                     <button type="button" class="btn btn-primary" id="cekPeserta">Cek Peserta</button>
                 </div>
             </div>
@@ -47,7 +47,8 @@
                         <div class="mb-5">
                             <label for="kdProviderPeserta" class="form-label required">Provider Peserta</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="kdProviderPeserta" name="kdProviderPeserta" placeholder="Kode Provider" required>
+                                <input type="text" class="form-control" id="kdProviderPeserta"
+                                    name="kdProviderPeserta" placeholder="Kode Provider" required>
                                 <button type="button" class="btn btn-secondary" id="cariProvider">
                                     <i class="fas fa-search"></i>
                                 </button>
@@ -57,7 +58,8 @@
                         <!-- Tanggal Daftar -->
                         <div class="mb-5">
                             <label for="tglDaftar" class="form-label required">Tanggal Daftar</label>
-                            <input type="text" class="form-control" id="tglDaftar" name="tglDaftar" placeholder="DD-MM-YYYY" required>
+                            <input type="text" class="form-control" id="tglDaftar" name="tglDaftar"
+                                placeholder="DD-MM-YYYY" required>
                         </div>
 
                         <!-- No Kartu -->
@@ -70,7 +72,8 @@
                         <div class="mb-5">
                             <label for="kdPoli" class="form-label required">Poli</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="kdPoli" name="kdPoli" placeholder="Kode Poli" required>
+                                <input type="text" class="form-control" id="kdPoli" name="kdPoli"
+                                    placeholder="Kode Poli" required>
                                 <button type="button" class="btn btn-secondary" id="cariPoli">
                                     <i class="fas fa-search"></i>
                                 </button>
@@ -87,13 +90,15 @@
                         <div class="mb-5">
                             <label class="form-label required">Jenis Kunjungan</label>
                             <div class="form-check form-check-custom form-check-solid mb-2">
-                                <input class="form-check-input" type="radio" name="kunjSakit" id="kunjSakit1" value="1" checked>
+                                <input class="form-check-input" type="radio" name="kunjSakit" id="kunjSakit1"
+                                    value="1" checked>
                                 <label class="form-check-label" for="kunjSakit1">
                                     Kunjungan Sakit
                                 </label>
                             </div>
                             <div class="form-check form-check-custom form-check-solid">
-                                <input class="form-check-input" type="radio" name="kunjSakit" id="kunjSakit0" value="0">
+                                <input class="form-check-input" type="radio" name="kunjSakit" id="kunjSakit0"
+                                    value="0">
                                 <label class="form-check-label" for="kunjSakit0">
                                     Kunjungan Sehat
                                 </label>
@@ -109,13 +114,15 @@
                             <!-- Sistole -->
                             <div class="col-md-6 mb-5">
                                 <label for="sistole" class="form-label">Sistole (mmHg)</label>
-                                <input type="number" class="form-control" id="sistole" name="sistole" value="0">
+                                <input type="number" class="form-control" id="sistole" name="sistole"
+                                    value="0">
                             </div>
 
                             <!-- Diastole -->
                             <div class="col-md-6 mb-5">
                                 <label for="diastole" class="form-label">Diastole (mmHg)</label>
-                                <input type="number" class="form-control" id="diastole" name="diastole" value="0">
+                                <input type="number" class="form-control" id="diastole" name="diastole"
+                                    value="0">
                             </div>
                         </div>
 
@@ -123,13 +130,15 @@
                             <!-- Berat Badan -->
                             <div class="col-md-6 mb-5">
                                 <label for="beratBadan" class="form-label">Berat Badan (kg)</label>
-                                <input type="number" step="0.01" class="form-control" id="beratBadan" name="beratBadan" value="0">
+                                <input type="number" step="0.01" class="form-control" id="beratBadan"
+                                    name="beratBadan" value="0">
                             </div>
 
                             <!-- Tinggi Badan -->
                             <div class="col-md-6 mb-5">
                                 <label for="tinggiBadan" class="form-label">Tinggi Badan (cm)</label>
-                                <input type="number" step="0.01" class="form-control" id="tinggiBadan" name="tinggiBadan" value="0">
+                                <input type="number" step="0.01" class="form-control" id="tinggiBadan"
+                                    name="tinggiBadan" value="0">
                             </div>
                         </div>
 
@@ -137,13 +146,15 @@
                             <!-- Respiratory Rate -->
                             <div class="col-md-6 mb-5">
                                 <label for="respRate" class="form-label">Respiratory Rate (/menit)</label>
-                                <input type="number" class="form-control" id="respRate" name="respRate" value="0">
+                                <input type="number" class="form-control" id="respRate" name="respRate"
+                                    value="0">
                             </div>
 
                             <!-- Heart Rate -->
                             <div class="col-md-6 mb-5">
                                 <label for="heartRate" class="form-label">Heart Rate (/menit)</label>
-                                <input type="number" class="form-control" id="heartRate" name="heartRate" value="0">
+                                <input type="number" class="form-control" id="heartRate" name="heartRate"
+                                    value="0">
                             </div>
                         </div>
 
@@ -151,13 +162,15 @@
                             <!-- Lingkar Perut -->
                             <div class="col-md-6 mb-5">
                                 <label for="lingkarPerut" class="form-label">Lingkar Perut (cm)</label>
-                                <input type="number" step="0.01" class="form-control" id="lingkarPerut" name="lingkarPerut" value="0">
+                                <input type="number" step="0.01" class="form-control" id="lingkarPerut"
+                                    name="lingkarPerut" value="0">
                             </div>
 
                             <!-- Rujuk Balik -->
                             <div class="col-md-6 mb-5">
                                 <label for="rujukBalik" class="form-label">Rujuk Balik</label>
-                                <input type="number" class="form-control" id="rujukBalik" name="rujukBalik" value="0">
+                                <input type="number" class="form-control" id="rujukBalik" name="rujukBalik"
+                                    value="0">
                             </div>
                         </div>
 
