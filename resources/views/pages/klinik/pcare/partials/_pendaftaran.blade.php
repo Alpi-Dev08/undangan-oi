@@ -408,6 +408,11 @@
                             .then(response => response.json())
                             .then(data => {
                                 if (data.metaData && data.metaData.code === 200) {
+                                    if (data.response.count < 1) {
+                                        toastr.warning('Tidak ada data poli yang ditemukan');
+                                        return;
+                                    }
+
                                     // Create dropdown for results
                                     let dropdown = document.getElementById('poliDropdown');
                                     if (!dropdown) {
