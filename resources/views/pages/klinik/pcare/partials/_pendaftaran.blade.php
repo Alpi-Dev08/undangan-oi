@@ -204,7 +204,7 @@
 
 @push('customscript')
     <script>
-        document.getElementById('cekPeserta').addEventListener('click', function () {
+        document.getElementById('cekPeserta').addEventListener('click', function() {
             const jenisPencarian = document.getElementById('jenisPencarian').value;
             const nomorPencarian = document.getElementById('nomorPencarian').value;
             const pesertaInfo = document.getElementById('pesertaInfo');
@@ -295,7 +295,7 @@
                     `;
 
                         // Add event listener for the "Lanjut ke Pendaftaran PCare" button
-                        document.getElementById('lanjutPendaftaran').addEventListener('click', function () {
+                        document.getElementById('lanjutPendaftaran').addEventListener('click', function() {
                             // Show the PCare registration form
                             document.getElementById('pendaftaranPcareFields').style.display = 'block';
 
@@ -306,7 +306,8 @@
 
                             // Pre-fill form fields with data from the peserta
                             document.getElementById('noKartu').value = peserta.noKartu;
-                            document.getElementById('kdProviderPeserta').value = peserta.kdProviderPst.kdProvider;
+                            document.getElementById('kdProviderPeserta').value = peserta.kdProviderPst
+                                .kdProvider;
 
                             // Format current date as DD-MM-YYYY for tglDaftar
                             const today = new Date();
@@ -327,40 +328,46 @@
         });
 
         // Initialize date picker for tglDaftar
-        $(document).ready(function () {
+        $(document).ready(function() {
             // Initialize date picker for tglDaftar with format DD-MM-YYYY
             $("#tglDaftar").daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true,
                 locale: {
                     format: 'DD-MM-YYYY'
-                }
+                },
+                maxDate: new Date(), // Membatasi tanggal maksimal hari ini
+                autoApply: true,
+                readonly: true // Mencegah input manual
             });
 
+            // Mencegah input manual pada field tanggal
+            $("#tglDaftar").attr('readonly', true);
+
             // Handle provider search button
-            $('#cariProvider').on('click', function () {
+            $('#cariProvider').on('click', function() {
                 // Open provider search modal or page
                 window.open('/pcare/provider', 'providerSearch', 'width=800,height=600');
             });
 
             // Handle poli search button
-            $('#cariPoli').on('click', function () {
+            $('#cariPoli').on('click', function() {
                 // Open poli search modal or page
                 window.open('/pcare/poli', 'poliSearch', 'width=800,height=600');
             });
 
             // Function to receive selected provider data from popup
-            window.setSelectedProvider = function (kode, nama) {
+            window.setSelectedProvider = function(kode, nama) {
                 document.getElementById('kdProviderPeserta').value = kode;
             };
 
             // Function to receive selected poli data from popup
-            window.setSelectedPoli = function (kode, nama) {
+            window.setSelectedPoli = function(kode, nama) {
                 document.getElementById('kdPoli').value = kode;
             };
 
             // Reset form button handler
-            $('#resetForm').on('click', function () {
+            $('#resetForm').on('click', function() {
                 if (confirm('Apakah Anda yakin ingin mengatur ulang formulir?')) {
                     // Reset only the PCare registration form fields, not the peserta search
                     document.getElementById('pendaftaranForm').reset();
@@ -386,8 +393,68 @@
                 }
             });
 
+            // Autocomplete untuk field kdPoli
+            // Add event listener for kdPoli input
+            const kdPoliInput = document.getElementById('kdPoli');
+            let searchTimeout;
+
+            kdPoliInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+
+                // Only search if input length >= 2
+                if (this.value.length >= 2) {
+                    searchTimeout = setTimeout(() => {
+                        fetch(`/pcare/cek-poli?keyword=${this.value}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.metaData && data.metaData.code === 200) {
+                                    // Create dropdown for results
+                                    let dropdown = document.getElementById('poliDropdown');
+                                    if (!dropdown) {
+                                        dropdown = document.createElement('div');
+                                        dropdown.id = 'poliDropdown';
+                                        dropdown.className =
+                                            'position-absolute w-100 bg-white shadow-sm border rounded mt-1 z-3';
+                                        kdPoliInput.parentElement.style.position = 'relative';
+                                        kdPoliInput.parentElement.appendChild(dropdown);
+                                    }
+
+                                    // Populate dropdown
+                                    dropdown.innerHTML = data.response.list
+                                        .map(item => `<div class="p-2 cursor-pointer hover-bg-light"
+                                                          data-kd-poli="${item.kdPoli}"
+                                                          data-nm-poli="${item.nmPoli}">
+                                                          ${item.kdPoli} - ${item.nmPoli}
+                                                     </div>`)
+                                        .join('');
+
+                                    // Add click handlers
+                                    dropdown.querySelectorAll('div').forEach(div => {
+                                        div.addEventListener('click', function() {
+                                            kdPoliInput.value = this.dataset
+                                                .kdPoli;
+                                            dropdown.remove();
+                                        });
+                                    });
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error fetching poli data:', error);
+                            });
+                    }, 300); // Debounce delay
+                }
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                const dropdown = document.getElementById('poliDropdown');
+                if (dropdown && !kdPoliInput.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.remove();
+                }
+            });
+
             // Form submission handler
-            $('#pendaftaranForm').on('submit', function (e) {
+            $('#pendaftaranForm').on('submit', function(e) {
                 e.preventDefault();
 
                 // Validate required fields
@@ -418,6 +485,76 @@
                         }
                     }
                 });
+
+                // Validasi kdPoli
+                const kdPoli = document.getElementById('kdPoli').value.trim();
+                if (kdPoli) {
+                    // Verifikasi kode poli valid
+                    $.ajax({
+                        url: '/pcare/get-poli',
+                        dataType: "json",
+                        async: false,
+                        data: {
+                            term: kdPoli
+                        },
+                        success: function(data) {
+                            if (data.metaData && data.metaData.code === 200) {
+                                const poliFound = data.response.some(item => item.kdPoli ===
+                                    kdPoli);
+                                if (!poliFound) {
+                                    isValid = false;
+                                    document.getElementById('kdPoli').classList.add(
+                                        'is-invalid');
+
+                                    // Add error message if it doesn't exist
+                                    let errorDiv = document.getElementById('kdPoli')
+                                        .nextElementSibling;
+                                    if (!errorDiv || !errorDiv.classList.contains(
+                                            'invalid-feedback')) {
+                                        errorDiv = document.createElement('div');
+                                        errorDiv.classList.add('invalid-feedback');
+                                        errorDiv.textContent = 'Kode Poli tidak ditemukan';
+                                        document.getElementById('kdPoli').parentNode
+                                            .insertBefore(errorDiv, document.getElementById(
+                                                'kdPoli').nextSibling);
+                                    }
+
+                                    toastr.error('Kode Poli tidak ditemukan');
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // Validasi tanggal pendaftaran
+                const tglDaftar = document.getElementById('tglDaftar').value;
+                if (tglDaftar) {
+                    const parts = tglDaftar.split('-');
+                    const inputDate = new Date(parts[2], parts[1] - 1, parts[0]);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+
+                    if (inputDate > today) {
+                        isValid = false;
+                        document.getElementById('tglDaftar').classList.add('is-invalid');
+
+                        // Add error message if it doesn't exist
+                        let errorDiv = document.getElementById('tglDaftar').nextElementSibling;
+                        if (!errorDiv || !errorDiv.classList.contains('invalid-feedback')) {
+                            errorDiv = document.createElement('div');
+                            errorDiv.classList.add('invalid-feedback');
+                            errorDiv.textContent = 'Tanggal pendaftaran tidak boleh lebih dari hari ini';
+                            document.getElementById('tglDaftar').parentNode.insertBefore(errorDiv, document
+                                .getElementById('tglDaftar').nextSibling);
+                        }
+
+                        toastr.error('Tanggal pendaftaran tidak boleh lebih dari hari ini');
+                    }
+                }
+
+                if (!isValid) {
+                    return false;
+                }
 
                 if (!isValid) {
                     toastr.error('Mohon lengkapi semua field yang wajib diisi');
@@ -451,13 +588,13 @@
 
                 // Submit form data via AJAX
                 fetch('/pcare/pendaftaran', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-                    },
-                    body: JSON.stringify(formData)
-                })
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                        },
+                        body: JSON.stringify(formData)
+                    })
                     .then(response => response.json())
                     .then(data => {
                         // Hide loading indicator
@@ -478,7 +615,8 @@
                                 } else {
                                     // Reset form and hide PCare registration fields
                                     document.getElementById('pendaftaranForm').reset();
-                                    document.getElementById('pendaftaranPcareFields').style.display = 'none';
+                                    document.getElementById('pendaftaranPcareFields').style
+                                        .display = 'none';
                                     document.getElementById('pesertaInfo').innerHTML = '';
                                     document.getElementById('nomorPencarian').value = '';
                                 }
@@ -487,7 +625,8 @@
                             // Show error message
                             Swal.fire({
                                 title: 'Gagal!',
-                                text: data.message || 'Terjadi kesalahan saat menyimpan pendaftaran',
+                                text: data.message ||
+                                    'Terjadi kesalahan saat menyimpan pendaftaran',
                                 icon: 'error',
                                 confirmButtonText: 'OK'
                             });
@@ -511,12 +650,14 @@
             });
 
             // Add input validation for numeric fields
-            const numericFields = ['sistole', 'diastole', 'beratBadan', 'tinggiBadan', 'respRate', 'heartRate', 'lingkarPerut', 'rujukBalik'];
+            const numericFields = ['sistole', 'diastole', 'beratBadan', 'tinggiBadan', 'respRate', 'heartRate',
+                'lingkarPerut', 'rujukBalik'
+            ];
 
             numericFields.forEach(field => {
                 const input = document.getElementById(field);
 
-                input.addEventListener('input', function () {
+                input.addEventListener('input', function() {
                     // Remove non-numeric characters except decimal point
                     this.value = this.value.replace(/[^0-9.]/g, '');
 
@@ -529,7 +670,7 @@
             });
 
             // Add validation for noKartu field (numeric only)
-            document.getElementById('nomorPencarian').addEventListener('input', function () {
+            document.getElementById('nomorPencarian').addEventListener('input', function() {
                 this.value = this.value.replace(/\D/g, '');
             });
         });
