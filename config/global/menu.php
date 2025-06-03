@@ -239,7 +239,7 @@
                             'permission' => ['settings.read'],
                         ],
                         [
-                            'title'      => 'Locations',
+                            'title'      => 'Locations / Poli',
                             'path'       => 'klinik/locations',
                             'bullet'     => '<span class="bullet bullet-dot"></span>',
                             'permission' => ['settings.read'],

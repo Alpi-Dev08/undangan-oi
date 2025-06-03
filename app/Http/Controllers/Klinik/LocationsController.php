@@ -17,6 +17,8 @@
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
     use Str;
+    // Replace the manual JSON construction with the FHIR Location class
+                    use Satusehat\Integration\FHIR\Location as FHIRLocation;
 
 
     class LocationsController extends Controller
@@ -84,86 +86,48 @@
                 try {
                     $validated['uuid'] = Str::uuid()->toString();
                     $location          = Location::create($validated);
-                    //dd($location);
-                    $jsonSatuSehat = [
-                        'status'               => $location->status == '1' ? "active" : "inactive",
-                        'address'              => [
-                            'city'       => $location->city->name,
-                            'country'    => $location->country->name,
-                            'extension'  => [[
-                                                 'extension' => [
-                                                     [
-                                                         'url'       => 'province',
-                                                         'valueCode' => $location->province->area_code,
-                                                     ],
-                                                     [
-                                                         'url'       => 'city',
-                                                         'valueCode' => str_replace('.', '', $location->city->area_code)
-                                                     ],
-                                                     [
-                                                         'url'       => 'district',
-                                                         'valueCode' => str_replace('.', '', $location->district->area_code),
-                                                     ],
-                                                     [
-                                                         'url'       => 'village',
-                                                         'valueCode' => str_replace('.', '', $location->sub_district->area_code),
-                                                     ],
-                                                 ],
-                                                 'url'       => 'https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode'
-                                             ]
-                            ],
-                            'line'       => [$location->address],
-                            'postalCode' => $location->postal_code,
-                            'use'        => 'work'
-                        ],
-                        'identifier'           => [
-                            [
-                                'system' => 'http://sys-ids.kemkes.go.id/location/1000001',
-                                'value'  => $location->code,
-                            ]
-                        ],
-                        'name'                 => $location->name,
-                        'description'          => $location->description,
-                        'mode'                 => 'instance',
-                        'managingOrganization' => [
-                            'reference' => 'Organization/' . $location->organization->organization_id,
-                        ],
-                        'resourceType'         => 'Location',
-                        'telecom'              => [
-                            [
-                                'system' => 'phone',
-                                'use'    => 'work',
-                                'value'  => $location->phone,
-                            ],
-                            [
-                                'system' => 'email',
-                                'use'    => 'work',
-                                'value'  => $location->email,
-                            ],
-                            [
-                                'system' => 'fax',
-                                'use'    => 'work',
-                                'value'  => $location->fax,
-                            ],
-                        ],
-                        'physicalType'         => [
-                            'coding' => [
-                                [
-                                    'code'    => 'ro',
-                                    'display' => 'Room',
-                                    'system'  => 'http://terminology.hl7.org/CodeSystem/location-physical-type',
-                                ],
-                            ]
-                        ],
-                    ];
-                    //echo json_encode($jsonSatuSehat);exit;
-                    $location->json_satu_sehat = json_encode($jsonSatuSehat);
-                    $location->save();
 
-                    $satusehat = satu_sehat('create', 'Location', $jsonSatuSehat);
-                    $data      = json_decode($satusehat);
 
-                    $location->response_satu_sehat = $satusehat;
+                    // Replace the $jsonSatuSehat array construction with:
+                    $fhirLocation = new FHIRLocation();
+
+                    // Set basic information
+                    $fhirLocation->addIdentifier($location->code);
+                    $fhirLocation->setName($location->name, $location->description);
+                    $fhirLocation->setStatus($location->status == '1' ? 'active' : 'inactive');
+
+                    // Set contact information
+                    $fhirLocation->addPhone($location->phone);
+                    $fhirLocation->addEmail($location->email);
+                    // Note: The FHIR class doesn't have addFax method, you may need to add it manually or extend the class
+
+                    // Set address
+                    $fhirLocation->setAddress(
+                        $location->address,
+                        $location->postal_code,
+                        $location->city->name,
+                        $location->sub_district->area_code
+                    );
+
+                    // Set managing organization
+                    $fhirLocation->setManagingOrganization($location->organization->organization_id);
+
+                    // Set physical type (defaults to 'ro' - Room)
+                    $fhirLocation->addPhysicalType('ro');
+
+                    // Get the JSON
+                    $jsonSatuSehat = json_decode($fhirLocation->json(), true);
+
+                    // If you need to add fax (since the FHIR class doesn't support it), add it manually:
+                    if ($location->fax) {
+                        $jsonSatuSehat['telecom'][] = [
+                            'system' => 'fax',
+                            'use' => 'work',
+                            'value' => $location->fax,
+                        ];
+                    }
+
+                    //$location->json_satu_sehat = json_encode($jsonSatuSehat);
                     $location->save();
 
                 } catch (Exception $e) {
