@@ -12,18 +12,16 @@
     use App\Models\Master\District;
     use App\Models\Master\Province;
     use App\Models\Master\SubDistrict;
-    use Doctrine\DBAL\Driver\PDO\Exception;
-    use Illuminate\Http\Request;
+    use Exception;
+    use Illuminate\Http\RedirectResponse;
     use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Str;
+    use Illuminate\View\View;
     use Satusehat\Integration\FHIR\Location as FHIRLocation;
-    use Str;
-
-    // Replace the manual JSON construction with the FHIR Location class
-
 
     class LocationsController extends Controller
     {
-        public $user;
+        protected $user;
 
         public function __construct()
         {
@@ -35,139 +33,155 @@
 
         /**
          * Display a listing of the resource.
-         *
-         * @return \Illuminate\Http\Response
          */
         public function index(LocationsDataTable $dataTable)
+        : View
         {
-            if (is_null($this->user) || !$this->user->can('klinik.read')) {
-                abort(403, 'Sorry !! You are Unauthorized to view any master data !');
-            }
-
+            $this->checkAuthorization('klinik.read', 'Unauthorized to view location data');
             return $dataTable->render('pages.klinik.locations.index');
         }
 
         /**
+         * Check if user is authorized to perform an action
+         *
+         * @param string $permission Permission to check
+         * @param string $message    Error message to display
+         *
+         * @return void
+         */
+        private function checkAuthorization(string $permission, string $message)
+        : void
+        {
+            if (is_null($this->user) || !$this->user->can($permission)) {
+                abort(403, $message);
+            }
+        }
+
+        /**
          * Store a newly created resource in storage.
-         *
-         * @param \App\Http\Requests\Klinik\StoreLocationRequest $request
-         *
-         * @return \Illuminate\Http\Response
          */
         public function store(StoreLocationRequest $request)
+        : RedirectResponse
         {
-            //dd($request->all());
-            if (is_null($this->user) || !$this->user->can('klinik.create')) {
-                abort(403, 'Sorry !! You are Unauthorized to create any master data !');
-            }
+            $this->checkAuthorization('klinik.create', 'Unauthorized to create location data');
 
             // Validation Data
             $validated = $request->validated();
 
-            // Process Data
-            if ($validated) {
-                try {
-                    $validated['uuid'] = Str::uuid()->toString();
-                    $location          = Location::create($validated);
+            try {
+                $validated['uuid'] = Str::uuid()->toString();
+                $location          = Location::create($validated);
 
+                // Generate FHIR Location JSON
+                $jsonSatuSehat = $this->generateFhirLocationJson($location);
 
-                    // Replace the $jsonSatuSehat array construction with:
-                    $fhirLocation = new FHIRLocation();
+                // Optionally save FHIR JSON to the location
+                // $location->json_satu_sehat = json_encode($jsonSatuSehat);
+                $location->save();
 
-                    // Set basic information
-                    $fhirLocation->addIdentifier($location->code);
-                    $fhirLocation->setName($location->name, $location->description);
-                    $fhirLocation->setStatus($location->status == '1' ? 'active' : 'inactive');
-
-                    // Set contact information
-                    $fhirLocation->addPhone($location->phone);
-                    $fhirLocation->addEmail($location->email);
-                    // Note: The FHIR class doesn't have addFax method, you may need to add it manually or extend the class
-
-                    // Set address
-                    $fhirLocation->setAddress(
-                        $location->address,
-                        $location->postal_code,
-                        $location->city->name,
-                        $location->sub_district->area_code
-                    );
-
-                    // Set managing organization
-                    $fhirLocation->setManagingOrganization($location->organization->organization_id);
-
-                    // Set physical type (defaults to 'ro' - Room)
-                    $fhirLocation->addPhysicalType('ro');
-
-                    // Get the JSON
-                    $jsonSatuSehat = json_decode($fhirLocation->json(), true);
-
-                    // If you need to add fax (since the FHIR class doesn't support it), add it manually:
-                    if ($location->fax) {
-                        $jsonSatuSehat['telecom'][] = [
-                            'system' => 'fax',
-                            'use'    => 'work',
-                            'value'  => $location->fax,
-                        ];
-                    }
-
-                    //$location->json_satu_sehat = json_encode($jsonSatuSehat);
-                    $location->save();
-
-                } catch (Exception $e) {
-                    report($e);
-                    return false;
-                }
-
-                session()->flash('success', 'Location has been created !!');
+                session()->flash('success', 'Location has been created successfully!');
                 return redirect()->route('locations.index');
+            } catch (Exception $e) {
+                report($e);
+                session()->flash('error', 'Failed to create location: ' . $e->getMessage());
+                return back()->withInput();
             }
-
-            return false;
         }
 
         /**
          * Show the form for creating a new resource.
-         *
-         * @return \Illuminate\Http\Response
          */
         public function create()
+        : View
         {
-            if (is_null($this->user) || !$this->user->can('klinik.create')) {
-                abort(403, 'Sorry !! You are Unauthorized to create any master data !');
-            }
+            $this->checkAuthorization('klinik.create', 'Unauthorized to create location data');
 
             $organizations = Organization::all();
             $countries     = Country::all();
             $provinces     = Province::all();
+
             return view('pages.klinik.locations.create', compact('organizations', 'countries', 'provinces'));
         }
 
         /**
+         * Generate FHIR Location JSON
+         *
+         * @param Location $location Location model
+         * @param bool     $isUpdate Whether this is for an update operation
+         *
+         * @return array FHIR Location JSON as array
+         */
+        private function generateFhirLocationJson(Location $location, bool $isUpdate = false)
+        : array
+        {
+            $fhirLocation = new FHIRLocation();
+
+            // Set basic information
+            $fhirLocation->addIdentifier($location->code);
+            $fhirLocation->setName($location->name, $location->description);
+            $fhirLocation->setStatus($location->status == '1' ? 'active' : 'inactive');
+
+            // Set contact information
+            $fhirLocation->addPhone($location->phone);
+            $fhirLocation->addEmail($location->email);
+
+            // Set address
+            $fhirLocation->setAddress(
+                $location->address,
+                $location->postal_code,
+                $location->city->name,
+                $location->sub_district->area_code
+            );
+
+            // Set managing organization=≠
+            $fhirLocation->setManagingOrganization($location->organization->organization_id);
+
+            // Set physical type (defaults to 'ro' - Room)
+            $fhirLocation->addPhysicalType('ro');
+
+            // Get the JSON and decode to array
+            $jsonSatuSehat = json_decode($fhirLocation->json(), true);
+
+            // Add the location ID for update operation
+            if ($isUpdate && $location->location_id) {
+                $jsonSatuSehat['id'] = $location->location_id;
+                $fhirLocation->put($location->location_id);
+            } else {
+                $fhirLocation->post();
+            }
+
+
+            // Add fax manually since FHIR class doesn't support it
+            if ($location->fax) {
+                $jsonSatuSehat['telecom'][] = [
+                    'system' => 'fax',
+                    'use'    => 'work',
+                    'value'  => $location->fax,
+                ];
+            }
+
+            return $jsonSatuSehat;
+        }
+
+        /**
          * Display the specified resource.
-         *
-         * @param \App\Models\Klinik\Location $location
-         *
-         * @return \Illuminate\Http\Response
          */
         public function show(Location $location)
+        : View
         {
-            //
+            $this->checkAuthorization('klinik.read', 'Unauthorized to view location data');
+            return view('pages.klinik.locations.show', compact('location'));
         }
 
         /**
          * Show the form for editing the specified resource.
-         *
-         * @param  $id
-         *
-         * @return \Illuminate\Http\Response
          */
-        public function edit($id)
+        public function edit(string $id)
+        : View
         {
-            if (is_null($this->user) || !$this->user->can('klinik.update')) {
-                abort(403, 'Sorry !! You are Unauthorized to edit any master data !');
-            }
+            $this->checkAuthorization('klinik.update', 'Unauthorized to edit location data');
 
-            $location      = Location::find($id);
+            $location      = Location::findOrFail($id);
             $organizations = Organization::all();
             $countries     = Country::all();
             $provinces     = Province::where('country_id', $location->country_id)->get();
@@ -175,105 +189,63 @@
             $districts     = District::where('city_id', $location->city_id)->get();
             $subdistricts  = SubDistrict::where('district_id', $location->district_id)->get();
 
-            return view('pages.klinik.locations.edit', compact('location', 'organizations', 'countries', 'provinces', 'cities', 'districts', 'subdistricts'));
+            return view('pages.klinik.locations.edit', compact(
+                'location',
+                'organizations',
+                'countries',
+                'provinces',
+                'cities',
+                'districts',
+                'subdistricts'
+            ));
         }
 
         /**
          * Update the specified resource in storage.
-         *
-         * @param \App\Http\Requests\Klinik\UpdateLocationRequest $request
-         * @param \App\Models\Klinik\Location                     $location
-         *
-         * @return \Illuminate\Http\Response
          */
-        public function update(Request $request, Location $location)
+        public function update(StoreLocationRequest $request, Location $location)
+        : RedirectResponse
         {
-            if (is_null($this->user) || !$this->user->can('klinik.update')) {
-                abort(403, 'Sorry !! You are Unauthorized to edit any master date !');
-            }
+            $this->checkAuthorization('klinik.update', 'Unauthorized to update location data');
 
             // Validation Data
-            $validated = $request->all();
+            $validated = $request->validated();
 
-            // Process Data
-            if ($validated) {
-                // Process Data
-                try {
-                    $location->update($validated);
+            try {
+                $location->update($validated);
 
-                    // Replace the manual JSON construction with FHIR Location class
-                    $fhirLocation = new FHIRLocation();
+                // Generate FHIR Location JSON with ID for update
+                $jsonSatuSehat = $this->generateFhirLocationJson($location, true);
 
-                    // Set basic information
-                    $fhirLocation->addIdentifier($location->code);
-                    $fhirLocation->setName($location->name, $location->description);
-                    $fhirLocation->setStatus($location->status == '1' ? 'active' : 'inactive');
+                // Optionally save FHIR JSON to the location
+                // $location->json_satu_sehat = json_encode($jsonSatuSehat);
+                $location->save();
 
-                    // Set contact information
-                    $fhirLocation->addPhone($location->phone);
-                    $fhirLocation->addEmail($location->email);
-
-                    // Set address
-                    $fhirLocation->setAddress(
-                        $location->address,
-                        $location->postal_code,
-                        $location->city->name,
-                        $location->sub_district->area_code
-                    );
-
-                    // Set managing organization
-                    $fhirLocation->setManagingOrganization($location->organization->organization_id);
-
-                    // Set physical type (defaults to 'ro' - Room)
-                    $fhirLocation->addPhysicalType('ro');
-
-                    // Get the JSON and decode to array
-                    $jsonSatuSehat = json_decode($fhirLocation->json(), true);
-
-                    // Add the location ID for update operation
-                    $jsonSatuSehat['id'] = $location->location_id;
-
-                    // Add fax manually since FHIR class doesn't support it
-                    if ($location->fax) {
-                        $jsonSatuSehat['telecom'][] = [
-                            'system' => 'fax',
-                            'use'    => 'work',
-                            'value'  => $location->fax,
-                        ];
-                    }
-
-                    //$location->json_satu_sehat = json_encode($jsonSatuSehat);
-                    $location->update();
-
-
-                } catch (Exception $e) {
-                    report($e);
-                    return false;
-                }
-
-                session()->flash('success', 'Location has been updated !!');
+                session()->flash('success', 'Location has been updated successfully!');
                 return redirect()->route('locations.index');
+            } catch (Exception $e) {
+                report($e);
+                session()->flash('error', 'Failed to update location: ' . $e->getMessage());
+                return back()->withInput();
             }
-
-            return false;
         }
 
         /**
          * Remove the specified resource from storage.
-         *
-         * @param \App\Models\Klinik\Location $location
-         *
-         * @return \Illuminate\Http\Response
          */
         public function destroy(Location $location)
+        : RedirectResponse
         {
-            if (is_null($this->user) || !$this->user->can('klinik.delete')) {
-                abort(403, 'Sorry !! You are Unauthorized to delete any master date !');
+            $this->checkAuthorization('klinik.delete', 'Unauthorized to delete location data');
+
+            try {
+                $location->delete();
+                session()->flash('success', 'Location has been deleted successfully!');
+            } catch (Exception $e) {
+                report($e);
+                session()->flash('error', 'Failed to delete location: ' . $e->getMessage());
             }
 
-            $location->delete();
-
-            session()->flash('success', 'Location has been deleted !!');
             return redirect()->route('locations.index');
         }
     }
