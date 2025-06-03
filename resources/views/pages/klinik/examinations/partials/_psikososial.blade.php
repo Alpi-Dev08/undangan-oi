@@ -125,7 +125,7 @@
                                             <input class="form-check-input" type="radio"
                                                 name="riwayat_pekerjaan[zat_bahaya]" id="riwayat_pekerjaan_tidak"
                                                 value="Tidak"
-                                                {{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->zat_bahaya == 'Tidak' ? 'checked' : '' }}>
+                                                {{ isset($psikososial->riwayat_pekerjaan) && isset($psikososial->riwayat_pekerjaan->zat_bahaya) && $psikososial->riwayat_pekerjaan->zat_bahaya == 'Tidak' ? 'checked' : '' }}>
                                             <span class="form-check-label">Tidak</span>
                                         </label>
                                     </div>
@@ -134,16 +134,16 @@
                                             <input class="form-check-input" type="radio"
                                                 name="riwayat_pekerjaan[zat_bahaya]" id="riwayat_pekerjaan_ya"
                                                 value="Ya"
-                                                {{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->zat_bahaya == 'Ya' ? 'checked' : '' }}>
+                                                {{ isset($psikososial->riwayat_pekerjaan) && isset($psikososial->riwayat_pekerjaan->zat_bahaya) && $psikososial->riwayat_pekerjaan->zat_bahaya == 'Ya' ? 'checked' : '' }}>
                                             <span class="form-check-label">Ya</span>
                                         </label>
                                     </div>
                                 </div>
                                 <div class="mt-2" id="zat_bahaya_detail"
-                                    style="{{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->zat_bahaya == 'Ya' ? '' : 'display: none;' }}">
+                                    style="{{ isset($psikososial->riwayat_pekerjaan) && isset($psikososial->riwayat_pekerjaan->zat_bahaya) && $psikososial->riwayat_pekerjaan->zat_bahaya == 'Ya' ? '' : 'display: none;' }}">
                                     <input type="text" class="form-control" name="riwayat_pekerjaan_bahaya"
                                         placeholder="Sebutkan zat berbahaya"
-                                        value="{{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->zat_bahaya == 'Ya' ? $psikososial->riwayat_pekerjaan_bahaya : '' }}">
+                                        value="{{ isset($psikososial->riwayat_pekerjaan) && isset($psikososial->riwayat_pekerjaan->zat_bahaya) && $psikososial->riwayat_pekerjaan->zat_bahaya == 'Ya' ? ($psikososial->riwayat_pekerjaan_bahaya ?? '') : '' }}">
                                 </div>
                             </div>
                         </div>
@@ -159,7 +159,7 @@
                                             <input class="form-check-input" type="radio"
                                                 name="riwayat_pekerjaan[berpergian]" id="riwayat_bepergian_tidak"
                                                 value="Tidak"
-                                                {{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->berpergian == 'Tidak' ? 'checked' : '' }}>
+                                                {{ isset($psikososial->riwayat_pekerjaan) && isset($psikososial->riwayat_pekerjaan->berpergian) && $psikososial->riwayat_pekerjaan->berpergian == 'Tidak' ? 'checked' : '' }}>
                                             <span class="form-check-label">Tidak</span>
                                         </label>
                                     </div>
@@ -168,16 +168,16 @@
                                             <input class="form-check-input" type="radio"
                                                 name="riwayat_pekerjaan[berpergian]" id="riwayat_bepergian_ya"
                                                 value="Ya"
-                                                {{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->berpergian == 'Ya' ? 'checked' : '' }}>
+                                                {{ isset($psikososial->riwayat_pekerjaan) && isset($psikososial->riwayat_pekerjaan->berpergian) && $psikososial->riwayat_pekerjaan->berpergian == 'Ya' ? 'checked' : '' }}>
                                             <span class="form-check-label">Ya</span>
                                         </label>
                                     </div>
                                 </div>
                                 <div class="mt-2" id="bepergian_detail"
-                                    style="{{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->berpergian == 'Ya' ? '' : 'display: none;' }}">
+                                    style="{{ isset($psikososial->riwayat_pekerjaan) && isset($psikososial->riwayat_pekerjaan->berpergian) && $psikososial->riwayat_pekerjaan->berpergian == 'Ya' ? '' : 'display: none;' }}">
                                     <input type="text" class="form-control" name="riwayat_pekerjaan_berpergian"
                                         placeholder="Sebutkan riwayat bepergian"
-                                        value="{{ isset($psikososial->riwayat_pekerjaan) && $psikososial->riwayat_pekerjaan->berpergian == 'Ya' ? $psikososial->riwayat_pekerjaan_berpergian : '' }}">
+                                        value="{{ isset($psikososial->riwayat_pekerjaan) && isset($psikososial->riwayat_pekerjaan->berpergian) && $psikososial->riwayat_pekerjaan->berpergian == 'Ya' ? ($psikososial->riwayat_pekerjaan_berpergian ?? '') : '' }}">
                                 </div>
                             </div>
                         </div>
