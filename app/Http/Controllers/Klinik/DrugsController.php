@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Klinik\StoreDrugRequest;
 use App\Http\Requests\Klinik\UpdateDrugRequest;
 use App\Models\Klinik\Drug;
+use App\Models\Klinik\DrugUsage;
 use App\Models\Klinik\Unit;
 use Doctrine\DBAL\Driver\PDO\Exception;
 use Illuminate\Support\Facades\Auth;
