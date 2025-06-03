@@ -11,6 +11,8 @@ use App\Models\Klinik\Unit;
 use Doctrine\DBAL\Driver\PDO\Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Exports\DrugsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DrugsController extends Controller
 {
@@ -209,7 +211,7 @@ class DrugsController extends Controller
     public function detail(Request $request, $id)
     {
         $drug = Drug::findOrFail($id);
-    
+
         if ($request->isMethod('post')) {
             $request->validate([
                 'date' => 'required|date',
@@ -217,10 +219,10 @@ class DrugsController extends Controller
                 'quantity' => 'required|integer|min:1',
                 'description' => 'nullable|string|max:500',
             ]);
-    
+
             $drug->stock += $request->quantity;
-            $drug->save(); 
-    
+            $drug->save();
+
             DrugUsage::create([
                 'drug_id' => $drug->id,
                 'date' => $request->date,
@@ -228,19 +230,19 @@ class DrugsController extends Controller
                 'quantity' => $request->quantity,
                 'description' => $request->description,
             ]);
-    
+
             session()->flash('success', 'Data penggunaan obat berhasil disimpan!');
-    
+
             return redirect()->route('drugs.index');
         }
-    
+
         return view('pages.klinik.drugs.addstock', compact('drug'));
     }
 
     public function reduceDetail(Request $request, $id)
     {
         $drug = Drug::findOrFail($id);
-    
+
         if ($request->isMethod('post')) {
             $request->validate([
                 'date' => 'required|date',
@@ -248,10 +250,10 @@ class DrugsController extends Controller
                 'quantity' => 'required|integer|min:1',
                 'description' => 'nullable|string|max:500',
             ]);
-    
-            $drug->stock += $request->quantity; 
-            $drug->save(); 
-    
+
+            $drug->stock += $request->quantity;
+            $drug->save();
+
             DrugUsage::create([
                 'drug_id' => $drug->id,
                 'date' => $request->date,
@@ -259,15 +261,15 @@ class DrugsController extends Controller
                 'quantity' => $request->quantity,
                 'description' => $request->description,
             ]);
-    
+
             session()->flash('success', 'Data penggunaan obat berhasil disimpan!');
-    
+
             return redirect()->route('drugs.index');
         }
-    
+
         return view('pages.klinik.drugs.reducestock', compact('drug'));
     }
-    
+
     public function updateDetail(Request $request, Drug $drug)
     {
         $validated = $request->validate([
@@ -276,7 +278,7 @@ class DrugsController extends Controller
             'quantity' => 'required|integer|min:1',
             'description' => 'nullable|string|max:500',
         ]);
-    
+
         $drug->increment('stock', $validated['quantity']);
 
         $history = [
@@ -287,20 +289,20 @@ class DrugsController extends Controller
         ];
 
         $histories = session('histories', []);
-    
+
        if (!isset($histories[$drug->id])) {
             $histories[$drug->id] = [];
         }
-    
+
         $histories[$drug->id][] = $history;
-    
+
         session(['histories' => $histories]);
-    
+
         session()->flash('success', 'Detail obat berhasil diperbarui.');
-    
+
         return redirect()->route('drugs.index');
     }
-    
+
     public function showDetail($id)
     {
         $drug = Drug::findOrFail($id);
@@ -310,8 +312,8 @@ class DrugsController extends Controller
         $drugHistories = $histories[$drug->id] ?? [];
 
         return view('pages.klinik.drugs.addstock', compact('drug', 'drugHistories'));
-    }    
-    
+    }
+
     public function updateDetailReduce(Request $request, Drug $drug)
     {
 
@@ -321,28 +323,28 @@ class DrugsController extends Controller
             'quantity' => 'required|integer|min:1',
             'description' => 'nullable|string|max:500',
         ]);
-        
-        $drug->decrement('stock', $validated['quantity']); 
-    
+
+        $drug->decrement('stock', $validated['quantity']);
+
         $history = [
             'date' => $validated['date'],
             'user_name' => $validated['user_name'],
             'quantity' => $validated['quantity'],
             'description' => $validated['description'],
         ];
-    
+
         $histories1 = session('histories1', []);
 
         if (!isset($histories1[$drug->id])) {
             $histories1[$drug->id] = [];
         }
-    
+
         $histories1[$drug->id][] = $history;
-    
+
         session(['histories1' => $histories1]);
-    
+
         session()->flash('success', 'Detail obat berhasil diperbarui.');
-    
+
         return redirect()->route('drugs.index');
     }
 
@@ -355,6 +357,20 @@ class DrugsController extends Controller
         $drugHistories1 = $histories1[$drug->id] ?? [];
 
         return view('pages.klinik.drugs.reducestock', compact('drug', 'drugHistories1'));
-    }           
-    
+    }
+
+
+    /**
+     * Export drugs data to Excel
+     *
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function export()
+    {
+        if (is_null($this->user) || ! $this->user->can('klinik.read')) {
+            abort(403, 'Sorry !! You are Unauthorized to view any master data !');
+        }
+
+        return Excel::download(new DrugsExport, 'drugs-'.date('YmdHis').'.xlsx');
+    }
 }
