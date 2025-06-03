@@ -7,27 +7,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Drug extends Model
+class DrugUsage extends Model
 {
     use SpatieLogsActivity, HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'unit_id',
-        'name',
-        'price',
-        'stock'
+        'drug_id',
+        'date',
+        'user_name',
+        'quantity',
+        'description'
     ];
 
-    public function unit()
-    {
-        return $this->belongsTo(Unit::class);
-    }
+    protected $casts = [
+        'date' => 'date',
+        'quantity' => 'integer'
+    ];
 
     /**
-     * Relasi ke model DrugUsage
+     * Relasi ke model Drug
      */
-    public function drugUsages()
+    public function drug()
     {
-        return $this->hasMany(DrugUsage::class);
+        return $this->belongsTo(Drug::class);
     }
 }
