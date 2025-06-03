@@ -4,9 +4,8 @@
 
     use App\DataTables\Klinik\LocationsDataTable;
     use App\Http\Controllers\Controller;
-    use App\Models\Klinik\Location;
     use App\Http\Requests\Klinik\StoreLocationRequest;
-    use App\Http\Requests\Klinik\UpdateLocationRequest;
+    use App\Models\Klinik\Location;
     use App\Models\Klinik\Organization;
     use App\Models\Master\City;
     use App\Models\Master\Country;
@@ -16,9 +15,10 @@
     use Doctrine\DBAL\Driver\PDO\Exception;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
+    use Satusehat\Integration\FHIR\Location as FHIRLocation;
     use Str;
+
     // Replace the manual JSON construction with the FHIR Location class
-                    use Satusehat\Integration\FHIR\Location as FHIRLocation;
 
 
     class LocationsController extends Controller
@@ -45,23 +45,6 @@
             }
 
             return $dataTable->render('pages.klinik.locations.index');
-        }
-
-        /**
-         * Show the form for creating a new resource.
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function create()
-        {
-            if (is_null($this->user) || !$this->user->can('klinik.create')) {
-                abort(403, 'Sorry !! You are Unauthorized to create any master data !');
-            }
-
-            $organizations = Organization::all();
-            $countries     = Country::all();
-            $provinces     = Province::all();
-            return view('pages.klinik.locations.create', compact('organizations', 'countries', 'provinces'));
         }
 
         /**
@@ -122,8 +105,8 @@
                     if ($location->fax) {
                         $jsonSatuSehat['telecom'][] = [
                             'system' => 'fax',
-                            'use' => 'work',
-                            'value' => $location->fax,
+                            'use'    => 'work',
+                            'value'  => $location->fax,
                         ];
                     }
 
@@ -140,6 +123,23 @@
             }
 
             return false;
+        }
+
+        /**
+         * Show the form for creating a new resource.
+         *
+         * @return \Illuminate\Http\Response
+         */
+        public function create()
+        {
+            if (is_null($this->user) || !$this->user->can('klinik.create')) {
+                abort(403, 'Sorry !! You are Unauthorized to create any master data !');
+            }
+
+            $organizations = Organization::all();
+            $countries     = Country::all();
+            $provinces     = Province::all();
+            return view('pages.klinik.locations.create', compact('organizations', 'countries', 'provinces'));
         }
 
         /**
@@ -201,89 +201,50 @@
                 try {
                     $location->update($validated);
 
-                    $jsonSatuSehat = [
-                        'status'               => $location->status == '1' ? "active" : "inactive",
-                        'address'              => [
-                            'city'       => $location->city->name,
-                            'country'    => $location->country->code,
-                            'extension'  => [[
-                                                 'extension' => [
-                                                     [
-                                                         'url'       => 'province',
-                                                         'valueCode' => $location->province->area_code,
-                                                     ],
-                                                     [
-                                                         'url'       => 'city',
-                                                         'valueCode' => str_replace('.', '', $location->city->area_code)
-                                                     ],
-                                                     [
-                                                         'url'       => 'district',
-                                                         'valueCode' => str_replace('.', '', $location->district->area_code),
-                                                     ],
-                                                     [
-                                                         'url'       => 'village',
-                                                         'valueCode' => str_replace('.', '', $location->sub_district->area_code),
-                                                     ],
-                                                 ],
-                                                 'url'       => 'https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode'
-                                             ]
-                            ],
-                            'line'       => [$location->address],
-                            'postalCode' => $location->postal_code,
-                            'use'        => 'work'
-                        ],
-                        'identifier'           => [
-                            [
-                                'system' => 'http://sys-ids.kemkes.go.id/location/1000001',
-                                'value'  => $location->code,
-                            ]
-                        ],
-                        'id'                   => $location->location_id,
-                        'name'                 => $location->name,
-                        'description'          => $location->description,
-                        'mode'                 => 'instance',
-                        'managingOrganization' => [
-                            'reference' => 'Organization/' . $location->organization->organization_id,
-                        ],
-                        'resourceType'         => 'Location',
-                        'telecom'              => [
-                            [
-                                'system' => 'phone',
-                                'use'    => 'work',
-                                'value'  => $location->phone,
-                            ],
-                            [
-                                'system' => 'email',
-                                'use'    => 'work',
-                                'value'  => $location->email,
-                            ],
-                            [
-                                'system' => 'fax',
-                                'use'    => 'work',
-                                'value'  => $location->fax,
-                            ],
-                        ],
-                        'physicalType'         => [
-                            'coding' => [
-                                [
-                                    'code'    => 'ro',
-                                    'display' => 'Room',
-                                    'system'  => 'http://terminology.hl7.org/CodeSystem/location-physical-type',
-                                ],
-                            ]
-                        ],
-                    ];
+                    // Replace the manual JSON construction with FHIR Location class
+                    $fhirLocation = new FHIRLocation();
 
-                    //echo json_encode($jsonSatuSehat);exit;
+                    // Set basic information
+                    $fhirLocation->addIdentifier($location->code);
+                    $fhirLocation->setName($location->name, $location->description);
+                    $fhirLocation->setStatus($location->status == '1' ? 'active' : 'inactive');
 
-                    $location->json_satu_sehat = json_encode($jsonSatuSehat);
+                    // Set contact information
+                    $fhirLocation->addPhone($location->phone);
+                    $fhirLocation->addEmail($location->email);
+
+                    // Set address
+                    $fhirLocation->setAddress(
+                        $location->address,
+                        $location->postal_code,
+                        $location->city->name,
+                        $location->sub_district->area_code
+                    );
+
+                    // Set managing organization
+                    $fhirLocation->setManagingOrganization($location->organization->organization_id);
+
+                    // Set physical type (defaults to 'ro' - Room)
+                    $fhirLocation->addPhysicalType('ro');
+
+                    // Get the JSON and decode to array
+                    $jsonSatuSehat = json_decode($fhirLocation->json(), true);
+
+                    // Add the location ID for update operation
+                    $jsonSatuSehat['id'] = $location->location_id;
+
+                    // Add fax manually since FHIR class doesn't support it
+                    if ($location->fax) {
+                        $jsonSatuSehat['telecom'][] = [
+                            'system' => 'fax',
+                            'use'    => 'work',
+                            'value'  => $location->fax,
+                        ];
+                    }
+
+                    //$location->json_satu_sehat = json_encode($jsonSatuSehat);
                     $location->update();
 
-                    $satusehat = satu_sehat('update', 'Location', $jsonSatuSehat,$location->location_id);
-
-
-                    $location->response_satu_sehat = $satusehat;
-                    $location->update();
 
                 } catch (Exception $e) {
                     report($e);
