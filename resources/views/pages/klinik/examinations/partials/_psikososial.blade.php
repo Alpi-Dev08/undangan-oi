@@ -143,7 +143,7 @@
                                     style="{{ isset($psikososial->riwayat_pekerjaan) && isset($psikososial->riwayat_pekerjaan->zat_bahaya) && $psikososial->riwayat_pekerjaan->zat_bahaya == 'Ya' ? '' : 'display: none;' }}">
                                     <input type="text" class="form-control" name="riwayat_pekerjaan_bahaya"
                                         placeholder="Sebutkan zat berbahaya"
-                                        value="{{ isset($psikososial->riwayat_pekerjaan) && isset($psikososial->riwayat_pekerjaan->zat_bahaya) && $psikososial->riwayat_pekerjaan->zat_bahaya == 'Ya' ? ($psikososial->riwayat_pekerjaan_bahaya ?? '') : '' }}">
+                                        value="{{ isset($psikososial->riwayat_pekerjaan) && isset($psikososial->riwayat_pekerjaan->zat_bahaya) && $psikososial->riwayat_pekerjaan->zat_bahaya == 'Ya' ? $psikososial->riwayat_pekerjaan_bahaya ?? '' : '' }}">
                                 </div>
                             </div>
                         </div>
@@ -177,7 +177,7 @@
                                     style="{{ isset($psikososial->riwayat_pekerjaan) && isset($psikososial->riwayat_pekerjaan->berpergian) && $psikososial->riwayat_pekerjaan->berpergian == 'Ya' ? '' : 'display: none;' }}">
                                     <input type="text" class="form-control" name="riwayat_pekerjaan_berpergian"
                                         placeholder="Sebutkan riwayat bepergian"
-                                        value="{{ isset($psikososial->riwayat_pekerjaan) && isset($psikososial->riwayat_pekerjaan->berpergian) && $psikososial->riwayat_pekerjaan->berpergian == 'Ya' ? ($psikososial->riwayat_pekerjaan_berpergian ?? '') : '' }}">
+                                        value="{{ isset($psikososial->riwayat_pekerjaan) && isset($psikososial->riwayat_pekerjaan->berpergian) && $psikososial->riwayat_pekerjaan->berpergian == 'Ya' ? $psikososial->riwayat_pekerjaan_berpergian ?? '' : '' }}">
                                 </div>
                             </div>
                         </div>
@@ -200,27 +200,27 @@
                                     <div class="col-md-4">
                                         <label class="form-check form-check-custom form-check-solid">
                                             <input class="form-check-input" type="radio"
-                                                name="riwayat_kesehatan[alergi_obat]" id="riwayat_kesehatan_satu"
+                                                name="riwayat_kesehatan[alergi_obat]" id="alergi_obat_tidak"
                                                 value="Tidak Ada"
-                                                {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_obat == 'Tidak Ada' ? 'checked' : '' }}>
+                                                {{ isset($psikososial->riwayat_kesehatan) && isset($psikososial->riwayat_kesehatan->alergi_obat) && $psikososial->riwayat_kesehatan->alergi_obat == 'Tidak Ada' ? 'checked' : '' }}>
                                             <span class="form-check-label">Tidak Ada</span>
                                         </label>
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-check form-check-custom form-check-solid">
                                             <input class="form-check-input" type="radio"
-                                                name="riwayat_kesehatan[alergi_obat]" id="riwayat_kesehatan_dua"
+                                                name="riwayat_kesehatan[alergi_obat]" id="alergi_obat_ada"
                                                 value="Ada"
-                                                {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_obat == 'Ada' ? 'checked' : '' }}>
+                                                {{ isset($psikososial->riwayat_kesehatan) && isset($psikososial->riwayat_kesehatan->alergi_obat) && $psikososial->riwayat_kesehatan->alergi_obat == 'Ada' ? 'checked' : '' }}>
                                             <span class="form-check-label">Ada</span>
                                         </label>
                                     </div>
                                 </div>
                                 <div class="mt-2" id="alergi_obat_detail"
-                                    style="{{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_obat == 'Ada' ? '' : 'display: none;' }}">
+                                    style="{{ isset($psikososial->riwayat_kesehatan) && isset($psikososial->riwayat_kesehatan->alergi_obat) && $psikososial->riwayat_kesehatan->alergi_obat == 'Ada' ? '' : 'display: none;' }}">
                                     <input type="text" class="form-control" name="riwayat_alergi_obat"
                                         placeholder="Sebutkan alergi obat"
-                                        value="{{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_obat == 'Ada' ? $psikososial->riwayat_alergi_obat : '' }}">
+                                        value="{{ isset($psikososial->riwayat_kesehatan) && isset($psikososial->riwayat_kesehatan->alergi_obat) && $psikososial->riwayat_kesehatan->alergi_obat == 'Ada' ? $psikososial->riwayat_alergi_obat ?? '' : '' }}">
                                 </div>
                             </div>
                         </div>
@@ -234,27 +234,27 @@
                                     <div class="col-md-4">
                                         <label class="form-check form-check-custom form-check-solid">
                                             <input class="form-check-input" type="radio"
-                                                name="riwayat_kesehatan[alergi_makanan]" id="riwayat_kesehatan_tiga"
+                                                name="riwayat_kesehatan[alergi_makanan]" id="alergi_makanan_tidak"
                                                 value="Tidak Ada"
-                                                {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_makanan == 'Tidak Ada' ? 'checked' : '' }}>
+                                                {{ isset($psikososial->riwayat_kesehatan) && isset($psikososial->riwayat_kesehatan->alergi_makanan) && $psikososial->riwayat_kesehatan->alergi_makanan == 'Tidak Ada' ? 'checked' : '' }}>
                                             <span class="form-check-label">Tidak Ada</span>
                                         </label>
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-check form-check-custom form-check-solid">
                                             <input class="form-check-input" type="radio"
-                                                name="riwayat_kesehatan[alergi_makanan]" id="riwayat_kesehatan_empat"
+                                                name="riwayat_kesehatan[alergi_makanan]" id="alergi_makanan_ada"
                                                 value="Ada"
-                                                {{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_makanan == 'Ada' ? 'checked' : '' }}>
+                                                {{ isset($psikososial->riwayat_kesehatan) && isset($psikososial->riwayat_kesehatan->alergi_makanan) && $psikososial->riwayat_kesehatan->alergi_makanan == 'Ada' ? 'checked' : '' }}>
                                             <span class="form-check-label">Ada</span>
                                         </label>
                                     </div>
                                 </div>
                                 <div class="mt-2" id="alergi_makanan_detail"
-                                    style="{{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_makanan == 'Ada' ? '' : 'display: none;' }}">
+                                    style="{{ isset($psikososial->riwayat_kesehatan) && isset($psikososial->riwayat_kesehatan->alergi_makanan) && $psikososial->riwayat_kesehatan->alergi_makanan == 'Ada' ? '' : 'display: none;' }}">
                                     <input type="text" class="form-control" name="riwayat_alergi_makanan"
                                         placeholder="Sebutkan alergi makanan"
-                                        value="{{ isset($psikososial->riwayat_kesehatan) && $psikososial->riwayat_kesehatan->alergi_makanan == 'Ada' ? $psikososial->riwayat_alergi_makanan : '' }}">
+                                        value="{{ isset($psikososial->riwayat_kesehatan) && isset($psikososial->riwayat_kesehatan->alergi_makanan) && $psikososial->riwayat_kesehatan->alergi_makanan == 'Ada' ? $psikososial->riwayat_alergi_makanan ?? '' : '' }}">
                                 </div>
                             </div>
                         </div>
