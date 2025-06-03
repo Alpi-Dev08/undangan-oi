@@ -6,6 +6,7 @@ use App\DataTables\Klinik\DrugsDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Klinik\StoreDrugRequest;
 use App\Http\Requests\Klinik\UpdateDrugRequest;
+use App\Imports\DrugsImport;
 use App\Models\Klinik\Drug;
 use App\Models\Klinik\DrugUsage;
 use App\Models\Klinik\Unit;
@@ -373,5 +374,67 @@ class DrugsController extends Controller
         }
 
         return Excel::download(new DrugsExport, 'drugs-'.date('YmdHis').'.xlsx');
+    }
+
+    /**
+     * Show the form for importing drugs
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function import()
+    {
+        if (is_null($this->user) || ! $this->user->can('klinik.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to import any master data !');
+        }
+
+        return view('pages.klinik.drugs.import');
+    }
+
+    /**
+     * Process the import file
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function processImport(Request $request)
+    {
+        if (is_null($this->user) || ! $this->user->can('klinik.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to import any master data !');
+        }
+
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048'
+        ]);
+
+
+
+        try {
+            $import = new DrugsImport();
+            Excel::import($import, $request->file('file'));
+
+            $failures = $import->failures();
+            $errors = $import->errors();
+
+            if ($failures->isNotEmpty() || $errors->isNotEmpty()) {
+                $errorMessages = [];
+
+                foreach ($failures as $failure) {
+                    $errorMessages[] = "Baris {$failure->row()}: " . implode(', ', $failure->errors());
+                }
+
+                foreach ($errors as $error) {
+                    $errorMessages[] = $error;
+                }
+
+                session()->flash('warning', 'Import selesai dengan beberapa error: ' . implode(' | ', $errorMessages));
+            } else {
+                session()->flash('success', 'Data obat berhasil diimport!');
+            }
+
+            return redirect()->route('drugs.index');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Terjadi kesalahan saat import: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 }

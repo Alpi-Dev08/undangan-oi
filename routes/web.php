@@ -125,7 +125,7 @@
         });
 
         //User Management
-        Route::resource('roles', RolesController::class);
+        //Route::resource('roles', RolesController::class);
         Route::resource('permissions', PermissionsController::class);
         Route::resource('users', UsersController::class);
 
@@ -231,7 +231,7 @@
                 ->name('komunikasi.efektif.store');
             Route::get('/komunikasi-efektif/status/{examination}', [KomunikasiEfektifController::class, 'status'])
                 ->name('komunikasi.efektif.status');
-            Route::get('/sbar', [Sbar::class, 'index']); //route ke fungsi index
+            //Route::get('/sbar', [Sbar::class, 'index']); //route ke fungsi index
             Route::resource('sbar', SbarController::class);
             Route::post('/sbar/{id}/verify', [SbarController::class, 'verify'])->name('sbar.verify');
 
@@ -239,6 +239,9 @@
             Route::resource('locations', LocationsController::class);
 
             Route::resource('units', UnitController::class);
+            Route::get('drugs/export', [DrugsController::class, 'export'])->name('drugs.export');
+            Route::get('drugs/import', [DrugsController::class, 'import'])->name('drugs.import');
+            Route::post('drugs/import', [DrugsController::class, 'processImport'])->name('drugs.process-import');
             Route::resource('drugs', DrugsController::class);
             Route::get('drugs/{drug}/detail', [DrugsController::class, 'detail'])->name('drugs.detail');
             Route::put('drugs/{drug}/detail', [DrugsController::class, 'updateDetail'])->name('drugs.detail_');
@@ -314,3 +317,4 @@
     Route::get('/auth/redirect/{provider}', [SocialiteLoginController::class, 'redirect']);
 
     require __DIR__ . '/auth.php';
+
