@@ -242,7 +242,8 @@
 
                                                 <!--begin::Col-->
                                                 <div class="col-lg-8 fv-row">
-                                                    <span class="fw-bold fs-6">{{ $info->place_of_birth . ', ' . $info->date_of_birth }}</span>
+                                <span
+                                    class="fw-bold fs-6">{{ $info->place_of_birth . ', ' . $info->date_of_birth }}</span>
                                                 </div>
                                                 <!--end::Col-->
                                             </div>
@@ -786,6 +787,15 @@
 
                                 <div class="tab-pane active" id="skrining" role="tabpanel" aria-labelledby="all-tab"
                                      data-kt-timeline-widget-4-blockui="true">
+
+                                    @php
+                                        // Decode data skrining yang sudah tersimpan
+                                        $skriningData = [];
+                                        if (isset($vitalityexamination) && $vitalityexamination && $vitalityexamination->skrining) {
+                                            $skriningData = json_decode($vitalityexamination->skrining, true) ?? [];
+                                        }
+                                    @endphp
+
                                     <form method="POST" class="form" action="{{ route('vitalityexaminations.skrining') }}">
                                         @method('POST')
                                         {{ csrf_field() }}
@@ -803,23 +813,26 @@
                                                     <div class="d-flex flex-row flex-row-fluid">
                                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
                                                             <input value="Sadar Penuh" class="form-check-input h-20px w-30px me-5"
-                                                                   type="radio" name="kesadaran" id="kesadaran_satu"/>
-                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                   type="radio" name="kesadaran" id="kesadaran_satu"
+                                                                {{ (isset($skriningData['kesadaran']) && $skriningData['kesadaran'] == 'Sadar Penuh') ? 'checked' : '' }} />
+                                                            <label class="form-check-label" for="kesadaran_satu">
                                                                 Sadar Penuh
                                                             </label>
                                                         </div>
                                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
                                                             <input value="Tampak mengantuk / gelisah bicara tidak jelas"
                                                                    class="form-check-input h-20px w-30px me-5" type="radio"
-                                                                   name="kesadaran" id="kesadaran_dua"/>
-                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                   name="kesadaran" id="kesadaran_dua"
+                                                                {{ (isset($skriningData['kesadaran']) && $skriningData['kesadaran'] == 'Tampak mengantuk / gelisah bicara tidak jelas') ? 'checked' : '' }} />
+                                                            <label class="form-check-label" for="kesadaran_dua">
                                                                 Tampak mengantuk / gelisah bicara tidak jelas
                                                             </label>
                                                         </div>
                                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
                                                             <input value="Tidak Sadar" class="form-check-input h-20px w-30px me-5"
-                                                                   type="radio" name="kesadaran" id="kesadaran_tiga"/>
-                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                   type="radio" name="kesadaran" id="kesadaran_tiga"
+                                                                {{ (isset($skriningData['kesadaran']) && $skriningData['kesadaran'] == 'Tidak Sadar') ? 'checked' : '' }} />
+                                                            <label class="form-check-label" for="kesadaran_tiga">
                                                                 Tidak Sadar
                                                             </label>
                                                         </div>
@@ -838,22 +851,25 @@
                                                     <div class="d-flex flex-row flex-row-fluid">
                                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
                                                             <input value="Nafas normal" class="form-check-input h-20px w-30px me-5"
-                                                                   type="radio" name="pernafasan" id="pernafasan_satu"/>
-                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                   type="radio" name="pernafasan" id="pernafasan_satu"
+                                                                {{ (isset($skriningData['pernafasan']) && $skriningData['pernafasan'] == 'Nafas normal') ? 'checked' : '' }} />
+                                                            <label class="form-check-label" for="pernafasan_satu">
                                                                 Nafas normal
                                                             </label>
                                                         </div>
                                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
                                                             <input value="Tampak sesak" class="form-check-input h-20px w-30px me-5"
-                                                                   type="radio" name="pernafasan" id="pernafasan_dua"/>
-                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                   type="radio" name="pernafasan" id="pernafasan_dua"
+                                                                {{ (isset($skriningData['pernafasan']) && $skriningData['pernafasan'] == 'Tampak sesak') ? 'checked' : '' }} />
+                                                            <label class="form-check-label" for="pernafasan_dua">
                                                                 Tampak sesak
                                                             </label>
                                                         </div>
                                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
                                                             <input value="Tidak bernapas" class="form-check-input h-20px w-30px me-5"
-                                                                   type="radio" name="pernafasan" id="pernafasan_tiga"/>
-                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                   type="radio" name="pernafasan" id="pernafasan_tiga"
+                                                                {{ (isset($skriningData['pernafasan']) && $skriningData['pernafasan'] == 'Tidak bernapas') ? 'checked' : '' }} />
+                                                            <label class="form-check-label" for="pernafasan_tiga">
                                                                 Tidak bernapas
                                                             </label>
                                                         </div>
@@ -871,22 +887,25 @@
                                                     <div class="d-flex flex-row flex-row-fluid">
                                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
                                                             <input value="Resiko rendah" class="form-check-input h-20px w-30px me-5"
-                                                                   type="radio" name="jatuh" id="jatuh_satu"/>
-                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                   type="radio" name="jatuh" id="jatuh_satu"
+                                                                {{ (isset($skriningData['jatuh']) && $skriningData['jatuh'] == 'Resiko rendah') ? 'checked' : '' }} />
+                                                            <label class="form-check-label" for="jatuh_satu">
                                                                 Resiko rendah
                                                             </label>
                                                         </div>
                                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
                                                             <input value="Resiko sedang" class="form-check-input h-20px w-30px me-5"
-                                                                   type="radio" name="jatuh" id="jatuh_dua"/>
-                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                   type="radio" name="jatuh" id="jatuh_dua"
+                                                                {{ (isset($skriningData['jatuh']) && $skriningData['jatuh'] == 'Resiko sedang') ? 'checked' : '' }} />
+                                                            <label class="form-check-label" for="jatuh_dua">
                                                                 Resiko sedang
                                                             </label>
                                                         </div>
                                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
                                                             <input value="Resiko Tinggi" class="form-check-input h-20px w-30px me-5"
-                                                                   type="radio" name="jatuh" id="jatuh_tiga"/>
-                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                   type="radio" name="jatuh" id="jatuh_tiga"
+                                                                {{ (isset($skriningData['jatuh']) && $skriningData['jatuh'] == 'Resiko Tinggi') ? 'checked' : '' }} />
+                                                            <label class="form-check-label" for="jatuh_tiga">
                                                                 Resiko Tinggi
                                                             </label>
                                                         </div>
@@ -904,24 +923,27 @@
                                                     <div class="d-flex flex-row flex-row-fluid">
                                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
                                                             <input value="Tidak ada" class="form-check-input h-20px w-30px me-5"
-                                                                   type="radio" name="nyeri" id="nyeri_satu"/>
-                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                   type="radio" name="nyeri" id="nyeri_satu"
+                                                                {{ (isset($skriningData['nyeri']) && $skriningData['nyeri'] == 'Tidak ada') ? 'checked' : '' }} />
+                                                            <label class="form-check-label" for="nyeri_satu">
                                                                 Tidak ada
                                                             </label>
                                                         </div>
                                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
                                                             <input value="Ada (Tingkat Sedang)"
                                                                    class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri"
-                                                                   id="nyeri_dua"/>
-                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                   id="nyeri_dua"
+                                                                {{ (isset($skriningData['nyeri']) && $skriningData['nyeri'] == 'Ada (Tingkat Sedang)') ? 'checked' : '' }} />
+                                                            <label class="form-check-label" for="nyeri_dua">
                                                                 Ada (Tingkat Sedang)
                                                             </label>
                                                         </div>
                                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
                                                             <input value="Nyeri dada kiri tembus punggung"
                                                                    class="form-check-input h-20px w-30px me-5" type="radio" name="nyeri"
-                                                                   id="nyeri_tiga"/>
-                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                   id="nyeri_tiga"
+                                                                {{ (isset($skriningData['nyeri']) && $skriningData['nyeri'] == 'Nyeri dada kiri tembus punggung') ? 'checked' : '' }} />
+                                                            <label class="form-check-label" for="nyeri_tiga">
                                                                 Nyeri dada kiri tembus punggung
                                                             </label>
                                                         </div>
@@ -944,28 +966,31 @@
                                                         </div>
                                                         <div class="d-flex flex-row flex-row-auto mb-5">
                                                             <label class="d-flex w-200px form-label">Lokasi : </label>
-                                                            <input type="text" name="lokasi_nyeri"
+                                                            <input type="text" name="lokasi_nyeri" value="{{ $skriningData['lokasi_nyeri'] ?? '' }}"
                                                                    class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0">
                                                         </div>
                                                         <div class="d-flex flex-row flex-row-fluid mb-5">
                                                             <div class="form-check form-switch form-check-custom form-check-solid me-10">
                                                                 <input value="1-3" class="form-check-input h-20px w-30px me-5"
-                                                                       type="radio" name="skala" id="skala_satu"/>
-                                                                <label class="form-check-label" for="kriteria_dua">
+                                                                       type="radio" name="skala" id="skala_satu"
+                                                                    {{ (isset($skriningData['skala']) && $skriningData['skala'] == '1-3') ? 'checked' : '' }} />
+                                                                <label class="form-check-label" for="skala_satu">
                                                                     1-3
                                                                 </label>
                                                             </div>
                                                             <div class="form-check form-switch form-check-custom form-check-solid me-10">
                                                                 <input value="4-6" class="form-check-input h-20px w-30px me-5"
-                                                                       type="radio" name="skala" id="skala_dua"/>
-                                                                <label class="form-check-label" for="kriteria_dua">
+                                                                       type="radio" name="skala" id="skala_dua"
+                                                                    {{ (isset($skriningData['skala']) && $skriningData['skala'] == '4-6') ? 'checked' : '' }} />
+                                                                <label class="form-check-label" for="skala_dua">
                                                                     4-6
                                                                 </label>
                                                             </div>
                                                             <div class="form-check form-switch form-check-custom form-check-solid me-10">
                                                                 <input value="6-10" class="form-check-input h-20px w-30px me-5"
-                                                                       type="radio" name="skala" id="skala_tiga"/>
-                                                                <label class="form-check-label" for="kriteria_dua">
+                                                                       type="radio" name="skala" id="skala_tiga"
+                                                                    {{ (isset($skriningData['skala']) && $skriningData['skala'] == '6-10') ? 'checked' : '' }} />
+                                                                <label class="form-check-label" for="skala_tiga">
                                                                     6-10
                                                                 </label>
                                                             </div>
@@ -985,15 +1010,17 @@
                                                     <div class="d-flex flex-row flex-row-fluid">
                                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
                                                             <input value="Tidak ada" class="form-check-input h-20px w-30px me-5"
-                                                                   type="radio" name="batuk" id="batuk_satu"/>
-                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                   type="radio" name="batuk" id="batuk_satu"
+                                                                {{ (isset($skriningData['batuk']) && $skriningData['batuk'] == 'Tidak ada') ? 'checked' : '' }} />
+                                                            <label class="form-check-label" for="batuk_satu">
                                                                 Tidak ada
                                                             </label>
                                                         </div>
                                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
                                                             <input value="Batuk > 2 Minggu" class="form-check-input h-20px w-30px me-5"
-                                                                   type="radio" name="batuk" id="batuk_dua"/>
-                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                   type="radio" name="batuk" id="batuk_dua"
+                                                                {{ (isset($skriningData['batuk']) && $skriningData['batuk'] == 'Batuk > 2 Minggu') ? 'checked' : '' }} />
+                                                            <label class="form-check-label" for="batuk_dua">
                                                                 Batuk > 2 Minggu
                                                             </label>
                                                         </div>
@@ -1011,22 +1038,25 @@
                                                     <div class="d-flex flex-row flex-row-fluid">
                                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
                                                             <input value="Diterima" class="form-check-input h-20px w-30px me-5"
-                                                                   type="radio" name="keputusan" id="keputusan_satu"/>
-                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                   type="radio" name="keputusan" id="keputusan_satu"
+                                                                {{ (isset($skriningData['keputusan']) && $skriningData['keputusan'] == 'Diterima') ? 'checked' : '' }} />
+                                                            <label class="form-check-label" for="keputusan_satu">
                                                                 Diterima
                                                             </label>
                                                         </div>
                                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
                                                             <input value="Di Dahulukan" class="form-check-input h-20px w-30px me-5"
-                                                                   type="radio" name="keputusan" id="keputusan_dua"/>
-                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                   type="radio" name="keputusan" id="keputusan_dua"
+                                                                {{ (isset($skriningData['keputusan']) && $skriningData['keputusan'] == 'Di Dahulukan') ? 'checked' : '' }} />
+                                                            <label class="form-check-label" for="keputusan_dua">
                                                                 Di Dahulukan
                                                             </label>
                                                         </div>
                                                         <div class="form-check form-switch form-check-custom form-check-solid me-10">
                                                             <input value="Dirujuk" class="form-check-input h-20px w-30px me-5"
-                                                                   type="radio" name="keputusan" id="keputusan_tiga"/>
-                                                            <label class="form-check-label" for="kriteria_dua">
+                                                                   type="radio" name="keputusan" id="keputusan_tiga"
+                                                                {{ (isset($skriningData['keputusan']) && $skriningData['keputusan'] == 'Dirujuk') ? 'checked' : '' }} />
+                                                            <label class="form-check-label" for="keputusan_tiga">
                                                                 Dirujuk
                                                             </label>
                                                         </div>
