@@ -12,6 +12,8 @@
     use App\Models\Master\Province;
     use App\Models\Master\SubDistrict;
     use Illuminate\Support\Facades\Storage;
+    use Satusehat\Integration\FHIR\Organization as SatuSehatOrganization;
+use Satusehat\Integration\Models\SatusehatLog;
 
     class OrganizationController extends Controller
     {
@@ -96,97 +98,59 @@
                     $organization->logo = $path;
                     $organization->save();
                 }
-                $jsonSatuSehat = [
-                    'active'       => true,
-                    'address'      => [[
-                                           'city'       => $organization->city->name,
-                                           'country'    => $organization->country->code,
-                                           'extension'  => [[
-                                                                'extension' => [
-                                                                    [
-                                                                        'url'       => 'province',
-                                                                        'valueCode' => $organization->province->area_code,
-                                                                    ],
-                                                                    [
-                                                                        'url'       => 'city',
-                                                                        'valueCode' => str_replace('.', '', $organization->city->area_code)
-                                                                    ],
-                                                                    [
-                                                                        'url'       => 'district',
-                                                                        'valueCode' => str_replace('.', '', $organization->district->area_code),
-                                                                    ],
-                                                                    [
-                                                                        'url'       => 'village',
-                                                                        'valueCode' => str_replace('.', '', $organization->sub_district->area_code),
-                                                                    ],
-                                                                ],
-                                                                'url'       => 'https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode'
-                                                            ]
-                                           ],
-                                           'line'       => [$organization->address],
-                                           'postalCode' => $organization->postal_code,
-                                           'type'       => 'both',
-                                           'use'        => 'work'
-                                       ]
-                    ],
-                    'id'           => $organization->organization_id,
-                    'identifier'   => [
-                        [
-                            'system' => 'https://fhir.kemkes.go.id/id/org-number',
-                            'value'  => $organization->organization_id,
-                        ],
-                        [
-                            'system' => 'https://fhir.kemkes.go.id/id/creator',
-                            'value'  => "10000004",
-                        ]
-                    ],
-                    'name'         => $organization->name,
-                    'partOf'       => [
-                        'reference' => 'Organization/' . $organization->organization_id,
-                    ],
-                    'resourceType' => 'Organization',
-                    'telecom'      => [
-                        [
-                            'system' => 'phone',
-                            'use'    => 'work',
-                            'value'  => $organization->phone,
-                        ],
-                        [
-                            'system' => 'url',
-                            'use'    => 'work',
-                            'value'  => $organization->url,
-                        ],
-                        [
-                            'system' => 'email',
-                            'use'    => 'work',
-                            'value'  => $organization->email,
-                        ],
-                        [
-                            'system' => 'fax',
-                            'use'    => 'work',
-                            'value'  => $organization->fax,
-                        ],
-                    ],
-                    'type'         => [
-                        [
-                            'coding' => [
-                                [
-                                    'code'    => '102',
-                                    'display' => 'Klinik',
-                                    'system'  => 'https://terminology.kemkes.go.id/CodeSystem/organization-type',
-                                ],
-                            ]
-                        ],
-                    ],
-                ];
 
-                $organization->json_satu_sehat = json_encode($jsonSatuSehat);
+                // Create SatuSehat Organization instance
+                $satuSehatOrg = new SatuSehatOrganization();
+
+                // Set identifier menggunakan addIdentifier()
+                $satuSehatOrg->addIdentifier($organization->organization_id);
+
+                // Set nama organisasi menggunakan setName()
+                $satuSehatOrg->setName($organization->name);
+
+                // Set operational status menggunakan setOperationalStatus()
+                $satuSehatOrg->setOperationalStatus('active');
+
+                // Set partOf menggunakan setPartOf()
+                $satuSehatOrg->setPartOf($organization->organization_id);
+
+                // Set type menggunakan setType() - gunakan 'prov' untuk provider
+                $satuSehatOrg->setType('prov');
+
+                // Add phone menggunakan addPhone()
+                if ($organization->phone) {
+                    $satuSehatOrg->addPhone($organization->phone);
+                }
+
+                // Add email menggunakan addEmail()
+                if ($organization->email) {
+                    $satuSehatOrg->addEmail($organization->email);
+                }
+
+                // Add URL menggunakan addUrl()
+                if ($organization->url) {
+                    $satuSehatOrg->addUrl($organization->url);
+                }
+
+                // Add address menggunakan addAddress()
+                // Parameter: address_line, postal_code, city_name, village_code
+                $villageCode = $organization->sub_district ? $organization->sub_district->area_code : null;
+                $satuSehatOrg->addAddress(
+                    $organization->address,
+                    $organization->postal_code,
+                    $organization->city ? $organization->city->name : null,
+                    $villageCode
+                );
+
+                // Get JSON menggunakan json()
+                //$jsonSatuSehat = json_decode($satuSehatOrg->json(), true);
+                $satuSehatOrg->put($organization->organization_id);
+                //$organization->json_satu_sehat = json_encode($jsonSatuSehat);
                 $organization->save();
-
-                satu_sehat('update', 'Organization', $organization->organization_id, $jsonSatuSehat);
 
                 return redirect()->route('organization.index')->with('success', 'Organization updated successfully');
             } catch (\Exception $e) {
+                dd($e->getMessage());
                 return redirect()->route('organization.index')->with('error', 'Organization updated failed');
             }
         }
