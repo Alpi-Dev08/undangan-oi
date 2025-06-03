@@ -177,14 +177,14 @@
                                                             :
                                                             {{ implode(', ',array_map(function ($item) {return getPenyakitdahulu($item)->name;}, $value)) }}
                                                         @else
-                                                            : {{ getPenyakitdahulu($value)->name }}
+                                                            : {{ getPenyakitdahulu($value)?->name ?? 'N/A' }}
                                                         @endif
                                                     @elseif($key == 'penyakit_keluarga')
                                                         @if (is_array($value))
                                                             :
                                                             {{ implode(', ',array_map(function ($item) {return getPenyakitKeluarga($item)->name;}, $value)) }}
                                                         @else
-                                                            : {{ getPenyakitKeluarga($value)->name }}
+                                                            : {{ getPenyakitKeluarga($value)?->name ?? 'N/A' }}
                                                         @endif
                                                     @else
                                                         : {{ $value }}
