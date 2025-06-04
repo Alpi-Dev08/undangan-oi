@@ -56,6 +56,10 @@ class Observations extends Observation{
                 $display = 'Physical findings of Ear Narrative';
                 $code = '10195-6';
                 break;
+            case '10203-8':
+                $display = 'Physical findings of Nose Narrative';
+                $code = '10203-8';
+                break;
 
         }
 
