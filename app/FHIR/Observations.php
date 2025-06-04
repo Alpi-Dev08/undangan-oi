@@ -21,7 +21,8 @@
             '32436-8' => 'Physical findings of Hair',
             '32446-7' => 'Physical findings of Lip',
             '85910-8' => 'Physical findings of Teeth and gum Narrative',
-            '11411-6' => 'Physical findings of Neck Narrative'
+            '11411-6' => 'Physical findings of Neck Narrative',
+            '56867-5' => 'Physical findings of Throat Narrative'
         ];
 
         // Define mapping of observation codes to their display names
