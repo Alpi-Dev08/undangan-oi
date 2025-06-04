@@ -403,5 +403,16 @@ class PhysicalExaminationsController extends Controller
             $observation->addStringComponent($physical->thigh);
             $observation->post();
         }
+
+        private function processCalfObservation(PhysicalExamination $physical, $observation)
+        {
+            if (!$physical->calf) {
+                return;
+            }
+
+            $observation->addCode('11389-4');
+            $observation->addStringComponent($physical->calf);
+            $observation->post();
+        }
 }
 
