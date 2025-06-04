@@ -176,6 +176,7 @@ class PhysicalExaminationsController extends Controller
             $this->processForearmObservation($physical, $observation);
             $this->processWristObservation($physical, $observation);
             $this->processThighObservation($physical, $observation);
+            $this->processCalfObservation($physical, $observation);
 
         }
 
