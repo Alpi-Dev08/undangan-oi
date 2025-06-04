@@ -9,6 +9,7 @@ use App\Models\Klinik\Examination;
 use App\Models\Klinik\PhysicalExamination;
 use Doctrine\DBAL\Driver\PDO\Exception;
 use Illuminate\Support\Facades\Auth;
+use App\FHIR\Observations;
 
 class PhysicalExaminationsController extends Controller
 {
@@ -60,7 +61,11 @@ class PhysicalExaminationsController extends Controller
         if($validated){
             try{
                 $validated['physical_value'] = json_encode($request->physical);
-                PhysicalExamination::create($validated);
+                $physical = PhysicalExamination::create($validated);
+
+                if ($physical) {
+                    $this->setObservation($physical);
+                }
             }catch(Exception $e){
                 report($e);
                 return false;
@@ -145,14 +150,61 @@ class PhysicalExaminationsController extends Controller
         return false;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Klinik\PhysicalExamination  $physicalexamination
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(PhysicalExamination $physicalexamination)
-    {
-        //
-    }
+    private function setObservation(PhysicalExamination $physical)
+        {
+            $examination = Examination::where('id', $physical->examination_id)->first();
+            $_encounter  = json_decode($examination->encounter);
+            $participant = $_encounter->participant[0]->individual;
+
+            $observation = $this->createBaseObservation($_encounter, $participant, $examination);
+
+            $this->processHeadObservation($physical, $observation);
+            $this->processeyeObservation($physical, $observation);
+        }
+
+        /**
+         * Create base observation object with common properties
+         */
+        private function createBaseObservation($encounter, $participant, $examination)
+        {
+            $observation = new Observations();
+            $observation->setStatus('final');
+            $observation->addCategory('exam');
+            $observation->setSubject(
+                str_replace('Patient/', '', $encounter->subject->reference),
+                $encounter->subject->display
+            );
+            $observation->setPerformer(
+                str_replace('Practitioner/', '', $participant->reference),
+                $participant->display
+            );
+            $observation->setEncounter($examination->encounter_id);
+
+            return $observation;
+        }
+
+        /**
+         * Process heart rate data
+         */
+        private function processHeadObservation(PhysicalExamination $physical, $observation)
+        {
+            if (!$physical->head) {
+                return;
+            }
+
+            $observation->addCode('10199-8');
+            $observation->addStringComponent($physical->head);
+            $observation->post();
+        }
+
+        private function processeyeObservation(PhysicalExamination $physical, $observation)
+        {
+            if (!$physical->eye) {
+                return;
+            }
+
+            $observation->addCode('10197-2');
+            $observation->addStringComponent($physical->eye);
+            $observation->post();
+        }
 }
