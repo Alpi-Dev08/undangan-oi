@@ -169,6 +169,8 @@ class PhysicalExaminationsController extends Controller
             $this->processThroatObservation($physical, $observation);
             $this->processChestObservation($physical, $observation);
             $this->processBreastsObservation($physical, $observation);
+            $this->processBackObservation($physical, $observation);
+            $this->processAbdomenObservation($physical, $observation);
         }
 
         /**
@@ -316,6 +318,28 @@ class PhysicalExaminationsController extends Controller
 
             $observation->addCode('10193-1');
             $observation->addStringComponent($physical->breasts);
+            $observation->post();
+        }
+
+        private function processBackObservation(PhysicalExamination $physical, $observation)
+        {
+            if (!$physical->back) {
+                return;
+            }
+
+            $observation->addCode('10192-3');
+            $observation->addStringComponent($physical->back);
+            $observation->post();
+        }
+
+        private function processAbdomenObservation(PhysicalExamination $physical, $observation)
+        {
+            if (!$physical->abdomen) {
+                return;
+            }
+
+            $observation->addCode('10191-5');
+            $observation->addStringComponent($physical->abdomen);
             $observation->post();
         }
 }
