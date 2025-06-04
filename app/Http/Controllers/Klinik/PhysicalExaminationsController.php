@@ -181,6 +181,7 @@ class PhysicalExaminationsController extends Controller
             $this->processTonsilObservation($physical, $observation);
             $this->processButtocksObservation($physical, $observation);
             $this->processHandObservation($physical, $observation);
+            $this->processNailObservation($physical, $observation);
         }
 
         /**
@@ -464,6 +465,18 @@ class PhysicalExaminationsController extends Controller
             $observation->addCode('11404-1');
             $observation->addStringComponent($physical->hand);
             $observation->addBodySite('7569003');
+            $observation->post();
+        }
+
+        private function processNailObservation(PhysicalExamination $physical, $observation)
+        {
+            if (!$physical->nail) {
+                return;
+            }
+
+            $observation->addCode('32456-6');
+            $observation->addStringComponent($physical->nail);
+            $observation->addBodySite('770812000');
             $observation->post();
         }
 }
