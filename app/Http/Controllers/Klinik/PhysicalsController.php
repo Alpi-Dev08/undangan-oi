@@ -180,6 +180,7 @@
             $observation = $this->createBaseObservation($_encounter, $participant, $examination);
 
             $this->processHeadObservation($physical, $observation);
+            $this->processeyeObservation($physical, $observation);
         }
 
         /**
@@ -214,6 +215,17 @@
 
             $observation->addCode('10199-8');
             $observation->addStringComponent($physical->head);
+            $observation->post();
+        }
+
+        private function processeyeObservation(PhysicalExamination $physical, $observation)
+        {
+            if (!$physical->eye) {
+                return;
+            }
+
+            $observation->addCode('10197-2');
+            $observation->addStringComponent($physical->eye);
             $observation->post();
         }
     }
