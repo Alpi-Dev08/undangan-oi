@@ -11,8 +11,7 @@
     use Doctrine\DBAL\Driver\PDO\Exception;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
-    use Satusehat\Integration\FHIR\Observation;
-
+    use App\FHIR\Observations;
 
     class VitalityExaminationsController extends Controller
     {
@@ -112,6 +111,7 @@
             $this->processHeartRate($vit, $observation);
             $this->processTemperature($vit, $observation);
             $this->processRespiratoryRate($vit, $observation);
+            $this->processBodyHeight($vit, $observation);
         }
 
         /**
@@ -119,7 +119,7 @@
          */
         private function createBaseObservation($encounter, $participant, $examination)
         {
-            $observation = new Observation();
+            $observation = new Observations();
             $observation->setStatus('final');
             $observation->addCategory('vital-signs');
             $observation->setSubject(
@@ -172,6 +172,25 @@
                 'unit'   => '{beats}/min',
                 'system' => 'http://unitsofmeasure.org',
                 'code'   => '{beats}/min'
+            ]);
+            $observation->post();
+        }
+
+        /**
+         * Process body height data
+         */
+        private function processBodyHeight(VitalityExamination $vit, $observation)
+        {
+            if (!$vit->body_height) {
+                return;
+            }
+
+            $observation->addCode('8302-2');
+            $observation->addComponent([
+                'value'  => (float) filter_var($vit->body_height, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
+                'unit'   => 'cm',
+                'system' => 'http://unitsofmeasure.org',
+                'code'   => 'cm'
             ]);
             $observation->post();
         }
