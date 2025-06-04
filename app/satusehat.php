@@ -8,8 +8,8 @@
     {
         $clientId     = env('CLIENTID_PROD');
         $clientSecret = env('CLIENTSECRET_PROD');
-        $url          = env('SATUSEHAT_BASE_URL_PROD') . '/accesstoken?grant_type=client_credentials';
-        $url          = $url.env('SATUSEHAT_AUTH_ENDPOINT');
+        $env          = env('SATUSEHAT_BASE_URL_PROD').env('SATUSEHAT_AUTH_ENDPOINT');
+        $url          = $env . '/accesstoken?grant_type=client_credentials';
 
         $data    = [
             'client_id'     => $clientId,
