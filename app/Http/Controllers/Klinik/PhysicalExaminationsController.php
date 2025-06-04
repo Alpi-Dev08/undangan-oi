@@ -172,6 +172,7 @@ class PhysicalExaminationsController extends Controller
          */
         private function createBaseObservation($encounter, $participant, $examination)
         {
+            $date = date('Y-m-d\TH:i:sP');
             $observation = new Observations();
             $observation->setStatus('final');
             $observation->addCategory('exam');
@@ -179,6 +180,8 @@ class PhysicalExaminationsController extends Controller
                 str_replace('Patient/', '', $encounter->subject->reference),
                 $encounter->subject->display
             );
+            $observation->addEffectiveDateTime($date);
+            $observation->addIssuedDateTime($date);
             $observation->setPerformer(
                 str_replace('Practitioner/', '', $participant->reference),
                 $participant->display

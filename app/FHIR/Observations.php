@@ -94,4 +94,29 @@
 
             return $this;
         }
+
+
+        /**
+         * Adds effective date time to the observation
+         *
+         * @param string $dateTime The effective date time in ISO 8601 format
+         * @return Observation The updated observation object
+         */
+        public function addEffectiveDateTime(string $dateTime): Observation
+        {
+            $this->observation['effectiveDateTime'] = $dateTime;
+            return $this;
+        }
+
+        /**
+         * Adds issued date time to the observation
+         *
+         * @param string $dateTime The issued date time in ISO 8601 format
+         * @return Observation The updated observation object
+         */
+        public function addIssuedDateTime(string $dateTime): Observation
+        {
+            $this->observation['issued'] = $dateTime;
+            return $this;
+        }
     }
