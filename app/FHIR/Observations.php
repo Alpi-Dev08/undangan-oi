@@ -18,7 +18,9 @@
             '10197-2' => 'Physical findings of Eye Narrative',
             '10195-6' => 'Physical findings of Ear Narrative',
             '10203-8' => 'Physical findings of Nose Narrative',
-            "32436-8" => "Physical findings of Hair"
+            '32436-8' => 'Physical findings of Hair',
+            '32446-7' => 'Physical findings of Lip',
+            '85910-8' => 'Physical findings of Teeth and gum Narrative',
         ];
 
         // Define mapping of observation codes to their display names
