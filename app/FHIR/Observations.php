@@ -23,7 +23,8 @@
             '85910-8' => 'Physical findings of Teeth and gum Narrative',
             '11411-6' => 'Physical findings of Neck Narrative',
             '56867-5' => 'Physical findings of Throat Narrative',
-            '11391-0' => 'Physical findings of Chest Narrative'
+            '11391-0' => 'Physical findings of Chest Narrative',
+            '10193-1' => 'Physical findings of Breasts Narrative',
         ];
 
         // Define mapping of observation codes to their display names
