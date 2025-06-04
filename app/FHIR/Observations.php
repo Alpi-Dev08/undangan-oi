@@ -79,6 +79,13 @@ class Observations extends Observation{
         return $this;
     }
 
+    public function addStringComponent(string $observationComponent) : Observation
+    {
+        $this->observation['valueString'] = $observationComponent;
+
+        return $this;
+    }
+
     /**
      * Adds a category to the observation.
      *
