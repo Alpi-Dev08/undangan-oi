@@ -178,6 +178,9 @@ class PhysicalExaminationsController extends Controller
             $this->processThighObservation($physical, $observation);
             $this->processCalfObservation($physical, $observation);
             $this->processPalatalObservation($physical, $observation);
+            $this->processTonsilObservation($physical, $observation);
+            $this->processButtocksObservation($physical, $observation);
+            $this->processHandObservation($physical, $observation);
         }
 
         /**
@@ -425,6 +428,42 @@ class PhysicalExaminationsController extends Controller
             $observation->addCode('10201-2');
             $observation->addStringComponent($physical->palatal);
             $observation->addBodySite('72914001');
+            $observation->post();
+        }
+
+        private function processTonsilObservation(PhysicalExamination $physical, $observation)
+        {
+            if (!$physical->tonsil) {
+                return;
+            }
+
+            $observation->addCode('10201-2');
+            $observation->addStringComponent($physical->tonsil);
+            $observation->addBodySite('91636008');
+            $observation->post();
+        }
+
+        private function processButtocksObservation(PhysicalExamination $physical, $observation)
+        {
+            if (!$physical->buttocks) {
+                return;
+            }
+
+            $observation->addCode('11388-6');
+            $observation->addStringComponent($physical->buttocks);
+            $observation->addBodySite('53505006');
+            $observation->post();
+        }
+
+        private function processHandObservation(PhysicalExamination $physical, $observation)
+        {
+            if (!$physical->hand) {
+                return;
+            }
+
+            $observation->addCode('11404-1');
+            $observation->addStringComponent($physical->hand);
+            $observation->addBodySite('7569003');
             $observation->post();
         }
 }

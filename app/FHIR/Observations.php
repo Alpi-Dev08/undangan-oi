@@ -32,12 +32,17 @@
             '11398-5' => 'Physical findings of Forearm Narrative',
             '11415-7' => 'Physical findings of Wrist Narrative',
             '11414-0' => 'Physical findings of Thigh Narrative',
-            '11389-4' => 'Physical findings of Calf Narrative'
+            '11389-4' => 'Physical findings of Calf Narrative',
+            '10201-2' => 'Physical findings of Mouth and Throat and Teeth Narrative',
+            '11388-6' => 'Physical findings of Buttocks Narrative',
+            '11404-1' => 'Physical findings of Hand Narrative',
         ];
 
         private const SNOMED_CODES = [
             '7569003' => 'Finger structure',
-            '72914001' => 'Palatal structure'
+            '72914001' => 'Palatal structure',
+            '91636008' => 'Bilateral palatine tonsils',
+            '53505006' => 'Anal structure'
         ];
 
         // Define mapping of observation codes to their display names
