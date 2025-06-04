@@ -40,6 +40,10 @@ class Observations extends Observation{
                 $display = 'Body height';
                 $code = '8302-2';
                 break;
+            case '29463-7':
+                $display = 'Body weight';
+                $code = '29463-7';
+                break;
 
         }
 

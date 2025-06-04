@@ -112,6 +112,7 @@
             $this->processTemperature($vit, $observation);
             $this->processRespiratoryRate($vit, $observation);
             $this->processBodyHeight($vit, $observation);
+            $this->processBodyWeight($vit, $observation);
         }
 
         /**
@@ -181,16 +182,33 @@
          */
         private function processBodyHeight(VitalityExamination $vit, $observation)
         {
-            if (!$vit->body_height) {
+            if (!$vit->height) {
                 return;
             }
 
+            // Process body height in cm
             $observation->addCode('8302-2');
             $observation->addComponent([
-                'value'  => (float) filter_var($vit->body_height, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
+                'value'  => (float) filter_var($vit->height, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
                 'unit'   => 'cm',
                 'system' => 'http://unitsofmeasure.org',
                 'code'   => 'cm'
+            ]);
+            $observation->post();
+        }
+
+        private function processBodyWeight(VitalityExamination $vit, $observation){
+            if (!$vit->weight) {
+                return;
+            }
+
+            // Process body height in cm
+            $observation->addCode('8302-2');
+            $observation->addComponent([
+                'value'  => (float) filter_var($vit->weight, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
+                'unit'   => 'kg',
+                'system' => 'http://unitsofmeasure.org',
+                'code'   => 'kg'
             ]);
             $observation->post();
         }
