@@ -1,127 +1,94 @@
 <?php
-namespace App\FHIR;
 
-use Satusehat\Integration\FHIR\Observation;
+    namespace App\FHIR;
 
-class Observations extends Observation{
-    private array $observation = ['resourceType' => 'Observation'];
-    public function addCode(string $observationCode): Observation
+    use Satusehat\Integration\FHIR\Observation;
+
+    class Observations extends Observation
     {
-        $code = [
-            'system' => 'http://loinc.org',
-            'code' => '',
-            'display' => '',
+        private const OBSERVATION_CODES = [
+            '8480-6'  => 'Systolic blood pressure',
+            '8462-4'  => 'Diastolic blood pressure',
+            '8867-4'  => 'Heart rate',
+            '8310-5'  => 'Body temperature',
+            '9279-1'  => 'Respiratory rate',
+            '8302-2'  => 'Body height',
+            '29463-7' => 'Body weight',
+            '10199-8' => 'Physical findings of Head Narrative',
+            '10197-2' => 'Physical findings of Eye Narrative',
+            '10195-6' => 'Physical findings of Ear Narrative',
+            '10203-8' => 'Physical findings of Nose Narrative'
         ];
 
-        $display = '';
-        $code = '';
-        switch ($observationCode) {
-            case '8480-6':
-                $display = 'Systolic blood pressure';
-                $code = '8480-6';
-                break;
-            case '8462-4':
-                $display = 'Diastolic blood pressure';
-                $code = '8462-4';
-                break;
-            case '8867-4':
-                $display = 'Heart rate';
-                $code = '8867-4';
-                break;
-            case '8310-5':
-                $display = 'Body temperature';
-                $code = '8310-5';
-                break;
-            case '9279-1':
-                $display = 'Respiratory rate';
-                $code = '9279-1';
-                break;
-            case '8302-2':
-                $display = 'Body height';
-                $code = '8302-2';
-                break;
-            case '29463-7':
-                $display = 'Body weight';
-                $code = '29463-7';
-                break;
-            case '10199-8':
-                $display = 'Physical findings of Head Narrative';
-                $code = '10199-8';
-                break;
-            case '10197-2':
-                $display = 'Physical findings of Eye Narrative';
-                $code = '10197-2';
-                break;
-            case '10195-6':
-                $display = 'Physical findings of Ear Narrative';
-                $code = '10195-6';
-                break;
-            case '10203-8':
-                $display = 'Physical findings of Nose Narrative';
-                $code = '10203-8';
-                break;
+        // Define mapping of observation codes to their display names
+        private array $observation = ['resourceType' => 'Observation'];
 
+        public function addCode(string $observationCode)
+        : Observation
+        {
+            $display                   = self::OBSERVATION_CODES[$observationCode] ?? '';
+            $this->observation['code'] = [
+                'coding' => [
+                    [
+                        'system'  => 'http://loinc.org',
+                        'code'    => $observationCode,
+                        'display' => $display,
+                    ],
+                ],
+            ];
+            return $this;
         }
 
-        $this->observation['code'] = [
-            'coding' => [
-                [
-                    'system' => 'http://loinc.org',
-                    'code' => $code,
-                    'display' => $display,
-                ],
-            ],
-        ];
+        public function addComponent(array $observationComponent)
+        : Observation
+        {
+            $this->observation['valueQuantity'] = $observationComponent;
 
-        return $this;
-    }
-
-    public function addComponent(array $observationComponent) : Observation
-    {
-        $this->observation['valueQuantity'] = $observationComponent;
-
-        return $this;
-    }
-
-    public function addStringComponent(string $observationComponent) : Observation
-    {
-        $this->observation['valueString'] = $observationComponent;
-
-        return $this;
-    }
-
-    /**
-     * Adds a category to the observation.
-     *
-     * @param  string  $category  the code of the category
-     * @return Observation The updated observation object.
-     */
-    public function addCategory(string $category): Observation
-    {
-        $display = '';
-        $code = '';
-        switch ($category) {
-            case 'vital-signs':
-                $display = 'Vital Signs';
-                $code = 'vital-signs';
-                break;
-            case 'exam':
-                $display = 'Exam';
-                $code = 'exam';
-                break;
+            return $this;
         }
 
-        // NOTE: we currently only support 'vital-signs'
-        $this->observation['category'][] = [
-            'coding' => [
-                [
-                    'system' => 'http://terminology.hl7.org/CodeSystem/observation-category',
-                    'code' => $code,
-                    'display' => $display,
-                ],
-            ],
-        ];
+        public function addStringComponent(string $observationComponent)
+        : Observation
+        {
+            $this->observation['valueString'] = $observationComponent;
 
-        return $this;
+            return $this;
+        }
+
+        /**
+         * Adds a category to the observation.
+         *
+         * @param string $category the code of the category
+         *
+         * @return Observation The updated observation object.
+         */
+        public function addCategory(string $category)
+        : Observation
+        {
+            $display = '';
+            $code    = '';
+            switch ($category) {
+                case 'vital-signs':
+                    $display = 'Vital Signs';
+                    $code    = 'vital-signs';
+                    break;
+                case 'exam':
+                    $display = 'Exam';
+                    $code    = 'exam';
+                    break;
+            }
+
+            // NOTE: we currently only support 'vital-signs'
+            $this->observation['category'][] = [
+                'coding' => [
+                    [
+                        'system'  => 'http://terminology.hl7.org/CodeSystem/observation-category',
+                        'code'    => $code,
+                        'display' => $display,
+                    ],
+                ],
+            ];
+
+            return $this;
+        }
     }
-}
