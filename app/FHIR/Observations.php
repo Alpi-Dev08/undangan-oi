@@ -34,6 +34,12 @@
             '11414-0' => 'Physical findings of Thigh Narrative',
             '11389-4' => 'Physical findings of Calf Narrative'
         ];
+
+        private const SNOMED_CODES = [
+            '7569003' => 'Finger structure',
+            '72914001' => 'Palatal structure'
+        ];
+
         // Define mapping of observation codes to their display names
         private array $observation = ['resourceType' => 'Observation'];
 
@@ -46,6 +52,22 @@
                     [
                         'system'  => 'http://loinc.org',
                         'code'    => $observationCode,
+                        'display' => $display,
+                    ],
+                ],
+            ];
+            return $this;
+        }
+
+        public function addBodySite(string $snomedCode)
+        : Observation
+        {
+            $display                   = self::SNOMED_CODES[$snomedCode] ?? '';
+            $this->observation['bodySite'] = [
+                'coding' => [
+                    [
+                        'system'  => 'http://snomed.info/sct',
+                        'code'    => $snomedCode,
                         'display' => $display,
                     ],
                 ],
