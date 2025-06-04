@@ -27,7 +27,8 @@
             '10193-1' => 'Physical findings of Breasts Narrative',
             '10192-3' => 'Physical findings of Back Narrative',
             '10191-5' => 'Physical findings of Abdomen Narrative',
-            '11400-9' => 'Physical findings of Genitala Narrative'
+            '11400-9' => 'Physical findings of Genitala Narrative',
+            '11386-0' => 'Physical findings of Upper Arm Narrative',
         ];
 
         // Define mapping of observation codes to their display names
