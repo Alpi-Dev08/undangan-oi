@@ -29,8 +29,8 @@
             '10191-5' => 'Physical findings of Abdomen Narrative',
             '11400-9' => 'Physical findings of Genitala Narrative',
             '11386-0' => 'Physical findings of Upper Arm Narrative',
+            '11398-5' => 'Physical findings of Forearm Narrative',
         ];
-
         // Define mapping of observation codes to their display names
         private array $observation = ['resourceType' => 'Observation'];
 
