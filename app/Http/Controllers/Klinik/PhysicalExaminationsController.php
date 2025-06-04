@@ -162,6 +162,7 @@ class PhysicalExaminationsController extends Controller
             $this->processeyeObservation($physical, $observation);
             $this->processEarObservation($physical, $observation);
             $this->processNoseObservation($physical, $observation);
+            $this->processHairObservation($physical, $observation);
         }
 
         /**
@@ -229,6 +230,17 @@ class PhysicalExaminationsController extends Controller
 
             $observation->addCode('10203-8');
             $observation->addStringComponent($physical->nose);
+            $observation->post();
+        }
+
+        private function processHairObservation(PhysicalExamination $physical, $observation)
+        {
+            if (!$physical->hair) {
+                return;
+            }
+
+            $observation->addCode('32436-8');
+            $observation->addStringComponent($physical->hair);
             $observation->post();
         }
 }
