@@ -9,8 +9,10 @@
     use App\Http\Requests\Klinik\UpdatePhysicalRequest;
     use App\Models\Klinik\PhysicalCategory;
     use Doctrine\DBAL\Driver\PDO\Exception;
+    use App\Models\Klinik\PhysicalExamination;
+    use App\Models\Klinik\Examination;
     use Illuminate\Support\Facades\Auth;
-
+    use App\FHIR\Observations;
 
     class PhysicalsController extends Controller
     {
@@ -71,7 +73,10 @@
             // Process Data
             if($validated){
                 try{
-                    Physical::create($validated);
+                    $phi = Physical::create($validated);
+                    if ($phi) {
+                        $this->setObservation($phi);
+                    }
                 }catch(Exception $e){
                     report($e);
                     return false;
@@ -164,5 +169,51 @@
 
             session()->flash('success', 'Physical has been deleted !!');
             return redirect()->route('physicals.index');
+        }
+
+        private function setObservation(PhysicalExamination $physical)
+        {
+            $examination = Examination::where('id', $physical->examination_id)->first();
+            $_encounter  = json_decode($examination->encounter);
+            $participant = $_encounter->participant[0]->individual;
+
+            $observation = $this->createBaseObservation($_encounter, $participant, $examination);
+
+            $this->processHeadObservation($physical, $observation);
+        }
+
+        /**
+         * Create base observation object with common properties
+         */
+        private function createBaseObservation($encounter, $participant, $examination)
+        {
+            $observation = new Observations();
+            $observation->setStatus('final');
+            $observation->addCategory('exam');
+            $observation->setSubject(
+                str_replace('Patient/', '', $encounter->subject->reference),
+                $encounter->subject->display
+            );
+            $observation->setPerformer(
+                str_replace('Practitioner/', '', $participant->reference),
+                $participant->display
+            );
+            $observation->setEncounter($examination->encounter_id);
+
+            return $observation;
+        }
+
+        /**
+         * Process heart rate data
+         */
+        private function processHeadObservation(PhysicalExamination $physical, $observation)
+        {
+            if (!$physical->head) {
+                return;
+            }
+
+            $observation->addCode('10199-8');
+            $observation->addStringComponent($physical->head);
+            $observation->post();
         }
     }
