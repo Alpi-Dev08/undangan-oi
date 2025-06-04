@@ -59,4 +59,11 @@ class Observations extends Observation{
 
         return $this;
     }
+
+    public function addComponent(array $observationComponent) : Observation
+    {
+        $this->observation['valueQuantity'] = $observationComponent;
+
+        return $this;
+    }
 }
