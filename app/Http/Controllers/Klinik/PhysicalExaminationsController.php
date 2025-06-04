@@ -171,6 +171,7 @@ class PhysicalExaminationsController extends Controller
             $this->processBreastsObservation($physical, $observation);
             $this->processBackObservation($physical, $observation);
             $this->processAbdomenObservation($physical, $observation);
+            $this->processGenitaliaObservation($physical, $observation);
         }
 
         /**
@@ -340,6 +341,17 @@ class PhysicalExaminationsController extends Controller
 
             $observation->addCode('10191-5');
             $observation->addStringComponent($physical->abdomen);
+            $observation->post();
+        }
+
+        private function processGenitaliaObservation(PhysicalExamination $physical, $observation)
+        {
+            if (!$physical->genitalia) {
+                return;
+            }
+
+            $observation->addCode('11400-9');
+            $observation->addStringComponent($physical->genitalia);
             $observation->post();
         }
 }
