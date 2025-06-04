@@ -165,22 +165,25 @@ class PhysicalExaminationsController extends Controller
             $this->processHairObservation($physical, $observation);
             $this->processLipObservation($physical, $observation);
             $this->processTeethObservation($physical, $observation);
+            $this->processTongueObservation($physical, $observation);
+            $this->processPalatalObservation($physical, $observation);
             $this->processNeckObservation($physical, $observation);
             $this->processThroatObservation($physical, $observation);
+            $this->processTonsilObservation($physical, $observation);
             $this->processChestObservation($physical, $observation);
             $this->processBreastsObservation($physical, $observation);
             $this->processBackObservation($physical, $observation);
             $this->processAbdomenObservation($physical, $observation);
             $this->processGenitaliaObservation($physical, $observation);
+            $this->processButtocksObservation($physical, $observation);
             $this->processUpperArmObservation($physical, $observation);
             $this->processForearmObservation($physical, $observation);
+            $this->processHandObservation($physical, $observation);
+            $this->processNailObservation($physical, $observation);
             $this->processWristObservation($physical, $observation);
             $this->processThighObservation($physical, $observation);
             $this->processCalfObservation($physical, $observation);
-            $this->processPalatalObservation($physical, $observation);
-            $this->processTonsilObservation($physical, $observation);
-            $this->processButtocksObservation($physical, $observation);
-            $this->processHandObservation($physical, $observation);
+            $this->processFootObservation($physical, $observation);
         }
 
         /**
@@ -284,6 +287,17 @@ class PhysicalExaminationsController extends Controller
 
             $observation->addCode('85910-8');
             $observation->addStringComponent($physical->teeth);
+            $observation->post();
+        }
+
+        private function processTongueObservation(PhysicalExamination $physical, $observation)
+        {
+            if (!$physical->tongue) {
+                return;
+            }
+
+            $observation->addCode('32483-0');
+            $observation->addStringComponent($physical->tongue);
             $observation->post();
         }
 
@@ -466,5 +480,28 @@ class PhysicalExaminationsController extends Controller
             $observation->addBodySite('7569003');
             $observation->post();
         }
-}
 
+        private function processNailObservation(PhysicalExamination $physical, $observation)
+        {
+            if (!$physical->nail) {
+                return;
+            }
+
+            $observation->addCode('32456-6');
+            $observation->addStringComponent($physical->nail);
+            $observation->addBodySite('770812000');
+            $observation->post();
+        }
+
+        private function processFootObservation(PhysicalExamination $physical, $observation)
+        {
+            if (!$physical->foot) {
+                return;
+            }
+
+            $observation->addCode('11397-7');
+            $observation->addStringComponent($physical->foot);
+            $observation->addBodySite('29707007');
+            $observation->post();
+        }
+}
