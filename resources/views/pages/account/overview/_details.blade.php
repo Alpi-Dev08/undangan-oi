@@ -27,7 +27,11 @@
                 <div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
                     <div class="d-flex flex-column">
                         <div class="d-flex align-items-center mb-2">
-                            <span class="text-gray-800 fs-2 fw-bolder me-1">{{ ($info->title_prefix !='' ? $info->title_prefix.'. ' : '').$user->name.($info->title_suffix!='' ? ', '.$info->title_suffix : '') }}</span>
+                            <span class="text-gray-800 fs-2 fw-bolder me-1">{{
+                                ($info && $info->title_prefix ? $info->title_prefix.'. ' : '') .
+                                $user->name .
+                                ($info && $info->title_suffix ? ', '.$info->title_suffix : '')
+                            }}</span>
                         </div>
                         <div class="d-flex flex-column fw-bold fs-6 mb-4 pe-2">
                             @if($user->hasRole('patient'))

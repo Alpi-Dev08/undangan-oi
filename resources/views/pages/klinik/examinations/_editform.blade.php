@@ -527,7 +527,7 @@
                                         <tbody>
                                         <tr>
                                             <td>Dokter Pelaksana Tindakan</td>
-                                            <td>: {{ (!in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.(!in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}</b>
+                                            <td>: {{ $examination->health_profesional->user->name }}{{ isset($examination->health_profesional->user->info) && !in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? ', '.$examination->health_profesional->user->info->title_prefix.'.' : '' }}{{ isset($examination->health_profesional->user->info) && !in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '' }}</b>
                                                 <br>
                                                 <b>{{ $examination->health_profesional->sip_number ? 'SIP.'.$examination->health_profesional->sip_number : '' }}
                                             </td>
