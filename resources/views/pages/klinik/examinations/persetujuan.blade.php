@@ -131,7 +131,7 @@
         <tbody>
             <tr>
                 <td style="width:20%;">Nama</td>
-                <td style="width:80%;">: <b>{{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</b></td>
+                <td style="width:80%;">: <b>{{ $user->name }}{{ isset($user->info) ? (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') : '' }}</b></td>
             </tr>
             <tr>
                 <td style="width:20%;">Tempat, Tanggal Lahir</td>
@@ -201,7 +201,13 @@
             <tr>
                 <td colspan="2" style="text-align: center">
                     <br>
-                    <b>{{ (!in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.(!in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}</b><br>
+                    <b>{{
+                        $examination->health_profesional->user->name .
+                        (isset($examination->health_profesional->user->info) && !in_array($examination->health_profesional->user->info->title_prefix,['','-']) ?
+                            $examination->health_profesional->user->info->title_prefix.'. ' : '') .
+                        (isset($examination->health_profesional->user->info) && !in_array($examination->health_profesional->user->info->title_suffix,['','-']) ?
+                            ', '.$examination->health_profesional->user->info->title_suffix : '')
+                    }}</b><br>
                     <b>{{ $examination->health_profesional->sip_number ? 'SIP.'.$examination->health_profesional->sip_number : '' }}</b>
                 </td>
                 <td colspan="2" style="text-align: center">
@@ -211,7 +217,7 @@
                         <p>No signature available</p>
                     @endif
                     <br>
-                    <b>{{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</b><br>
+                    <b>{{ $user->name }}{{ isset($user->info) ? (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') : '' }}</b><br>
                 </td>
 
             </tr>
