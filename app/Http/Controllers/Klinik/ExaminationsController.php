@@ -303,62 +303,240 @@
             ]));
         }
 
+        /**
+         * Menyimpan layanan pemeriksaan dan membuat detail transaksi
+         *
+         * @param Request $request
+         * @return \Illuminate\Http\RedirectResponse
+         * @throws \Exception
+         */
         public function storeservices(Request $request)
         {
-            $examination = Examination::find($request->examination_id);
-            $transaction = Transaction::where('examination_id', $examination->id)->first();
+            // Log aktivitas awal
+            \Log::info('Memulai proses penyimpanan layanan pemeriksaan', [
+                'examination_id' => $request->examination_id,
+                'user_id' => Auth::id()
+            ]);
 
-            if ($examination->is_appointment == 1) {
-                $examination->examination_date   = date('Y-m-d H:i:s');
-                $examination->appointment_status = 1;
-                $examination->save();
-            }
 
-            $total = 0;
 
-            if ($examination->package_id != null) {
-                $package = Package::find($examination->package_id);
-                TransactionDetail::create([
+            // Validasi input request
+            $validatedData = $request->validate([
+                'examination_id' => 'required|exists:examinations,id',
+                'service_id' => 'nullable|array',
+                'service_id.*' => 'exists:services,id',
+                'payment' => 'nullable|boolean'
+            ]);
+
+
+            try {
+                // Mulai database transaction
+                \DB::beginTransaction();
+
+                // Ambil data examination dengan relasi yang diperlukan
+                $examination = Examination::find($validatedData['examination_id']);
+                // Ambil atau buat transaksi
+                $transaction = Transaction::firstOrCreate(
+                    ['examination_id' => $examination->id],
+                    [
+                        'amount' => 0,
+                        'status' => 'pending',
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]
+                );
+
+
+
+                // Update status appointment jika diperlukan
+                $this->updateAppointmentStatus($examination);
+
+                // Proses layanan dan hitung total
+                $total = $this->processServices($examination, $transaction, $validatedData);
+
+                // Update total transaksi
+                $transaction->update(['amount' => $total]);
+
+                // Commit transaction
+                \DB::commit();
+
+                // Log sukses
+                \Log::info('Berhasil menyimpan layanan pemeriksaan', [
+                    'examination_id' => $examination->id,
                     'transaction_id' => $transaction->id,
-                    'status'         => 'waiting payment',
-                    'service_id'     => $package->id,
-                    'name'           => $package->name,
-                    'price'          => $package->price,
-                    'total'          => $package->price,
+                    'total_amount' => $total
                 ]);
 
-                $total = $package->price;
-            } else {
-                TransactionDetail::where('transaction_id', $transaction->id)->delete();
-                foreach ($request->service_id as $service_id) {
-                    $service = Service::find($service_id);
 
+                // Redirect berdasarkan pilihan payment
+                return $this->handleRedirect($request, $transaction, $examination);
+
+            } catch (\Exception $e) {
+                // Rollback transaction jika terjadi error
+                \DB::rollback();
+
+                // Log error
+                \Log::error('Gagal menyimpan layanan pemeriksaan', [
+                    'examination_id' => $request->examination_id,
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+
+                // Return dengan error message
+                return redirect()->back()
+                    ->withErrors(['error' => 'Terjadi kesalahan saat menyimpan layanan pemeriksaan.'])
+                    ->withInput();
+            }
+        }
+
+        /**
+         * Update status appointment jika examination adalah appointment
+         *
+         * @param Examination $examination
+         * @return void
+         */
+        private function updateAppointmentStatus(Examination $examination): void
+        {
+            if ($examination->is_appointment == 1) {
+                $examination->update([
+                    'examination_date' => now(),
+                    'appointment_status' => 1
+                ]);
+
+                \Log::info('Status appointment berhasil diupdate', [
+                    'examination_id' => $examination->id
+                ]);
+            }
+        }
+
+        /**
+         * Proses layanan dan hitung total biaya
+         *
+         * @param Examination $examination
+         * @param Transaction $transaction
+         * @param array $validatedData
+         * @return float
+         */
+        private function processServices(Examination $examination, Transaction $transaction, array $validatedData): float
+        {
+            $total = 0;
+
+            if ($examination->package_id !== null) {
+                // Proses package
+                $total = $this->processPackageService($examination, $transaction);
+            } else {
+                // Proses individual services
+                $total = $this->processIndividualServices($transaction, $validatedData);
+            }
+
+            return $total;
+        }
+
+        /**
+         * Proses layanan package
+         *
+         * @param Examination $examination
+         * @param Transaction $transaction
+         * @return float
+         */
+        private function processPackageService(Examination $examination, Transaction $transaction): float
+        {
+            $package = Package::findOrFail($examination->package_id);
+
+            // Hapus detail transaksi yang ada
+            TransactionDetail::where('transaction_id', $transaction->id)->delete();
+
+            // Buat detail transaksi untuk package
+            TransactionDetail::create([
+                'transaction_id' => $transaction->id,
+                'status' => 'waiting payment',
+                'service_id' => $package->id,
+                'name' => $package->name,
+                'price' => $package->price,
+                'total' => $package->price,
+            ]);
+
+            \Log::info('Package service berhasil diproses', [
+                'package_id' => $package->id,
+                'package_name' => $package->name,
+                'price' => $package->price
+            ]);
+
+            return $package->price;
+        }
+
+        /**
+         * Proses layanan individual
+         *
+         * @param Transaction $transaction
+         * @param array $validatedData
+         * @return float
+         */
+        private function processIndividualServices(Transaction $transaction, array $validatedData): float
+        {
+            $total = 0;
+
+            // Hapus detail transaksi yang ada
+            TransactionDetail::where('transaction_id', $transaction->id)->delete();
+
+            if (isset($validatedData['service_id']) && is_array($validatedData['service_id'])) {
+                $services = Service::whereIn('id', $validatedData['service_id'])->get();
+
+                foreach ($services as $service) {
                     TransactionDetail::create([
                         'transaction_id' => $transaction->id,
-                        'status'         => 'waiting payment',
-                        'service_id'     => $service->id,
-                        'name'           => $service->name,
-                        'price'          => $service->price,
-                        'total'          => $service->price,
+                        'status' => 'waiting payment',
+                        'service_id' => $service->id,
+                        'name' => $service->name,
+                        'price' => $service->price,
+                        'total' => $service->price,
                     ]);
 
-                    $total = $total + $service->price;
+                    $total += $service->price;
                 }
+
+                \Log::info('Individual services berhasil diproses', [
+                    'service_count' => count($services),
+                    'total_amount' => $total
+                ]);
             }
 
-            $transaction->amount = $total;
-            $transaction->save();
+            return $total;
+        }
 
+        /**
+         * Handle redirect berdasarkan pilihan payment
+         *
+         * @param Request $request
+         * @param Transaction $transaction
+         * @param Examination $examination
+         * @return \Illuminate\Http\RedirectResponse
+         */
+        private function handleRedirect(Request $request, Transaction $transaction, Examination $examination)
+        {
             if ($request->payment == 1) {
-                return redirect()->route('transactions.edit', ['transaction' => $transaction->id]);
-            } else {
-                // get the default inner page
-                if (Auth()->user()->hasRole('admin')) {
-                    return redirect()->route('patients.index');
-                }
+                \Log::info('Redirect ke halaman payment', [
+                    'transaction_id' => $transaction->id
+                ]);
 
-                return redirect()->route('examinations.vitality', ['id' => $examination->id]);
+                return redirect()->route('transactions.edit', ['transaction' => $transaction->id])
+                    ->with('success', 'Layanan berhasil disimpan. Silakan lanjutkan ke pembayaran.');
             }
+
+            // Redirect berdasarkan role user
+            if (Auth::user()->hasRole('admin')) {
+                \Log::info('Admin redirect ke patients index');
+
+                return redirect()->route('patients.index')
+                    ->with('success', 'Layanan berhasil disimpan.');
+            }
+
+            \Log::info('Redirect ke vitality examination', [
+                'examination_id' => $examination->id
+            ]);
+
+            return redirect()->route('examinations.vitality', ['id' => $examination->id])
+                ->with('success', 'Layanan berhasil disimpan. Silakan lanjutkan ke pemeriksaan vitalitas.');
         }
 
         public function vitality(Request $request)
