@@ -344,22 +344,6 @@
                         @include('pages.klinik.examinations.partials.components.surat._sehat')
                         @include('pages.klinik.examinations.partials.components.surat._sakit')
 
-                        <div class="tab-pane fade" id="hakkewajiban" role="tabpanel">
-                            <h3 class="fs-3 fw-bold">Bukti Penyampaian Hak dan Kewajiban</h3>
-                            <form method="post" action="{{ route('suket.hakkewajiban', $examination->id) }}">
-                                @csrf
-                                <div class="row">
-                                    <button id="button_bukti_penyampaian" type="submit"
-                                        class="btn btn-bg-dark text-white" style="display:none">Download PDF</button>
-                                    <div id="signature_bukti_penyampaian" class="row text-center"
-                                        style="display: none">
-                                        {!! $qr !!}
-                                        <em class="text-center">Scan untuk melakukan Tanda Tangan</em><br>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-
 
                         <div class="tab-pane fade" id="persetujuan" role="tabpanel">
                             <h3 class="fs-3 fw-bold">Persetujuan Tindakan Medis</h3>
@@ -651,6 +635,7 @@
                             </div>
                             </form>
                         </div>
+                        @include('pages.klinik.examinations.partials.components.surat._hakkewajiban')
 
                         <div class="tab-pane fade" id="surgicalsafetychecklist" role="tabpanel">
                             <h3 class="fs-3 fw-bold"> SURGICAL SAFETY CHECKLIST </h3>
