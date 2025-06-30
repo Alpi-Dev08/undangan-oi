@@ -342,82 +342,7 @@
                             </form>
                         </div>
                         @include('pages.klinik.examinations.partials.components.surat._sehat')
-                        <div class="tab-pane fade" id="suratsakit" role="tabpanel">
-                            <form action="{{ route('suket.sakit', $examination->id) }}" method="POST">
-                                @csrf
-                                <div class="row">
-                                    <div class="mb-10">
-                                        <label for="exampleFormControlInput1"
-                                            class="required form-label">Pekerjaan</label>
-                                        <input type="text" class="form-control form-control-solid"
-                                            placeholder="Pekerjaan" name="pekerjaan"
-                                            value="{{ $info->job_title ?? '' }}" />
-                                    </div>
-                                    <div class="mb-10">
-                                        <label for="exampleFormControlInput1"
-                                            class="required form-label">Perusahaan</label>
-                                        <input type="text" class="form-control form-control-solid"
-                                            placeholder="Perusahaan" name="perusahaan"
-                                            value="{{ $info->company_name ?? '' }}" />
-                                    </div>
-                                    <hr>
-                                    <p class="col-lg-4 col-form-label fw-bold fs-6">Keterangan Informasi</p>
-                                    <!--begin::Switch-->
-                                    <div class="mb-10">
-                                        <label class="form-check form-switch form-check-custom form-check-solid">
-                                            <input class="form-check-input" type="radio" name="keterangan"
-                                                value="1" />
-                                            <span class="form-check-label fw-semibold text-muted">
-                                                Dapat Kembali Bekerja
-                                            </span>
-                                        </label>
-                                    </div>
-
-                                    <div class="mb-10">
-                                        <label class="form-check form-switch form-check-custom form-check-solid">
-                                            <input class="form-check-input" type="radio" name="keterangan"
-                                                value="2" />
-                                            <span class="form-check-label fw-semibold text-muted d-flex flex-row"
-                                                style="align-items: center;align-content: space-between;">
-                                                Disarankan untuk beristirahat selama : <input name="hari"
-                                                    type="number" class="form-control form-control-solid w-50px">
-                                                hari, dari tanggal : <input
-                                                    class="form-control form-control-solid w-300px" name="start_date"
-                                                    type="date"> s.d <input name="end_date"
-                                                    class="form-control form-control-solid w-300px" type="date">
-                                            </span>
-                                        </label>
-                                    </div>
-
-                                    <div class="mb-10">
-                                        <label class="form-check form-switch form-check-custom form-check-solid">
-                                            <input class="form-check-input" type="radio" name="keterangan"
-                                                value="3" />
-                                            <span class="form-check-label fw-semibold text-muted d-flex flex-row"
-                                                style="align-items: center;align-content: space-between;">
-                                                Perlu datang kembali ke klinik pada : <input name="back_date"
-                                                    class="form-control form-control-solid w-300px" type="date">
-                                            </span>
-                                        </label>
-                                    </div>
-
-                                    <div class="mb-10">
-                                        <label class="form-check form-switch form-check-custom form-check-solid">
-                                            <input class="form-check-input" type="radio" name="keterangan"
-                                                value="4" />
-                                            <span class="form-check-label fw-semibold text-muted">
-                                                Perlu dirujuk ke Rumah Sakit untuk mendapatkan pemeriksaan lebih lanjut
-                                            </span>
-                                        </label>
-                                    </div>
-                                    <div class="mb-10">
-                                        <label for="exampleFormControlInput1" class="form-label">Keterangan</label>
-                                        <textarea rows="3" class="form-control form-control-solid" placeholder="Keterangan" name="description"></textarea>
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-bg-dark text-white">Download PDF</button>
-                            </form>
-                        </div>
+                        @include('pages.klinik.examinations.partials.components.surat._sakit')
 
                         <div class="tab-pane fade" id="hakkewajiban" role="tabpanel">
                             <h3 class="fs-3 fw-bold">Bukti Penyampaian Hak dan Kewajiban</h3>
@@ -1536,8 +1461,8 @@
                                                     </div>
                                                     <div class="form-check form-check-custom form-check-solid mb-3">
                                                         <input class="form-check-input" type="radio"
-                                                            id="formulirPemeriksaanTidak"
-                                                            name="formulir_pemeriksaan" value="Tidak" checked />
+                                                            id="formulirPemeriksaanTidak" name="formulir_pemeriksaan"
+                                                            value="Tidak" checked />
                                                         <label class="form-check-label fw-semibold text-black"
                                                             for="formulirPemeriksaanTidak">Tidak</label>
                                                     </div>
