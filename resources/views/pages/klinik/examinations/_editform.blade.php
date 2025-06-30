@@ -341,182 +341,7 @@
                                 <button type="submit" class="btn btn-bg-dark text-white">Download PDF</button>
                             </form>
                         </div>
-                        <div class="tab-pane fade active show" id="suratsehat" role="tabpanel">
-                            <h3 class="fs-3 fw-bold">Informasi Kesehatan</h3>
-                            <div class="table-responsive">
-                                <form method="post" action="{{ route('suket.sehat', $examination->id) }}">
-                                    <table class="table" style="width:100%">
-                                        <tbody>
-                                            <tr>
-                                                <td>Tinggi Badan</td>
-                                                <td>: {{ $examination->vitality->height ?? '-' }} cm</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Berat Badan</td>
-                                                <td>: {{ $examination->vitality->weight ?? '-' }} kg</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Tekanan Darah</td>
-                                                <td>: {{ $examination->vitality->blood_pressure ?? '-' }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Nadi</td>
-                                                <td>: {{ $examination->vitality->heart_rate ?? '-' }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Suhu Tubuh</td>
-                                                <td>: {{ $examination->vitality->temperature ?? '-' }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><label for="gigi">Gigi</label></td>
-                                                <td class="d-flex">:&nbsp;
-                                                    <div
-                                                        class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
-                                                        <select
-                                                            class="form-select form-select-solid form-select-lg fw-bold"
-                                                            name="gigi" id="gigi">
-                                                            <option value="Normal">Normal</option>
-                                                            <option value="Tidak Normal">Tidak Normal</option>
-                                                        </select>
-                                                        <input type="text" name="keterangan_gigi"
-                                                            class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0"
-                                                            placeholder="Keterangan">
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><label for="keadaan_umum">Keadaan Umum</label></td>
-                                                <td class="d-flex">:&nbsp;
-                                                    <div
-                                                        class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
-                                                        <select
-                                                            class="form-select form-select-solid form-select-lg fw-bold"
-                                                            name="keadaan_umum" id="keadaan_umum">
-                                                            <option value="Normal">Normal</option>
-                                                            <option value="Tidak Normal">Tidak Normal</option>
-                                                        </select>
-                                                        <input type="text" name="keterangan_keadaan_umum"
-                                                            class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0"
-                                                            placeholder="Keterangan">
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><label for="mata">Mata</label></td>
-                                                <td class="d-flex">:&nbsp;
-                                                    <div
-                                                        class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
-                                                        <select
-                                                            class="form-select form-select-solid form-select-lg fw-bold"
-                                                            name="mata" id="mata">
-                                                            <option value="Normal">Normal</option>
-                                                            <option value="Tidak Normal">Tidak Normal</option>
-                                                        </select>
-                                                        <input type="text" name="keterangan_mata"
-                                                            class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0"
-                                                            placeholder="Keterangan">
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><label for="tht">THT</label></td>
-                                                <td class="d-flex">:&nbsp;
-                                                    <div
-                                                        class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
-                                                        <select
-                                                            class="form-select form-select-solid form-select-lg fw-bold"
-                                                            name="tht" id="tht">
-                                                            <option value="Normal">Normal</option>
-                                                            <option value="Tidak Normal">Tidak Normal</option>
-                                                        </select>
-                                                        <input type="text" name="keterangan_tht"
-                                                            class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0"
-                                                            placeholder="Keterangan">
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><label for="mulut">Mulut</label></td>
-                                                <td class="d-flex">:&nbsp;
-                                                    <div
-                                                        class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
-                                                        <select
-                                                            class="form-select form-select-solid form-select-lg fw-bold"
-                                                            name="mulut" id="mulut">
-                                                            <option value="Normal">Normal</option>
-                                                            <option value="Tidak Normal">Tidak Normal</option>
-                                                        </select>
-                                                        <input type="text" name="keterangan_mulut"
-                                                            class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0"
-                                                            placeholder="Keterangan">
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><label for="dada">Dada (Paru & Jantung)</label></td>
-                                                <td class="d-flex">:&nbsp;
-                                                    <div
-                                                        class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
-                                                        <select
-                                                            class="form-select form-select-solid form-select-lg fw-bold"
-                                                            name="dada" id="dada">
-                                                            <option value="Normal">Normal</option>
-                                                            <option value="Tidak Normal">Tidak Normal</option>
-                                                        </select>
-                                                        <input type="text" name="keterangan_dada"
-                                                            class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0"
-                                                            placeholder="Keterangan">
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><label for="perut">Perut</label></td>
-                                                <td class="d-flex">:&nbsp;
-                                                    <div
-                                                        class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
-                                                        <select
-                                                            class="form-select form-select-solid form-select-lg fw-bold"
-                                                            name="perut" id="perut">
-                                                            <option value="Normal">Normal</option>
-                                                            <option value="Tidak Normal">Tidak Normal</option>
-                                                        </select>
-                                                        <input type="text" name="keterangan_perut"
-                                                            class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0"
-                                                            placeholder="Keterangan">
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><label for="extremitas">Extremitas</label></td>
-                                                <td class="d-flex">:&nbsp;
-                                                    <div
-                                                        class="d-flex gap-3 flex-row flex-row-fluid justify-content-between w-100">
-                                                        <select
-                                                            class="form-select form-select-solid form-select-lg fw-bold"
-                                                            name="extremitas" id="extremitas">
-                                                            <option value="Normal">Normal</option>
-                                                            <option value="Tidak Normal">Tidak Normal</option>
-                                                        </select>
-                                                        <input type="text" name="keterangan_extremitas"
-                                                            class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0"
-                                                            placeholder="Keterangan">
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                            </div>
-
-                            @csrf
-                            <div class="row">
-                                <div class="mb-10">
-                                    <label for="exampleFormControlInput1" class="form-label">Keterangan</label>
-                                    <textarea rows="3" class="form-control form-control-solid" placeholder="Keterangan" name="description"></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-bg-dark text-white">Download PDF</button>
-                            </div>
-                            </form>
-                        </div>
+                        @include('pages.klinik.examinations.partials.components.surat._sehat')
                         <div class="tab-pane fade" id="suratsakit" role="tabpanel">
                             <form action="{{ route('suket.sakit', $examination->id) }}" method="POST">
                                 @csrf
@@ -1501,8 +1326,7 @@
                                                         <label class="form-check-label fw-semibold text-black"
                                                             for="peralatanKesiapanTidak">Tidak</label>
                                                     </div>
-                                                    <div id="keteranganField"
-                                                        style="display:none; margin-top: 10px;">
+                                                    <div id="keteranganField" style="display:none; margin-top: 10px;">
                                                         <label for="keterangan"
                                                             class="form-label fw-semibold text-black">Keterangan:</label>
                                                         <textarea class="form-control" id="keterangan" name="keterangan" rows="3"></textarea>
@@ -1550,8 +1374,7 @@
                                             </tr>
                                             <tr>
                                                 <td>Jam diberikan</td>
-                                                <td class="d-flex">:&nbsp;<input type="text"
-                                                        name="jam_diberikan"
+                                                <td class="d-flex">:&nbsp;<input type="text" name="jam_diberikan"
                                                         class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0"
                                                         placeholder="Jam">
                                                 </td>
@@ -1587,8 +1410,7 @@
                                             </tr>
                                             <tr>
                                                 <td>Nama Tindakan</td>
-                                                <td class="d-flex">:&nbsp;<input type="text"
-                                                        name="nama_tindakan"
+                                                <td class="d-flex">:&nbsp;<input type="text" name="nama_tindakan"
                                                         class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0"
                                                         placeholder="Nama Tindakan">
                                                 </td>
