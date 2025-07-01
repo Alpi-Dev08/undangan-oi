@@ -2,506 +2,894 @@
 
 namespace App\Http\Controllers\Klinik;
 
+use App\FHIR\Observations;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Klinik\StorePhysicalExaminationRequest;
 use App\Http\Requests\Klinik\UpdatePhysicalExaminationRequest;
 use App\Models\Klinik\Examination;
 use App\Models\Klinik\PhysicalExamination;
-use Doctrine\DBAL\Driver\PDO\Exception;
+use Exception;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\FHIR\Observations;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
+/**
+ * Class PhysicalExaminationsController
+ *
+ * Handles CRUD operations for Physical Examinations
+ *
+ * @package App\Http\Controllers\Klinik
+ */
 class PhysicalExaminationsController extends Controller
 {
-    public $user;
+    /**
+     * Current authenticated user
+     */
+    private $user;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->middleware(function ($request, $next) {
-            $this->user = Auth::guard('web')->user();
+            $this->user = Auth::user();
             return $next($request);
         });
     }
+
     /**
-     * Display a listing of the resource.
+     * Display a listing of the physical examinations
      *
-     * @return \Illuminate\Http\Response
+     * @return View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function index()
+    public function index(): View
     {
-        //
+        Gate::authorize('klinik.view');
+
+        Log::info('Physical examinations index accessed', [
+            'user_id' => $this->user->id,
+            'user_email' => $this->user->email
+        ]);
+
+        return view('pages.klinik.physicalexaminations.index');
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new physical examination
      *
-     * @return \Illuminate\Http\Response
+     * @return View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function create()
+    public function create(): View
     {
-        //
+        Gate::authorize('klinik.create');
+
+        Log::info('Physical examination create form accessed', [
+            'user_id' => $this->user->id
+        ]);
+
+        return view('pages.klinik.physicalexaminations.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created physical examination in storage
      *
-     * @param  \App\Http\Requests\Klinik\StorePhysicalExaminationRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param StorePhysicalExaminationRequest $request
+     * @return RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function store(StorePhysicalExaminationRequest $request)
+    public function store(StorePhysicalExaminationRequest $request): RedirectResponse
     {
-        if (is_null($this->user) || !$this->user->can('klinik.create')) {
-            abort(403, 'Sorry !! You are Unauthorized to create any master data !');
-        }
-        $request->physical_value = json_encode($request->physical);
+        Gate::authorize('klinik.create');
 
-        $validated = $request->validated();
+        DB::beginTransaction();
 
-        // Process Data
-        if($validated){
-            try{
-                $validated['physical_value'] = json_encode($request->physical);
-                $physical = PhysicalExamination::create($validated);
+        try {
+            // Validate examination exists
+            $examination = Examination::findOrFail($request->examination_id);
 
-                if ($physical) {
-                    $this->setObservation($physical);
-                }
-            }catch(Exception $e){
-                report($e);
-                return false;
+            // Prepare validated data
+            $validated = $request->validated();
+            $validated['physical_value'] = json_encode($request->physical ?? []);
+
+            // Create physical examination
+            $physicalExamination = PhysicalExamination::create($validated);
+
+            // Set FHIR observation if physical examination created successfully
+            if ($physicalExamination) {
+                $this->setObservation($physicalExamination);
             }
 
-            if($request->selesai){
-                $examination = Examination::find($request->examination_id);
-                $examination->status = "waiting payment";
-                $examination->save();
+            // Handle examination completion
+            if ($request->selesai) {
+                $examination->update(['status' => 'waiting payment']);
 
-                return redirect()->route('transactions.create', ['id' => $examination->id])->with('success', 'Physical Examination successfully created');
+                DB::commit();
+
+                Log::info('Physical examination completed and examination status updated', [
+                    'user_id' => $this->user->id,
+                    'physical_examination_id' => $physicalExamination->id,
+                    'examination_id' => $examination->id,
+                    'new_status' => 'waiting payment'
+                ]);
+
+                return redirect()->route('transactions.create', ['id' => $examination->id])
+                    ->with('success', 'Pemeriksaan fisik berhasil dibuat dan siap untuk pembayaran.');
             }
 
-            session()->flash('success', 'Disease has been created !!');
-            return redirect()->route('examinations.edit',['examination' => $request->examination_id]);
-        }
+            DB::commit();
 
-        return false;
+            Log::info('Physical examination created successfully', [
+                'user_id' => $this->user->id,
+                'physical_examination_id' => $physicalExamination->id,
+                'examination_id' => $examination->id
+            ]);
+
+            return redirect()->route('examinations.edit', ['examination' => $request->examination_id])
+                ->with('success', 'Pemeriksaan fisik berhasil dibuat.');
+
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            Log::error('Error creating physical examination', [
+                'user_id' => $this->user->id,
+                'request_data' => $request->validated(),
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan saat menyimpan pemeriksaan fisik.');
+        }
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified physical examination
      *
-     * @param  \App\Models\Klinik\PhysicalExamination  $physicalexamination
-     * @return \Illuminate\Http\Response
+     * @param PhysicalExamination $physicalExamination
+     * @return View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function show(PhysicalExamination $physicalexamination)
+    public function show(PhysicalExamination $physicalExamination): View
     {
-        //
+        Gate::authorize('klinik.view');
+
+        Log::info('Physical examination viewed', [
+            'user_id' => $this->user->id,
+            'physical_examination_id' => $physicalExamination->id
+        ]);
+
+        return view('pages.klinik.physicalexaminations.show', compact('physicalExamination'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified physical examination
      *
-     * @param  \App\Models\Klinik\PhysicalExamination  $physicalexamination
-     * @return \Illuminate\Http\Response
+     * @param PhysicalExamination $physicalExamination
+     * @return View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function edit(PhysicalExamination $physicalexamination)
+    public function edit(PhysicalExamination $physicalExamination): View
     {
+        Gate::authorize('klinik.update');
 
+        Log::info('Physical examination edit form accessed', [
+            'user_id' => $this->user->id,
+            'physical_examination_id' => $physicalExamination->id
+        ]);
+
+        return view('pages.klinik.physicalexaminations.edit', compact('physicalExamination'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified physical examination in storage
      *
-     * @param  \App\Http\Requests\Klinik\UpdatePhysicalExaminationRequest  $request
-     * @param  \App\Models\Klinik\PhysicalExamination  $physicalexamination
-     * @return \Illuminate\Http\Response
+     * @param UpdatePhysicalExaminationRequest $request
+     * @param PhysicalExamination $physicalExamination
+     * @return RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(UpdatePhysicalExaminationRequest $request, PhysicalExamination $physicalexamination)
+    public function update(UpdatePhysicalExaminationRequest $request, PhysicalExamination $physicalExamination): RedirectResponse
     {
-        if (is_null($this->user) || !$this->user->can('klinik.create')) {
-            abort(403, 'Sorry !! You are Unauthorized to create any master data !');
-        }
-        $request->physical_value = json_encode($request->physical);
+        Gate::authorize('klinik.update');
 
-        // Validation Data
-        $validated = $request->validated();
+        DB::beginTransaction();
 
-        // Process Data
-        if($validated){
-            try{
-                $validated['physical_value'] = json_encode($request->physical);
-                $physicalexamination->update($validated);
-            }catch(Exception $e){
-                report($e);
-                return false;
+        try {
+            // Validate examination exists
+            $examination = Examination::findOrFail($request->examination_id);
+
+            // Prepare validated data
+            $validated = $request->validated();
+            $validated['physical_value'] = json_encode($request->physical ?? []);
+
+            // Update physical examination
+            $physicalExamination->update($validated);
+
+            // Handle examination completion
+            if ($request->selesai) {
+                $examination->update(['status' => 'done']);
+
+                DB::commit();
+
+                Log::info('Physical examination updated and examination completed', [
+                    'user_id' => $this->user->id,
+                    'physical_examination_id' => $physicalExamination->id,
+                    'examination_id' => $examination->id,
+                    'new_status' => 'done'
+                ]);
+
+                return redirect()->route('transactions.create', ['id' => $examination->id])
+                    ->with('success', 'Pemeriksaan fisik berhasil diperbarui dan pemeriksaan selesai.');
             }
 
-            if($request->selesai){
-                $examination = Examination::find($request->examination_id);
-                $examination->status = "done";
-                $examination->save();
+            DB::commit();
 
-                return redirect()->route('transactions.create', ['id' => $examination->id])->with('success', 'Physical Examination successfully created');
-            }
+            Log::info('Physical examination updated successfully', [
+                'user_id' => $this->user->id,
+                'physical_examination_id' => $physicalExamination->id,
+                'examination_id' => $examination->id
+            ]);
 
-            session()->flash('success', 'Disease has been created !!');
-            return redirect()->route('examinations.edit',['examination' => $request->examination_id]);
+            return redirect()->route('examinations.edit', ['examination' => $request->examination_id])
+                ->with('success', 'Pemeriksaan fisik berhasil diperbarui.');
+
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            Log::error('Error updating physical examination', [
+                'user_id' => $this->user->id,
+                'physical_examination_id' => $physicalExamination->id,
+                'request_data' => $request->validated(),
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan saat memperbarui pemeriksaan fisik.');
         }
-
-        return false;
     }
 
-    private function setObservation(PhysicalExamination $physical)
-        {
-            $examination = Examination::where('id', $physical->examination_id)->first();
-            $_encounter  = json_decode($examination->encounter);
-            $participant = $_encounter->participant[0]->individual;
+    /**
+     * Remove the specified physical examination from storage
+     *
+     * @param PhysicalExamination $physicalExamination
+     * @return RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function destroy(PhysicalExamination $physicalExamination): RedirectResponse
+    {
+        Gate::authorize('klinik.delete');
 
-            $observation = $this->createBaseObservation($_encounter, $participant, $examination);
+        DB::beginTransaction();
 
-            $this->processHeadObservation($physical, $observation);
-            $this->processeyeObservation($physical, $observation);
-            $this->processEarObservation($physical, $observation);
-            $this->processNoseObservation($physical, $observation);
-            $this->processHairObservation($physical, $observation);
-            $this->processLipObservation($physical, $observation);
-            $this->processTeethObservation($physical, $observation);
-            $this->processTongueObservation($physical, $observation);
-            $this->processPalatalObservation($physical, $observation);
-            $this->processNeckObservation($physical, $observation);
-            $this->processThroatObservation($physical, $observation);
-            $this->processTonsilObservation($physical, $observation);
-            $this->processChestObservation($physical, $observation);
-            $this->processBreastsObservation($physical, $observation);
-            $this->processBackObservation($physical, $observation);
-            $this->processAbdomenObservation($physical, $observation);
-            $this->processGenitaliaObservation($physical, $observation);
-            $this->processButtocksObservation($physical, $observation);
-            $this->processUpperArmObservation($physical, $observation);
-            $this->processForearmObservation($physical, $observation);
-            $this->processHandObservation($physical, $observation);
-            $this->processNailObservation($physical, $observation);
-            $this->processWristObservation($physical, $observation);
-            $this->processThighObservation($physical, $observation);
-            $this->processCalfObservation($physical, $observation);
-            $this->processFootObservation($physical, $observation);
+        try {
+            $physicalExaminationId = $physicalExamination->id;
+            $examinationId = $physicalExamination->examination_id;
+
+            $physicalExamination->delete();
+
+            DB::commit();
+
+            Log::info('Physical examination deleted successfully', [
+                'user_id' => $this->user->id,
+                'physical_examination_id' => $physicalExaminationId,
+                'examination_id' => $examinationId
+            ]);
+
+            return redirect()->back()
+                ->with('success', 'Pemeriksaan fisik berhasil dihapus.');
+
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            Log::error('Error deleting physical examination', [
+                'user_id' => $this->user->id,
+                'physical_examination_id' => $physicalExamination->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan saat menghapus pemeriksaan fisik.');
         }
+    }
 
-        /**
-         * Create base observation object with common properties
-         */
-        private function createBaseObservation($encounter, $participant, $examination)
-        {
-            $date = date('Y-m-d\TH:i:sP');
-            $observation = new Observations();
-            $observation->setStatus('final');
-            $observation->addCategory('exam');
-            $observation->setSubject(
-                str_replace('Patient/', '', $encounter->subject->reference),
-                $encounter->subject->display
-            );
-            $observation->addEffectiveDateTime($date);
-            $observation->addIssuedDateTime($date);
-            $observation->setPerformer(
-                str_replace('Practitioner/', '', $participant->reference),
-                $participant->display
-            );
-            $observation->setEncounter($examination->encounter_id);
+    /**
+     * Set FHIR observation for physical examination
+     *
+     * @param PhysicalExamination $physical
+     * @return void
+     */
+    private function setObservation(PhysicalExamination $physical): void
+    {
+        try {
+            $examination = Examination::findOrFail($physical->examination_id);
+            $encounter = json_decode($examination->encounter);
 
-            return $observation;
-        }
-
-        /**
-         * Process heart rate data
-         */
-        private function processHeadObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->head) {
+            if (!$encounter || !isset($encounter->participant[0]->individual)) {
+                Log::warning('Invalid encounter data for physical examination', [
+                    'physical_examination_id' => $physical->id,
+                    'examination_id' => $physical->examination_id
+                ]);
                 return;
             }
 
-            $observation->addCode('10199-8');
-            $observation->addStringComponent($physical->head);
-            $observation->post();
-        }
+            $participant = $encounter->participant[0]->individual;
+            $observation = $this->createBaseObservation($encounter, $participant, $examination);
 
-        private function processEyeObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->eye) {
-                return;
+            // Process all physical examination observations
+            $this->processAllObservations($physical, $observation);
+
+            Log::info('FHIR observations processed successfully', [
+                'physical_examination_id' => $physical->id,
+                'examination_id' => $physical->examination_id
+            ]);
+
+        } catch (Exception $e) {
+            Log::error('Error setting FHIR observation', [
+                'physical_examination_id' => $physical->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+        }
+    }
+
+    /**
+     * Create base observation object with common properties
+     *
+     * @param object $encounter
+     * @param object $participant
+     * @param Examination $examination
+     * @return Observations
+     */
+    private function createBaseObservation(object $encounter, object $participant, Examination $examination): Observations
+    {
+        $date = date('Y-m-d\TH:i:sP');
+        $observation = new Observations();
+
+        $observation->setStatus('final');
+        $observation->addCategory('exam');
+        $observation->setSubject(
+            str_replace('Patient/', '', $encounter->subject->reference),
+            $encounter->subject->display
+        );
+        $observation->addEffectiveDateTime($date);
+        $observation->addIssuedDateTime($date);
+        $observation->setPerformer(
+            str_replace('Practitioner/', '', $participant->reference),
+            $participant->display
+        );
+        $observation->setEncounter($examination->encounter_id);
+
+        return $observation;
+    }
+
+    /**
+     * Process all physical examination observations
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processAllObservations(PhysicalExamination $physical, Observations $observation): void
+    {
+        $observationMethods = [
+            'processHeadObservation',
+            'processEyeObservation',
+            'processEarObservation',
+            'processNoseObservation',
+            'processHairObservation',
+            'processLipObservation',
+            'processTeethObservation',
+            'processTongueObservation',
+            'processPalatalObservation',
+            'processNeckObservation',
+            'processThroatObservation',
+            'processTonsilObservation',
+            'processChestObservation',
+            'processBreastsObservation',
+            'processBackObservation',
+            'processAbdomenObservation',
+            'processGenitaliaObservation',
+            'processButtocksObservation',
+            'processUpperArmObservation',
+            'processForearmObservation',
+            'processHandObservation',
+            'processNailObservation',
+            'processWristObservation',
+            'processThighObservation',
+            'processCalfObservation',
+            'processFootObservation'
+        ];
+
+        foreach ($observationMethods as $method) {
+            if (method_exists($this, $method)) {
+                $this->$method($physical, $observation);
             }
+        }
+    }
 
-            $observation->addCode('10197-2');
-            $observation->addStringComponent($physical->eye);
-            $observation->post();
+    /**
+     * Process head observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processHeadObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->head) {
+            return;
         }
 
-        private function processEarObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->ear) {
-                return;
-            }
+        $observation->addCode('10199-8');
+        $observation->addStringComponent($physical->head);
+        $observation->post();
+    }
 
-            $observation->addCode('10195-6');
-            $observation->addStringComponent($physical->ear);
-            $observation->post();
+    /**
+     * Process eye observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processEyeObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->eye) {
+            return;
         }
 
-        private function processNoseObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->nose) {
-                return;
-            }
+        $observation->addCode('10197-2');
+        $observation->addStringComponent($physical->eye);
+        $observation->post();
+    }
 
-            $observation->addCode('10203-8');
-            $observation->addStringComponent($physical->nose);
-            $observation->post();
+    /**
+     * Process ear observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processEarObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->ear) {
+            return;
         }
 
-        private function processHairObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->hair) {
-                return;
-            }
+        $observation->addCode('10195-6');
+        $observation->addStringComponent($physical->ear);
+        $observation->post();
+    }
 
-            $observation->addCode('32436-8');
-            $observation->addStringComponent($physical->hair);
-            $observation->post();
+    /**
+     * Process nose observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processNoseObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->nose) {
+            return;
         }
 
-        private function processLipObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->lip) {
-                return;
-            }
+        $observation->addCode('10203-8');
+        $observation->addStringComponent($physical->nose);
+        $observation->post();
+    }
 
-            $observation->addCode('32446-7');
-            $observation->addStringComponent($physical->lip);
-            $observation->post();
+    /**
+     * Process hair observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processHairObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->hair) {
+            return;
         }
 
-        private function processTeethObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->teeth) {
-                return;
-            }
+        $observation->addCode('32436-8');
+        $observation->addStringComponent($physical->hair);
+        $observation->post();
+    }
 
-            $observation->addCode('85910-8');
-            $observation->addStringComponent($physical->teeth);
-            $observation->post();
+    /**
+     * Process lip observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processLipObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->lip) {
+            return;
         }
 
-        private function processTongueObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->tongue) {
-                return;
-            }
+        $observation->addCode('32446-7');
+        $observation->addStringComponent($physical->lip);
+        $observation->post();
+    }
 
-            $observation->addCode('32483-0');
-            $observation->addStringComponent($physical->tongue);
-            $observation->post();
+    /**
+     * Process teeth observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processTeethObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->teeth) {
+            return;
         }
 
-        private function processNeckObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->neck) {
-                return;
-            }
+        $observation->addCode('85910-8');
+        $observation->addStringComponent($physical->teeth);
+        $observation->post();
+    }
 
-            $observation->addCode('11411-6');
-            $observation->addStringComponent($physical->neck);
-            $observation->post();
+    /**
+     * Process tongue observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processTongueObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->tongue) {
+            return;
         }
 
-        private function processThroatObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->throat) {
-                return;
-            }
+        $observation->addCode('32483-0');
+        $observation->addStringComponent($physical->tongue);
+        $observation->post();
+    }
 
-            $observation->addCode('56867-5');
-            $observation->addStringComponent($physical->throat);
-            $observation->post();
+    /**
+     * Process palatal observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processPalatalObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->palatal) {
+            return;
         }
 
-        private function processChestObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->chest) {
-                return;
-            }
+        $observation->addCode('10201-2');
+        $observation->addStringComponent($physical->palatal);
+        $observation->addBodySite('72914001');
+        $observation->post();
+    }
 
-            $observation->addCode('11391-0');
-            $observation->addStringComponent($physical->chest);
-            $observation->post();
+    /**
+     * Process neck observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processNeckObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->neck) {
+            return;
         }
 
-        private function processBreastsObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->breasts) {
-                return;
-            }
+        $observation->addCode('11411-6');
+        $observation->addStringComponent($physical->neck);
+        $observation->post();
+    }
 
-            $observation->addCode('10193-1');
-            $observation->addStringComponent($physical->breasts);
-            $observation->post();
+    /**
+     * Process throat observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processThroatObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->throat) {
+            return;
         }
 
-        private function processBackObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->back) {
-                return;
-            }
+        $observation->addCode('56867-5');
+        $observation->addStringComponent($physical->throat);
+        $observation->post();
+    }
 
-            $observation->addCode('10192-3');
-            $observation->addStringComponent($physical->back);
-            $observation->post();
+    /**
+     * Process tonsil observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processTonsilObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->tonsil) {
+            return;
         }
 
-        private function processAbdomenObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->abdomen) {
-                return;
-            }
+        $observation->addCode('10201-2');
+        $observation->addStringComponent($physical->tonsil);
+        $observation->addBodySite('91636008');
+        $observation->post();
+    }
 
-            $observation->addCode('10191-5');
-            $observation->addStringComponent($physical->abdomen);
-            $observation->post();
+    /**
+     * Process chest observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processChestObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->chest) {
+            return;
         }
 
-        private function processGenitaliaObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->genitalia) {
-                return;
-            }
+        $observation->addCode('11391-0');
+        $observation->addStringComponent($physical->chest);
+        $observation->post();
+    }
 
-            $observation->addCode('11400-9');
-            $observation->addStringComponent($physical->genitalia);
-            $observation->post();
+    /**
+     * Process breasts observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processBreastsObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->breasts) {
+            return;
         }
 
-        private function processUpperArmObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->upper_arm) {
-                return;
-            }
+        $observation->addCode('10193-1');
+        $observation->addStringComponent($physical->breasts);
+        $observation->post();
+    }
 
-            $observation->addCode('11386-0');
-            $observation->addStringComponent($physical->upper_arm);
-            $observation->post();
+    /**
+     * Process back observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processBackObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->back) {
+            return;
         }
 
-         private function processForearmObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->forearm) {
-                return;
-            }
+        $observation->addCode('10192-3');
+        $observation->addStringComponent($physical->back);
+        $observation->post();
+    }
 
-            $observation->addCode('11398-5');
-            $observation->addStringComponent($physical->forearm);
-            $observation->post();
+    /**
+     * Process abdomen observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processAbdomenObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->abdomen) {
+            return;
         }
 
-        private function processWristObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->wrist) {
-                return;
-            }
+        $observation->addCode('10191-5');
+        $observation->addStringComponent($physical->abdomen);
+        $observation->post();
+    }
 
-            $observation->addCode('11415-7');
-            $observation->addStringComponent($physical->wrist);
-            $observation->post();
+    /**
+     * Process genitalia observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processGenitaliaObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->genitalia) {
+            return;
         }
 
-        private function processThighObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->thigh) {
-                return;
-            }
+        $observation->addCode('11400-9');
+        $observation->addStringComponent($physical->genitalia);
+        $observation->post();
+    }
 
-            $observation->addCode('11414-0');
-            $observation->addStringComponent($physical->thigh);
-            $observation->post();
+    /**
+     * Process buttocks observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processButtocksObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->buttocks) {
+            return;
         }
 
-        private function processCalfObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->calf) {
-                return;
-            }
+        $observation->addCode('11388-6');
+        $observation->addStringComponent($physical->buttocks);
+        $observation->addBodySite('53505006');
+        $observation->post();
+    }
 
-            $observation->addCode('11389-4');
-            $observation->addStringComponent($physical->calf);
-            $observation->post();
+    /**
+     * Process upper arm observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processUpperArmObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->upper_arm) {
+            return;
         }
 
-        private function processPalatalObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->palatal) {
-                return;
-            }
+        $observation->addCode('11386-0');
+        $observation->addStringComponent($physical->upper_arm);
+        $observation->post();
+    }
 
-            $observation->addCode('10201-2');
-            $observation->addStringComponent($physical->palatal);
-            $observation->addBodySite('72914001');
-            $observation->post();
+    /**
+     * Process forearm observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processForearmObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->forearm) {
+            return;
         }
 
-        private function processTonsilObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->tonsil) {
-                return;
-            }
+        $observation->addCode('11398-5');
+        $observation->addStringComponent($physical->forearm);
+        $observation->post();
+    }
 
-            $observation->addCode('10201-2');
-            $observation->addStringComponent($physical->tonsil);
-            $observation->addBodySite('91636008');
-            $observation->post();
+    /**
+     * Process hand observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processHandObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->hand) {
+            return;
         }
 
-        private function processButtocksObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->buttocks) {
-                return;
-            }
+        $observation->addCode('11404-1');
+        $observation->addStringComponent($physical->hand);
+        $observation->addBodySite('7569003');
+        $observation->post();
+    }
 
-            $observation->addCode('11388-6');
-            $observation->addStringComponent($physical->buttocks);
-            $observation->addBodySite('53505006');
-            $observation->post();
+    /**
+     * Process nail observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processNailObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->nail) {
+            return;
         }
 
-        private function processHandObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->hand) {
-                return;
-            }
+        $observation->addCode('32456-6');
+        $observation->addStringComponent($physical->nail);
+        $observation->addBodySite('770812000');
+        $observation->post();
+    }
 
-            $observation->addCode('11404-1');
-            $observation->addStringComponent($physical->hand);
-            $observation->addBodySite('7569003');
-            $observation->post();
+    /**
+     * Process wrist observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processWristObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->wrist) {
+            return;
         }
 
-        private function processNailObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->nail) {
-                return;
-            }
+        $observation->addCode('11415-7');
+        $observation->addStringComponent($physical->wrist);
+        $observation->post();
+    }
 
-            $observation->addCode('32456-6');
-            $observation->addStringComponent($physical->nail);
-            $observation->addBodySite('770812000');
-            $observation->post();
+    /**
+     * Process thigh observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processThighObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->thigh) {
+            return;
         }
 
-        private function processFootObservation(PhysicalExamination $physical, $observation)
-        {
-            if (!$physical->foot) {
-                return;
-            }
+        $observation->addCode('11414-0');
+        $observation->addStringComponent($physical->thigh);
+        $observation->post();
+    }
 
-            $observation->addCode('11397-7');
-            $observation->addStringComponent($physical->foot);
-            $observation->addBodySite('29707007');
-            $observation->post();
+    /**
+     * Process calf observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processCalfObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->calf) {
+            return;
         }
+
+        $observation->addCode('11389-4');
+        $observation->addStringComponent($physical->calf);
+        $observation->post();
+    }
+
+    /**
+     * Process foot observation
+     *
+     * @param PhysicalExamination $physical
+     * @param Observations $observation
+     * @return void
+     */
+    private function processFootObservation(PhysicalExamination $physical, Observations $observation): void
+    {
+        if (!$physical->foot) {
+            return;
+        }
+
+        $observation->addCode('11397-7');
+        $observation->addStringComponent($physical->foot);
+        $observation->addBodySite('29707007');
+        $observation->post();
+    }
 }
