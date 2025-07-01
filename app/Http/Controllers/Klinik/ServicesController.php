@@ -1,176 +1,413 @@
 <?php
 
-    namespace App\Http\Controllers\Klinik;
+namespace App\Http\Controllers\Klinik;
 
-    use App\DataTables\Klinik\ServicesDataTable;
-    use App\Http\Controllers\Controller;
-    use App\Models\Klinik\Country;
-    use App\Models\Klinik\Service;
-    use App\Http\Requests\Klinik\StoreServiceRequest;
-    use App\Http\Requests\Klinik\UpdateServiceRequest;
-    use App\Models\Klinik\ServiceCategory;
-    use Doctrine\DBAL\Driver\PDO\Exception;
-    use Illuminate\Http\Request;
-    use Illuminate\Support\Facades\Auth;
+use App\DataTables\Klinik\ServicesDataTable;
+use App\Http\Controllers\Controller;
+use App\Models\Klinik\Service;
+use App\Models\Klinik\ServiceCategory;
+use App\Http\Requests\Klinik\StoreServiceRequest;
+use App\Http\Requests\Klinik\UpdateServiceRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
+use Throwable;
 
-
-    class ServicesController extends Controller
+/**
+ * Controller untuk mengelola layanan
+ *
+ * Menangani operasi CRUD untuk layanan termasuk
+ * validasi, otorisasi, logging, dan transaksi database
+ */
+class ServicesController extends Controller
+{
+    /**
+     * Konstruktor controller
+     *
+     * Menerapkan middleware otentikasi untuk semua method
+     */
+    public function __construct()
     {
-        public $user;
+        $this->middleware('auth');
+    }
 
-        public function __construct()
-        {
-            $this->middleware(function ($request, $next) {
-                $this->user = Auth::guard('web')->user();
-                return $next($request);
-            });
-        }
+    /**
+     * Menampilkan daftar layanan
+     *
+     * @param ServicesDataTable $dataTable
+     * @return Response|View
+     */
+    public function index(ServicesDataTable $dataTable)
+    {
+        try {
+            // Pemeriksaan otorisasi menggunakan Gate
+            Gate::authorize('viewAny', Service::class);
 
-        /**
-         * Display a listing of the resource.
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function index(ServicesDataTable $dataTable)
-        {
-            if (is_null($this->user) || !$this->user->can('klinik.read')) {
-                abort(403, 'Sorry !! You are Unauthorized to view any master data !');
-            }
+            Log::info('Menampilkan daftar layanan', [
+                'user_id' => Auth::id(),
+                'user_name' => Auth::user()->name
+            ]);
 
             return $dataTable->render('pages.klinik.services.index');
+
+        } catch (Throwable $e) {
+            Log::error('Gagal memuat daftar layanan', [
+                'error' => $e->getMessage(),
+                'user_id' => Auth::id(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return redirect()->back()
+                ->with('error', 'Gagal memuat daftar layanan');
         }
+    }
 
-        /**
-         * Show the form for creating a new resource.
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function create()
-        {
-            if (is_null($this->user) || !$this->user->can('klinik.create')) {
-                abort(403, 'Sorry !! You are Unauthorized to create any master data !');
-            }
+    /**
+     * Menampilkan form untuk membuat layanan baru
+     *
+     * @return View|RedirectResponse
+     */
+    public function create(): View|RedirectResponse
+    {
+        try {
+            // Pemeriksaan otorisasi menggunakan Gate
+            Gate::authorize('create', Service::class);
 
-            $service_category = ServiceCategory::all();
-            return view('pages.klinik.services.create', compact('service_category'));
+            // Memuat kategori layanan untuk dropdown
+            $service_categories = ServiceCategory::select('id', 'name')
+                ->orderBy('name')
+                ->get();
+
+            Log::info('Menampilkan form pembuatan layanan', [
+                'user_id' => Auth::id(),
+                'categories_count' => $service_categories->count()
+            ]);
+
+            return view('pages.klinik.services.create', [
+                'service_category' => $service_categories
+            ]);
+
+        } catch (Throwable $e) {
+            Log::error('Gagal memuat form pembuatan layanan', [
+                'error' => $e->getMessage(),
+                'user_id' => Auth::id()
+            ]);
+
+            return redirect()->route('services.index')
+                ->with('error', 'Gagal memuat form pembuatan layanan');
         }
+    }
 
-        /**
-         * Store a newly created resource in storage.
-         *
-         * @param \App\Http\Requests\StoreServiceRequest $request
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function store(StoreServiceRequest $request)
-        {
-            if (is_null($this->user) || !$this->user->can('klinik.create')) {
-                abort(403, 'Sorry !! You are Unauthorized to create any master data !');
-            }
+    /**
+     * Menyimpan layanan baru ke database
+     *
+     * @param StoreServiceRequest $request
+     * @return RedirectResponse
+     */
+    public function store(StoreServiceRequest $request): RedirectResponse
+    {
+        try {
+            // Pemeriksaan otorisasi menggunakan Gate
+            Gate::authorize('create', Service::class);
 
-            // Validation Data
+            // Validasi data sudah dilakukan oleh FormRequest
             $validated = $request->validated();
 
-            // Process Data
-            if ($validated) {
-                try {
-                    Service::create($validated);
-                } catch (Exception $e) {
-                    print_r($e);
-                    return false;
-                }
+            // Sanitasi dan normalisasi data
+            $validated['name'] = trim($validated['name']);
+            $validated['price'] = $validated['price'] ?? 0;
 
-                session()->flash('success', 'Service has been created !!');
-                return redirect()->route('services.index');
+            // Pengecekan keberadaan kategori layanan
+            $serviceCategory = ServiceCategory::find($validated['service_category_id']);
+            if (!$serviceCategory) {
+                Log::warning('Percobaan membuat layanan dengan kategori yang tidak ada', [
+                    'service_category_id' => $validated['service_category_id'],
+                    'user_id' => Auth::id()
+                ]);
+
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Kategori layanan tidak ditemukan');
             }
 
-            print_r($validated);
-            exit;
+            // Pengecekan duplikasi nama dalam kategori yang sama (case-insensitive)
+            $existingService = Service::whereRaw('LOWER(name) = ?', [strtolower($validated['name'])])
+                ->where('service_category_id', $validated['service_category_id'])
+                ->first();
 
-            return false;
-        }
+            if ($existingService) {
+                Log::warning('Percobaan membuat layanan dengan nama yang sudah ada dalam kategori', [
+                    'name' => $validated['name'],
+                    'service_category_id' => $validated['service_category_id'],
+                    'existing_id' => $existingService->id,
+                    'user_id' => Auth::id()
+                ]);
 
-        /**
-         * Display the specified resource.
-         *
-         * @param \App\Models\Service $service
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function show(Service $service)
-        {
-            //
-        }
-
-        /**
-         * Show the form for editing the specified resource.
-         *
-         * @param  $id
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function edit($id)
-        {
-            if (is_null($this->user) || !$this->user->can('klinik.update')) {
-                abort(403, 'Sorry !! You are Unauthorized to edit any master data !');
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Nama layanan sudah digunakan dalam kategori ini');
             }
 
-            $service_category = ServiceCategory::all();
-            $service = Service::find($id);
-            return view('pages.klinik.services.edit', compact(['service_category','service']));
+            // Transaksi database dengan rollback
+            DB::beginTransaction();
+
+            $service = Service::create($validated);
+
+            DB::commit();
+
+            Log::info('Layanan berhasil dibuat', [
+                'service_id' => $service->id,
+                'name' => $service->name,
+                'service_category_id' => $service->service_category_id,
+                'price' => $service->price,
+                'user_id' => Auth::id()
+            ]);
+
+            return redirect()->route('services.index')
+                ->with('success', 'Layanan berhasil dibuat');
+
+        } catch (Throwable $e) {
+            DB::rollBack();
+
+            Log::error('Gagal membuat layanan', [
+                'error' => $e->getMessage(),
+                'input' => $request->all(),
+                'user_id' => Auth::id(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Gagal membuat layanan');
         }
+    }
 
-        /**
-         * Update the specified resource in storage.
-         *
-         * @param \App\Http\Requests\UpdateServiceRequest $request
-         * @param \App\Models\Service                     $service
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function update(UpdateServiceRequest $request, Service $service)
-        {
-            if (is_null($this->user) || !$this->user->can('klinik.update')) {
-                abort(403, 'Sorry !! You are Unauthorized to edit any master date !');
-            }
+    /**
+     * Menampilkan detail layanan
+     *
+     * @param Service $service
+     * @return View|RedirectResponse
+     */
+    public function show(Service $service): View|RedirectResponse
+    {
+        try {
+            // Pemeriksaan otorisasi menggunakan Gate
+            Gate::authorize('view', $service);
 
-            // Validation Data
+            // Load relasi kategori
+            $service->load('category');
+
+            Log::info('Menampilkan detail layanan', [
+                'service_id' => $service->id,
+                'user_id' => Auth::id()
+            ]);
+
+            return view('pages.klinik.services.show', compact('service'));
+
+        } catch (Throwable $e) {
+            Log::error('Gagal memuat detail layanan', [
+                'service_id' => $service->id,
+                'error' => $e->getMessage(),
+                'user_id' => Auth::id()
+            ]);
+
+            return redirect()->route('services.index')
+                ->with('error', 'Gagal memuat detail layanan');
+        }
+    }
+
+    /**
+     * Menampilkan form untuk mengedit layanan
+     *
+     * @param Service $service
+     * @return View|RedirectResponse
+     */
+    public function edit(Service $service): View|RedirectResponse
+    {
+        try {
+            // Pemeriksaan otorisasi menggunakan Gate
+            Gate::authorize('update', $service);
+
+            // Memuat kategori layanan untuk dropdown
+            $service_categories = ServiceCategory::select('id', 'name')
+                ->orderBy('name')
+                ->get();
+
+            // Load relasi kategori untuk service
+            $service->load('category');
+
+            Log::info('Menampilkan form edit layanan', [
+                'service_id' => $service->id,
+                'user_id' => Auth::id()
+            ]);
+
+            return view('pages.klinik.services.edit', [
+                'service_category' => $service_categories,
+                'service' => $service
+            ]);
+
+        } catch (Throwable $e) {
+            Log::error('Gagal memuat form edit layanan', [
+                'service_id' => $service->id,
+                'error' => $e->getMessage(),
+                'user_id' => Auth::id()
+            ]);
+
+            return redirect()->route('services.index')
+                ->with('error', 'Gagal memuat form edit layanan');
+        }
+    }
+
+    /**
+     * Memperbarui layanan di database
+     *
+     * @param UpdateServiceRequest $request
+     * @param Service $service
+     * @return RedirectResponse
+     */
+    public function update(UpdateServiceRequest $request, Service $service): RedirectResponse
+    {
+        try {
+            // Pemeriksaan otorisasi menggunakan Gate
+            Gate::authorize('update', $service);
+
+            // Validasi data sudah dilakukan oleh FormRequest
             $validated = $request->validated();
 
-            // Process Data
-            if ($validated) {
-                // Process Data
-                try {
-                    $service->update($validated);
-                } catch (Exception $e) {
-                    report($e);
-                    return false;
-                }
+            // Sanitasi dan normalisasi data
+            $validated['name'] = trim($validated['name']);
+            $validated['price'] = $validated['price'] ?? $service->price;
 
-                session()->flash('success', 'Service has been updated !!');
-                return redirect()->route('services.index');
+            // Pengecekan keberadaan kategori layanan
+            $serviceCategory = ServiceCategory::find($validated['service_category_id']);
+            if (!$serviceCategory) {
+                Log::warning('Percobaan update layanan dengan kategori yang tidak ada', [
+                    'service_category_id' => $validated['service_category_id'],
+                    'service_id' => $service->id,
+                    'user_id' => Auth::id()
+                ]);
+
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Kategori layanan tidak ditemukan');
             }
 
-            return false;
+            // Pengecekan duplikasi nama dalam kategori yang sama (case-insensitive) kecuali untuk record yang sedang diupdate
+            $existingService = Service::whereRaw('LOWER(name) = ?', [strtolower($validated['name'])])
+                ->where('service_category_id', $validated['service_category_id'])
+                ->where('id', '!=', $service->id)
+                ->first();
+
+            if ($existingService) {
+                Log::warning('Percobaan update layanan dengan nama yang sudah ada dalam kategori', [
+                    'name' => $validated['name'],
+                    'service_category_id' => $validated['service_category_id'],
+                    'existing_id' => $existingService->id,
+                    'updating_id' => $service->id,
+                    'user_id' => Auth::id()
+                ]);
+
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Nama layanan sudah digunakan dalam kategori ini');
+            }
+
+            // Transaksi database dengan rollback
+            DB::beginTransaction();
+
+            $service->update($validated);
+
+            DB::commit();
+
+            Log::info('Layanan berhasil diperbarui', [
+                'service_id' => $service->id,
+                'name' => $service->name,
+                'service_category_id' => $service->service_category_id,
+                'price' => $service->price,
+                'user_id' => Auth::id()
+            ]);
+
+            return redirect()->route('services.index')
+                ->with('success', 'Layanan berhasil diperbarui');
+
+        } catch (Throwable $e) {
+            DB::rollBack();
+
+            Log::error('Gagal memperbarui layanan', [
+                'service_id' => $service->id,
+                'error' => $e->getMessage(),
+                'input' => $request->all(),
+                'user_id' => Auth::id(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Gagal memperbarui layanan');
         }
+    }
 
-        /**
-         * Remove the specified resource from storage.
-         *
-         * @param \App\Models\Service $service
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function destroy(Service $service)
-        {
-            if (is_null($this->user) || !$this->user->can('klinik.delete')) {
-                abort(403, 'Sorry !! You are Unauthorized to delete any master date !');
+    /**
+     * Menghapus layanan dari database
+     *
+     * @param Service $service
+     * @return RedirectResponse
+     */
+    public function destroy(Service $service): RedirectResponse
+    {
+        try {
+            // Pemeriksaan otorisasi menggunakan Gate
+            Gate::authorize('delete', $service);
+
+            // Pengecekan relasi sebelum penghapusan
+            if ($service->transaction_detail()->exists()) {
+                Log::warning('Percobaan menghapus layanan yang masih memiliki transaksi', [
+                    'service_id' => $service->id,
+                    'transactions_count' => $service->transaction_detail()->count(),
+                    'user_id' => Auth::id()
+                ]);
+
+                return redirect()->route('services.index')
+                    ->with('error', 'Layanan tidak dapat dihapus karena masih memiliki transaksi terkait');
             }
+
+            // Transaksi database dengan rollback
+            DB::beginTransaction();
+
+            $serviceName = $service->name;
+            $serviceId = $service->id;
+            $categoryId = $service->service_category_id;
 
             $service->delete();
 
-            session()->flash('success', 'Service has been deleted !!');
-            return redirect()->route('services.index');
-        }
+            DB::commit();
 
+            Log::info('Layanan berhasil dihapus', [
+                'service_id' => $serviceId,
+                'name' => $serviceName,
+                'service_category_id' => $categoryId,
+                'user_id' => Auth::id()
+            ]);
+
+            return redirect()->route('services.index')
+                ->with('success', 'Layanan berhasil dihapus');
+
+        } catch (Throwable $e) {
+            DB::rollBack();
+
+            Log::error('Gagal menghapus layanan', [
+                'service_id' => $service->id,
+                'error' => $e->getMessage(),
+                'user_id' => Auth::id(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return redirect()->route('services.index')
+                ->with('error', 'Gagal menghapus layanan');
+        }
     }
+}
