@@ -5,58 +5,50 @@
          <img id="penandaan_operasi" src="{{ asset('assets/media/penandaan_operasi_wanita.png') }}">
      @endif
      <div id="point"></div>
-     <form method="post" action="{{ route('suket.operasi', $examination->id) }}">
+     <form method="post" action="{{ route('suket.operasi', $examination->id) }}" class="form mt-5">
          @csrf
          <input type="hidden" name="coordinate_x" id="coordinate_x">
          <input type="hidden" name="coordinate_y" id="coordinate_y">
 
-         <table class="table" style="width:100%">
-             <tbody>
-                 <tr>
-                     <td>Ruangan</td>
-                     <td class="d-flex">:&nbsp;<input type="text" name="ruangan"
-                             class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0"
-                             placeholder="Ruangan">
-                     </td>
-                 </tr>
-                 <tr>
-                     <td>Jenis Operasi</td>
-                     <td class="d-flex">:&nbsp;<input type="text" name="operasi"
-                             class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0"
-                             placeholder="Jenis Operasi">
-                     </td>
-                 </tr>
-                 <tr>
-                     <td>Tanggal</td>
-                     <td class="d-flex">:&nbsp;<input type="date" name="tanggal"
-                             class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0"
-                             placeholder="Tanggal">
-                     </td>
-                 </tr>
-                 <tr>
-                     <td>Waktu</td>
-                     <td class="d-flex">:&nbsp;<input type="time" name="jam"
-                             class="form-control form-control-solid border border-gray-300 mb-3 mb-lg-0"
-                             placeholder="Waktu">
-                     </td>
-                 </tr>
+         <div class="row g-4 mb-4">
+             <div class="col-md-6 mb-3">
+                 <div class="d-flex flex-column">
+                     <label for="ruangan" class="form-label fw-bold mb-2">Ruangan</label>
+                     <input type="text" name="ruangan" id="ruangan" class="form-control form-control-solid"
+                         placeholder="Ruangan">
+                 </div>
+             </div>
+             <div class="col-md-6 mb-3">
+                 <div class="d-flex flex-column">
+                     <label for="operasi" class="form-label fw-bold mb-2">Jenis Operasi</label>
+                     <input type="text" name="operasi" id="operasi" class="form-control form-control-solid"
+                         placeholder="Jenis Operasi">
+                 </div>
+             </div>
+             <div class="col-md-6 mb-3">
+                 <div class="d-flex flex-column">
+                     <label for="tanggal" class="form-label fw-bold mb-2">Tanggal</label>
+                     <input type="date" name="tanggal" id="tanggal" class="form-control form-control-solid">
+                 </div>
+             </div>
+             <div class="col-md-6 mb-3">
+                 <div class="d-flex flex-column">
+                     <label for="jam" class="form-label fw-bold mb-2">Waktu</label>
+                     <input type="time" name="jam" id="jam" class="form-control form-control-solid">
+                 </div>
+             </div>
+         </div>
 
-             </tbody>
-         </table>
-         <button type="submit" class="btn btn-bg-dark text-white">Download PDF</button>
+         <div class="d-flex justify-content-end">
+             <button type="submit" class="btn btn-primary px-6">
+                 <i class="fas fa-file-pdf me-2"></i>Download PDF
+             </button>
+         </div>
      </form>
  </div>
 
  @section('styles')
      <style>
-         .timeline-label .timeline-label {
-             width: 200px !important
-         }
-
-         .timeline-label:before {
-             left: 201px !important;
-         }
-
          #penandaanoperasi {
              position: relative;
          }
@@ -83,7 +75,7 @@
              $("#penandaanoperasi").click(function(e) {
                  e.preventDefault();
                  var containerOffset = $(".container").offset();
-                 var imageOffset = $("#image").offset();
+                 var imageOffset = $("#penandaan_operasi").offset();
 
                  // Calculate click position relative to container, not image
                  var x = e.clientX - containerOffset.left;
