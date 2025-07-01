@@ -349,23 +349,6 @@
         .timeline-label:before {
             left: 201px !important;
         }
-
-        #penandaanoperasi {
-            position: relative;
-        }
-
-        #penandaan_operasi {
-            position: relative;
-            /* Needed for absolute positioning of the point */
-        }
-
-        #point {
-            position: absolute;
-            width: 15px;
-            height: 15px;
-            background-color: red;
-            border-radius: 50%;
-        }
     </style>
 @endsection
 
@@ -399,26 +382,6 @@
                     }
                 });
             }, 5000);
-
-            $("#penandaanoperasi").click(function(e) {
-                e.preventDefault();
-                var containerOffset = $(".container").offset();
-                var imageOffset = $("#image").offset();
-
-                // Calculate click position relative to container, not image
-                var x = e.clientX - containerOffset.left;
-                var y = e.clientY - containerOffset.top;
-
-                // Subtract container padding to position point accurately
-                var pointLeft = x - $(".container").css("padding-left").replace("px", "");
-                var pointTop = y - $(".container").css("padding-top").replace("px", "");
-                $("#coordinate_x").val(pointLeft);
-                $("#coordinate_y").val(pointTop);
-                $("#point").css({
-                    left: pointLeft + "px",
-                    top: pointTop + "px"
-                });
-            });
         })
     </script>
 
