@@ -4,16 +4,10 @@ namespace App\Http\Controllers\Klinik;
 
 use App\DataTables\Klinik\ServicesDataTable;
 use App\Http\Controllers\Controller;
-use App\Models\Klinik\Service;
-use App\Models\Klinik\ServiceCategory;
-use App\Http\Requests\Klinik\StoreServiceRequest;
-use App\Http\Requests\Klinik\UpdateServiceRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
+use App\Http\Requests\Klinik\{StoreServiceRequest, UpdateServiceRequest};
+use App\Models\Klinik\{Service, ServiceCategory};
+use Illuminate\Http\{RedirectResponse, Response};
+use Illuminate\Support\Facades\{Auth, DB, Log};
 use Illuminate\View\View;
 use Throwable;
 
@@ -26,13 +20,23 @@ use Throwable;
 class ServicesController extends Controller
 {
     /**
+     * Instance pengguna yang sedang login
+     *
+     * @var \App\Models\User|null
+     */
+    public $user;
+
+    /**
      * Konstruktor controller
      *
      * Menerapkan middleware otentikasi untuk semua method
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::guard('web')->user();
+            return $next($request);
+        });
     }
 
     /**
@@ -43,13 +47,19 @@ class ServicesController extends Controller
      */
     public function index(ServicesDataTable $dataTable)
     {
-        try {
-            // Pemeriksaan otorisasi menggunakan Gate
-            Gate::authorize('viewAny', Service::class);
+        // Validasi otorisasi pengguna
+        if (is_null($this->user) || !$this->user->can('klinik.read')) {
+            Log::warning('Unauthorized access attempt to services index', [
+                'user_id' => $this->user?->id,
+                'permission' => 'klinik.read'
+            ]);
+            abort(403, 'Maaf! Anda tidak memiliki izin untuk melihat data layanan.');
+        }
 
+        try {
             Log::info('Menampilkan daftar layanan', [
-                'user_id' => Auth::id(),
-                'user_name' => Auth::user()->name
+                'user_id' => $this->user->id,
+                'user_name' => $this->user->name
             ]);
 
             return $dataTable->render('pages.klinik.services.index');
@@ -57,7 +67,7 @@ class ServicesController extends Controller
         } catch (Throwable $e) {
             Log::error('Gagal memuat daftar layanan', [
                 'error' => $e->getMessage(),
-                'user_id' => Auth::id(),
+                'user_id' => $this->user->id,
                 'trace' => $e->getTraceAsString()
             ]);
 
@@ -73,17 +83,23 @@ class ServicesController extends Controller
      */
     public function create(): View|RedirectResponse
     {
-        try {
-            // Pemeriksaan otorisasi menggunakan Gate
-            Gate::authorize('create', Service::class);
+        // Validasi otorisasi pengguna
+        if (is_null($this->user) || !$this->user->can('klinik.create')) {
+            Log::warning('Unauthorized access attempt to services create', [
+                'user_id' => $this->user?->id,
+                'permission' => 'klinik.create'
+            ]);
+            abort(403, 'Maaf! Anda tidak memiliki izin untuk membuat data layanan.');
+        }
 
+        try {
             // Memuat kategori layanan untuk dropdown
             $service_categories = ServiceCategory::select('id', 'name')
                 ->orderBy('name')
                 ->get();
 
             Log::info('Menampilkan form pembuatan layanan', [
-                'user_id' => Auth::id(),
+                'user_id' => $this->user->id,
                 'categories_count' => $service_categories->count()
             ]);
 
@@ -94,7 +110,7 @@ class ServicesController extends Controller
         } catch (Throwable $e) {
             Log::error('Gagal memuat form pembuatan layanan', [
                 'error' => $e->getMessage(),
-                'user_id' => Auth::id()
+                'user_id' => $this->user->id
             ]);
 
             return redirect()->route('services.index')
@@ -110,10 +126,16 @@ class ServicesController extends Controller
      */
     public function store(StoreServiceRequest $request): RedirectResponse
     {
-        try {
-            // Pemeriksaan otorisasi menggunakan Gate
-            Gate::authorize('create', Service::class);
+        // Validasi otorisasi pengguna
+        if (is_null($this->user) || !$this->user->can('klinik.create')) {
+            Log::warning('Unauthorized access attempt to services store', [
+                'user_id' => $this->user?->id,
+                'permission' => 'klinik.create'
+            ]);
+            abort(403, 'Maaf! Anda tidak memiliki izin untuk membuat data layanan.');
+        }
 
+        try {
             // Validasi data sudah dilakukan oleh FormRequest
             $validated = $request->validated();
 
@@ -126,7 +148,7 @@ class ServicesController extends Controller
             if (!$serviceCategory) {
                 Log::warning('Percobaan membuat layanan dengan kategori yang tidak ada', [
                     'service_category_id' => $validated['service_category_id'],
-                    'user_id' => Auth::id()
+                    'user_id' => $this->user->id
                 ]);
 
                 return redirect()->back()
@@ -144,7 +166,7 @@ class ServicesController extends Controller
                     'name' => $validated['name'],
                     'service_category_id' => $validated['service_category_id'],
                     'existing_id' => $existingService->id,
-                    'user_id' => Auth::id()
+                    'user_id' => $this->user->id
                 ]);
 
                 return redirect()->back()
@@ -164,7 +186,7 @@ class ServicesController extends Controller
                 'name' => $service->name,
                 'service_category_id' => $service->service_category_id,
                 'price' => $service->price,
-                'user_id' => Auth::id()
+                'user_id' => $this->user->id
             ]);
 
             return redirect()->route('services.index')
@@ -176,7 +198,7 @@ class ServicesController extends Controller
             Log::error('Gagal membuat layanan', [
                 'error' => $e->getMessage(),
                 'input' => $request->all(),
-                'user_id' => Auth::id(),
+                'user_id' => $this->user->id,
                 'trace' => $e->getTraceAsString()
             ]);
 
@@ -194,16 +216,23 @@ class ServicesController extends Controller
      */
     public function show(Service $service): View|RedirectResponse
     {
-        try {
-            // Pemeriksaan otorisasi menggunakan Gate
-            Gate::authorize('view', $service);
+        // Validasi otorisasi pengguna
+        if (is_null($this->user) || !$this->user->can('klinik.read')) {
+            Log::warning('Unauthorized access attempt to services show', [
+                'user_id' => $this->user?->id,
+                'service_id' => $service->id,
+                'permission' => 'klinik.read'
+            ]);
+            abort(403, 'Maaf! Anda tidak memiliki izin untuk melihat detail layanan.');
+        }
 
+        try {
             // Load relasi kategori
             $service->load('category');
 
             Log::info('Menampilkan detail layanan', [
                 'service_id' => $service->id,
-                'user_id' => Auth::id()
+                'user_id' => $this->user->id
             ]);
 
             return view('pages.klinik.services.show', compact('service'));
@@ -212,7 +241,7 @@ class ServicesController extends Controller
             Log::error('Gagal memuat detail layanan', [
                 'service_id' => $service->id,
                 'error' => $e->getMessage(),
-                'user_id' => Auth::id()
+                'user_id' => $this->user->id
             ]);
 
             return redirect()->route('services.index')
@@ -228,10 +257,17 @@ class ServicesController extends Controller
      */
     public function edit(Service $service): View|RedirectResponse
     {
-        try {
-            // Pemeriksaan otorisasi menggunakan Gate
-            Gate::authorize('update', $service);
+        // Validasi otorisasi pengguna
+        if (is_null($this->user) || !$this->user->can('klinik.update')) {
+            Log::warning('Unauthorized access attempt to services edit', [
+                'user_id' => $this->user?->id,
+                'service_id' => $service->id,
+                'permission' => 'klinik.update'
+            ]);
+            abort(403, 'Maaf! Anda tidak memiliki izin untuk mengedit data layanan.');
+        }
 
+        try {
             // Memuat kategori layanan untuk dropdown
             $service_categories = ServiceCategory::select('id', 'name')
                 ->orderBy('name')
@@ -242,7 +278,7 @@ class ServicesController extends Controller
 
             Log::info('Menampilkan form edit layanan', [
                 'service_id' => $service->id,
-                'user_id' => Auth::id()
+                'user_id' => $this->user->id
             ]);
 
             return view('pages.klinik.services.edit', [
@@ -254,7 +290,7 @@ class ServicesController extends Controller
             Log::error('Gagal memuat form edit layanan', [
                 'service_id' => $service->id,
                 'error' => $e->getMessage(),
-                'user_id' => Auth::id()
+                'user_id' => $this->user->id
             ]);
 
             return redirect()->route('services.index')
@@ -271,10 +307,17 @@ class ServicesController extends Controller
      */
     public function update(UpdateServiceRequest $request, Service $service): RedirectResponse
     {
-        try {
-            // Pemeriksaan otorisasi menggunakan Gate
-            Gate::authorize('update', $service);
+        // Validasi otorisasi pengguna
+        if (is_null($this->user) || !$this->user->can('klinik.update')) {
+            Log::warning('Unauthorized access attempt to services update', [
+                'user_id' => $this->user?->id,
+                'service_id' => $service->id,
+                'permission' => 'klinik.update'
+            ]);
+            abort(403, 'Maaf! Anda tidak memiliki izin untuk mengedit data layanan.');
+        }
 
+        try {
             // Validasi data sudah dilakukan oleh FormRequest
             $validated = $request->validated();
 
@@ -288,7 +331,7 @@ class ServicesController extends Controller
                 Log::warning('Percobaan update layanan dengan kategori yang tidak ada', [
                     'service_category_id' => $validated['service_category_id'],
                     'service_id' => $service->id,
-                    'user_id' => Auth::id()
+                    'user_id' => $this->user->id
                 ]);
 
                 return redirect()->back()
@@ -308,7 +351,7 @@ class ServicesController extends Controller
                     'service_category_id' => $validated['service_category_id'],
                     'existing_id' => $existingService->id,
                     'updating_id' => $service->id,
-                    'user_id' => Auth::id()
+                    'user_id' => $this->user->id
                 ]);
 
                 return redirect()->back()
@@ -328,7 +371,7 @@ class ServicesController extends Controller
                 'name' => $service->name,
                 'service_category_id' => $service->service_category_id,
                 'price' => $service->price,
-                'user_id' => Auth::id()
+                'user_id' => $this->user->id
             ]);
 
             return redirect()->route('services.index')
@@ -341,7 +384,7 @@ class ServicesController extends Controller
                 'service_id' => $service->id,
                 'error' => $e->getMessage(),
                 'input' => $request->all(),
-                'user_id' => Auth::id(),
+                'user_id' => $this->user->id,
                 'trace' => $e->getTraceAsString()
             ]);
 
@@ -359,16 +402,23 @@ class ServicesController extends Controller
      */
     public function destroy(Service $service): RedirectResponse
     {
-        try {
-            // Pemeriksaan otorisasi menggunakan Gate
-            Gate::authorize('delete', $service);
+        // Validasi otorisasi pengguna
+        if (is_null($this->user) || !$this->user->can('klinik.delete')) {
+            Log::warning('Unauthorized access attempt to services destroy', [
+                'user_id' => $this->user?->id,
+                'service_id' => $service->id,
+                'permission' => 'klinik.delete'
+            ]);
+            abort(403, 'Maaf! Anda tidak memiliki izin untuk menghapus data layanan.');
+        }
 
+        try {
             // Pengecekan relasi sebelum penghapusan
             if ($service->transaction_detail()->exists()) {
                 Log::warning('Percobaan menghapus layanan yang masih memiliki transaksi', [
                     'service_id' => $service->id,
                     'transactions_count' => $service->transaction_detail()->count(),
-                    'user_id' => Auth::id()
+                    'user_id' => $this->user->id
                 ]);
 
                 return redirect()->route('services.index')
@@ -390,7 +440,7 @@ class ServicesController extends Controller
                 'service_id' => $serviceId,
                 'name' => $serviceName,
                 'service_category_id' => $categoryId,
-                'user_id' => Auth::id()
+                'user_id' => $this->user->id
             ]);
 
             return redirect()->route('services.index')
@@ -402,7 +452,7 @@ class ServicesController extends Controller
             Log::error('Gagal menghapus layanan', [
                 'service_id' => $service->id,
                 'error' => $e->getMessage(),
-                'user_id' => Auth::id(),
+                'user_id' => $this->user->id,
                 'trace' => $e->getTraceAsString()
             ]);
 
