@@ -4,18 +4,19 @@ namespace App\Http\Controllers\Klinik;
 
 use App\DataTables\Klinik\HealthProfesionalTypesDataTable;
 use App\Http\Controllers\Controller;
-use App\Models\Klinik\HealthProfesional;
-use App\Models\Klinik\HealthProfesionalType;
-use App\Http\Requests\Klinik\StoreHealthProfesionalTypeRequest;
-use App\Http\Requests\Klinik\UpdateHealthProfesionalTypeRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use App\Http\Requests\Klinik\{
+    StoreHealthProfesionalTypeRequest,
+    UpdateHealthProfesionalTypeRequest
+};
+use App\Models\Klinik\{
+    HealthProfesional,
+    HealthProfesionalType
+};
+use App\Models\User;
+use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
+use Illuminate\Support\Facades\{Auth, DB, Log};
 use Illuminate\View\View;
 use Throwable;
-use App\Models\User;
 
 /**
  * Controller untuk mengelola tipe tenaga kesehatan (Health Professional Types)
@@ -53,7 +54,7 @@ class HealthProfesionalTypesController extends Controller
      * @return View
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function index(HealthProfesionalTypesDataTable $dataTable): View
+    public function index(HealthProfesionalTypesDataTable $dataTable): JsonResponse|View
     {
         if (is_null($this->user) || !$this->user->can('klinik.read')) {
             Log::warning('Unauthorized access attempt to health professional types index', [
