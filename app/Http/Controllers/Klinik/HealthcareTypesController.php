@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Exception;
+use Illuminate\Http\JsonResponse;
 
 /**
  * Controller untuk mengelola data tipe layanan kesehatan
@@ -49,7 +50,7 @@ class HealthcareTypesController extends Controller
      * @param HealthcareTypesDataTable $dataTable Instance DataTable untuk menampilkan data
      * @return Response|View
      */
-    public function index(HealthcareTypesDataTable $dataTable): Response|View
+    public function index(HealthcareTypesDataTable $dataTable): JsonResponse|View
     {
         // Log aktivitas akses halaman index
         Log::info('User mengakses halaman daftar tipe layanan kesehatan', [

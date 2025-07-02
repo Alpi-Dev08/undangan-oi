@@ -24,18 +24,6 @@ use Exception;
 class HealthcareCategoriesController extends Controller
 {
     /**
-     * Create a new controller instance.
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('permission:view_healthcare_categories')->only(['index', 'show']);
-        $this->middleware('permission:create_healthcare_categories')->only(['create', 'store']);
-        $this->middleware('permission:edit_healthcare_categories')->only(['edit', 'update']);
-        $this->middleware('permission:delete_healthcare_categories')->only(['destroy']);
-    }
-
-    /**
      * Display a listing of healthcare categories.
      *
      * @param HealthcareCategoriesDataTable $dataTable
