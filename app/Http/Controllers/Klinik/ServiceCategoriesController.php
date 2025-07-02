@@ -44,9 +44,6 @@ class ServiceCategoriesController extends Controller
     public function index(ServiceCategoriesDataTable $dataTable)
     {
         try {
-            // Pemeriksaan otorisasi menggunakan Gate
-            Gate::authorize('viewAny', ServiceCategory::class);
-
             Log::info('Menampilkan daftar kategori layanan', [
                 'user_id' => Auth::id(),
                 'user_name' => Auth::user()->name
@@ -74,9 +71,6 @@ class ServiceCategoriesController extends Controller
     public function create(): View|RedirectResponse
     {
         try {
-            // Pemeriksaan otorisasi menggunakan Gate
-            Gate::authorize('create', ServiceCategory::class);
-
             Log::info('Menampilkan form pembuatan kategori layanan', [
                 'user_id' => Auth::id()
             ]);
@@ -103,9 +97,6 @@ class ServiceCategoriesController extends Controller
     public function store(StoreServiceCategoryRequest $request): RedirectResponse
     {
         try {
-            // Pemeriksaan otorisasi menggunakan Gate
-            Gate::authorize('create', ServiceCategory::class);
-
             // Validasi data sudah dilakukan oleh FormRequest
             $validated = $request->validated();
 
@@ -171,9 +162,6 @@ class ServiceCategoriesController extends Controller
     public function show(ServiceCategory $servicecategory): View|RedirectResponse
     {
         try {
-            // Pemeriksaan otorisasi menggunakan Gate
-            Gate::authorize('view', $servicecategory);
-
             Log::info('Menampilkan detail kategori layanan', [
                 'service_category_id' => $servicecategory->id,
                 'user_id' => Auth::id()
@@ -202,9 +190,6 @@ class ServiceCategoriesController extends Controller
     public function edit(ServiceCategory $servicecategory): View|RedirectResponse
     {
         try {
-            // Pemeriksaan otorisasi menggunakan Gate
-            Gate::authorize('update', $servicecategory);
-
             Log::info('Menampilkan form edit kategori layanan', [
                 'service_category_id' => $servicecategory->id,
                 'user_id' => Auth::id()
@@ -234,9 +219,6 @@ class ServiceCategoriesController extends Controller
     public function update(UpdateServiceCategoryRequest $request, ServiceCategory $servicecategory): RedirectResponse
     {
         try {
-            // Pemeriksaan otorisasi menggunakan Gate
-            Gate::authorize('update', $servicecategory);
-
             // Validasi data sudah dilakukan oleh FormRequest
             $validated = $request->validated();
 
@@ -305,9 +287,6 @@ class ServiceCategoriesController extends Controller
     public function destroy(ServiceCategory $servicecategory): RedirectResponse
     {
         try {
-            // Pemeriksaan otorisasi menggunakan Gate
-            Gate::authorize('delete', $servicecategory);
-
             // Pengecekan relasi sebelum penghapusan
             if ($servicecategory->services()->exists()) {
                 Log::warning('Percobaan menghapus kategori layanan yang masih memiliki layanan', [
