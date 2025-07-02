@@ -4,15 +4,10 @@ namespace App\Http\Controllers\Klinik;
 
 use App\DataTables\Klinik\AnamnesisDataTable;
 use App\Http\Controllers\Controller;
-use App\Models\Klinik\Anamnesis;
-use App\Http\Requests\Klinik\StoreAnamnesisRequest;
-use App\Http\Requests\Klinik\UpdateAnamnesisRequest;
-use App\Models\Klinik\AnamnesisCategory;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use App\Http\Requests\Klinik\{StoreAnamnesisRequest, UpdateAnamnesisRequest};
+use App\Models\Klinik\{Anamnesis, AnamnesisCategory};
+use Illuminate\Http\{JsonResponse, RedirectResponse};
+use Illuminate\Support\Facades\{Auth, DB, Log};
 use Illuminate\View\View;
 use Exception;
 
@@ -35,9 +30,9 @@ class AnamnesisController extends Controller
      * Display a listing of anamnesis records
      *
      * @param AnamnesisDataTable $dataTable
-     * @return Response
+     * @return JsonResponse
      */
-    public function index(AnamnesisDataTable $dataTable): Response
+    public function index(AnamnesisDataTable $dataTable): JsonResponse|View
     {
         if (is_null($this->user) || !$this->user->can('klinik.read')) {
             abort(403, 'Sorry !! You are Unauthorized to view any master data !');
