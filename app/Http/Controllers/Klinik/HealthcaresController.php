@@ -4,24 +4,13 @@ namespace App\Http\Controllers\Klinik;
 
 use App\DataTables\Klinik\HealthcaresDataTable;
 use App\Http\Controllers\Controller;
-use App\Models\Klinik\Healthcare;
-use App\Http\Requests\Klinik\StoreHealthcareRequest;
-use App\Http\Requests\Klinik\UpdateHealthcareRequest;
-use App\Models\Klinik\HealthcareCategory;
-use App\Models\Klinik\HealthcareType;
-use App\Models\Master\City;
-use App\Models\Master\Country;
-use App\Models\Master\District;
-use App\Models\Master\Province;
-use App\Models\Master\SubDistrict;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use App\Http\Requests\Klinik\{StoreHealthcareRequest, UpdateHealthcareRequest};
+use App\Models\Klinik\{Healthcare, HealthcareCategory, HealthcareType};
+use App\Models\Master\{City, Country, District, Province, SubDistrict};
 use Exception;
+use Illuminate\Http\{JsonResponse, RedirectResponse, Request, Response};
+use Illuminate\Support\Facades\{Auth, DB, Log};
+use Illuminate\View\View;
 
 /**
  * Controller untuk mengelola data layanan kesehatan
@@ -54,9 +43,9 @@ class HealthcaresController extends Controller
      * Menampilkan daftar layanan kesehatan
      *
      * @param HealthcaresDataTable $dataTable Instance DataTable untuk menampilkan data
-     * @return Response|View
+     * @return JsonResponse|View
      */
-    public function index(HealthcaresDataTable $dataTable): Response|View
+    public function index(HealthcaresDataTable $dataTable): JsonResponse|View
     {
         // Log aktivitas akses halaman index
         Log::info('User mengakses halaman daftar layanan kesehatan', [
