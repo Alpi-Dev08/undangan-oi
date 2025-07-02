@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers\Klinik;
 
-use App\DataTables\Klinik\DiseasesDataTable;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Klinik\StoreDiseaseRequest;
-use App\Http\Requests\Klinik\UpdateDiseaseRequest;
 use App\Models\Klinik\Disease;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use App\DataTables\Klinik\DiseasesDataTable;
+use App\Http\Requests\Klinik\{StoreDiseaseRequest, UpdateDiseaseRequest};
+use Illuminate\Http\{JsonResponse, RedirectResponse};
+use Illuminate\Support\Facades\{Auth, DB, Log};
 use Illuminate\View\View;
 
 /**
@@ -37,9 +33,9 @@ class DiseasesController extends Controller
      * Menampilkan daftar penyakit
      *
      * @param DiseasesDataTable $dataTable
-     * @return View
+     * @return JsonResponse
      */
-    public function index(DiseasesDataTable $dataTable): View
+    public function index(DiseasesDataTable $dataTable): JsonResponse|View
     {
         if (is_null($this->user) || !$this->user->can('klinik.read')) {
             Log::warning('Unauthorized access attempt to diseases index', [
