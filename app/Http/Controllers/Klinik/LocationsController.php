@@ -61,7 +61,7 @@ class LocationsController extends Controller
      * @return View
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    public function index(LocationsDataTable $dataTable): View
+    public function index(LocationsDataTable $dataTable)
     {
         $this->checkAuthorization('klinik.read', 'Unauthorized to view location data');
 
