@@ -4,15 +4,10 @@ namespace App\Http\Controllers\Klinik;
 
 use App\DataTables\Klinik\PhysicalCategoriesDataTable;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Klinik\StorePhysicalCategoryRequest;
-use App\Http\Requests\Klinik\UpdatePhysicalCategoryRequest;
+use App\Http\Requests\Klinik\{StorePhysicalCategoryRequest, UpdatePhysicalCategoryRequest};
 use App\Models\Klinik\PhysicalCategory;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\{Auth, DB, Log};
 use Illuminate\View\View;
 use Exception;
 
@@ -47,19 +42,25 @@ class PhysicalCategoriesController extends Controller
      *
      * @param PhysicalCategoriesDataTable $dataTable
      * @return mixed
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index(PhysicalCategoriesDataTable $dataTable)
     {
         try {
-            Gate::authorize('klinik.view');
+            // Check user permissions
+            if (!$this->user->can('klinik.read')) {
+                Log::warning('Unauthorized access attempt to physical categories index', [
+                    'user_id' => $this->user->id,
+                    'user_email' => $this->user->email
+                ]);
+                abort(403, 'Anda tidak memiliki izin untuk mengakses halaman ini.');
+            }
 
             Log::info('Physical categories index accessed', [
                 'user_id' => $this->user->id,
                 'user_email' => $this->user->email
             ]);
 
-            return $dataTable->render('pages.klinik.phyisicalcategories.index');
+            return $dataTable->render('pages.klinik.physicalcategories.index');
         } catch (Exception $e) {
             Log::error('Error accessing physical categories index', [
                 'user_id' => $this->user->id,
@@ -75,17 +76,22 @@ class PhysicalCategoriesController extends Controller
      * Show the form for creating a new physical category
      *
      * @return View
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function create(): View
     {
-        Gate::authorize('klinik.create');
+        // Check user permissions
+        if (!$this->user->can('klinik.create')) {
+            Log::warning('Unauthorized access attempt to physical category create form', [
+                'user_id' => $this->user->id
+            ]);
+            abort(403, 'Anda tidak memiliki izin untuk membuat kategori fisik.');
+        }
 
         Log::info('Physical category create form accessed', [
             'user_id' => $this->user->id
         ]);
 
-        return view('pages.klinik.phyisicalcategories.create');
+        return view('pages.klinik.physicalcategories.create');
     }
 
     /**
@@ -93,11 +99,16 @@ class PhysicalCategoriesController extends Controller
      *
      * @param StorePhysicalCategoryRequest $request
      * @return RedirectResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(StorePhysicalCategoryRequest $request): RedirectResponse
     {
-        Gate::authorize('klinik.create');
+        // Check user permissions
+        if (!$this->user->can('klinik.create')) {
+            Log::warning('Unauthorized attempt to create physical category', [
+                'user_id' => $this->user->id
+            ]);
+            abort(403, 'Anda tidak memiliki izin untuk membuat kategori fisik.');
+        }
 
         DB::beginTransaction();
 
@@ -148,18 +159,24 @@ class PhysicalCategoriesController extends Controller
      *
      * @param PhysicalCategory $physicalCategory
      * @return View
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(PhysicalCategory $physicalCategory): View
     {
-        Gate::authorize('klinik.view');
+        // Check user permissions
+        if (!$this->user->can('klinik.read')) {
+            Log::warning('Unauthorized access attempt to view physical category', [
+                'user_id' => $this->user->id,
+                'category_id' => $physicalCategory->id
+            ]);
+            abort(403, 'Anda tidak memiliki izin untuk melihat kategori fisik.');
+        }
 
         Log::info('Physical category viewed', [
             'user_id' => $this->user->id,
             'category_id' => $physicalCategory->id
         ]);
 
-        return view('pages.klinik.phyisicalcategories.show', compact('physicalCategory'));
+        return view('pages.klinik.physicalcategories.show', compact('physicalCategory'));
     }
 
     /**
@@ -167,11 +184,17 @@ class PhysicalCategoriesController extends Controller
      *
      * @param int $id
      * @return View|RedirectResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function edit(int $id)
     {
-        Gate::authorize('klinik.update');
+        // Check user permissions
+        if (!$this->user->can('klinik.update')) {
+            Log::warning('Unauthorized access attempt to physical category edit form', [
+                'user_id' => $this->user->id,
+                'category_id' => $id
+            ]);
+            abort(403, 'Anda tidak memiliki izin untuk mengedit kategori fisik.');
+        }
 
         try {
             $physicalCategory = PhysicalCategory::findOrFail($id);
@@ -181,7 +204,7 @@ class PhysicalCategoriesController extends Controller
                 'category_id' => $physicalCategory->id
             ]);
 
-            return view('pages.klinik.phyisicalcategories.edit', compact('physicalCategory'));
+            return view('pages.klinik.physicalcategories.edit', compact('physicalCategory'));
 
         } catch (Exception $e) {
             Log::error('Error accessing physical category edit form', [
@@ -201,11 +224,17 @@ class PhysicalCategoriesController extends Controller
      * @param UpdatePhysicalCategoryRequest $request
      * @param int $id
      * @return RedirectResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(UpdatePhysicalCategoryRequest $request, int $id): RedirectResponse
     {
-        Gate::authorize('klinik.update');
+        // Check user permissions
+        if (!$this->user->can('klinik.update')) {
+            Log::warning('Unauthorized attempt to update physical category', [
+                'user_id' => $this->user->id,
+                'category_id' => $id
+            ]);
+            abort(403, 'Anda tidak memiliki izin untuk mengedit kategori fisik.');
+        }
 
         DB::beginTransaction();
 
@@ -263,11 +292,17 @@ class PhysicalCategoriesController extends Controller
      *
      * @param int $id
      * @return RedirectResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy(int $id): RedirectResponse
     {
-        Gate::authorize('klinik.delete');
+        // Check user permissions
+        if (!$this->user->can('klinik.delete')) {
+            Log::warning('Unauthorized attempt to delete physical category', [
+                'user_id' => $this->user->id,
+                'category_id' => $id
+            ]);
+            abort(403, 'Anda tidak memiliki izin untuk menghapus kategori fisik.');
+        }
 
         DB::beginTransaction();
 
