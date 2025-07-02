@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers\Klinik;
 
-use App\DataTables\Klinik\PackagesDataTable;
-use App\Http\Controllers\Controller;
-use App\Models\Klinik\Package;
-use App\Http\Requests\Klinik\StorePackageRequest;
-use App\Http\Requests\Klinik\UpdatePackageRequest;
-use App\Models\Klinik\PackageDetail;
-use App\Models\Klinik\Service;
-use App\Models\Klinik\ServiceCategory;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Exception;
 use Throwable;
-
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\{DB, Log, Auth};
+use App\Http\Controllers\Controller;
+use App\Models\Klinik\{
+    Package,
+    Service,
+    PackageDetail,
+    ServiceCategory
+};
+use App\DataTables\Klinik\PackagesDataTable;
+use App\Http\Requests\Klinik\{
+    StorePackageRequest,
+    UpdatePackageRequest
+};
 /**
  * Controller untuk mengelola paket layanan klinik
  *
@@ -53,9 +53,9 @@ class PackagesController extends Controller
      * Menampilkan daftar paket layanan
      *
      * @param PackagesDataTable $dataTable
-     * @return Response
+     * @return JsonResponse
      */
-    public function index(PackagesDataTable $dataTable): Response
+    public function index(PackagesDataTable $dataTable): JsonResponse|View
     {
         Log::info('Mengakses halaman daftar paket layanan', [
             'user_id' => $this->user?->id,
