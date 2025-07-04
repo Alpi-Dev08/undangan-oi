@@ -3,28 +3,59 @@
 namespace App\Http\Requests\Klinik;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
+/**
+ * Request validation untuk update unit
+ */
 class UpdateUnitRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Menentukan apakah user memiliki izin untuk request ini
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        return Auth::check() && Auth::user()->can('klinik.update');
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Aturan validasi untuk request
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'name' => 'required|max:100|unique:units,name,'.$this->unit->id,
+            'name' => 'required|string|max:100|unique:units,name,' . $this->unit->id
+        ];
+    }
+
+    /**
+     * Pesan error kustom
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Nama unit harus diisi.',
+            'name.string' => 'Nama unit harus berupa teks.',
+            'name.max' => 'Nama unit maksimal 100 karakter.',
+            'name.unique' => 'Nama unit sudah digunakan.',
+        ];
+    }
+
+    /**
+     * Atribut kustom untuk pesan error
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'name' => 'nama unit',
         ];
     }
 }
