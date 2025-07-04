@@ -2,25 +2,19 @@
 
 namespace App\Http\Controllers\Klinik;
 
-use App\DataTables\Klinik\DrugsDataTable;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Klinik\StoreDrugRequest;
-use App\Http\Requests\Klinik\UpdateDrugRequest;
-use App\Imports\DrugsImport;
-use App\Models\Klinik\Drug;
-use App\Models\Klinik\DrugUsage;
-use App\Models\Klinik\Unit;
-use App\Exports\DrugsExport;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
-use Illuminate\View\View;
-use Maatwebsite\Excel\Facades\Excel;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Exception;
+use Illuminate\View\View;
+use App\Exports\DrugsExport;
+use App\Imports\DrugsImport;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
+use App\DataTables\Klinik\DrugsDataTable;
+use App\Models\Klinik\{Drug, DrugUsage, Unit};
+use Illuminate\Support\Facades\{Auth, DB, Log};
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Illuminate\Http\{Request, RedirectResponse, Response};
+use App\Http\Requests\Klinik\{StoreDrugRequest, UpdateDrugRequest};
 
 class DrugsController extends Controller
 {
@@ -43,7 +37,7 @@ class DrugsController extends Controller
      * @param DrugsDataTable $dataTable
      * @return Response
      */
-    public function index(DrugsDataTable $dataTable): Response
+    public function index(DrugsDataTable $dataTable): JsonResponse|View
     {
         Log::info('Mengakses halaman daftar obat', ['user_id' => $this->user?->id]);
 
