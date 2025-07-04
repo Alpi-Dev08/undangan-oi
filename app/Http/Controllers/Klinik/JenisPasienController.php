@@ -4,20 +4,12 @@ namespace App\Http\Controllers\Klinik;
 
 use App\DataTables\Klinik\JenisPasienDataTable;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Klinik\StoreJenisPasienRequest;
-use App\Http\Requests\Klinik\UpdateJenisPasienRequest;
-use App\Models\JenisPasien;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\Klinik\{StoreJenisPasienRequest, UpdateJenisPasienRequest};
+use App\Models\{JenisPasien, User};
+use Illuminate\Http\{JsonResponse, RedirectResponse};
+use Illuminate\Support\Facades\{Auth, DB, Log};
 use Illuminate\View\View;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
-use Exception;
 use Throwable;
-use App\Models\User;
 
 /**
  * Controller untuk mengelola data Jenis Pasien
@@ -63,10 +55,10 @@ class JenisPasienController extends Controller
      * fitur pagination, sorting, dan filtering
      *
      * @param JenisPasienDataTable $dataTable Instance DataTable untuk jenis pasien
-     * @return Response Halaman index dengan DataTable
+     * @return JsonResponse|View Halaman index dengan DataTable
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function index(JenisPasienDataTable $dataTable): Response
+    public function index(JenisPasienDataTable $dataTable): JsonResponse|View
     {
         // Validasi otorisasi pengguna
         if (is_null($this->user) || !$this->user->can('klinik.read')) {

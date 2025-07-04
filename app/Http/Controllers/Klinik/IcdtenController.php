@@ -5,18 +5,11 @@ namespace App\Http\Controllers\Klinik;
 use App\DataTables\Klinik\IcdtenDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\Klinik\Icdten;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
-use Exception;
-use Throwable;
 use App\Models\User;
+use Illuminate\Http\{Request, RedirectResponse, JsonResponse};
+use Illuminate\Support\Facades\{Auth, DB, Log};
+use Illuminate\View\View;
+use Throwable;
 
 /**
  * Controller untuk mengelola data ICD-10
@@ -62,10 +55,10 @@ class IcdtenController extends Controller
      * fitur pagination, sorting, dan filtering
      *
      * @param IcdtenDataTable $dataTable Instance DataTable untuk ICD-10
-     * @return Response Halaman index dengan DataTable
+     * @return JsonResponse|View Halaman index dengan DataTable
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function index(IcdtenDataTable $dataTable): Response
+    public function index(IcdtenDataTable $dataTable): JsonResponse|View
     {
         // Validasi otorisasi pengguna
         if (is_null($this->user) || !$this->user->can('klinik.read')) {

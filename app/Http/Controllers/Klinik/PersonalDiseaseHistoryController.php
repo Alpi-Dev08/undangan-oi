@@ -4,14 +4,13 @@ namespace App\Http\Controllers\Klinik;
 
 use App\DataTables\Klinik\PersonalDiseaseHistoryDataTable;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Klinik\StorePersonalDiseaseHistoryRequest;
-use App\Http\Requests\Klinik\UpdatePersonalDiseaseHistoryRequest;
+use App\Http\Requests\Klinik\{
+    StorePersonalDiseaseHistoryRequest,
+    UpdatePersonalDiseaseHistoryRequest
+};
 use App\Models\Klinik\PersonalDiseaseHistory;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\{Auth, DB, Log};
 use Illuminate\View\View;
 use Exception;
 
@@ -24,20 +23,6 @@ use Exception;
  */
 class PersonalDiseaseHistoryController extends Controller
 {
-    /**
-     * Constructor
-     *
-     * Menerapkan middleware otentikasi dan otorisasi
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('permission:personal-disease-histories.view')->only(['index']);
-        $this->middleware('permission:personal-disease-histories.create')->only(['create', 'store']);
-        $this->middleware('permission:personal-disease-histories.edit')->only(['edit', 'update']);
-        $this->middleware('permission:personal-disease-histories.delete')->only(['destroy']);
-    }
-
     /**
      * Tampilkan daftar riwayat penyakit pribadi
      *

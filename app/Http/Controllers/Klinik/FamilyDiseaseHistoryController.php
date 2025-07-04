@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Klinik;
 
-use App\DataTables\Klinik\FamilyDiseaseHistoryDataTable;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Klinik\StoreFamilyDiseaseHistoryRequest;
-use App\Http\Requests\Klinik\UpdateFamilyDiseaseHistoryRequest;
-use App\Models\Klinik\FamilyDiseaseHistory;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Exception;
+use Illuminate\Http\{JsonResponse, RedirectResponse};
+use Illuminate\Support\Facades\{DB, Log, Auth};
+use Illuminate\View\View;
+use App\Http\Controllers\Controller;
+use App\Models\Klinik\FamilyDiseaseHistory;
+use App\DataTables\Klinik\FamilyDiseaseHistoryDataTable;
+use App\Http\Requests\Klinik\{
+    StoreFamilyDiseaseHistoryRequest,
+    UpdateFamilyDiseaseHistoryRequest
+};
 
 /**
  * Class FamilyDiseaseHistoryController
@@ -24,24 +24,12 @@ use Exception;
 class FamilyDiseaseHistoryController extends Controller
 {
     /**
-     * Create a new controller instance.
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('permission:view_family_disease_histories')->only(['index', 'show']);
-        $this->middleware('permission:create_family_disease_histories')->only(['create', 'store']);
-        $this->middleware('permission:edit_family_disease_histories')->only(['edit', 'update']);
-        $this->middleware('permission:delete_family_disease_histories')->only(['destroy']);
-    }
-
-    /**
      * Display a listing of family disease histories.
      *
      * @param FamilyDiseaseHistoryDataTable $dataTable
-     * @return View
+     * @return JsonResponse|View
      */
-    public function index(FamilyDiseaseHistoryDataTable $dataTable): View
+    public function index(FamilyDiseaseHistoryDataTable $dataTable): JsonResponse|View
     {
         try {
             Log::info('Family disease history list accessed', [
