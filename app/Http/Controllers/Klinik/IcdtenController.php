@@ -397,8 +397,8 @@ class IcdtenController extends Controller
 
             if (!empty($term)) {
                 $query->where(function ($q) use ($term) {
-                    $q->where('code', 'ILIKE', "%{$term}%")
-                      ->orWhere('name', 'ILIKE', "%{$term}%");
+                    $q->where('code', 'LIKE', "%{$term}%")
+                      ->orWhere('name', 'LIKE', "%{$term}%");
                 });
             }
 
