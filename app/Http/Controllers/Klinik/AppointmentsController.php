@@ -4,13 +4,10 @@ namespace App\Http\Controllers\Klinik;
 
 use App\DataTables\Klinik\AppointmentsDataTable;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Klinik\StoreExaminationRequest;
-use App\Http\Requests\Klinik\UpdateExaminationRequest;
+use App\Http\Requests\Klinik\{StoreExaminationRequest, UpdateExaminationRequest};
 use App\Models\Klinik\Examination;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\{JsonResponse, RedirectResponse};
+use Illuminate\Support\Facades\{Auth, DB, Log};
 use Illuminate\View\View;
 
 /**
@@ -38,7 +35,7 @@ class AppointmentsController extends Controller
      * @param AppointmentsDataTable $dataTable
      * @return View
      */
-    public function index(AppointmentsDataTable $dataTable): View
+    public function index(AppointmentsDataTable $dataTable): JsonResponse|View
     {
         if (is_null($this->user) || !$this->user->can('klinik.read')) {
             Log::warning('Unauthorized access attempt to appointments index', [

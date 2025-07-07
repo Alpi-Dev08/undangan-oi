@@ -5,34 +5,35 @@ namespace App\Http\Controllers\Klinik;
 use App\DataTables\PatientDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Account\SettingsInfoRequest;
-use App\Models\Klinik\Examination;
-use App\Models\Klinik\Patient;
-use App\Models\Klinik\PemeriksaanAwal;
-use App\Models\Master\BloodType;
-use App\Models\Master\CardType;
-use App\Models\Master\City;
-use App\Models\Master\Country;
-use App\Models\Master\District;
-use App\Models\Master\Education;
-use App\Models\Master\Gender;
-use App\Models\Master\MaritalStatus;
-use App\Models\Master\Province;
-use App\Models\Master\Religion;
-use App\Models\Master\SubDistrict;
-use App\Models\Master\Work;
-use App\Models\User;
-use App\Models\UserInfo;
+use App\Models\{
+    Klinik\Examination,
+    Klinik\Patient,
+    Klinik\PemeriksaanAwal,
+    Master\BloodType,
+    Master\CardType,
+    Master\City,
+    Master\Country,
+    Master\District,
+    Master\Education,
+    Master\Gender,
+    Master\MaritalStatus,
+    Master\Province,
+    Master\Religion,
+    Master\SubDistrict,
+    Master\Work,
+    User,
+    UserInfo
+};
 use Haruncpi\LaravelIdGenerator\IdGenerator;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\{Request, Response, RedirectResponse, JsonResponse};
 use Illuminate\View\View;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\{
+    Auth,
+    DB,
+    Hash,
+    Log,
+    Storage
+};
 use Spatie\Permission\Models\Role;
 use Exception;
 use Throwable;
@@ -72,7 +73,7 @@ class PatientsController extends Controller
      * @param PatientDataTable $dataTable
      * @return Response
      */
-    public function index(PatientDataTable $dataTable): Response
+    public function index(PatientDataTable $dataTable): JsonResponse|View
     {
         Log::info('Mengakses halaman daftar pasien', [
             'user_id' => $this->user?->id,
