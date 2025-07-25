@@ -2,46 +2,42 @@
 
     namespace App\Http\Controllers\Klinik;
 
-    use App\DataTables\Klinik\ExaminationsDataTable;
-    use App\FHIR\FamilyDisease;
-    use App\FHIR\PersonalDisease;
-    use App\Http\Controllers\Controller;
-    use App\Http\Requests\Klinik\StoreExaminationRequest;
-    use App\Http\Requests\Klinik\UpdateExaminationRequest;
-    use App\Models\Klinik\AdditionalCategory;
-    use App\Models\Klinik\AdditionalExamination;
-    use App\Models\Klinik\AnamnesisCategory;
-    use App\Models\Klinik\AnamnesisExamination;
-    use App\Models\Klinik\Drug;
-    use App\Models\Klinik\Examination;
-    use App\Models\Klinik\FamilyDiseaseHistory;
-    use App\Models\Klinik\HealthProfesional;
-    use App\Models\Klinik\Icdten;
-    use App\Models\Klinik\LaboratoryExamination;
-    use App\Models\Klinik\OtherExamination;
-    use App\Models\Klinik\Package;
-    use App\Models\Klinik\PemeriksaanAwal;
-    use App\Models\Klinik\PersonalDiseaseHistory;
-    use App\Models\Klinik\PhysicalCategory;
-    use App\Models\Klinik\PhysicalExamination;
-    use App\Models\Klinik\Plan;
-    use App\Models\Klinik\Service;
-    use App\Models\Klinik\ServiceCategory;
-    use App\Models\Klinik\Transaction;
-    use App\Models\Klinik\TransactionDetail;
-    use App\Models\Klinik\VitalityExamination;
-    use App\Models\Master\OdontogramSymbol;
-    use App\Models\User;
-    use Barryvdh\DomPDF\Facade\Pdf;
-    use Carbon\Carbon;
-    use Doctrine\DBAL\Driver\PDO\Exception;
-    use Illuminate\Http\Request;
-    use Illuminate\Support\Facades\Auth;
-    use Illuminate\Support\Facades\Storage;
-    use QrCode;
-    use Satusehat\Integration\FHIR\Condition;
-    use Satusehat\Integration\FHIR\Encounter;
-    use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
+use App\DataTables\Klinik\ExaminationsDataTable;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Klinik\{StoreExaminationRequest, UpdateExaminationRequest};
+use App\Models\Klinik\{
+    AdditionalCategory,
+    AdditionalExamination,
+    AnamnesisCategory,
+    AnamnesisExamination,
+    Drug,
+    Examination,
+    FamilyDiseaseHistory,
+    HealthProfesional,
+    Icdten,
+    LaboratoryExamination,
+    OtherExamination,
+    Package,
+    PemeriksaanAwal,
+    PersonalDiseaseHistory,
+    PhysicalCategory,
+    PhysicalExamination,
+    Plan,
+    Service,
+    ServiceCategory,
+    Transaction,
+    TransactionDetail,
+    VitalityExamination
+};
+use App\Models\{Master\OdontogramSymbol, User};
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
+use Doctrine\DBAL\Driver\PDO\Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\{Auth, DB, Log, Storage};
+use QrCode;
+use Satusehat\Integration\FHIR\{Condition, Encounter};
+use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 
     class ExaminationsController extends Controller
@@ -262,18 +258,56 @@
             ]));
         }
 
+        /**
+         * Membuat pembayaran untuk transaksi
+         *
+         * @param Request $request
+         * @return RedirectResponse
+         */
         public function createPayment(Request $request)
         {
-            $id                  = $request->id;
-            $transaction         = Transaction::find($id);
-            $transaction->status = 'paid';
-            $transaction->save();
+            try {
+                DB::beginTransaction();
 
-            $examination         = Examination::find($transaction->examination_id);
-            $examination->status = 'done';
-            $examination->save();
+                $id = $request->id;
+                $transaction = Transaction::find($id);
 
-            return redirect()->route('transactions.index');
+                if (!$transaction) {
+                    Log::error('Transaction not found: ' . $id);
+                    return redirect()->route('transactions.index')
+                                   ->with('error', 'Transaksi tidak ditemukan');
+                }
+
+                // Konfirmasi pembayaran dengan user yang sedang login
+                $paymentConfirmed = $transaction->confirmPayment();
+
+                if (!$paymentConfirmed) {
+                    DB::rollBack();
+                    Log::error('Failed to confirm payment for transaction: ' . $id);
+                    return redirect()->route('transactions.index')
+                                   ->with('error', 'Gagal mengkonfirmasi pembayaran');
+                }
+
+                // Update status examination
+                $examination = Examination::find($transaction->examination_id);
+                if ($examination) {
+                    $examination->status = 'done';
+                    $examination->save();
+                    Log::info('Examination status updated to done: ' . $examination->id);
+                }
+
+                DB::commit();
+                Log::info('Payment created successfully for transaction: ' . $id . ' by user: ' . Auth::id());
+
+                return redirect()->route('transactions.index')
+                            ->with('success', 'Pembayaran berhasil dikonfirmasi');
+
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error('Error creating payment: ' . $e->getMessage());
+                return redirect()->route('transactions.index')
+                            ->with('error', 'Terjadi kesalahan saat mengkonfirmasi pembayaran');
+            }
         }
 
         public function services(Request $request)

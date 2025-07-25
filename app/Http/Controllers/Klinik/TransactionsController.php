@@ -135,7 +135,8 @@ class TransactionsController extends Controller
             $transaction->update([
                 'amount' => $total,
                 'notes' => $request->notes,
-                'status' => 'waiting payment'
+                'status' => 'waiting payment',
+                'updated_by' => $this->user->id
             ]);
 
             DB::commit();
