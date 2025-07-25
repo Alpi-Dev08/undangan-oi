@@ -39,81 +39,92 @@
     @if (Auth::user()->hasRole(['admin', 'administrator', 'dokter']))
         {{-- Quick Stats Cards --}}
         <div class="row g-5 mb-6" x-data="dashboardStats()">
-            <div class="col-xl-3 col-md-6">
-                <div class="card card-flush h-100 hover-elevate-up">
-                    <div class="card-body d-flex align-items-center p-6">
-                        <div class="symbol symbol-45px me-5">
-                            <div class="symbol-label bg-light-primary">
-                                <i class="fas fa-users text-primary fs-2"></i>
+            {{-- Row 1: Total Pasien & Pasien Baru --}}
+            <div class="col-xl-6 col-lg-6 col-md-12">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="card card-flush h-100 hover-elevate-up">
+                            <div class="card-body d-flex align-items-center p-6">
+                                <div class="symbol symbol-45px me-4">
+                                    <div class="symbol-label bg-light-primary">
+                                        <i class="fas fa-users text-primary fs-2"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <span class="text-gray-400 fw-semibold d-block fs-7">Total Pasien</span>
+                                    <span class="text-gray-800 fw-bold d-block fs-2" x-text="stats.patients">-</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="flex-grow-1">
-                            <span class="text-gray-400 fw-semibold d-block fs-7">Total Pasien</span>
-                            <span class="text-gray-800 fw-bold d-block fs-2" x-text="stats.patients">-</span>
+                    </div>
+                    <div class="col-6">
+                        <div class="card card-flush h-100 hover-elevate-up">
+                            <div class="card-body d-flex align-items-center p-6">
+                                <div class="symbol symbol-45px me-4">
+                                    <div class="symbol-label bg-light-success">
+                                        <i class="fas fa-user-plus text-success fs-2"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <span class="text-gray-400 fw-semibold d-block fs-7">Pasien Baru</span>
+                                    <span class="text-gray-800 fw-bold d-block fs-2"
+                                        x-text="stats.new_patients">-</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-xl-3 col-md-6">
-                <div class="card card-flush h-100 hover-elevate-up">
-                    <div class="card-body d-flex align-items-center p-6">
-                        <div class="symbol symbol-45px me-5">
-                            <div class="symbol-label bg-light-success">
-                                <i class="fas fa-user-plus text-success fs-2"></i>
+            {{-- Row 2: Pemeriksaan & Antrian --}}
+            <div class="col-xl-6 col-lg-6 col-md-12">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="card card-flush h-100 hover-elevate-up">
+                            <div class="card-body d-flex align-items-center p-6">
+                                <div class="symbol symbol-45px me-4">
+                                    <div class="symbol-label bg-light-info">
+                                        <i class="fas fa-stethoscope text-info fs-2"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <span class="text-gray-400 fw-semibold d-block fs-7">Pemeriksaan</span>
+                                    <span class="text-gray-800 fw-bold d-block fs-2"
+                                        x-text="stats.examinations">-</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="flex-grow-1">
-                            <span class="text-gray-400 fw-semibold d-block fs-7">Pasien Baru Hari Ini</span>
-                            <span class="text-gray-800 fw-bold d-block fs-2" x-text="stats.new_patients">-</span>
+                    </div>
+                    <div class="col-6">
+                        <div class="card card-flush h-100 hover-elevate-up">
+                            <div class="card-body d-flex align-items-center p-6">
+                                <div class="symbol symbol-45px me-4">
+                                    <div class="symbol-label bg-light-warning">
+                                        <i class="fas fa-calendar-check text-warning fs-2"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <span class="text-gray-400 fw-semibold d-block fs-7">Antrian Aktif</span>
+                                    <span class="text-gray-800 fw-bold d-block fs-2" x-text="stats.queue">-</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-xl-3 col-md-6">
-                <div class="card card-flush h-100 hover-elevate-up">
-                    <div class="card-body d-flex align-items-center p-6">
-                        <div class="symbol symbol-45px me-5">
-                            <div class="symbol-label bg-light-success">
-                                <i class="fas fa-stethoscope text-success fs-2"></i>
+            {{-- Row 3: Pendapatan (Full Width) --}}
+            <div class="col-12">
+                <div class="card card-flush h-100 hover-elevate-up bg-gradient-primary">
+                    <div class="card-body d-flex align-items-center justify-content-center p-6">
+                        <div class="symbol symbol-50px me-5">
+                            <div class="symbol-label bg-white bg-opacity-20">
+                                <i class="fas fa-money-bill-wave text-primary fs-1"></i>
                             </div>
                         </div>
-                        <div class="flex-grow-1">
-                            <span class="text-gray-400 fw-semibold d-block fs-7">Pemeriksaan Hari Ini</span>
-                            <span class="text-gray-800 fw-bold d-block fs-2" x-text="stats.examinations">-</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-md-6">
-                <div class="card card-flush h-100 hover-elevate-up">
-                    <div class="card-body d-flex align-items-center p-6">
-                        <div class="symbol symbol-45px me-5">
-                            <div class="symbol-label bg-light-warning">
-                                <i class="fas fa-calendar-check text-warning fs-2"></i>
-                            </div>
-                        </div>
-                        <div class="flex-grow-1">
-                            <span class="text-gray-400 fw-semibold d-block fs-7">Antrian Aktif</span>
-                            <span class="text-gray-800 fw-bold d-block fs-2" x-text="stats.queue">-</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-md-6">
-                <div class="card card-flush h-100 hover-elevate-up">
-                    <div class="card-body d-flex align-items-center p-6">
-                        <div class="symbol symbol-45px me-5">
-                            <div class="symbol-label bg-light-info">
-                                <i class="fas fa-money-bill-wave text-info fs-2"></i>
-                            </div>
-                        </div>
-                        <div class="flex-grow-1">
-                            <span class="text-gray-400 fw-semibold d-block fs-7">Pendapatan Hari Ini</span>
-                            <span class="text-gray-800 fw-bold d-block fs-2"
+                        <div class="text-center">
+                            <span class="text-primary fw-semibold d-block fs-6 opacity-75">Pendapatan Hari Ini</span>
+                            <span class="text-primary fw-bold d-block fs-1"
                                 x-text="formatCurrency(stats.revenue)">-</span>
                         </div>
                     </div>
