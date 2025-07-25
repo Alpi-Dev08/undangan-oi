@@ -304,13 +304,13 @@
                                     <a href="{{ route('patients.create') }}" class="btn btn-light-primary">
                                         <i class="fas fa-user-plus me-2"></i>Daftar Pasien Baru
                                     </a>
-                                    <a href="{{ route('examinations.create') }}" class="btn btn-light-success">
-                                        <i class="fas fa-stethoscope me-2"></i>Pemeriksaan Baru
+                                    <a href="{{ route('examinations.index') }}" class="btn btn-light-success">
+                                        <i class="fas fa-stethoscope me-2"></i>Pemeriksaan
                                     </a>
-                                    <a href="{{ route('transactions.create') }}" class="btn btn-light-warning">
-                                        <i class="fas fa-receipt me-2"></i>Transaksi Baru
+                                    <a href="{{ route('transactions.index') }}" class="btn btn-light-warning">
+                                        <i class="fas fa-receipt me-2"></i>Transaksi
                                     </a>
-                                    <a href="#" class="btn btn-light-info">
+                                    <a href="#" class="btn btn-light-info" disabled>
                                         <i class="fas fa-chart-bar me-2"></i>Lihat Laporan
                                     </a>
                                 </div>
@@ -326,7 +326,7 @@
             <script>
                 // Pastikan Alpine.js sudah loaded
                 document.addEventListener('alpine:init', () => {
-                    // Alpine.js component untuk dashboard stats
+                    // Update bagian Alpine.js component untuk dashboard stats
                     Alpine.data('dashboardStats', () => ({
                         stats: {
                             patients: 0,
@@ -334,33 +334,99 @@
                             queue: 0,
                             revenue: 0
                         },
+                        dailyStats: [],
+                        monthlyStats: [],
+                        comprehensiveStats: null,
+                        loading: false,
 
                         init() {
                             this.loadStats();
+                            this.loadDailyStats();
+                            this.loadMonthlyStats();
+                            this.loadComprehensiveStats();
                         },
 
                         async loadStats() {
                             try {
-                                // Simulasi loading data - ganti dengan API call yang sebenarnya
-                                await new Promise(resolve => setTimeout(resolve, 1000));
+                                this.loading = true;
+                                const response = await fetch('{{ route('dashboard.stats') }}');
+                                const result = await response.json();
 
-                                this.stats = {
-                                    patients: 0,
-                                    examinations: 0,
-                                    queue: 0,
-                                    revenue: 0
-                                };
+                                if (result.success) {
+                                    this.stats = result.data;
+                                } else {
+                                    console.error('Failed to load stats:', result.message);
+                                    toastr.error('Gagal memuat statistik dashboard');
+                                }
                             } catch (error) {
                                 console.error('Error loading stats:', error);
+                                toastr.error('Terjadi kesalahan saat memuat statistik');
+                            } finally {
+                                this.loading = false;
+                            }
+                        },
+
+                        async loadDailyStats() {
+                            try {
+                                const response = await fetch(
+                                    '{{ route('dashboard.stats.daily-patients') }}');
+                                const result = await response.json();
+
+                                if (result.success) {
+                                    this.dailyStats = result.data;
+                                }
+                            } catch (error) {
+                                console.error('Error loading daily stats:', error);
+                            }
+                        },
+
+                        async loadMonthlyStats() {
+                            try {
+                                const response = await fetch(
+                                    '{{ route('dashboard.stats.monthly-patients') }}');
+                                const result = await response.json();
+
+                                if (result.success) {
+                                    this.monthlyStats = result.data;
+                                }
+                            } catch (error) {
+                                console.error('Error loading monthly stats:', error);
+                            }
+                        },
+
+                        async loadComprehensiveStats() {
+                            try {
+                                const response = await fetch(
+                                    '{{ route('dashboard.stats.comprehensive') }}');
+                                const result = await response.json();
+
+                                if (result.success) {
+                                    this.comprehensiveStats = result.data;
+                                }
+                            } catch (error) {
+                                console.error('Error loading comprehensive stats:', error);
                             }
                         },
 
                         formatCurrency(amount) {
                             return new Intl.NumberFormat('id-ID', {
                                 style: 'currency',
-                                currency: 'IDR',
-                                minimumFractionDigits: 0
-                            }).format(amount);
+                                currency: 'IDR'
+                            }).format(amount || 0);
+                        },
+
+                        getGrowthIcon() {
+                            if (!this.comprehensiveStats) return 'fas fa-minus';
+                            const growth = this.comprehensiveStats.month.growth_percentage;
+                            return growth > 0 ? 'fas fa-arrow-up text-success' :
+                                growth < 0 ? 'fas fa-arrow-down text-danger' :
+                                'fas fa-minus text-muted';
+                        },
+
+                        getGrowthText() {
+                            if (!this.comprehensiveStats) return '0%';
+                            const growth = this.comprehensiveStats.month.growth_percentage;
+                            return Math.abs(growth) + '%';
                         }
                     }));
 
