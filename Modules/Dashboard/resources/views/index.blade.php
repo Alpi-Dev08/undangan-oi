@@ -1,57 +1,246 @@
 <x-base-layout>
-    @if (Auth::user()->hasRole(['admin', 'administrator']))
-        <div class="row g-5">
-            <div class="col-xl-8">
-                <div class="card card-flush h-xl-100">
-                    <div class="card-header pt-7">
-                        <h3 class="card-title align-items-start flex-column">
-                            <span class="card-label fw-bold text-dark">Formulir Skala Get Up and Go Test</span>
-                            <span class="text-muted mt-1 fw-semibold fs-7">Evaluasi risiko jatuh pasien</span>
-                        </h3>
+    {{-- Alert untuk pesan flash --}}
+    @if (session('warning'))
+        <div class="alert alert-warning alert-dismissible fade show mb-6" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            {{ session('warning') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show mb-6" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    {{-- Welcome Section --}}
+    <div class="row mb-6">
+        <div class="col-12">
+            <div class="card bg-gradient-primary text-white">
+                <div class="card-body p-8">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h1 class="text-white mb-2">Selamat Datang, {{ $user->name }}!</h1>
+                            <p class="text-white-75 mb-0 fs-5">Dashboard Sistem Informasi Klinik</p>
+                            <small class="text-white-50">{{ now()->format('l, d F Y - H:i') }} WIB</small>
+                        </div>
+                        <div class="text-end">
+                            <i class="fas fa-user-md fa-3x text-white-25"></i>
+                        </div>
                     </div>
-                    <div class="card-body pt-5">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Auth::user()->hasRole(['admin', 'administrator']))
+        {{-- Quick Stats Cards --}}
+        <div class="row g-5 mb-6" x-data="dashboardStats()">
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-flush h-100 hover-elevate-up">
+                    <div class="card-body d-flex align-items-center p-6">
+                        <div class="symbol symbol-45px me-5">
+                            <div class="symbol-label bg-light-primary">
+                                <i class="fas fa-users text-primary fs-2"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <span class="text-gray-400 fw-semibold d-block fs-7">Total Pasien</span>
+                            <span class="text-gray-800 fw-bold d-block fs-2" x-text="stats.patients">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-flush h-100 hover-elevate-up">
+                    <div class="card-body d-flex align-items-center p-6">
+                        <div class="symbol symbol-45px me-5">
+                            <div class="symbol-label bg-light-success">
+                                <i class="fas fa-stethoscope text-success fs-2"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <span class="text-gray-400 fw-semibold d-block fs-7">Pemeriksaan Hari Ini</span>
+                            <span class="text-gray-800 fw-bold d-block fs-2" x-text="stats.examinations">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-flush h-100 hover-elevate-up">
+                    <div class="card-body d-flex align-items-center p-6">
+                        <div class="symbol symbol-45px me-5">
+                            <div class="symbol-label bg-light-warning">
+                                <i class="fas fa-calendar-check text-warning fs-2"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <span class="text-gray-400 fw-semibold d-block fs-7">Antrian Aktif</span>
+                            <span class="text-gray-800 fw-bold d-block fs-2" x-text="stats.queue">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-flush h-100 hover-elevate-up">
+                    <div class="card-body d-flex align-items-center p-6">
+                        <div class="symbol symbol-45px me-5">
+                            <div class="symbol-label bg-light-info">
+                                <i class="fas fa-money-bill-wave text-info fs-2"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <span class="text-gray-400 fw-semibold d-block fs-7">Pendapatan Hari Ini</span>
+                            <span class="text-gray-800 fw-bold d-block fs-2"
+                                x-text="formatCurrency(stats.revenue)">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-5">
+            {{-- Get Up and Go Test Form --}}
+            <div class="col-xl-8">
+                <div class="card card-flush h-xl-100 shadow-sm">
+                    <div class="card-header pt-7 border-bottom">
+                        <div class="d-flex align-items-center">
+                            <div class="symbol symbol-40px me-4">
+                                <div class="symbol-label bg-light-primary">
+                                    <i class="fas fa-walking text-primary fs-4"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h3 class="card-title align-items-start flex-column mb-0">
+                                    <span class="card-label fw-bold text-dark fs-3">Formulir Skala Get Up and Go
+                                        Test</span>
+                                    <span class="text-muted mt-1 fw-semibold fs-7">Evaluasi risiko jatuh pasien dengan
+                                        metode standar</span>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body pt-6" x-data="getUpGoTest()">
                         <form id="gotest" method="POST" class="form" action="{{ route('patients.pretest') }}">
                             @csrf
-                            <div class="mb-10">
-                                <label class="form-label fw-semibold">1. Keseimbangan Pasien:</label>
-                                <div class="d-flex align-items-center mb-3">
-                                    <span class="fw-semibold fs-6 text-gray-800 flex-grow-1 pe-3">Apakah pasien tampak
-                                        tidak seimbang atau menggunakan alat bantu?</span>
-                                    <div class="form-check form-switch form-check-custom form-check-solid">
-                                        <input class="form-check-input h-20px w-30px" type="checkbox" value="ya"
-                                            name="kriteria_satu" id="kriteria_satu" />
-                                        <label class="form-check-label" for="kriteria_satu">Ya</label>
+
+                            {{-- Kriteria 1 --}}
+                            <div class="mb-8">
+                                <div class="bg-light-primary rounded p-6">
+                                    <div class="d-flex align-items-start">
+                                        <div class="symbol symbol-30px me-4 mt-1">
+                                            <div class="symbol-label bg-primary">
+                                                <span class="text-white fw-bold fs-6">1</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <label class="form-label fw-bold fs-6 mb-3">Keseimbangan Pasien</label>
+                                            <p class="text-gray-700 fs-6 mb-4">Apakah pasien tampak tidak seimbang atau
+                                                menggunakan alat bantu saat berdiri atau berjalan?</p>
+
+                                            <div class="form-check form-switch form-check-custom form-check-solid">
+                                                <input class="form-check-input h-20px w-40px" type="checkbox"
+                                                    value="ya" name="kriteria_satu" id="kriteria_satu"
+                                                    x-model="criteria.one" @change="updateAssessment()" />
+                                                <label class="form-check-label fw-semibold ms-3" for="kriteria_satu">
+                                                    <span
+                                                        x-text="criteria.one ? 'Ya, pasien tidak seimbang' : 'Tidak, pasien seimbang'"></span>
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="mb-10">
-                                <label class="form-label fw-semibold">2. Penggunaan Bantuan:</label>
-                                <div class="d-flex align-items-center">
-                                    <span class="fw-semibold fs-6 text-gray-800 flex-grow-1 pe-3">Apakah pasien memegang
-                                        benda untuk bantuan saat berjalan?</span>
-                                    <div class="form-check form-switch form-check-custom form-check-solid">
-                                        <input class="form-check-input h-20px w-30px" type="checkbox" value="ya"
-                                            name="kriteria_dua" id="kriteria_dua" />
-                                        <label class="form-check-label" for="kriteria_dua">Ya</label>
+                            {{-- Kriteria 2 --}}
+                            <div class="mb-8">
+                                <div class="bg-light-info rounded p-6">
+                                    <div class="d-flex align-items-start">
+                                        <div class="symbol symbol-30px me-4 mt-1">
+                                            <div class="symbol-label bg-info">
+                                                <span class="text-white fw-bold fs-6">2</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <label class="form-label fw-bold fs-6 mb-3">Penggunaan Bantuan</label>
+                                            <p class="text-gray-700 fs-6 mb-4">Apakah pasien memegang benda atau
+                                                menggunakan alat bantu untuk berjalan?</p>
+
+                                            <div class="form-check form-switch form-check-custom form-check-solid">
+                                                <input class="form-check-input h-20px w-40px" type="checkbox"
+                                                    value="ya" name="kriteria_dua" id="kriteria_dua"
+                                                    x-model="criteria.two" @change="updateAssessment()" />
+                                                <label class="form-check-label fw-semibold ms-3" for="kriteria_dua">
+                                                    <span
+                                                        x-text="criteria.two ? 'Ya, menggunakan bantuan' : 'Tidak, tidak menggunakan bantuan'"></span>
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <input type="hidden" name="interpretasi" id="_interpretasi">
-                            <input type="hidden" name="tindakan" id="_tindakan">
+                            {{-- Hidden inputs --}}
+                            <input type="hidden" name="interpretasi" x-model="result.interpretation">
+                            <input type="hidden" name="tindakan" x-model="result.action">
 
-                            <div id="keterangan" class="border border-dashed border-gray-300 p-6 rounded mb-5">
-                                <h4 class="fw-bold mb-3">Hasil Evaluasi:</h4>
-                                <p class="mb-2">Interpretasi: <span id="interpretasi" class="fw-bold"></span></p>
-                                <p>Tindakan: <span id="tindakan" class="fw-bold"></span></p>
+                            {{-- Hasil Evaluasi --}}
+                            <div class="border border-dashed border-gray-300 rounded p-6 mb-6"
+                                :class="{
+                                    'bg-light-success border-success': result.severity === 'success',
+                                    'bg-light-warning border-warning': result.severity === 'warning',
+                                    'bg-light-danger border-danger': result.severity === 'danger'
+                                }">
+                                <div class="d-flex align-items-start">
+                                    <div class="symbol symbol-40px me-4">
+                                        <div class="symbol-label"
+                                            :class="{
+                                                'bg-success': result.severity === 'success',
+                                                'bg-warning': result.severity === 'warning',
+                                                'bg-danger': result.severity === 'danger'
+                                            }">
+                                            <i class="fas fa-clipboard-check text-white fs-5"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h4 class="fw-bold mb-3">Hasil Evaluasi Risiko Jatuh</h4>
+                                        <div class="mb-3">
+                                            <span class="text-gray-600 fs-6">Interpretasi: </span>
+                                            <span class="fw-bold fs-6"
+                                                :class="{
+                                                    'text-success': result.severity === 'success',
+                                                    'text-warning': result.severity === 'warning',
+                                                    'text-danger': result.severity === 'danger'
+                                                }"
+                                                x-text="result.interpretation"></span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-600 fs-6">Tindakan yang Diperlukan: </span>
+                                            <span class="fw-semibold fs-6 text-gray-800"
+                                                x-text="result.action"></span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
+                            {{-- Submit Button --}}
                             <div class="text-end">
-                                <button type="submit" class="btn btn-primary" id="kt_assessment_submit">
-                                    <span class="indicator-label">Simpan Hasil</span>
-                                    <span class="indicator-progress">Mohon tunggu...
-                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                <button type="submit" class="btn btn-primary btn-lg" id="kt_assessment_submit"
+                                    x-bind:disabled="!result.interpretation">
+                                    <span class="indicator-label">
+                                        <i class="fas fa-save me-2"></i>Simpan Hasil Evaluasi
+                                    </span>
+                                    <span class="indicator-progress">
+                                        <span class="spinner-border spinner-border-sm align-middle me-2"></span>
+                                        Menyimpan...
+                                    </span>
                                 </button>
                             </div>
                         </form>
@@ -59,21 +248,71 @@
                 </div>
             </div>
 
+            {{-- Satu Sehat Integration --}}
             <div class="col-xl-4">
-                <div class="card card-flush h-xl-100">
-                    <div class="card-body d-flex flex-column p-10">
-                        <div class="mb-5">
-                            <img src="{{ asset('assets/media/illustrations/satusehat.png') }}" class="mw-100 mh-200px"
-                                alt="Satu Sehat Logo">
+                <div class="row g-5">
+                    {{-- Satu Sehat Card --}}
+                    <div class="col-12">
+                        <div class="card card-flush h-100 shadow-sm">
+                            <div class="card-body d-flex flex-column p-8 text-center">
+                                <div class="mb-6">
+                                    <img src="{{ asset('assets/media/illustrations/satusehat.png') }}"
+                                        class="mw-100 mh-150px mx-auto" alt="Satu Sehat Logo">
+                                </div>
+
+                                <h3 class="text-dark mb-4 fw-bold">Verifikasi Satu Sehat Mobile</h3>
+
+                                <div class="fs-6 text-gray-600 mb-6 text-start">
+                                    <ul class="list-unstyled">
+                                        <li class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-check text-success me-3"></i>
+                                            <span>Integrasi dengan sistem nasional</span>
+                                        </li>
+                                        <li class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-shield-alt text-primary me-3"></i>
+                                            <span>Keamanan data terjamin</span>
+                                        </li>
+                                        <li class="d-flex align-items-center">
+                                            <i class="fas fa-sync text-info me-3"></i>
+                                            <span>Sinkronisasi real-time</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                @if (isset($kyc_iframe))
+                                    <a href="{{ route('kycurl') }}" class="btn btn-primary btn-lg w-100"
+                                        target="_blank">
+                                        <i class="fas fa-external-link-alt me-2"></i>
+                                        Verifikasi Sekarang
+                                    </a>
+                                @endif
+                            </div>
                         </div>
-                        <h3 class="text-dark mb-5">Verifikasi Satu Sehat Mobile</h3>
-                        <div class="fs-6 text-gray-600 mb-5">Klik tombol di bawah untuk memverifikasi akun Satu Sehat
-                            Mobile Anda.</div>
-                        @if (isset($kyc_iframe))
-                            <a href="{{ route('kycurl') }}" class="btn btn-primary" target="_blank">
-                                <i class="fas fa-check-circle me-2"></i>Verifikasi Sekarang
-                            </a>
-                        @endif
+                    </div>
+
+                    {{-- Quick Actions --}}
+                    <div class="col-12">
+                        <div class="card card-flush shadow-sm">
+                            <div class="card-header">
+                                <h3 class="card-title fw-bold">Aksi Cepat</h3>
+                            </div>
+                            <div class="card-body p-6">
+                                <div class="d-grid gap-3">
+                                    <a href="{{ route('patients.create') }}" class="btn btn-light-primary">
+                                        <i class="fas fa-user-plus me-2"></i>Daftar Pasien Baru
+                                    </a>
+                                    <a href="{{ route('examinations.create') }}" class="btn btn-light-success">
+                                        <i class="fas fa-stethoscope me-2"></i>Pemeriksaan Baru
+                                    </a>
+                                    <a href="{{ route('transactions.create') }}" class="btn btn-light-warning">
+                                        <i class="fas fa-receipt me-2"></i>Transaksi Baru
+                                    </a>
+                                    <a href="#" class="btn btn-light-info">
+                                        <i class="fas fa-chart-bar me-2"></i>Lihat Laporan
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -81,63 +320,165 @@
 
         @push('customscript')
             <script>
-                $(function() {
-                    const interpretasiEl = $("#interpretasi");
-                    const tindakanEl = $("#tindakan");
-                    const _interpretasiEl = $("#_interpretasi");
-                    const _tindakanEl = $("#_tindakan");
+                // Alpine.js component untuk dashboard stats
+                function dashboardStats() {
+                    return {
+                        stats: {
+                            patients: 0,
+                            examinations: 0,
+                            queue: 0,
+                            revenue: 0
+                        },
 
-                    function updateAssessment() {
-                        const kriteriaSatu = $('#kriteria_satu').is(':checked');
-                        const kriteriaDua = $('#kriteria_dua').is(':checked');
+                        init() {
+                            this.loadStats();
+                        },
 
-                        if (kriteriaSatu && kriteriaDua) {
-                            setAssessment('Berisiko Tinggi',
-                                'pemberian gelang kuning, edukasi, pendampingan dan pemberian fasilitas (kursi roda, tripod)',
-                                'danger');
-                        } else if (kriteriaSatu || kriteriaDua) {
-                            setAssessment('Berisiko Rendah', 'edukasi pasien dan / atau keluarga', 'warning');
-                        } else {
-                            setAssessment('Tidak Beresiko Jatuh', '-', 'success');
+                        async loadStats() {
+                            try {
+                                // Simulasi loading data - ganti dengan API call yang sebenarnya
+                                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                                this.stats = {
+                                    patients: 1250,
+                                    examinations: 15,
+                                    queue: 8,
+                                    revenue: 2500000
+                                };
+                            } catch (error) {
+                                console.error('Error loading stats:', error);
+                            }
+                        },
+
+                        formatCurrency(amount) {
+                            return new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR',
+                                minimumFractionDigits: 0
+                            }).format(amount);
                         }
                     }
+                }
 
-                    function setAssessment(interpretasi, tindakan, severity) {
-                        interpretasiEl.text(interpretasi).removeClass('text-success text-warning text-danger').addClass(
-                            `text-${severity}`);
-                        tindakanEl.text(tindakan).removeClass('text-success text-warning text-danger').addClass(
-                            `text-${severity}`);
-                        _interpretasiEl.val(interpretasi);
-                        _tindakanEl.val(tindakan);
+                // Alpine.js component untuk Get Up and Go Test
+                function getUpGoTest() {
+                    return {
+                        criteria: {
+                            one: false,
+                            two: false
+                        },
+
+                        result: {
+                            interpretation: '',
+                            action: '',
+                            severity: 'success'
+                        },
+
+                        init() {
+                            this.updateAssessment();
+                        },
+
+                        updateAssessment() {
+                            if (this.criteria.one && this.criteria.two) {
+                                this.setAssessment(
+                                    'Berisiko Tinggi',
+                                    'Pemberian gelang kuning, edukasi komprehensif, pendampingan ketat, dan penyediaan fasilitas bantuan (kursi roda, tripod, handrail)',
+                                    'danger'
+                                );
+                            } else if (this.criteria.one || this.criteria.two) {
+                                this.setAssessment(
+                                    'Berisiko Rendah',
+                                    'Edukasi pasien dan keluarga tentang pencegahan jatuh, monitoring berkala',
+                                    'warning'
+                                );
+                            } else {
+                                this.setAssessment(
+                                    'Tidak Berisiko Jatuh',
+                                    'Tidak diperlukan tindakan khusus, lanjutkan perawatan standar',
+                                    'success'
+                                );
+                            }
+                        },
+
+                        setAssessment(interpretation, action, severity) {
+                            this.result = {
+                                interpretation,
+                                action,
+                                severity
+                            };
+                        }
                     }
+                }
 
-                    $("#kriteria_satu, #kriteria_dua").change(updateAssessment);
-
-                    updateAssessment(); // Initial assessment
-
-                    // Form submission with loading indicator
+                // Form submission dengan loading indicator
+                document.addEventListener('DOMContentLoaded', function() {
                     const form = document.getElementById('gotest');
                     const submitButton = document.getElementById('kt_assessment_submit');
-                    form.addEventListener('submit', function(e) {
-                        e.preventDefault();
-                        submitButton.setAttribute('data-kt-indicator', 'on');
-                        submitButton.disabled = true;
 
-                        setTimeout(function() {
-                            form.submit();
-                        }, 2000);
-                    });
+                    if (form && submitButton) {
+                        form.addEventListener('submit', function(e) {
+                            e.preventDefault();
+
+                            // Show loading state
+                            submitButton.setAttribute('data-kt-indicator', 'on');
+                            submitButton.disabled = true;
+
+                            // Submit after delay
+                            setTimeout(function() {
+                                form.submit();
+                            }, 1500);
+                        });
+                    }
                 });
             </script>
         @endpush
 
+        {{-- Toast notifications --}}
         @if (session('error'))
             @push('customscript')
                 <script>
-                    toastr.error("{{ session('error') }}", "Error");
+                    document.addEventListener('DOMContentLoaded', function() {
+                        if (typeof toastr !== 'undefined') {
+                            toastr.error("{{ session('error') }}", "Error", {
+                                timeOut: 5000,
+                                closeButton: true,
+                                progressBar: true
+                            });
+                        }
+                    });
                 </script>
             @endpush
         @endif
 
+        @if (session('success'))
+            @push('customscript')
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        if (typeof toastr !== 'undefined') {
+                            toastr.success("{{ session('success') }}", "Berhasil", {
+                                timeOut: 5000,
+                                closeButton: true,
+                                progressBar: true
+                            });
+                        }
+                    });
+                </script>
+            @endpush
+        @endif
+    @else
+        {{-- Non-admin view --}}
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body text-center p-10">
+                        <i class="fas fa-user-shield fa-4x text-muted mb-5"></i>
+                        <h3 class="text-gray-800 mb-3">Akses Terbatas</h3>
+                        <p class="text-gray-600 fs-5">Anda tidak memiliki akses untuk melihat dashboard administrator.
+                        </p>
+                        <p class="text-gray-500">Silakan hubungi administrator untuk informasi lebih lanjut.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     @endif
 </x-base-layout>
