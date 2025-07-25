@@ -1,5 +1,5 @@
 <div class="tab-pane" id="vitality-examination" role="tabpanel" aria-labelledby="all-tab"
-     data-kt-timeline-widget-4-blockui="true" x-data="vitalityExamination()">
+    data-kt-timeline-widget-4-blockui="true" x-data="vitalityExamination()">
 
     @include('pages.klinik.examinations.partials.components.vitality._form-header')
 
@@ -8,6 +8,7 @@
         @include('pages.klinik.examinations.partials.components.vitality._vital-signs')
         @include('pages.klinik.examinations.partials.components.vitality._body-measurements')
         @include('pages.klinik.examinations.partials.components.vitality._body-composition')
+        @include('pages.klinik.examinations.partials.components.vitality._physical-findings')
         @include('pages.klinik.examinations.partials.components.vitality._others-field')
     </div>
 

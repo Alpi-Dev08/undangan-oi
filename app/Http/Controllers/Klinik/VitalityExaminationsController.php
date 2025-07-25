@@ -30,16 +30,53 @@ class VitalityExaminationsController extends Controller
     private const UNAUTHORIZED_UPDATE = 'Sorry !! Anda tidak berwenang untuk mengubah data master!';
     private const UNAUTHORIZED_DELETE = 'Sorry !! Anda tidak berwenang untuk menghapus data master!';
 
-    // FHIR observation codes untuk vital signs
+    // FHIR observation codes untuk vital signs dan physical findings
     private const OBSERVATION_CODES = [
-        'systolic_bp'      => '8480-6',
-        'diastolic_bp'     => '8462-4',
-        'heart_rate'       => '8867-4',
-        'body_height'      => '8302-2',
-        'body_weight'      => '29463-7',
-        'temperature'      => '8310-5',
-        'respiratory_rate' => '9279-1',
-    ];
+    // Vital Signs
+    'systolic_bp'      => '8480-6',
+    'diastolic_bp'     => '8462-4',
+    'heart_rate'       => '8867-4',
+    'body_height'      => '8302-2',
+    'body_weight'      => '29463-7',
+    'temperature'      => '8310-5',
+    'respiratory_rate' => '9279-1',
+
+    // Physical Findings
+    'head_findings'    => '10199-8', // Physical findings of Head Narrative
+    'eye_findings'     => '10197-2', // Physical findings of Eye Narrative
+    'ear_findings'     => '10195-6', // Physical findings of Ear Narrative
+    'nose_findings'    => '10203-8', // Physical findings of Nose Narrative
+    'hair_findings'    => '32436-8', // Physical findings of Hair
+    'lip_findings'     => '32446-7', // Physical findings of Lip
+    'teeth_findings'   => '85910-8', // Physical findings of Teeth and gum Narrative
+    'neck_findings'    => '11411-6', // Physical findings of Neck Narrative
+    'throat_findings'  => '56867-5', // Physical findings of Throat Narrative
+    'chest_findings'   => '11391-0', // Physical findings of Chest Narrative
+    'breast_findings'  => '10193-1', // Physical findings of Breasts Narrative
+    'back_findings'    => '10192-3', // Physical findings of Back Narrative
+    'abdomen_findings' => '10191-5', // Physical findings of Abdomen Narrative
+    'genital_findings' => '11400-9', // Physical findings of Genitala Narrative
+    'upper_arm_findings' => '11386-0', // Physical findings of Upper Arm Narrative
+    'forearm_findings' => '11398-5', // Physical findings of Forearm Narrative
+    'wrist_findings'   => '11415-7', // Physical findings of Wrist Narrative
+    'thigh_findings'   => '11414-0', // Physical findings of Thigh Narrative
+    'calf_findings'    => '11389-4', // Physical findings of Calf Narrative
+    'mouth_findings'   => '10201-2', // Physical findings of Mouth and Throat and Teeth Narrative
+    'buttocks_findings' => '11388-6', // Physical findings of Buttocks Narrative
+    'hand_findings'    => '11404-1', // Physical findings of Hand Narrative
+    'nail_findings'    => '32456-6', // Physical findings of Nail
+    'tongue_findings'  => '32483-0', // Physical findings of Tongue
+];
+
+// SNOMED codes untuk body site
+private const SNOMED_CODES = [
+    'finger_structure'    => '7569003',
+    'palatal_structure'   => '72914001',
+    'palatine_tonsils'    => '91636008',
+    'anal_structure'      => '53505006',
+    'nail_unit_finger'    => '770812000',
+    'toe_structure'       => '29707007',
+];
 
     protected $user;
 
@@ -375,7 +412,7 @@ class VitalityExaminationsController extends Controller
     }
 
     /**
-     * Proses semua FHIR observations untuk vital signs
+     * Proses semua FHIR observations untuk vital signs dan physical findings
      *
      * @param VitalityExamination $vitalityExamination
      * @return void
@@ -409,6 +446,9 @@ class VitalityExaminationsController extends Controller
             // Proses semua vital signs
             $this->processAllVitalSigns($vitalityExamination, $observation);
 
+            // Proses semua physical findings
+            $this->processAllPhysicalFindings($vitalityExamination, $observation);
+
             Log::info('FHIR observations berhasil diproses', [
                 'vitality_examination_id' => $vitalityExamination->id,
                 'examination_id' => $examination->id
@@ -420,9 +460,103 @@ class VitalityExaminationsController extends Controller
                 'vitality_examination_id' => $vitalityExamination->id,
                 'examination_id' => $vitalityExamination->examination_id
             ]);
+        }
+    }
 
-            // Tidak throw exception karena ini adalah proses tambahan
-            // Vitality examination tetap bisa disimpan meskipun FHIR gagal
+    /**
+     * Proses semua physical findings untuk FHIR observations
+     *
+     * @param VitalityExamination $vitalityExamination
+     * @param Observations $observation
+     * @return void
+     */
+    private function processAllPhysicalFindings(
+        VitalityExamination $vitalityExamination,
+        Observations $observation
+    ): void {
+        $physicalFindings = [
+            'head_findings' => 'head_findings',
+            'eye_findings' => 'eye_findings',
+            'ear_findings' => 'ear_findings',
+            'nose_findings' => 'nose_findings',
+            'hair_findings' => 'hair_findings',
+            'lip_findings' => 'lip_findings',
+            'teeth_findings' => 'teeth_findings',
+            'neck_findings' => 'neck_findings',
+            'throat_findings' => 'throat_findings',
+            'chest_findings' => 'chest_findings',
+            'breast_findings' => 'breast_findings',
+            'back_findings' => 'back_findings',
+            'abdomen_findings' => 'abdomen_findings',
+            'genital_findings' => 'genital_findings',
+            'upper_arm_findings' => 'upper_arm_findings',
+            'forearm_findings' => 'forearm_findings',
+            'wrist_findings' => 'wrist_findings',
+            'thigh_findings' => 'thigh_findings',
+            'calf_findings' => 'calf_findings',
+            'mouth_findings' => 'mouth_findings',
+            'buttocks_findings' => 'buttocks_findings',
+            'hand_findings' => 'hand_findings',
+            'nail_findings' => 'nail_findings',
+            'tongue_findings' => 'tongue_findings',
+        ];
+
+        foreach ($physicalFindings as $field => $code) {
+            $this->processPhysicalFinding($vitalityExamination, $observation, $field, $code);
+        }
+    }
+
+    /**
+     * Proses individual physical finding untuk FHIR observation
+     *
+     * @param VitalityExamination $vitalityExamination
+     * @param Observations $observation
+     * @param string $field
+     * @param string $codeKey
+     * @return void
+     */
+    private function processPhysicalFinding(
+        VitalityExamination $vitalityExamination,
+        Observations $observation,
+        string $field,
+        string $codeKey
+    ): void {
+        if (!$vitalityExamination->$field) {
+            return;
+        }
+
+        $observationCode = self::OBSERVATION_CODES[$codeKey] ?? null;
+
+        if (!$observationCode) {
+            Log::warning('Observation code tidak ditemukan', [
+                'field' => $field,
+                'code_key' => $codeKey
+            ]);
+            return;
+        }
+
+        try {
+            $newObservation = clone $observation;
+            $newObservation->addCode($observationCode);
+            $newObservation->addCategory('exam');
+            $newObservation->addStringComponent($vitalityExamination->$field);
+            $newObservation->addEffectiveDateTime(now()->toISOString());
+            $newObservation->addIssuedDateTime(now()->toISOString());
+            $newObservation->post();
+
+            Log::info('Physical finding berhasil dikirim ke FHIR', [
+                'field' => $field,
+                'observation_code' => $observationCode,
+                'vitality_examination_id' => $vitalityExamination->id
+            ]);
+
+        } catch (Exception $e) {
+            Log::error('Gagal mengirim physical finding ke FHIR', [
+                'error' => $e->getMessage(),
+                'field' => $field,
+                'observation_code' => $observationCode,
+                'vitality_examination_id' => $vitalityExamination->id
+            ]);
         }
     }
 
