@@ -19,16 +19,16 @@
     {{-- Welcome Section --}}
     <div class="row mb-6">
         <div class="col-12">
-            <div class="card bg-gradient-primary text-white">
+            <div class="card bg-gradient-primary text-info">
                 <div class="card-body p-8">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1">
-                            <h1 class="text-white mb-2">Selamat Datang, {{ $user->name }}!</h1>
-                            <p class="text-white-75 mb-0 fs-5">Dashboard Sistem Informasi Klinik</p>
-                            <small class="text-white-50">{{ now()->format('l, d F Y - H:i') }} WIB</small>
+                            <h1 class="text-info mb-2">Selamat Datang, {{ $user->name }}!</h1>
+                            <p class="text-info-75 mb-0 fs-5">Dashboard Sistem Informasi Klinik</p>
+                            <small class="text-info-50">{{ now()->format('l, d F Y - H:i') }} WIB</small>
                         </div>
                         <div class="text-end">
-                            <i class="fas fa-user-md fa-3x text-white-25"></i>
+                            <i class="fas fa-user-md fa-3x text-info"></i>
                         </div>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    @if (Auth::user()->hasRole(['admin', 'administrator']))
+    @if (Auth::user()->hasRole(['admin', 'administrator', 'dokter']))
         {{-- Quick Stats Cards --}}
         <div class="row g-5 mb-6" x-data="dashboardStats()">
             <div class="col-xl-3 col-md-6">
@@ -127,7 +127,7 @@
                         </div>
                     </div>
 
-                    <div class="card-body pt-6" x-data="getUpGoTest()">
+                    <div class="card-body pt-6" x-data="getUpGoTest">
                         <form id="gotest" method="POST" class="form" action="{{ route('patients.pretest') }}">
                             @csrf
 
@@ -148,7 +148,7 @@
                                             <div class="form-check form-switch form-check-custom form-check-solid">
                                                 <input class="form-check-input h-20px w-40px" type="checkbox"
                                                     value="ya" name="kriteria_satu" id="kriteria_satu"
-                                                    x-model="criteria.one" @change="updateAssessment()" />
+                                                    x-model="criteria.one" @change="handleCriteriaChange()" />
                                                 <label class="form-check-label fw-semibold ms-3" for="kriteria_satu">
                                                     <span
                                                         x-text="criteria.one ? 'Ya, pasien tidak seimbang' : 'Tidak, pasien seimbang'"></span>
@@ -176,7 +176,7 @@
                                             <div class="form-check form-switch form-check-custom form-check-solid">
                                                 <input class="form-check-input h-20px w-40px" type="checkbox"
                                                     value="ya" name="kriteria_dua" id="kriteria_dua"
-                                                    x-model="criteria.two" @change="updateAssessment()" />
+                                                    x-model="criteria.two" @change="handleCriteriaChange()" />
                                                 <label class="form-check-label fw-semibold ms-3" for="kriteria_dua">
                                                     <span
                                                         x-text="criteria.two ? 'Ya, menggunakan bantuan' : 'Tidak, tidak menggunakan bantuan'"></span>
@@ -193,18 +193,20 @@
 
                             {{-- Hasil Evaluasi --}}
                             <div class="border border-dashed border-gray-300 rounded p-6 mb-6"
-                                :class="{
+                                x-bind:class="{
                                     'bg-light-success border-success': result.severity === 'success',
                                     'bg-light-warning border-warning': result.severity === 'warning',
-                                    'bg-light-danger border-danger': result.severity === 'danger'
+                                    'bg-light-danger border-danger': result.severity === 'danger',
+                                    'bg-light-secondary border-secondary': result.severity === 'secondary'
                                 }">
                                 <div class="d-flex align-items-start">
                                     <div class="symbol symbol-40px me-4">
                                         <div class="symbol-label"
-                                            :class="{
+                                            x-bind:class="{
                                                 'bg-success': result.severity === 'success',
                                                 'bg-warning': result.severity === 'warning',
-                                                'bg-danger': result.severity === 'danger'
+                                                'bg-danger': result.severity === 'danger',
+                                                'bg-secondary': result.severity === 'secondary'
                                             }">
                                             <i class="fas fa-clipboard-check text-white fs-5"></i>
                                         </div>
@@ -214,10 +216,11 @@
                                         <div class="mb-3">
                                             <span class="text-gray-600 fs-6">Interpretasi: </span>
                                             <span class="fw-bold fs-6"
-                                                :class="{
+                                                x-bind:class="{
                                                     'text-success': result.severity === 'success',
                                                     'text-warning': result.severity === 'warning',
-                                                    'text-danger': result.severity === 'danger'
+                                                    'text-danger': result.severity === 'danger',
+                                                    'text-secondary': result.severity === 'secondary'
                                                 }"
                                                 x-text="result.interpretation"></span>
                                         </div>
@@ -233,7 +236,7 @@
                             {{-- Submit Button --}}
                             <div class="text-end">
                                 <button type="submit" class="btn btn-primary btn-lg" id="kt_assessment_submit"
-                                    x-bind:disabled="!result.interpretation">
+                                    x-bind:disabled="result.severity === 'secondary'">
                                     <span class="indicator-label">
                                         <i class="fas fa-save me-2"></i>Simpan Hasil Evaluasi
                                     </span>
@@ -319,10 +322,12 @@
         </div>
 
         @push('customscript')
+            <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
             <script>
-                // Alpine.js component untuk dashboard stats
-                function dashboardStats() {
-                    return {
+                // Pastikan Alpine.js sudah loaded
+                document.addEventListener('alpine:init', () => {
+                    // Alpine.js component untuk dashboard stats
+                    Alpine.data('dashboardStats', () => ({
                         stats: {
                             patients: 0,
                             examinations: 0,
@@ -340,10 +345,10 @@
                                 await new Promise(resolve => setTimeout(resolve, 1000));
 
                                 this.stats = {
-                                    patients: 1250,
-                                    examinations: 15,
-                                    queue: 8,
-                                    revenue: 2500000
+                                    patients: 0,
+                                    examinations: 0,
+                                    queue: 0,
+                                    revenue: 0
                                 };
                             } catch (error) {
                                 console.error('Error loading stats:', error);
@@ -357,28 +362,29 @@
                                 minimumFractionDigits: 0
                             }).format(amount);
                         }
-                    }
-                }
+                    }));
 
-                // Alpine.js component untuk Get Up and Go Test
-                function getUpGoTest() {
-                    return {
+                    // Alpine.js component untuk Get Up and Go Test
+                    Alpine.data('getUpGoTest', () => ({
                         criteria: {
                             one: false,
                             two: false
                         },
 
                         result: {
-                            interpretation: '',
-                            action: '',
-                            severity: 'success'
+                            interpretation: 'Belum ada evaluasi',
+                            action: 'Silakan pilih kriteria untuk memulai evaluasi',
+                            severity: 'secondary'
                         },
 
                         init() {
+                            console.log('Get Up and Go Test initialized');
                             this.updateAssessment();
                         },
 
                         updateAssessment() {
+                            console.log('Updating assessment with criteria:', this.criteria);
+
                             if (this.criteria.one && this.criteria.two) {
                                 this.setAssessment(
                                     'Berisiko Tinggi',
@@ -399,16 +405,29 @@
                                 );
                             }
                         },
-
                         setAssessment(interpretation, action, severity) {
                             this.result = {
                                 interpretation,
                                 action,
                                 severity
                             };
+                            console.log('Assessment result:', this.result);
+                        },
+
+                        // Method untuk handle perubahan checkbox dengan debounce
+                        handleCriteriaChange() {
+                            this.$nextTick(() => {
+                                this.updateAssessment();
+                            });
+                        },
+
+                        // Method untuk toggle criteria
+                        toggleCriteria(criteriaKey) {
+                            this.criteria[criteriaKey] = !this.criteria[criteriaKey];
+                            this.handleCriteriaChange();
                         }
-                    }
-                }
+                    }));
+                });
 
                 // Form submission dengan loading indicator
                 document.addEventListener('DOMContentLoaded', function() {
