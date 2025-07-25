@@ -113,8 +113,27 @@
                 </div>
             </div>
 
-            {{-- Row 3: Pendapatan (Full Width) --}}
-            <div class="col-12">
+            {{-- Row 3: Pending Payment (Full Width) --}}
+            <div class="col-6">
+                <div class="card card-flush h-100 hover-elevate-up bg-gradient-warning">
+                    <div class="card-body d-flex align-items-center justify-content-center p-6">
+                        <div class="symbol symbol-50px me-5">
+                            <div class="symbol-label bg-white bg-opacity-20">
+                                <i class="fas fa-clock text-warning fs-1"></i>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <span class="text-warning fw-semibold d-block fs-6 opacity-75">Pending Payment Hari
+                                Ini</span>
+                            <span class="text-warning fw-bold d-block fs-1"
+                                x-text="formatCurrency(stats.pending_payment)">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Row 4: Pendapatan (Full Width) --}}
+            <div class="col-6">
                 <div class="card card-flush h-100 hover-elevate-up bg-gradient-primary">
                     <div class="card-body d-flex align-items-center justify-content-center p-6">
                         <div class="symbol symbol-50px me-5">
@@ -360,7 +379,8 @@
                             new_patients: 0,
                             examinations: 0,
                             queue: 0,
-                            revenue: 0
+                            revenue: 0,
+                            pending_payment: 0
                         },
                         dailyStats: [],
                         monthlyStats: [],
