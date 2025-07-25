@@ -21,6 +21,7 @@ use App\Models\Master\SubDistrict;
 use App\Models\Master\Work;
 use App\Models\User;
 use App\Models\UserInfo;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -69,7 +70,7 @@ class HealthProfesionalsController extends Controller
      * @return View
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function index(NakesDataTable $dataTable): View
+    public function index(NakesDataTable $dataTable): View|JsonResponse
     {
         if (is_null($this->user) || !$this->user->can('user.read')) {
             Log::warning('Unauthorized access attempt to health professionals index', [

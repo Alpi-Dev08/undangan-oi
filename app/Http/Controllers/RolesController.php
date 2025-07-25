@@ -1,5 +1,11 @@
 <?php
-
+namespace App\Http\Controllers;
+use App\Models\Permission;
+use Illuminate\Http\Request;
+use App\Models\PermissionGroup;
+use App\DataTables\RolesDataTable;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
 
 class RolesController extends Controller
 {
