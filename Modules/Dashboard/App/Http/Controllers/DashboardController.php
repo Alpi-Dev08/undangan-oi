@@ -74,6 +74,11 @@ class DashboardController extends Controller
             // Hitung total pasien
             $totalPatients = Patient::whereNull('deleted_at')->count();
 
+            // Hitung pasien baru hari ini
+            $newPatientsToday = Patient::whereDate('register_date', Carbon::today())
+                ->whereNull('deleted_at')
+                ->count();
+
             // Hitung total pemeriksaan
             $totalExaminations = Examination::whereDate('examination_date', Carbon::today())
                 ->whereNull('deleted_at')
@@ -94,6 +99,7 @@ class DashboardController extends Controller
 
             $stats = [
                 'patients' => $totalPatients,
+                'new_patients' => $newPatientsToday,
                 'examinations' => $totalExaminations,
                 'queue' => $todayQueue,
                 'revenue' => $totalRevenue
