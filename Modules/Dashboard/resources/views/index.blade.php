@@ -60,6 +60,22 @@
                     <div class="card-body d-flex align-items-center p-6">
                         <div class="symbol symbol-45px me-5">
                             <div class="symbol-label bg-light-success">
+                                <i class="fas fa-user-plus text-success fs-2"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <span class="text-gray-400 fw-semibold d-block fs-7">Pasien Baru Hari Ini</span>
+                            <span class="text-gray-800 fw-bold d-block fs-2" x-text="stats.new_patients">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-flush h-100 hover-elevate-up">
+                    <div class="card-body d-flex align-items-center p-6">
+                        <div class="symbol symbol-45px me-5">
+                            <div class="symbol-label bg-light-success">
                                 <i class="fas fa-stethoscope text-success fs-2"></i>
                             </div>
                         </div>
@@ -330,6 +346,7 @@
                     Alpine.data('dashboardStats', () => ({
                         stats: {
                             patients: 0,
+                            new_patients: 0,
                             examinations: 0,
                             queue: 0,
                             revenue: 0
