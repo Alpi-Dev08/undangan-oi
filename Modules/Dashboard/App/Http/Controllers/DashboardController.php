@@ -97,12 +97,19 @@ class DashboardController extends Controller
                 ->whereDate('updated_at', Carbon::today())
                 ->sum('amount');
 
+            // Hitung pending payment hari ini
+            $pendingPayment = Transaction::whereIn('status', ['waiting payment', 'waiting'])
+                ->whereNull('deleted_at')
+                ->whereDate('created_at', Carbon::today())
+                ->sum('amount');
+
             $stats = [
                 'patients' => $totalPatients,
                 'new_patients' => $newPatientsToday,
                 'examinations' => $totalExaminations,
                 'queue' => $todayQueue,
-                'revenue' => $totalRevenue
+                'revenue' => $totalRevenue,
+                'pending_payment' => $pendingPayment
             ];
 
             DB::commit();
