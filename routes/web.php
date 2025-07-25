@@ -112,7 +112,7 @@ use Modules\Dashboard\App\Http\Controllers\DashboardController;
         });
 
         //User Management
-        //Route::resource('roles', RolesController::class);
+        Route::resource('roles', RolesController::class);
         Route::resource('permissions', PermissionsController::class);
         Route::resource('users', UsersController::class);
 
