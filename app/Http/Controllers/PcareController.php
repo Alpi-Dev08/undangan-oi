@@ -59,7 +59,7 @@
 
                     // Add pagination metadata if available
                     if (isset($response->response) && isset($response->response->list)) {
-                        $response->pagination = [
+                        $response->pagination = (object) [
                             'start'       => $start,
                             'limit'       => $limit,
                             'total'       => isset($response->response->total) ? $response->response->total : count($response->response->list),
