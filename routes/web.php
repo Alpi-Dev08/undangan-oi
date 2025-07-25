@@ -59,6 +59,7 @@
     use App\Http\Controllers\RolesController;
     use App\Http\Controllers\UsersController;
     use Illuminate\Support\Facades\Route;
+use Modules\Dashboard\App\Http\Controllers\DashboardController;
 
     /*
     |--------------------------------------------------------------------------
@@ -71,21 +72,7 @@
     |
     */
 
-    // Route::get('/', function () {
-    //     return redirect('index');
-    // });
-
-    $menu = theme()->getMenu();
-    array_walk($menu, function ($val) {
-        if (isset($val['path'])) {
-            $route = Route::get($val['path'], [PagesController::class, 'index']);
-
-            // Exclude documentation from auth middleware
-            if (!Str::contains($val['path'], 'documentation')) {
-                $route->middleware('auth');
-            }
-        }
-    });
+    Route::get('/',[DashboardController::class,'index']);
 
     Route::get('bukti-penyampaian-informasi/{id}', [PagesController::class, 'bukti_penyampaian_informasi'])->name('buktipenyampaianinformasi');
     Route::post('bukti-penyampaian-informasi', [PagesController::class, 'store_bukti_penyampaian_informasi'])->name('buktipenyampaianinformasi.store');
@@ -186,6 +173,9 @@
             Route::post('examinations-psikososial', [ExaminationsController::class, 'psikososial'])
                  ->name('examination.psikososial');
 
+            Route::post('/examinations/{examination}/hakkewajiban', [ExaminationsController::class, 'hakkewajiban'])->name('suket.hakkewajiban');
+            Route::get('/examinations/{examination}/hakkewajiban/pdf', [ExaminationsController::class, 'hakkewajiban_pdf'])->name('suket.hakkewajiban.pdf');
+
             Route::post('suket-sehat/{id}', [ExaminationsController::class, 'sehat'])->name('suket.sehat');
             Route::post('suket-sakit/{id}', [ExaminationsController::class, 'sakit'])->name('suket.sakit');
             Route::post('suket-hak-dan-kewajiban/{id}', [ExaminationsController::class, 'hakkewajiban'])
@@ -195,6 +185,12 @@
             Route::post('suket-surgicalsafetychecklist/{id}', [ExaminationsController::class, 'surgicalsafetychecklist'])
                  ->name('suket.surgicalsafetychecklist');
             Route::post('suket-operasi/{id}', [ExaminationsController::class, 'penandaan_operasi'])->name('suket.operasi');
+
+            // Tambahkan route yang hilang
+            Route::post('suket-hak-kewajiban/{id}', [ExaminationsController::class, 'hak_kewajiban'])->name('suket.hak_kewajiban');
+            Route::post('suket-persetujuan-tindakan/{id}', [ExaminationsController::class, 'persetujuan_tindakan'])->name('suket.persetujuan_tindakan');
+            Route::post('suket-penandaan-operasi/{id}', [ExaminationsController::class, 'penandaan_operasi'])->name('suket.penandaan_operasi');
+            Route::post('suket-surgical-checklist/{id}', [ExaminationsController::class, 'surgical_checklist'])->name('suket.surgical_checklist');
 
             Route::resource('servicecategories', ServiceCategoriesController::class);
             Route::resource('services', ServicesController::class);
