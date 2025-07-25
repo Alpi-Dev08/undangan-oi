@@ -93,6 +93,7 @@ use Modules\Dashboard\App\Http\Controllers\DashboardController;
         Route::get('/kyc_url', [KycController::class,'index'])->name('kycurl');
         // Account pages
         Route::prefix('account')->group(function () {
+            Route::get('overview', [SettingsController::class, 'index'])->name('settings.index');
             Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
             Route::put('settings', [SettingsController::class, 'update'])->name('settings.update');
             Route::put('setting/nakes', [SettingsController::class, 'nakes'])->name('settings.nakes');
