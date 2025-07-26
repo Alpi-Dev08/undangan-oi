@@ -243,6 +243,54 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
             ]));
         }
 
+        /**
+         * Download invoice sebagai PDF
+         *
+         * @param Request $request
+         * @return \Illuminate\Http\Response
+         */
+        public function invoicePdf(Request $request)
+        {
+            $id                 = $request->id;
+            $examination        = Examination::find($id);
+            $user               = User::find($examination->user_id);
+            $info               = $user->info;
+            $transaction        = Transaction::where('examination_id', $examination->id)->first();
+            $transaction_detail = TransactionDetail::where('transaction_id', $transaction->id)->get();
+
+            // Hitung total resep jika ada
+            $total_resep = 0;
+            // Logic untuk menghitung total resep bisa ditambahkan di sini
+
+            $data = compact([
+                'user',
+                'info',
+                'examination',
+                'transaction',
+                'transaction_detail',
+                'total_resep'
+            ]);
+
+            // Generate PDF dengan DomPDF
+            $pdf = Pdf::loadView('pages.klinik.examinations.invoice-pdf', $data);
+
+            // Set paper size dan orientasi
+            $pdf->setPaper('A4', 'portrait');
+
+            // Set options untuk kualitas yang lebih baik
+            $pdf->setOptions([
+                'dpi' => 150,
+                'defaultFont' => 'sans-serif',
+                'isHtml5ParserEnabled' => true,
+                'isPhpEnabled' => true
+            ]);
+
+            // Download PDF dengan nama file yang sesuai
+            $filename = 'Invoice_' . $transaction->invoice_number . '_' . date('Y-m-d') . '.pdf';
+
+            return $pdf->download($filename);
+        }
+
         public function payments(Request $request)
         {
             $id          = $request->id;

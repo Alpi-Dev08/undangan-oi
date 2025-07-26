@@ -153,6 +153,8 @@ use Modules\Dashboard\App\Http\Controllers\DashboardController;
 
             Route::resource('specialities', SpecialitiesController::class);
             Route::resource('diseases', DiseasesController::class);
+            Route::get('/examinations/invoice-pdf', [ExaminationsController::class, 'invoicePdf'])->name('examinations.invoice.pdf');
+
             Route::resource('examinations', ExaminationsController::class);
             Route::get('examinations-service', [ExaminationsController::class, 'services'])
                  ->name('examinations.services');

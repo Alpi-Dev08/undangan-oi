@@ -301,12 +301,26 @@
         <div class="my-1 me-5">
             <!-- begin::Print-->
             <button type="button" class="btn btn-dark my-1 me-12" onclick="printDiv('printableArea');">
-                <i class="ki-duotone ki-printer fs-2">
-                    <span class="path1"></span>
-                    <span class="path2"></span>
-                    <span class="path3"></span>
-                </i>
-                Print Invoice
+                <!-- Print Actions -->
+                <div class="d-flex justify-content-end gap-3 mb-4 noprint">
+                    <button type="button" class="btn btn-light-primary" onclick="window.print()">
+                        <i class="ki-duotone ki-printer fs-2">
+                            <span class="path1"></span>
+                            <span class="path2"></span>
+                            <span class="path3"></span>
+                        </i>
+                        Print Invoice
+                    </button>
+
+                    <a href="{{ route('examinations.invoice.pdf', ['id' => $examination->id]) }}"
+                       class="btn btn-primary" target="_blank">
+                        <i class="ki-duotone ki-file-down fs-2">
+                            <span class="path1"></span>
+                            <span class="path2"></span>
+                        </i>
+                        Download PDF
+                    </a>
+                </div>
             </button>
             <!-- end::Print-->
         </div>
