@@ -422,3 +422,68 @@
                     $org->url;
         }
     }
+
+    if (! function_exists('terbilang')) {
+        /**
+         * Convert number to Indonesian words
+         *
+         * @param int|float $angka Number to convert
+         * @return string Indonesian words representation of the number
+         */
+        function terbilang($angka)
+        {
+            $angka = abs($angka);
+            $huruf = [
+                '', 'satu', 'dua', 'tiga', 'empat', 'lima', 'enam', 'tujuh', 'delapan', 'sembilan',
+                'sepuluh', 'sebelas'
+            ];
+
+            $temp = '';
+
+            if ($angka < 12) {
+                $temp = ' ' . $huruf[$angka];
+            } elseif ($angka < 20) {
+                $temp = terbilang($angka - 10) . ' belas';
+            } elseif ($angka < 100) {
+                $temp = terbilang($angka / 10) . ' puluh' . terbilang($angka % 10);
+            } elseif ($angka < 200) {
+                $temp = ' seratus' . terbilang($angka - 100);
+            } elseif ($angka < 1000) {
+                $temp = terbilang($angka / 100) . ' ratus' . terbilang($angka % 100);
+            } elseif ($angka < 2000) {
+                $temp = ' seribu' . terbilang($angka - 1000);
+            } elseif ($angka < 1000000) {
+                $temp = terbilang($angka / 1000) . ' ribu' . terbilang($angka % 1000);
+            } elseif ($angka < 1000000000) {
+                $temp = terbilang($angka / 1000000) . ' juta' . terbilang($angka % 1000000);
+            } elseif ($angka < 1000000000000) {
+                $temp = terbilang($angka / 1000000000) . ' milyar' . terbilang($angka % 1000000000);
+            } elseif ($angka < 1000000000000000) {
+                $temp = terbilang($angka / 1000000000000) . ' trilyun' . terbilang($angka % 1000000000000);
+            }
+
+            return $temp;
+        }
+    }
+
+    if (! function_exists('terbilangRupiah')) {
+        /**
+         * Convert number to Indonesian Rupiah words
+         *
+         * @param int|float $angka Number to convert
+         * @return string Indonesian Rupiah words representation
+         */
+        function terbilangRupiah($angka)
+        {
+            $angka = number_format($angka, 2, ',', '.');
+            $bagian = explode(',', $angka);
+            $rupiah = terbilang($bagian[0]);
+
+            if ($bagian[1] > 0) {
+                $sen = terbilang($bagian[1]);
+                return ucfirst($rupiah) . ' rupiah ' . $sen . ' sen';
+            } else {
+                return ucfirst($rupiah) . ' rupiah';
+            }
+        }
+    }
