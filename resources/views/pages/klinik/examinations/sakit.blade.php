@@ -88,11 +88,12 @@
                     <h2 style="margin:0px;text-transform: uppercase;font-size: 16px;font-weight: bold">WISHING YOU GOOD
                         HEALTH AND HAPPINESS</h2>
                     <p style="margin:0px;text-transform: uppercase;font-size: 14px;">SEMOGA SEHAT DAN BAHAGIA SELALU</p>
+
                 </td>
                 <td style="width:50%;text-align: right;vertical-align: bottom;float: right;height:100px">
                     <img src="{{ public_path(theme()->getMediaUrlPath() . 'logos/qr.jpeg') }}"
-                        style="height:85px;margin-right:5px;"><img
-                        src="{{ public_path(theme()->getMediaUrlPath() . 'logos/logo-yayasan.png') }}"
+                        style="height:85px;margin-right:5px;">
+                    <img src="{{ public_path(theme()->getMediaUrlPath() . 'logos/logo-yayasan.png') }}"
                         style="height:75px;">
                 </td>
             </tr>
@@ -210,9 +211,19 @@
         <p>Keterangan / Comments :</p>
         <p style="margin-bottom:20px;">{{ $data->description ?? '-' }}</p>
 
+        <div style="width:300px;float:left;text-align:center;margin-top:10px">
+            @if (isset($sick_letter_number) && file_exists(storage_path('app/public/sick-letter/' . $sick_letter_number . '.svg')))
+                <img src="data:image/svg+xml;base64,{{ base64_encode(file_get_contents(storage_path('app/public/sick-letter/' . $sick_letter_number . '.svg'))) }}"
+                    style="height:85px;margin-right:5px;">
+            @endif
+            @if (isset($sick_letter_number))
+                <p style="margin:5px 0px;font-size: 10px;">Nomor Surat: {{ $sick_letter_number }}</p>
+                <p style="margin:0px;font-size: 8px;">Verifikasi:
+                    https://klinik.dharma.or.id/sick-letter/{{ $sick_letter_number }}</p>
+            @endif
+
+        </div>
         <div style="width:300px;float:right;text-align:center">
-
-
             Kab. Tangerang,
             {{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }}<br><br><br><br><br><br>
 

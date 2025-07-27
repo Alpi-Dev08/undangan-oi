@@ -65,7 +65,7 @@
             line-height: 1.4;
             color: #000;
             background: #fff;
-            margin-top: 1.5cm;
+            margin-top: 1.8cm;
             margin-bottom: 0px;
         }
 
@@ -241,7 +241,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2"></td>
+                <td colspan="2">&nbsp;</td>
             </tr>
         </table>
     </header>
