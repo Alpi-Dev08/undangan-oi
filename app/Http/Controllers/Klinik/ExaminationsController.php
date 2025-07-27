@@ -240,9 +240,9 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
                 Log::info('Created invoice directory: ' . $invoiceDir);
             }
 
-            $qr = QrCode::format('png')->size(100)
+            $qr = QrCode::format('svg')->size(100)
                         ->style('square')
-                        ->generate('https://klinik.dharma.or.id/invoice/' . $transaction->invoice_number, storage_path('app/public/invoice/'.$transaction->invoice_number.'.png'));
+                        ->generate('https://klinik.dharma.or.id/invoice/' . $transaction->invoice_number, storage_path('app/public/invoice/'.$transaction->invoice_number.'.svg'));
 
             // get the default inner page
             return view('pages.klinik.examinations.invoice', compact([
