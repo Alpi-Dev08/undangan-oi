@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verifikasi Invoice - {{ $invoice_number }}</title>
+    <title>{{ ucfirst(theme()->getOption('meta', 'title')) }} | Verifikasi Invoice - {{ $invoice_number }}</title>
+    <link rel="shortcut icon" href="{{ asset('assets' . '/' . theme()->getOption('assets', 'favicon')) }}" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .verification-card {
