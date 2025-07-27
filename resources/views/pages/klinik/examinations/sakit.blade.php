@@ -136,6 +136,7 @@
         <p>Telah datang ke klinik pada Tanggal : <b
                 style="text-decoration: underline;">{{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }}</b>
             dan yang bersangkutan :</p>
+
         <p><em>Has attended to the clinic on : <b
                     style="text-decoration: underline;">{{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }}</b>
                 and the patient :</em></p>
@@ -192,6 +193,20 @@
                 </tbody>
             </table>
         @endif
+
+        <p style="margin-top: 10px; margin-bottom: 10px;">Kami informasikan bahwa pasien diatas didiagnosa:</p>
+        @php
+            $assessments = explode('|', $examination->assessment);
+            $assessments = array_filter(array_map('trim', $assessments)); // Remove empty items and trim whitespace
+        @endphp
+
+        @foreach ($assessments as $index => $assessment)
+            <p style="margin-left: 10px; margin-bottom: 5px;">{{ $index + 1 }}. {{ $assessment }}</p>
+        @endforeach
+
+        <p style="margin-bottom: 10px;">Diagnosa tersebut diberikan dari hasil konsultasi dan gejala yang disampaikan
+            oleh pasien.</p>
+
         <p>Keterangan / Comments :</p>
         <p style="margin-bottom:20px;">{{ $data->description ?? '-' }}</p>
 
