@@ -8,7 +8,7 @@
             <div class="d-flex align-items-center">
                 <div class="me-4">
                     <!-- Logo Klinik -->
-                    <img src="{{ asset(theme()->getMediaUrlPath() . 'logos/ikon-klinik.png') }}" alt="Logo Klinik"
+                    <img src="{{ asset('assets/media/logos/ikon-klinik.png') }}" alt="Logo Klinik"
                         class="h-80px print-logo">
                 </div>
                 <div>
@@ -21,12 +21,14 @@
                     </div>
                 </div>
             </div>
-
             <!-- QR Code -->
             <div class="text-end">
                 <div class="border border-dark p-2 d-inline-block">
                     <!-- QR Code placeholder -->
-                    <div class="bg-dark" style="width: 60px; height: 60px;">{!! QrCode::size(60)->generate(url('invoice/' . $transaction->invoice_number)) !!}</div>
+                    <div class="bg-dark" style="width: 80px; height: 80px;">
+                        <img src="{{ asset('storage/invoice/' . $transaction->invoice_number . '.png') }}"
+                            alt="Logo Klinik" class="h-80px print-logo">
+                    </div>
                 </div>
             </div>
         </div>
@@ -300,28 +302,16 @@
         <!-- begin::Actions-->
         <div class="my-1 me-5">
             <!-- begin::Print-->
-            <button type="button" class="btn btn-dark my-1 me-12" onclick="printDiv('printableArea');">
-                <!-- Print Actions -->
-                <div class="d-flex justify-content-end gap-3 mb-4 noprint">
-                    <button type="button" class="btn btn-light-primary" onclick="window.print()">
-                        <i class="ki-duotone ki-printer fs-2">
-                            <span class="path1"></span>
-                            <span class="path2"></span>
-                            <span class="path3"></span>
-                        </i>
-                        Print Invoice
-                    </button>
-
-                    <a href="{{ route('examinations.invoice.pdf', ['id' => $examination->id]) }}"
-                       class="btn btn-primary" target="_blank">
-                        <i class="ki-duotone ki-file-down fs-2">
-                            <span class="path1"></span>
-                            <span class="path2"></span>
-                        </i>
-                        Download PDF
-                    </a>
-                </div>
-            </button>
+            <div class="d-flex justify-content-end gap-3 mb-4 noprint">
+                <a href="{{ route('examinations.invoice.pdf', ['id' => $examination->id]) }}" class="btn btn-primary"
+                    target="_blank">
+                    <i class="ki-duotone ki-file-down fs-2">
+                        <span class="path1"></span>
+                        <span class="path2"></span>
+                    </i>
+                    Print Invoice
+                </a>
+            </div>
             <!-- end::Print-->
         </div>
         <!-- end::Actions-->
