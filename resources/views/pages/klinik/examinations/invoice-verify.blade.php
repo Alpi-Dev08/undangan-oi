@@ -136,12 +136,12 @@
 
                         <div class="row mb-2">
                             <div class="col-md-5"><strong>Dokter Pemeriksa</strong></div>
-                            <div class="col-md-7">: Dr.
-                                {{ $examination->health_profesional->user->name .
-                                    (isset($examination->health_profesional->user->info) &&
-                                    !in_array($examination->health_profesional->user->info->title_prefix, ['', '-'])
-                                        ? $examination->health_profesional->user->info->title_prefix . '. '
-                                        : '') .
+                            <div class="col-md-7">:
+                                {{ (isset($examination->health_profesional->user->info) &&
+                                !in_array($examination->health_profesional->user->info->title_prefix, ['', '-'])
+                                    ? $examination->health_profesional->user->info->title_prefix . '. '
+                                    : 'dr.') .
+                                    $examination->health_profesional->user->name .
                                     (isset($examination->health_profesional->user->info) &&
                                     !in_array($examination->health_profesional->user->info->title_suffix, ['', '-'])
                                         ? ', ' . $examination->health_profesional->user->info->title_suffix
@@ -152,7 +152,7 @@
                         <div class="row mb-2">
                             <div class="col-md-5"><strong>Tanggal Invoice</strong></div>
                             <div class="col-md-7">:
-                                {{ \Carbon\Carbon::parse($transaction->created_at)->format('d F Y H:i') }}</div>
+                                {{ \Carbon\Carbon::parse($transaction->updated_at)->format('d F Y H:i') }}</div>
                         </div>
 
                         <div class="row mb-2">

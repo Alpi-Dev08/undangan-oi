@@ -289,7 +289,7 @@
                     <td class="info-label">Invoice Date</td>
                     <td>:</td>
                     <td class="fw-bold">
-                        {{ Carbon::parse($transaction->created_at)->locale('id')->format('d F Y H:i') }}</td>
+                        {{ Carbon::parse($transaction->updated_at)->locale('id')->format('d F Y H:i') }}</td>
                 </tr>
                 <tr>
                     <td class="info-label">Address</td>
@@ -298,7 +298,7 @@
                     <td class="info-label">Registration Date</td>
                     <td>:</td>
                     <td class="fw-bold">
-                        {{ Carbon::parse($examination->registration_date)->locale('id')->format('d F Y H:i') }}</td>
+                        {{ Carbon::parse($examination->created_at)->locale('id')->format('d F Y H:i') }}</td>
                 </tr>
                 <tr>
                     <td class="info-label">Patient Type</td>
@@ -311,13 +311,12 @@
                 <tr>
                     <td class="info-label">Primary Doctor</td>
                     <td>:</td>
-                    <td>
-                        Dr.
-                        {{ $examination->health_profesional->user->name .
-                            (isset($examination->health_profesional->user->info) &&
-                            !in_array($examination->health_profesional->user->info->title_prefix, ['', '-'])
-                                ? $examination->health_profesional->user->info->title_prefix . '. '
-                                : '') .
+                    <td style="text-tranform:capitalize">
+                        {{ (isset($examination->health_profesional->user->info) &&
+                        !in_array($examination->health_profesional->user->info->title_prefix, ['', '-'])
+                            ? $examination->health_profesional->user->info->title_prefix . '. '
+                            : 'dr.') .
+                            $examination->health_profesional->user->name .
                             (isset($examination->health_profesional->user->info) &&
                             !in_array($examination->health_profesional->user->info->title_suffix, ['', '-'])
                                 ? ', ' . $examination->health_profesional->user->info->title_suffix

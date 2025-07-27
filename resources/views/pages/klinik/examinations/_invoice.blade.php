@@ -70,12 +70,11 @@
                     <td class="fw-bold text-dark">Primary Doctor</td>
                     <td class="fw-bold">:</td>
                     <td class="fw-bold text-dark">
-                        Dr.
-                        {{ $examination->health_profesional->user->name .
-                            (isset($examination->health_profesional->user->info) &&
-                            !in_array($examination->health_profesional->user->info->title_prefix, ['', '-'])
-                                ? $examination->health_profesional->user->info->title_prefix . '. '
-                                : '') .
+                        {{ (isset($examination->health_profesional->user->info) &&
+                        !in_array($examination->health_profesional->user->info->title_prefix, ['', '-'])
+                            ? $examination->health_profesional->user->info->title_prefix . '. '
+                            : 'dr.') .
+                            $examination->health_profesional->user->name .
                             (isset($examination->health_profesional->user->info) &&
                             !in_array($examination->health_profesional->user->info->title_suffix, ['', '-'])
                                 ? ', ' . $examination->health_profesional->user->info->title_suffix
@@ -96,14 +95,14 @@
                     <td class="fw-bold text-dark">Invoice Date</td>
                     <td class="fw-bold">:</td>
                     <td class="fw-bold text-dark">
-                        {{ Carbon::parse($transaction->created_at)->locale('id')->format('d F Y H:i') }}
+                        {{ Carbon::parse($transaction->updated_at)->locale('id')->format('d F Y H:i') }}
                     </td>
                 </tr>
                 <tr>
                     <td class="fw-bold text-dark">Registration Date</td>
                     <td class="fw-bold">:</td>
                     <td class="fw-bold text-dark">
-                        {{ Carbon::parse($examination->registration_date)->locale('id')->format('d F Y H:i') }}
+                        {{ Carbon::parse($examination->created_at)->locale('id')->format('d F Y H:i') }}
                     </td>
                 </tr>
             </table>
