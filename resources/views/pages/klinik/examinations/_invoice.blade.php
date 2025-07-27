@@ -26,7 +26,7 @@
                 <div class="border border-dark p-2 d-inline-block">
                     <!-- QR Code placeholder -->
                     <div class="bg-dark" style="width: 80px; height: 80px;">
-                        <img src="{{ asset('storage/invoice/' . $transaction->invoice_number . '.png') }}"
+                        <img src="{{ asset('storage/invoice/' . $transaction->invoice_number . '.svg') }}"
                             alt="Logo Klinik" class="h-80px print-logo">
                     </div>
                 </div>

@@ -7,6 +7,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice {{ $transaction->invoice_number }}</title>
     <style>
+        @font-face {
+            font-family: 'Roboto Condensed';
+            src: public_path('assets/fonts/Roboto_Condensed/RobotoCondensed-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Roboto';
+            src: public_path('assets/fonts/Roboto/Roboto-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Nunito Sans';
+            src: public_path('assets/fonts/Nunito_Sans/NunitoSans-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /**
+                Set the margins of the page to 0, so the footer and the header
+                can be of the full height and width !
+             **/
+        @page {
+            margin: 0cm;
+        }
+
+        /** Define the header rules **/
+        header {
+            position: fixed;
+            top: 1cm;
+            left: 1cm;
+            right: 1cm;
+            height: 0px;
+        }
+
+        /** Define the footer rules **/
+        footer {
+            position: fixed;
+            bottom: 1cm;
+            left: 1cm;
+            right: 1cm;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -19,77 +65,21 @@
             line-height: 1.4;
             color: #000;
             background: #fff;
+            margin-top: 1.5cm;
+            margin-bottom: 0px;
         }
 
         .container {
             max-width: 100%;
             margin: 0 auto;
-            padding: 75px;
-        }
-
-        .header {
-            border-bottom: 2px solid #000;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-
-        .header-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        .logo-cell {
-            width: 100px;
-            vertical-align: top;
-            padding-right: 15px;
-        }
-
-        .clinic-info-cell {
-            vertical-align: top;
-            padding-right: 15px;
-        }
-
-        .qr-cell {
-            width: 100px;
-            vertical-align: top;
-            text-align: right;
-        }
-
-        .logo {
-            max-height: 60px;
-            width: auto;
-        }
-
-        .clinic-info {
-            text-align: left;
-        }
-
-        .clinic-name {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            text-transform: capitalize;
-        }
-
-        .clinic-address {
-            font-size: 9px;
-            margin-bottom: 2px;
-            line-height: 1.3;
-            text-transform: capitalize;
-        }
-
-        .qr-code {
-            border: 1px solid #000;
-            padding: 5px;
-            display: inline-block;
+            padding: 50px;
         }
 
         .invoice-title {
             text-align: center;
             font-size: 24px;
             font-weight: bold;
-            margin-top: 15px;
+            margin: 0;
         }
 
         .patient-info {
@@ -235,38 +225,51 @@
     </style>
 </head>
 
-<body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <table class="header-table">
-                <tr>
-                    <td class="logo-cell">
-                        <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('assets/media/logos/ikon-klinik.png'))) }}"
-                            alt="" width="95" height="95">
-                    </td>
-                    <td class="clinic-info-cell">
-                        <div class="clinic-info">
-                            <div class="clinic-name">{{ Str::lower(organization()->name) }}</div>
-                            <div class="clinic-address">
-                                {{ organization()->address }},<br>
-                                {{ Str::lower(organization()->city->name) }} {{ organization()->province->name }}
-                                {{ organization()->postal_code }},<br>
-                                {{ organization()->country->name }}
-                            </div>
-                            <div class="clinic-address">Telp. {{ organization()->phone }}</div>
-                        </div>
-                    </td>
-                    <td class="qr-cell">
-                        <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('storage/invoice/' . $transaction->invoice_number . '.png'))) }}"
-                            alt="Logo Klinik" class="h-80px print-logo">
-                    </td>
-                </tr>
-            </table>
+<body style="font-family: 'Nunito Sans', sans-serif;">
+    <!--begin::Header-->
+    <header>
+        <table style="width:100%;border-bottom-width:5px;border-bottom-style:double">
+            <tr style="vertical-align:baseline">
+                <td style="width: 50%;vertical-align:top">
+                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path(theme()->getMediaUrlPath() . 'logos/logo-klinik.png'))) }}"
+                        style="height:50px;">
+                </td>
+                <td style="width: 50%; vertical-align:top">
+                    <p style="margin:0px; margin-top:10px; font-size:12px;text-align: right;color:#000;">
+                        {!! organizationInfo('full') !!}
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+            </tr>
+        </table>
+    </header>
+    <!--end::Header-->
 
-            <!-- Invoice Title -->
-            <div class="invoice-title">INVOICE</div>
-        </div>
+    <!--begin::Footer-->
+    <footer>
+        <table style="width:100%;border-top-width: 1px;border-top-style: solid">
+            <tr>
+                <td style="width:50%;text-align: left;vertical-align: top;height:120px">
+                    <h2 style="margin:0px;text-transform: uppercase;font-size: 16px;font-weight: bold">WISHING YOU GOOD
+                        HEALTH AND HAPPINESS</h2>
+                    <p style="margin:0px;text-transform: uppercase;font-size: 14px;">SEMOGA SEHAT DAN BAHAGIA SELALU</p>
+                </td>
+                <td style="width:50%;text-align: right;vertical-align: bottom;float: right;height:100px">
+                    <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path(theme()->getMediaUrlPath() . 'logos/qr.jpeg'))) }}"
+                        style="height:100px;margin-right:5px;margin-top:5px">
+                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path(theme()->getMediaUrlPath() . 'logos/logo-yayasan.png'))) }}"
+                        style="height:85px;">
+                </td>
+            </tr>
+        </table>
+    </footer>
+    <!--end::Footer-->
+
+    <div class="container">
+        <!-- Invoice Title -->
+        <div class="invoice-title">INVOICE</div>
 
         <!-- Patient Info -->
         <div class="patient-info">
@@ -502,6 +505,10 @@
         <div class="print-footer">
             <div>Invoice ini merupakan bukti pembayaran yang sah</div>
             <div>Printed on {{ Carbon::now()->format('d-M-Y H:i') }} by {{ auth()->user()->name ?? 'System' }}</div>
+            <div style="margin:10px auto;width:100px; padding:5px; border:1px solid black">
+                <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('storage/invoice/' . $transaction->invoice_number . '.svg'))) }}"
+                    alt="Logo Klinik" class="h-80px print-logo">
+            </div>
         </div>
     </div>
 </body>
