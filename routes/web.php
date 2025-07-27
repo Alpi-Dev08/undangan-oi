@@ -313,6 +313,9 @@ use Modules\Dashboard\App\Http\Controllers\DashboardController;
     Route::get('/invoice/{invoiceNumber}', [App\Http\Controllers\Klinik\ExaminationsController::class, 'verifyInvoice'])
         ->name('invoice.verify')
         ->where('invoiceNumber', '[A-Za-z0-9\-]+');
+    Route::get('/sick-letter/{sickLetterNumber}', [App\Http\Controllers\Klinik\ExaminationsController::class, 'verifySickLetter'])
+        ->name('sick-letter.verify')
+        ->where('sickLetterNumber', '[A-Za-z0-9\-]+');
     /**
      * Socialite login using Google service
      * https://laravel.com/docs/8.x/socialite
