@@ -90,18 +90,69 @@ class DashboardController extends Controller
                 ->whereNull('deleted_at')
                 ->count();
 
-            // Hitung total revenue dari transaksi yang sudah dibayar
+            // Hitung total revenue dari transaksi yang sudah dibayar + total resep
             $totalRevenue = Transaction::where('status', 'paid')
                 ->whereNull('deleted_at')
                 ->whereDate('created_at', Carbon::today())
                 ->whereDate('updated_at', Carbon::today())
                 ->sum('amount');
 
-            // Hitung pending payment hari ini
+            // Tambahkan kalkulasi total resep untuk revenue
+            $totalRevenueResep = 0;
+            $paidTransactions = Transaction::where('status', 'paid')
+                ->whereNull('deleted_at')
+                ->whereDate('created_at', Carbon::today())
+                ->whereDate('updated_at', Carbon::today())
+                ->with('examination')
+                ->get();
+
+            foreach ($paidTransactions as $transaction) {
+                if ($transaction->examination && $transaction->examination->resep) {
+                    $resep = json_decode($transaction->examination->resep);
+                    if (isset($resep->obat)) {
+                        $obat = $resep->obat;
+                        $qty = $resep->qty;
+                        foreach ($obat as $key => $value) {
+                            if (isset(getObat($value)->name)) {
+                                $totalRevenueResep += $qty[$key] * getObat($value)->price;
+                            }
+                        }
+                    }
+                }
+            }
+
+            $totalRevenue += $totalRevenueResep;
+
+            // Hitung pending payment hari ini + total resep
             $pendingPayment = Transaction::whereIn('status', ['waiting payment', 'waiting'])
                 ->whereNull('deleted_at')
                 ->whereDate('created_at', Carbon::today())
                 ->sum('amount');
+
+            // Tambahkan kalkulasi total resep untuk pending payment
+            $pendingPaymentResep = 0;
+            $pendingTransactions = Transaction::whereIn('status', ['waiting payment', 'waiting'])
+                ->whereNull('deleted_at')
+                ->whereDate('created_at', Carbon::today())
+                ->with('examination')
+                ->get();
+
+            foreach ($pendingTransactions as $transaction) {
+                if ($transaction->examination && $transaction->examination->resep) {
+                    $resep = json_decode($transaction->examination->resep);
+                    if (isset($resep->obat)) {
+                        $obat = $resep->obat;
+                        $qty = $resep->qty;
+                        foreach ($obat as $key => $value) {
+                            if (isset(getObat($value)->name)) {
+                                $pendingPaymentResep += $qty[$key] * getObat($value)->price;
+                            }
+                        }
+                    }
+                }
+            }
+
+            $pendingPayment += $pendingPaymentResep;
 
             $stats = [
                 'patients' => $totalPatients,
