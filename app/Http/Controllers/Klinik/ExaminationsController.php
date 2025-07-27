@@ -272,10 +272,16 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
             // Hitung total resep jika ada
             $total_resep = 0;
-              $qr = QrCode::format('png')
-                        ->size(100)
-                        ->style('square')
-                        ->generate('https://klinik.dharma.or.id/invoice/' . $transaction->invoice_number);
+            $resep = json_decode($examination->resep);
+            if (isset($resep->obat)) {
+                $obat = $resep->obat;
+                $qty = $resep->qty;
+                foreach ($obat as $key => $value) {
+                    if (isset(getObat($value)->name)) {
+                        $total_resep += $qty[$key] * getObat($value)->price;
+                    }
+                }
+            }
 
             $data = compact([
                 'user',
@@ -284,7 +290,6 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
                 'transaction',
                 'transaction_detail',
                 'total_resep',
-                'qr',
             ]);
 
             // Generate PDF dengan DomPDF
@@ -1091,6 +1096,16 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
                 // Hitung total resep
                 $total_resep = 0;
+                $resep = json_decode($examination->resep);
+                if (isset($resep->obat)) {
+                    $obat = $resep->obat;
+                    $qty = $resep->qty;
+                    foreach ($obat as $key => $value) {
+                        if (isset(getObat($value)->name)) {
+                            $total_resep += $qty[$key] * getObat($value)->price;
+                        }
+                    }
+                }
                 foreach ($transaction_detail as $detail) {
                     if ($detail->drug_id) {
                         $total_resep += $detail->price * $detail->quantity;
