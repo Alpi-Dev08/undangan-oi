@@ -768,16 +768,34 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
             $data = json_decode(json_encode($request->all()));
 
-            // get the default inner page
-            /*return view('pages.klinik.examinations.sakit', compact([
-                'user', 'info', 'examination', 'data'
-            ]));*/
+            // Generate unique sick letter number
+            $sick_letter_number = 'SK-' . date('Ymd') . '-' . str_pad($examination->id, 4, '0', STR_PAD_LEFT);
+
+            // Store sick letter data in examination
+            $examination->update([
+                'sick_letter_number' => $sick_letter_number,
+                'sick_letter_data' => json_encode($data)
+            ]);
+
+            // Pastikan direktori sick-letter ada sebelum menyimpan QR code
+            $sickLetterDir = storage_path('app/public/sick-letter');
+            if (!file_exists($sickLetterDir)) {
+                mkdir($sickLetterDir, 0755, true);
+                Log::info('Created sick letter directory: ' . $sickLetterDir);
+            }
+
+            // Generate QR code for verification
+            $qr = QrCode::format('svg')->size(100)
+                        ->style('square')
+                        ->generate('https://klinik.dharma.or.id/sick-letter/' . $sick_letter_number, storage_path('app/public/sick-letter/'.$sick_letter_number.'.svg'));
 
             $pdf = Pdf::loadView('pages.klinik.examinations.sakit', compact([
                 'user',
                 'info',
                 'examination',
                 'data',
+                'sick_letter_number',
+                'qr',
             ]));
 
             return $pdf->download('surat_keterangan_sakit_' . $user->name . '.pdf');
@@ -1132,6 +1150,57 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
                     'status' => 'error',
                     'message' => 'Terjadi kesalahan saat memverifikasi invoice',
                     'invoice_number' => $invoice_number
+                ]);
+            }
+        }
+
+        /**
+         * Verifikasi kebenaran surat sakit melalui QR code
+         *
+         * @param string $sick_letter_number
+         * @return \Illuminate\Http\Response
+         */
+        public function verifySickLetter($sick_letter_number)
+        {
+            try {
+                // Log akses verifikasi surat sakit
+                Log::info('Sick letter verification accessed for: ' . $sick_letter_number);
+
+                // Cari examination berdasarkan nomor surat sakit
+                $examination = Examination::where('sick_letter_number', $sick_letter_number)->first();
+
+                if (!$examination) {
+                    Log::warning('Sick letter not found: ' . $sick_letter_number);
+                    return view('pages.klinik.examinations.sick-letter-verify', [
+                        'status' => 'not_found',
+                        'message' => 'Surat sakit tidak ditemukan',
+                        'sick_letter_number' => $sick_letter_number
+                    ]);
+                }
+
+                // Ambil data terkait
+                $user = User::find($examination->user_id);
+                $info = $user->info;
+                $sick_letter_data = json_decode($examination->sick_letter_data);
+
+                Log::info('Sick letter verification successful for: ' . $sick_letter_number);
+
+                return view('pages.klinik.examinations.sick-letter-verify', [
+                    'status' => 'valid',
+                    'message' => 'Surat sakit valid dan terverifikasi',
+                    'sick_letter_number' => $sick_letter_number,
+                    'examination' => $examination,
+                    'user' => $user,
+                    'info' => $info,
+                    'sick_letter_data' => $sick_letter_data
+                ]);
+
+            } catch (\Exception $e) {
+                Log::error('Error verifying sick letter: ' . $e->getMessage());
+                return view('pages.klinik.examinations.sick-letter-verify', [
+                    'status' => 'error',
+                    'message' => 'Terjadi kesalahan saat memverifikasi surat sakit',
+                    'sick_letter_number' => $sick_letter_number
                 ]);
             }
         }

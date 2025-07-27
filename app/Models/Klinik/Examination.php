@@ -45,7 +45,9 @@
             'encounter_id',
             'encounter',
             'encounter_status',
-            'jenis_pasien_id'
+            'jenis_pasien_id',
+            'sick_letter_number',
+            'sick_letter_data',
         ];
 
         public function jenisPasien()
