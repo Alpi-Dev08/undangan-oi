@@ -67,16 +67,12 @@
 
             <div class="card-header bg-white">
                 <div class="clinic-header">
-                    <div class="d-flex align-items-start mb-3">
-                        <img src="{{ asset('assets/media/logos/ikon-klinik.png') }}" alt="Logo Klinik" class="me-3"
-                            style="height: 60px; width: auto;">
+                    <div class="d-flex flex-column align-items-start text-left mb-3">
+                        <img src="{{ asset('assets/media/logos/logo-klinik.png') }}" alt="Logo Klinik" class="mb-3"
+                            style="height: 50px; width: auto;">
                         <div>
-                            <h4 class="mb-1">{{ organization()->name ?? 'Klinik Dharma Medika' }}</h4>
-                            <div class="text-muted fs-7 lh-lg text-capitalize">
-                                <div>{{ organization()->address }},<br> {{ Str::lower(organization()->city->name) }}
-                                    {{ organization()->province->name }} {{ organization()->postal_code }},
-                                    {{ organization()->country->name }}</div>
-                                <div>Telp. {{ organization()->phone }}</div>
+                            <div class="text-muted fs-7 text-capitalize" style="font-size: 12px;">
+                                <div>{!! organizationInfo('full') !!}</div>
                             </div>
                         </div>
                     </div>

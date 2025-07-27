@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ ucfirst(theme()->getOption('meta', 'title')) }} | Verifikasi Surat Sakit - {{ $sick_letter_number }}</title>
+    <title>{{ ucfirst(theme()->getOption('meta', 'title')) }} | Verifikasi Surat Sakit - {{ $sick_letter_number }}
+    </title>
     <link rel="shortcut icon" href="{{ asset('assets' . '/' . theme()->getOption('assets', 'favicon')) }}" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -67,16 +68,12 @@
 
             <div class="card-header bg-white">
                 <div class="clinic-header">
-                    <div class="d-flex align-items-start mb-3">
-                        <img src="{{ asset('assets/media/logos/ikon-klinik.png') }}" alt="Logo Klinik" class="me-3"
-                            style="height: 60px; width: auto;">
+                    <div class="d-flex flex-column align-items-start text-left mb-3">
+                        <img src="{{ asset('assets/media/logos/logo-klinik.png') }}" alt="Logo Klinik" class="mb-3"
+                            style="height: 50px; width: auto;">
                         <div>
-                            <h4 class="mb-1">{{ organization()->name ?? 'Klinik Dharma Medika' }}</h4>
-                            <div class="text-muted fs-7 lh-lg text-capitalize">
-                                <div>{{ organization()->address }},<br> {{ Str::lower(organization()->city->name) }}
-                                    {{ organization()->province->name }} {{ organization()->postal_code }},
-                                    {{ organization()->country->name }}</div>
-                                <div>Telp. {{ organization()->phone }}</div>
+                            <div class="text-muted fs-7 text-capitalize" style="font-size: 12px;">
+                                <div>{!! organizationInfo('full') !!}</div>
                             </div>
                         </div>
                     </div>
@@ -155,14 +152,15 @@
                                 {{ \Carbon\Carbon::parse($examination->examination_date)->format('d F Y') }}</div>
                         </div>
 
-                        @if(isset($sick_letter_data->keterangan))
+                        @if (isset($sick_letter_data->keterangan))
                             <div class="row mb-2">
                                 <div class="col-md-5"><strong>Status Pasien</strong></div>
                                 <div class="col-md-7">:
-                                    @if($sick_letter_data->keterangan == 1)
+                                    @if ($sick_letter_data->keterangan == 1)
                                         <span class="badge bg-success">Dapat kembali bekerja</span>
                                     @elseif($sick_letter_data->keterangan == 2)
-                                        <span class="badge bg-warning">Disarankan istirahat {{ $sick_letter_data->hari ?? '0' }} hari</span>
+                                        <span class="badge bg-warning">Disarankan istirahat
+                                            {{ $sick_letter_data->hari ?? '0' }} hari</span>
                                     @elseif($sick_letter_data->keterangan == 3)
                                         <span class="badge bg-info">Perlu kontrol kembali</span>
                                     @elseif($sick_letter_data->keterangan == 4)
@@ -172,7 +170,7 @@
                             </div>
                         @endif
 
-                        @if(isset($sick_letter_data->description) && $sick_letter_data->description)
+                        @if (isset($sick_letter_data->description) && $sick_letter_data->description)
                             <div class="row mb-2">
                                 <div class="col-md-5"><strong>Keterangan</strong></div>
                                 <div class="col-md-7">: {{ $sick_letter_data->description }}</div>
