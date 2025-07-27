@@ -233,6 +233,17 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
             $transaction        = Transaction::where('examination_id', $examination->id)->first();
             $transaction_detail = TransactionDetail::where('transaction_id', $transaction->id)->get();
 
+            // Pastikan direktori invoice ada sebelum menyimpan QR code
+            $invoiceDir = storage_path('app/public/invoice');
+            if (!file_exists($invoiceDir)) {
+                mkdir($invoiceDir, 0755, true);
+                Log::info('Created invoice directory: ' . $invoiceDir);
+            }
+
+            $qr = QrCode::format('png')->size(100)
+                        ->style('square')
+                        ->generate('https://klinik.dharma.or.id/invoice/' . $transaction->invoice_number, storage_path('app/public/invoice/'.$transaction->invoice_number.'.png'));
+
             // get the default inner page
             return view('pages.klinik.examinations.invoice', compact([
                 'user',
@@ -240,6 +251,7 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
                 'examination',
                 'transaction',
                 'transaction_detail',
+                'qr',
             ]));
         }
 
@@ -260,7 +272,10 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
             // Hitung total resep jika ada
             $total_resep = 0;
-            // Logic untuk menghitung total resep bisa ditambahkan di sini
+              $qr = QrCode::format('png')
+                        ->size(100)
+                        ->style('square')
+                        ->generate('https://klinik.dharma.or.id/invoice/' . $transaction->invoice_number);
 
             $data = compact([
                 'user',
@@ -268,7 +283,8 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
                 'examination',
                 'transaction',
                 'transaction_detail',
-                'total_resep'
+                'total_resep',
+                'qr',
             ]);
 
             // Generate PDF dengan DomPDF
