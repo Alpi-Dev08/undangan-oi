@@ -1059,4 +1059,66 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
                              ->with('success', 'Data berhasil disimpan dan bisa dilihat di daftar status.');
         }
 
+        /**
+         * Verifikasi kebenaran invoice melalui QR code
+         *
+         * @param string $invoice_number
+         * @return \Illuminate\Http\Response
+         */
+        public function verifyInvoice($invoice_number)
+        {
+            try {
+                // Log akses verifikasi invoice
+                Log::info('Invoice verification accessed for: ' . $invoice_number);
+
+                // Cari transaksi berdasarkan nomor invoice
+                $transaction = Transaction::where('invoice_number', $invoice_number)->first();
+
+                if (!$transaction) {
+                    Log::warning('Invoice not found: ' . $invoice_number);
+                    return view('pages.klinik.examinations.invoice-verify', [
+                        'status' => 'not_found',
+                        'message' => 'Invoice tidak ditemukan',
+                        'invoice_number' => $invoice_number
+                    ]);
+                }
+
+                // Ambil data terkait
+                $examination = Examination::find($transaction->examination_id);
+                $user = User::find($examination->user_id);
+                $info = $user->info;
+                $transaction_detail = TransactionDetail::where('transaction_id', $transaction->id)->get();
+
+                // Hitung total resep
+                $total_resep = 0;
+                foreach ($transaction_detail as $detail) {
+                    if ($detail->drug_id) {
+                        $total_resep += $detail->price * $detail->quantity;
+                    }
+                }
+
+                Log::info('Invoice verification successful for: ' . $invoice_number);
+
+                return view('pages.klinik.examinations.invoice-verify', [
+                    'status' => 'valid',
+                    'message' => 'Invoice valid dan terverifikasi',
+                    'invoice_number' => $invoice_number,
+                    'transaction' => $transaction,
+                    'examination' => $examination,
+                    'user' => $user,
+                    'info' => $info,
+                    'transaction_detail' => $transaction_detail,
+                    'total_resep' => $total_resep
+                ]);
+
+            } catch (\Exception $e) {
+                Log::error('Error verifying invoice: ' . $e->getMessage());
+                return view('pages.klinik.examinations.invoice-verify', [
+                    'status' => 'error',
+                    'message' => 'Terjadi kesalahan saat memverifikasi invoice',
+                    'invoice_number' => $invoice_number
+                ]);
+            }
+        }
+
     }
