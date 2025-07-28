@@ -263,13 +263,13 @@
         <div class="col-md-6">
             <div class="border border-dark p-3">
                 <div class="fs-8 text-dark lh-lg">
-                    <div>- Klinik Satriabudi Dharma Medika NPWP : 01.788.139.2.054.000</div>
+                    <div>- Klinik Satriabudi Dharma Medika NPWP : </div>
                     <div>- Invoice ini berlaku sebagai faktur Pajak sesuai dengan Peraturan</div>
                     <div>Direktur Jenderal Pajak No. 27/PJ/2011, Tanggal 18 September 2011</div>
                     <div>- Pembayaran dapat dilakukan melalui :</div>
-                    <div>- Reservasi Rawat Jalan Call Center {{ organization()->phone }} (Senin-Sabtu 07.00-20.00)
+                    <div>- Reservasi Rawat Jalan Call Center {{ organization()->phone }} (Senin-Jumat 08.00-20.00)
                     </div>
-                    <div>- Klinik Hari Minggu (Sunday Clinic) 08.00-12.00</div>
+                    <div>- Klinik Hari Sabtu dan Minggu (Weekend Clinic) 08.00-17.00</div>
                 </div>
             </div>
         </div>

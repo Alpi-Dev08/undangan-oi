@@ -61,7 +61,7 @@
 
         body {
             font-family: 'Inter', Helvetica, 'sans-serif';
-            font-size: 11px;
+            font-size: 16px;
             line-height: 1.4;
             color: #000;
             background: #fff;
@@ -77,7 +77,7 @@
 
         .invoice-title {
             text-align: center;
-            font-size: 24px;
+            font-size: 26px;
             font-weight: bold;
             margin: 0;
         }
@@ -95,7 +95,7 @@
         .info-table td {
             padding: 3px 5px;
             vertical-align: top;
-            font-size: 10px;
+            font-size: 14px;
         }
 
         .info-label {
@@ -114,7 +114,7 @@
             border: 1px solid #000;
             padding: 6px 4px;
             text-align: left;
-            font-size: 9px;
+            font-size: 14px;
         }
 
         .services-table th {
@@ -153,11 +153,11 @@
         .total-table td {
             padding: 5px 10px;
             border-top: 1px solid #000;
-            font-size: 10px;
+            font-size: 14px;
         }
 
         .grand-total {
-            font-size: 12px;
+            font-size: 14px;
             font-weight: bold;
             border-top: 2px solid #000 !important;
         }
@@ -177,7 +177,7 @@
             border: 1px solid #000;
             padding: 6px;
             text-align: center;
-            font-size: 9px;
+            font-size: 14px;
         }
 
         .receipt-table th {
@@ -196,7 +196,7 @@
         }
 
         .footer-text {
-            font-size: 8px;
+            font-size: 12px;
             line-height: 1.4;
         }
 
@@ -220,7 +220,7 @@
             text-align: center;
             border-top: 1px solid #000;
             padding-top: 10px;
-            font-size: 8px;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -475,13 +475,13 @@
                     <td style="width: 60%; vertical-align: top; padding-right: 20px;">
                         <div class="footer-box">
                             <div class="footer-text">
-                                <div>- Klinik Satriabudi Dharma Medika NPWP : 01.788.139.2.054.000</div>
+                                <div>- Klinik Satriabudi Dharma Medika NPWP : </div>
                                 <div>- Invoice ini berlaku sebagai faktur Pajak sesuai dengan Peraturan</div>
                                 <div>Direktur Jenderal Pajak No. 27/PJ/2011, Tanggal 18 September 2011</div>
                                 <div>- Pembayaran dapat dilakukan melalui :</div>
-                                <div>- Reservasi Rawat Jalan Call Center {{ organization()->phone }} (Senin-Sabtu
-                                    07.00-20.00)</div>
-                                <div>- Klinik Hari Minggu (Sunday Clinic) 08.00-12.00</div>
+                                <div>- Reservasi Rawat Jalan Call Center {{ organization()->phone }} (Senin-Jumat
+                                    08.00-20.00)</div>
+                                <div>- Klinik Hari Sabtu dan Minggu (Weekend Clinic) 08.00-17.00</div>
                             </div>
                         </div>
                     </td>
