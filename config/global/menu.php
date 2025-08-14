@@ -454,8 +454,41 @@
                 ],
             ],
 
+            // Skrining Examination
+            [ 
+                'title'      => 'Skrining Examination',
+                'icon'       => [
+                    'svg'  => theme()->getSvgIcon('assets/media/icons/duotune/general/gen005.svg', 'svg-icon-2'),
+                    'font' => '<i class="bi bi-layers fs-3"></i>',
+                ],
+                'classes'    => ['item' => 'menu-accordion'],
+                'attributes' => [
+                    'data-kt-menu-trigger' => 'click',
+                ], 
+                'permission' => ['klinik.read'],
+                'sub'        => [
+                    'class' => 'menu-sub-accordion menu-active-bg', 
+                    'items' => [
+                        [
+                            'title'      => 'Location Examination',
+                            'path'       => 'klinik/locationexaminations',
+                            'bullet'     => '<span class="bullet bullet-dot"></span>',
+                            'role'       => ['admin', 'administrator', 'ners', 'admin-perawat'],
+                            'permission' => ['klinik.read'],
+                        ],
+                        [
+                            'title'  => 'Skrining Examination',
+                            'path'   => 'klinik/skriningexaminations',
+                            'bullet' => '<span class="bullet bullet-dot"></span>',
+                            'role'   => ['admin', 'administrator', 'ners', 'admin-perawat'],
+                            'permission' => ['klinik.read'],
+                        ],
+                    ],
+                ],
+            ],
+
             // System
-            [
+            [ 
                 'title'      => 'System',
                 'icon'       => [
                     'svg'  => theme()->getSvgIcon('assets/media/icons/duotune/coding/cod001.svg', 'svg-icon-2'),

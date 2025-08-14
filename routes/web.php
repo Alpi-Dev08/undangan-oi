@@ -30,12 +30,14 @@
     use App\Http\Controllers\Klinik\PhysicalExaminationsController;
     use App\Http\Controllers\Klinik\PhysicalsController;
     use App\Http\Controllers\Klinik\SbarController;
-    use App\Http\Controllers\Klinik\ServiceCategoriesController;
+    use App\Http\Controllers\Klinik\ServiceCategoriesController; 
     use App\Http\Controllers\Klinik\ServicesController;
     use App\Http\Controllers\Klinik\SpecialitiesController;
     use App\Http\Controllers\Klinik\TransactionsController;
     use App\Http\Controllers\Klinik\UnitController;
     use App\Http\Controllers\Klinik\VitalityExaminationsController;
+    use App\Http\Controllers\Klinik\SkriningExaminationsController;
+    use App\Http\Controllers\Klinik\LocationExaminationsController;
     use App\Http\Controllers\KycController;
     use App\Http\Controllers\Logs\AuditLogsController;
     use App\Http\Controllers\Logs\SystemLogsController;
@@ -59,7 +61,7 @@
     use App\Http\Controllers\RolesController;
     use App\Http\Controllers\UsersController;
     use Illuminate\Support\Facades\Route;
-use Modules\Dashboard\App\Http\Controllers\DashboardController;
+    use Modules\Dashboard\App\Http\Controllers\DashboardController;
 
     /*
     |--------------------------------------------------------------------------
@@ -79,9 +81,9 @@ use Modules\Dashboard\App\Http\Controllers\DashboardController;
     Route::get('bukti-penyampaian/{id}', [PagesController::class, 'get_bukti_penyampaian_informasi'])->name('bukti_penyampaian');
     Route::get('generate-pdf/{id}', [PagesController::class, 'generatePDF'])->name('generate.pdf');
 
-//     Route::get('persetujuan-tindakan-medis/{id}', [PagesController::class, 'persetujuan_tindakan_medis'])->name('persetujuantindakanmedis');
-//     Route::post('persetujuan-tindakan-medis', [PagesController::class, 'store_persetujuan-tindakan-medis'])->name('persetujuantindakanmedis.store');
-//     Route::get('persetujuan-tindakan/{id}', [PagesController::class, 'get_persetujuan-tindakan-medis'])->name('bukti_persetujuan');
+    //     Route::get('persetujuan-tindakan-medis/{id}', [PagesController::class, 'persetujuan_tindakan_medis'])->name('persetujuantindakanmedis');
+    //     Route::post('persetujuan-tindakan-medis', [PagesController::class, 'store_persetujuan-tindakan-medis'])->name('persetujuantindakanmedis.store');
+    //     Route::get('persetujuan-tindakan/{id}', [PagesController::class, 'get_persetujuan-tindakan-medis'])->name('bukti_persetujuan');
 
     // Documentations pages
     Route::prefix('documentation')->group(function () {
@@ -137,7 +139,7 @@ use Modules\Dashboard\App\Http\Controllers\DashboardController;
             Route::resource('subdistricts', SubDistrictsController::class);
             Route::get('district-sub', [SubDistrictsController::class, 'getSubDistrictByCityId']);
         });
-
+ 
         //Masters Data
         Route::prefix('klinik')->group(callback: function () {
             Route::resource('healthcarecategories', HealthcareCategoriesController::class);
@@ -219,7 +221,26 @@ use Modules\Dashboard\App\Http\Controllers\DashboardController;
             Route::put('laboratoryexamination-result', [LaboratoryExaminationsController::class, 'resultUpdate'])
                  ->name('result.update');
             Route::resource('laboratoryexaminations', LaboratoryExaminationsController::class);
+            
+            Route::get('skriningexaminations/export', [SkriningExaminationsController::class, 'export'])
+                 ->name('skriningexaminations.export');
 
+            Route::resource('skriningexaminations', SkriningExaminationsController::class);
+  
+            Route::get('skriningexaminations-result', [SkriningExaminationsController::class, 'result'])
+               ->name('skriningexaminations.result');
+            Route::put('skriningexaminations-result', [SkriningExaminationsController::class, 'resultUpdate'])
+               ->name('skriningexaminations.result.update');
+            Route::get('skriningexamination-download', [SkriningExaminationsController::class, 'download'])
+               ->name('skriningexaminations.download');
+            Route::get('skriningexaminations/{skrining}/detail', [SkriningExaminationsController::class, 'detail'])
+               ->name('skriningexaminations.detail');
+
+            Route::post('skriningexaminations/filter', [SkriningExaminationsController::class, 'filter'])
+               ->name('skriningexaminations.filter');
+
+            Route::resource('locationexaminations', LocationExaminationsController::class);
+ 
             // Routes for Komunikasi Efektif
             Route::get('/komunikasi-efektif/form/{examination}', [KomunikasiEfektifController::class, 'showForm'])
                  ->name('komunikasi.efektif.form');
@@ -255,8 +276,6 @@ use Modules\Dashboard\App\Http\Controllers\DashboardController;
             Route::resource('jenis-pasien', JenisPasienController::class);
             Route::resource('personal-disease-histories', PersonalDiseaseHistoryController::class);
             Route::resource('family-disease-histories', FamilyDiseaseHistoryController::class);
-
-
         });
 
 
