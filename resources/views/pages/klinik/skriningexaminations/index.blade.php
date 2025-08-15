@@ -136,18 +136,13 @@
         @push('customscript')
         <script>
         $(document).ready(function() {
-            // Set default date today
-            var today = new Date().toISOString().split('T')[0];
-            $('#tanggalExamination').val(today);
+            // Kosongkan tanggal di awal
+            $('#tanggalExamination').val('');
 
+            // Tombol filter
             $('#filterExamination').on('click', function() {
                 let locationId = $('#locationSelect').val();
                 let examinationDate = $('#tanggalExamination').val();
-
-                if (!locationId || !examinationDate) {
-                    toastr.error('Pilih lokasi dan tanggal terlebih dahulu.');
-                    return;
-                }
 
                 $(this).prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Memproses...');
 
@@ -189,30 +184,27 @@
                 });
             });
 
+            // Reset form
             $('#resetForm').on('click', function() {
                 $('#locationSelect').val('');
-                $('#tanggalExamination').val(today);
+                $('#tanggalExamination').val('');
                 $('#skriningTableBody').html('');
                 $('#skriningTableWrapper').addClass('d-none');
             });
-        });
 
-        $('#exportBtn').on('click', function(e) {
-            e.preventDefault();
+            // Export
+            $('#exportBtn').on('click', function(e) {
+                e.preventDefault();
 
-            let location = $('#locationSelect').val() || '';
-            let date     = $('#tanggalExamination').val() || '';
+                let location = $('#locationSelect').val() || '';
+                let date     = $('#tanggalExamination').val() || '';
 
-            let url = '{{ route("skriningexaminations.export") }}'
-                + '?location=' + encodeURIComponent(location)
-                + '&date=' + encodeURIComponent(date);
+                let url = '{{ route("skriningexaminations.export") }}'
+                    + '?location=' + encodeURIComponent(location)
+                    + '&date=' + encodeURIComponent(date);
 
-            window.location.href = url;
-        });
-
-        // Deteksi kapan user benar-benar memilih tanggal
-        $('#tanggalExamination').on('change', function() {
-            $(this).data('userSelected', true);
+                window.location.href = url;
+            });
         });
         </script>
         @endpush

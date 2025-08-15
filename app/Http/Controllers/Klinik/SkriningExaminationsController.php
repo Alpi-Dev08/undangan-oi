@@ -106,16 +106,14 @@ class SkriningExaminationsController extends Controller
             'data' => $data
         ]);
     }
-        
+   
     public function export(Request $request)
     {
-        // Ambil parameter filter
-        $locationId = $request->get('location') ?: null;
-        $examDate   = $request->get('date') ?: null;
+        $locationId = $request->get('location');
+        $date       = $request->get('date');
 
-        // Kirim ke export, jika null maka export semua data
         return Excel::download(
-            new SkriningExaminationsExport($locationId, $examDate),
+            new SkriningExaminationsExport($locationId, $date),
             'skrining_examinations.xlsx'
         );
     }

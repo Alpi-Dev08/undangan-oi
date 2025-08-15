@@ -24,19 +24,19 @@ class SkriningExaminationsExport implements FromCollection, WithHeadings, WithMa
 
     public function __construct($locationId = null, $examinationDate = null)
     {
-        $this->locationId      = $locationId;
-        $this->examinationDate = $examinationDate;
+        $this->locationId = $locationId ?: null;
+        $this->examinationDate = $examinationDate ?: null;
     }
 
     public function collection()
     {
-        $q = SkriningExamination::with(['location','gender']);
+        $q = SkriningExamination::with(['location', 'gender']);
 
-        if ($this->locationId) {
+        if (!empty($this->locationId)) {
             $q->where('location_id', $this->locationId);
         }
 
-        if ($this->examinationDate) {
+        if (!empty($this->examinationDate)) {
             $q->whereDate('examination_date', $this->examinationDate);
         }
 
@@ -80,9 +80,7 @@ class SkriningExaminationsExport implements FromCollection, WithHeadings, WithMa
             if (!isset($item['ItemName'])) continue;
 
             $key = $this->normalizeKey($item['ItemName']);
-            $val = isset($item['hasil']) && trim($item['hasil']) !== '' 
-                ? (string) $item['hasil'] 
-                : '-';
+            $val = isset($item['hasil']) && trim((string)$item['hasil']) !== '' ? (string)$item['hasil'] : '-';
             $map[$key] = $val;
         }
 
@@ -98,7 +96,6 @@ class SkriningExaminationsExport implements FromCollection, WithHeadings, WithMa
         $GD2PP       = $this->getByAliases($map, ['gd2pp','guladarah2pp','gd_2pp','2pp','guladarah2jampp']);
         $Desk        = $row->deskripsi ?: '-';
 
-        // NIK/No BPJS tampil sebagai string
         $nikBpjs = '-';
         if (!empty($row->card_type)) {
             $nikBpjs = $row->nik_bpjs ?: '-';
@@ -131,7 +128,7 @@ class SkriningExaminationsExport implements FromCollection, WithHeadings, WithMa
     public function styles(Worksheet $sheet)
     {
         return [
-            3 => ['font' => ['bold' => true]], // header kolom bold
+            3 => ['font' => ['bold' => true]], // hanya header baris 3 yang bold
         ];
     }
 
@@ -141,62 +138,100 @@ class SkriningExaminationsExport implements FromCollection, WithHeadings, WithMa
             AfterSheet::class => function (AfterSheet $event) {
                 $sheet = $event->sheet->getDelegate();
 
-                // Sisipkan 2 baris di atas untuk header lokasi
                 $sheet->insertNewRowBefore(1, 2);
-
-                // Merge kolom B..T untuk lokasi (tengah)
                 $sheet->mergeCells('B1:T1');
 
-                $locationName = $this->locationId
-                    ? optional(SkriningExaminationLocation::find($this->locationId))->name
-                    : 'SEMUA LOKASI';
-                $sheet->setCellValue('B1', $locationName);
+                $locationText = 'SEMUA LOKASI';
+                if (!$this->isAll($this->locationId)) {
+                    $locName = SkriningExaminationLocation::whereKey(
+                        is_numeric($this->locationId) ? (int)$this->locationId : $this->locationId
+                    )->value('name');
+                    if ($locName) $locationText = $locName;
+                }
 
-                // Style header lokasi
+                $date = $this->normalizeDate($this->examinationDate);
+                $dateText = $date ? Carbon::parse($date)->format('d F Y') : 'SEMUA TANGGAL';
+
+                $sheet->setCellValue('B1', $locationText.' - '.$dateText);
+
                 $sheet->getStyle('B1')->getFont()->setBold(true)->setSize(12);
                 $sheet->getStyle('B1')->getAlignment()
                     ->setHorizontal(Alignment::HORIZONTAL_CENTER)
                     ->setVertical(Alignment::VERTICAL_CENTER);
 
-                // Auto-size kolom A..T
                 foreach (range('A','T') as $col) {
                     $sheet->getColumnDimension($col)->setAutoSize(true);
                 }
 
                 $lastRow = $sheet->getHighestRow();
 
-                // Format kolom D (NIK/No BPJS) sebagai TEXT sebelum isi data
                 $sheet->getStyle('D4:D'.$lastRow)
                       ->getNumberFormat()
                       ->setFormatCode(NumberFormat::FORMAT_TEXT);
 
-                // Border tabel A3..T$lastRow
                 $sheet->getStyle('A3:T'.$lastRow)->getBorders()->getAllBorders()
                       ->setBorderStyle(Border::BORDER_THIN);
 
-                // Header kolom (baris 3) bold
-                $sheet->getStyle('A3:T3')->getFont()->setBold(true);
+                $sheet->getStyle('A3:T3')->getFont()->setBold(true); // header bold
 
-                // Bold kolom Nama (C) mulai baris 4
-                for ($r = 4; $r <= $lastRow; $r++) {
-                    $sheet->getStyle('C'.$r)->getFont()->setBold(true);
-                }
+                $lastRow = $sheet->getHighestRow();
+                $sheet->getStyle('B4:B'.$lastRow)->getFont()->setBold(false);
+                $lastRow = $sheet->getHighestRow();
+                $sheet->getStyle('B4:C'.$lastRow)->getFont()->setBold(false);
+                $lastRow = $sheet->getHighestRow();
+                $sheet->getStyle('B4:D'.$lastRow)->getFont()->setBold(false);
+                $lastRow = $sheet->getHighestRow();
+                $sheet->getStyle('B4:E'.$lastRow)->getFont()->setBold(false);
+                $lastRow = $sheet->getHighestRow();
+                $sheet->getStyle('B4:F'.$lastRow)->getFont()->setBold(false);
+                $lastRow = $sheet->getHighestRow();
+                $sheet->getStyle('B4:G'.$lastRow)->getFont()->setBold(false);
+                $lastRow = $sheet->getHighestRow();
+                $sheet->getStyle('B4:H'.$lastRow)->getFont()->setBold(false);
+                $lastRow = $sheet->getHighestRow(); 
+                $sheet->getStyle('B4:I'.$lastRow)->getFont()->setBold(false);
+                $lastRow = $sheet->getHighestRow();
+                $sheet->getStyle('B4:J'.$lastRow)->getFont()->setBold(false);
 
-                // Rata tengah No, Usia, hasil pemeriksaan + Desk
-                $sheet->getStyle('A3:A'.$lastRow)->getAlignment()
-                    ->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                $sheet->getStyle('F3:F'.$lastRow)->getAlignment()
-                    ->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                $sheet->getStyle('J3:T'.$lastRow)->getAlignment()
-                    ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                // (Baris ini dihapus: loop untuk membold kolom Nama) 
+                $sheet->getStyle('A3:A'.$lastRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle('F3:F'.$lastRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle('J3:T'.$lastRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-                // Set setiap nilai di kolom D sebagai string eksplisit
                 for ($r = 4; $r <= $lastRow; $r++) {
                     $cell = $sheet->getCell('D'.$r);
                     $cell->setValueExplicit($cell->getValue(), DataType::TYPE_STRING);
                 }
             },
         ];
+    }
+
+    private function isAll($value): bool
+    {
+        if (is_null($value)) return true;
+        if ($value === '') return true;
+        if (is_string($value) && in_array(strtolower(trim($value)), ['all', 'semua'], true)) return true;
+        if (is_numeric($value) && (int)$value === 0) return true;
+        return false;
+    }
+
+    private function normalizeDate($value): ?string
+    {
+        if (is_null($value)) return null;
+        $v = trim((string)$value);
+        if ($v === '') return null;
+
+        try {
+            if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $v)) {
+                return Carbon::createFromFormat('d/m/Y', $v)->toDateString();
+            }
+            if (preg_match('/^\d{2}-\d{2}-\d{4}$/', $v)) {
+                return Carbon::createFromFormat('d-m-Y', $v)->toDateString();
+            }
+            return Carbon::parse($v)->toDateString();
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 
     private function normalizeKey(string $name): string
@@ -241,8 +276,8 @@ class SkriningExaminationsExport implements FromCollection, WithHeadings, WithMa
     private function getByAliases(array $map, array $aliases): string
     {
         foreach ($aliases as $a) {
-            if (isset($map[$a]) && trim($map[$a]) !== '') {
-                return $map[$a];
+            if (isset($map[$a]) && trim((string)$map[$a]) !== '') {
+                return (string)$map[$a];
             }
         }
         return '-';
