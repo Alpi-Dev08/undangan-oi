@@ -2,11 +2,11 @@
 
     use App\Http\Controllers\ApiController;
     use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\RegisteredUserController;
+    use App\Http\Controllers\Auth\PasswordResetLinkController;
+    use App\Http\Controllers\Auth\RegisteredUserController;
     use App\Http\Controllers\CustomerController;
     use App\Http\Controllers\SampleDataController;
-use Illuminate\Support\Facades\Route;
+    use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------

@@ -36,6 +36,8 @@
     use App\Http\Controllers\Klinik\TransactionsController;
     use App\Http\Controllers\Klinik\UnitController;
     use App\Http\Controllers\Klinik\VitalityExaminationsController;
+    use App\Http\Controllers\Klinik\SkriningExaminationsController;
+    use App\Http\Controllers\Klinik\LocationExaminationsController;
     use App\Http\Controllers\KycController;
     use App\Http\Controllers\Logs\AuditLogsController;
     use App\Http\Controllers\Logs\SystemLogsController;
@@ -59,7 +61,7 @@
     use App\Http\Controllers\RolesController;
     use App\Http\Controllers\UsersController;
     use Illuminate\Support\Facades\Route;
-use Modules\Dashboard\App\Http\Controllers\DashboardController;
+    use Modules\Dashboard\App\Http\Controllers\DashboardController;
 
     /*
     |--------------------------------------------------------------------------
@@ -73,15 +75,16 @@ use Modules\Dashboard\App\Http\Controllers\DashboardController;
     */
 
     Route::get('/',[DashboardController::class,'index']);
+    Route::get('/',[DashboardController::class,'index']);
 
     Route::get('bukti-penyampaian-informasi/{id}', [PagesController::class, 'bukti_penyampaian_informasi'])->name('buktipenyampaianinformasi');
     Route::post('bukti-penyampaian-informasi', [PagesController::class, 'store_bukti_penyampaian_informasi'])->name('buktipenyampaianinformasi.store');
     Route::get('bukti-penyampaian/{id}', [PagesController::class, 'get_bukti_penyampaian_informasi'])->name('bukti_penyampaian');
     Route::get('generate-pdf/{id}', [PagesController::class, 'generatePDF'])->name('generate.pdf');
 
-//     Route::get('persetujuan-tindakan-medis/{id}', [PagesController::class, 'persetujuan_tindakan_medis'])->name('persetujuantindakanmedis');
-//     Route::post('persetujuan-tindakan-medis', [PagesController::class, 'store_persetujuan-tindakan-medis'])->name('persetujuantindakanmedis.store');
-//     Route::get('persetujuan-tindakan/{id}', [PagesController::class, 'get_persetujuan-tindakan-medis'])->name('bukti_persetujuan');
+    //     Route::get('persetujuan-tindakan-medis/{id}', [PagesController::class, 'persetujuan_tindakan_medis'])->name('persetujuantindakanmedis');
+    //     Route::post('persetujuan-tindakan-medis', [PagesController::class, 'store_persetujuan-tindakan-medis'])->name('persetujuantindakanmedis.store');
+    //     Route::get('persetujuan-tindakan/{id}', [PagesController::class, 'get_persetujuan-tindakan-medis'])->name('bukti_persetujuan');
 
     // Documentations pages
     Route::prefix('documentation')->group(function () {
@@ -179,6 +182,9 @@ use Modules\Dashboard\App\Http\Controllers\DashboardController;
             Route::post('/examinations/{examination}/hakkewajiban', [ExaminationsController::class, 'hakkewajiban'])->name('suket.hakkewajiban');
             Route::get('/examinations/{examination}/hakkewajiban/pdf', [ExaminationsController::class, 'hakkewajiban_pdf'])->name('suket.hakkewajiban.pdf');
 
+            Route::post('/examinations/{examination}/hakkewajiban', [ExaminationsController::class, 'hakkewajiban'])->name('suket.hakkewajiban');
+            Route::get('/examinations/{examination}/hakkewajiban/pdf', [ExaminationsController::class, 'hakkewajiban_pdf'])->name('suket.hakkewajiban.pdf');
+
             Route::post('suket-sehat/{id}', [ExaminationsController::class, 'sehat'])->name('suket.sehat');
             Route::post('suket-sakit/{id}', [ExaminationsController::class, 'sakit'])->name('suket.sakit');
             Route::post('suket-hak-dan-kewajiban/{id}', [ExaminationsController::class, 'hakkewajiban'])
@@ -188,6 +194,12 @@ use Modules\Dashboard\App\Http\Controllers\DashboardController;
             Route::post('suket-surgicalsafetychecklist/{id}', [ExaminationsController::class, 'surgicalsafetychecklist'])
                  ->name('suket.surgicalsafetychecklist');
             Route::post('suket-operasi/{id}', [ExaminationsController::class, 'penandaan_operasi'])->name('suket.operasi');
+
+            // Tambahkan route yang hilang
+            Route::post('suket-hak-kewajiban/{id}', [ExaminationsController::class, 'hak_kewajiban'])->name('suket.hak_kewajiban');
+            Route::post('suket-persetujuan-tindakan/{id}', [ExaminationsController::class, 'persetujuan_tindakan'])->name('suket.persetujuan_tindakan');
+            Route::post('suket-penandaan-operasi/{id}', [ExaminationsController::class, 'penandaan_operasi'])->name('suket.penandaan_operasi');
+            Route::post('suket-surgical-checklist/{id}', [ExaminationsController::class, 'surgical_checklist'])->name('suket.surgical_checklist');
 
             // Tambahkan route yang hilang
             Route::post('suket-hak-kewajiban/{id}', [ExaminationsController::class, 'hak_kewajiban'])->name('suket.hak_kewajiban');
@@ -222,6 +234,25 @@ use Modules\Dashboard\App\Http\Controllers\DashboardController;
             Route::put('laboratoryexamination-result', [LaboratoryExaminationsController::class, 'resultUpdate'])
                  ->name('result.update');
             Route::resource('laboratoryexaminations', LaboratoryExaminationsController::class);
+
+            Route::get('skriningexaminations/export', [SkriningExaminationsController::class, 'export'])
+                 ->name('skriningexaminations.export');
+
+            Route::resource('skriningexaminations', SkriningExaminationsController::class);
+
+            Route::get('skriningexaminations-result', [SkriningExaminationsController::class, 'result'])
+               ->name('skriningexaminations.result');
+            Route::put('skriningexaminations-result', [SkriningExaminationsController::class, 'resultUpdate'])
+               ->name('skriningexaminations.result.update');
+            Route::get('skriningexamination-download', [SkriningExaminationsController::class, 'download'])
+               ->name('skriningexaminations.download');
+            Route::get('skriningexaminations/{skrining}/detail', [SkriningExaminationsController::class, 'detail'])
+               ->name('skriningexaminations.detail');
+
+            Route::post('skriningexaminations/filter', [SkriningExaminationsController::class, 'filter'])
+               ->name('skriningexaminations.filter');
+
+            Route::resource('locationexaminations', LocationExaminationsController::class);
 
             // Routes for Komunikasi Efektif
             Route::get('/komunikasi-efektif/form/{examination}', [KomunikasiEfektifController::class, 'showForm'])
@@ -258,8 +289,6 @@ use Modules\Dashboard\App\Http\Controllers\DashboardController;
             Route::resource('jenis-pasien', JenisPasienController::class);
             Route::resource('personal-disease-histories', PersonalDiseaseHistoryController::class);
             Route::resource('family-disease-histories', FamilyDiseaseHistoryController::class);
-
-
         });
 
 

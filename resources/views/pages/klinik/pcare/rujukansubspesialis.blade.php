@@ -523,5 +523,5 @@
                 }
             });
         </script>
-@endpush
+    @endpush
 </x-base-layout>

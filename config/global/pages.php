@@ -825,6 +825,36 @@ return [
                 ],
             ],
         ],
+        'skriningexaminations' => [
+            '*' => [
+                'title' => 'Examinations',
+            ],
+            'assets' => [
+                'custom' => [
+                    'css' => [
+                        'plugins/custom/datatables/datatables.bundle.css',
+                    ],
+                    'js' => [
+                        'plugins/custom/datatables/datatables.bundle.js',
+                    ],
+                ],
+            ],
+        ],
+        'locationexaminations' => [
+            '*' => [
+                'title' => 'Location Examinations',
+            ],
+            'assets' => [
+                'custom' => [
+                    'css' => [
+                        'plugins/custom/datatables/datatables.bundle.css',
+                    ],
+                    'js' => [
+                        'plugins/custom/datatables/datatables.bundle.js',
+                    ],
+                ],
+            ],
+        ],
     ],
 
 ];

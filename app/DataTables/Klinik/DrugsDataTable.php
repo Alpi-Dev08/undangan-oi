@@ -102,7 +102,7 @@ class DrugsDataTable extends DataTable
     }
 
     /**
-     * Get filename for export.
+     * Get filename for export. 
      */
     protected function filename(): string
     {
