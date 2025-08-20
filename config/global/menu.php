@@ -465,6 +465,7 @@
                 'attributes' => [
                     'data-kt-menu-trigger' => 'click',
                 ], 
+                'role'       => ['admin', 'administrator', 'ners', 'admin-perawat','dokter'],
                 'permission' => ['klinik.read'],
                 'sub'        => [
                     'class' => 'menu-sub-accordion menu-active-bg', 
@@ -473,14 +474,14 @@
                             'title'      => 'Location Examination',
                             'path'       => 'klinik/locationexaminations',
                             'bullet'     => '<span class="bullet bullet-dot"></span>',
-                            'role'       => ['admin', 'administrator', 'ners', 'admin-perawat'],
+                            'role'       => ['admin', 'administrator', 'ners', 'admin-perawat','dokter'],
                             'permission' => ['klinik.read'],
                         ],
                         [
                             'title'  => 'Skrining Examination',
                             'path'   => 'klinik/skriningexaminations',
                             'bullet' => '<span class="bullet bullet-dot"></span>',
-                            'role'   => ['admin', 'administrator', 'ners', 'admin-perawat'],
+                            'role'   => ['admin', 'administrator', 'ners', 'admin-perawat','dokter'],
                             'permission' => ['klinik.read'],
                         ],
                     ],
