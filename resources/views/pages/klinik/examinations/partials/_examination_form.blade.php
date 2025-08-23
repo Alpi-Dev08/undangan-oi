@@ -4,7 +4,8 @@
             <i class="fas fa-stethoscope me-2"></i>Form Pemeriksaan
         </h5>
 
-        <form id="kt_modal_add_examinations_form" method="POST" class="form" action="{{ route('examinations.update',['examination' => $examination->id]) }}">
+        <form id="kt_modal_add_examinations_form" method="POST" class="form"
+            action="{{ route('examinations.update', ['examination' => $examination->id]) }}">
             @method('PUT')
             {{ csrf_field() }}
 
@@ -12,13 +13,14 @@
                 <!-- Health Professional -->
                 <div class="col-12">
                     <label class="form-label fw-bold">{{ __('Dokter') }}</label>
-                    <input type="hidden" name="user_id" value="{{$user->id}}">
-                    <input type="hidden" name="health_profesional_id" value="{{ $examination->health_profesional_id }}">
+                    <input type="hidden" name="user_id" value="{{ $user->id }}">
+                    <input type="hidden" name="health_profesional_id"
+                        value="{{ $examination->health_profesional_id }}">
                     <p class="form-control-plaintext">
-                        @if(isset($examination->health_profesional->user->info))
-                            {{ ($examination->health_profesional->user->info->title_prefix !='' ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.($examination->health_profesional->user->info->title_suffix!='' ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}
+                        @if (isset($examination->health_profesional->user->info))
+                            {{ ($examination->health_profesional->user->info->title_prefix != '' ? $examination->health_profesional->user->info->title_prefix . '. ' : '') . $examination->health_profesional->user->name . ($examination->health_profesional->user->info->title_suffix != '' ? ', ' . $examination->health_profesional->user->info->title_suffix : '') }}
                         @else
-                            {{$examination->health_profesional->user->name}}
+                            {{ $examination->health_profesional?->user?->name }}
                         @endif
                     </p>
                 </div>
@@ -28,7 +30,7 @@
                     <label class="form-label fw-bold">Subjective</label>
                     <textarea name="subjective" class="form-control @error('subjective') is-invalid @enderror" placeholder="Subjective">{{ $examination->subjective }}</textarea>
                     @error('subjective')
-                    <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -37,7 +39,7 @@
                     <label class="form-label fw-bold">Objective</label>
                     <textarea name="objective" class="form-control @error('objective') is-invalid @enderror" placeholder="Objective">{{ $examination->objective }}</textarea>
                     @error('objective')
-                    <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -47,21 +49,26 @@
                 <!-- Assessment -->
                 <div class="col-12">
                     <label class="form-label fw-bold">Assessment</label>
-                    <select id="icdtens" aria-label="{{ __('Select a Diagnosa') }}" data-control="select2" data-placeholder="{{ __('Select a Diagnosa...') }}" class="form-select mb-2">
+                    <select id="icdtens" aria-label="{{ __('Select a Diagnosa') }}" data-control="select2"
+                        data-placeholder="{{ __('Select a Diagnosa...') }}" class="form-select mb-2">
                     </select>
-                    <textarea name="assessment" id="assessment" class="form-control @error('assessment') is-invalid @enderror" placeholder="Assessment">{{ $examination->assessment }}</textarea>
+                    <textarea name="assessment" id="assessment" class="form-control @error('assessment') is-invalid @enderror"
+                        placeholder="Assessment">{{ $examination->assessment }}</textarea>
                     @error('assessment')
-                    <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <!-- Plan -->
                 <div class="col-12">
                     <label class="form-label fw-bold">{{ __('Plan') }}</label>
-                    <select name="plan_id" aria-label="{{ __('Select a Plan') }}" data-control="select2" data-placeholder="{{ __('Select a Plan...') }}" class="form-select">
+                    <select name="plan_id" aria-label="{{ __('Select a Plan') }}" data-control="select2"
+                        data-placeholder="{{ __('Select a Plan...') }}" class="form-select">
                         <option value="">{{ __('Select a Plan...') }}</option>
-                        @foreach($plans as $plan)
-                            <option value="{{ $plan->id }}" {{  $plan->id === old('plan_id', $examination->plan_id ?? '') ? 'selected' :'' }}>{{  $plan->name }}</option>
+                        @foreach ($plans as $plan)
+                            <option value="{{ $plan->id }}"
+                                {{ $plan->id === old('plan_id', $examination->plan_id ?? '') ? 'selected' : '' }}>
+                                {{ $plan->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -75,21 +82,26 @@
                             $keterangan = $resep->keterangan ?? [];
                             $qty = $resep->qty ?? [];
                         @endphp
-                        @foreach($obat as $key => $value)
+                        @foreach ($obat as $key => $value)
                             <div class="row mb-2 align-items-center resep-row">
                                 <div class="col-md-5 col-sm-12 mb-2 mb-md-0">
-                                    <select name="resep[obat][]" class="form-select" data-control="select2" data-placeholder="{{ __('Pilih Obat...') }}">
+                                    <select name="resep[obat][]" class="form-select" data-control="select2"
+                                        data-placeholder="{{ __('Pilih Obat...') }}">
                                         <option value="">{{ __('Pilih Obat...') }}</option>
-                                        @foreach($drugs as $drug)
-                                            <option value="{{ $drug->id }}" {{ $drug->id == $value ? 'selected' : '' }}>{{  $drug->name }}</option>
+                                        @foreach ($drugs as $drug)
+                                            <option value="{{ $drug->id }}"
+                                                {{ $drug->id == $value ? 'selected' : '' }}>{{ $drug->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-md-4 col-sm-8 mb-2 mb-md-0">
-                                    <input placeholder="Keterangan" name="resep[keterangan][]" class="form-control" type="text" value="{{ $keterangan[$key] ?? '' }}">
+                                    <input placeholder="Keterangan" name="resep[keterangan][]" class="form-control"
+                                        type="text" value="{{ $keterangan[$key] ?? '' }}">
                                 </div>
                                 <div class="col-md-2 col-sm-3 mb-2 mb-md-0">
-                                    <input placeholder="Qty" name="resep[qty][]" class="form-control" type="number" min="1" value="{{ $qty[$key] ?? '' }}">
+                                    <input placeholder="Qty" name="resep[qty][]" class="form-control" type="number"
+                                        min="1" value="{{ $qty[$key] ?? '' }}">
                                 </div>
                                 <div class="col-md-1 col-sm-1">
                                     <button type="button" class="btn btn-sm btn-icon btn-light-danger remove-resep">
@@ -109,7 +121,7 @@
                     <label class="form-label fw-bold">Saran</label>
                     <textarea name="saran" class="form-control @error('saran') is-invalid @enderror" placeholder="Saran">{{ $examination->saran }}</textarea>
                     @error('saran')
-                    <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -136,8 +148,8 @@
                     <div class="col-md-5 col-sm-12 mb-2 mb-md-0">
                         <select name="resep[obat][]" class="form-select" data-control="select2" data-placeholder="{{ __('Pilih Obat...') }}">
                             <option value="">{{ __('Pilih Obat...') }}</option>
-                            @foreach($drugs as $drug)
-                <option value="{{ $drug->id }}">{{  $drug->name }}</option>
+                            @foreach ($drugs as $drug)
+                <option value="{{ $drug->id }}">{{ $drug->name }}</option>
                             @endforeach
                 </select>
             </div>
