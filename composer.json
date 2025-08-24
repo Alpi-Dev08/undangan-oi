@@ -34,19 +34,14 @@
         "yajra/laravel-datatables": "^11.0"
     },
     "require-dev": {
-        "barryvdh/laravel-ide-helper": "^2.15",
         "barryvdh/laravel-debugbar": "^3.9",
         "barryvdh/laravel-ide-helper": "^3.0",
         "fakerphp/faker": "^1.9.1",
         "laravel/boost": "^1.0",
-        "laravel/breeze": "^1.0",
         "laravel/breeze": "^2.0",
         "laravel/sail": "^1.18",
-        "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^7.0",
         "nunomaduro/collision": "^8.1",
         "phpunit/phpunit": "^10.1",
-        "roave/security-advisories": "dev-latest",
         "spatie/laravel-ignition": "^2.0"
     },
     "config": {
