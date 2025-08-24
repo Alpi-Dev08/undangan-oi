@@ -182,7 +182,7 @@ return [
 
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Webklex\PDFMerger\Providers\PDFMergerServiceProvider::class,
-        Collective\Html\HtmlServiceProvider::class,
+        //Collective\Html\HtmlServiceProvider::class,
 
     ],
 
@@ -238,9 +238,8 @@ return [
 
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'PDFMerger' => Webklex\PDFMerger\Facades\PDFMergerFacade::class,
-        'Form' => Collective\Html\FormFacade::class,
-        'Html' => Collective\Html\HtmlFacade::class,
-
+        //'Form' => Collective\Html\FormFacade::class,
+        //'Html' => Collective\Html\HtmlFacade::class,
     ],
 
 ];
