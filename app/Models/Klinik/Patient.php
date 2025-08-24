@@ -15,7 +15,8 @@ class Patient extends Model
     protected $fillable = [
         'user_id',
         'patient_code',
-        'registration_date'
+        'registration_date',
+        'pdf_path' // Tambahkan field ini
     ];
 
     /**

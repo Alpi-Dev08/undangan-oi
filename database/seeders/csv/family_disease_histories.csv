@@ -1,0 +1,597 @@
+code;name;code_system;value_set
+44241000119103;Adult child of alcoholic;http://snomed.info/sct;SNOMED-CT
+789612004;Alcohol abuse by mother;http://snomed.info/sct;SNOMED-CT
+878802007;Alcoholic husband;http://snomed.info/sct;SNOMED-CT
+275114006;Alcoholic offspring;http://snomed.info/sct;SNOMED-CT
+878804008;Alcoholic parent;http://snomed.info/sct;SNOMED-CT
+878803002;Alcoholic spouse;http://snomed.info/sct;SNOMED-CT
+568061000005106;Both parents have allergy;http://snomed.info/sct;SNOMED-CT
+439138006;Both parents misuse drugs;http://snomed.info/sct;SNOMED-CT
+161079000;Both parents smoke;http://snomed.info/sct;SNOMED-CT
+160447006;Brother deceased;http://snomed.info/sct;SNOMED-CT
+161062006;Child abuse in family;http://snomed.info/sct;SNOMED-CT
+739684008;Child of patient deceased;http://snomed.info/sct;SNOMED-CT
+1254721002;Child of subject has disability;http://snomed.info/sct;SNOMED-CT
+160457007;Daughter deceased;http://snomed.info/sct;SNOMED-CT
+442080007;Drug misuse by mother;http://snomed.info/sct;SNOMED-CT
+1258861001;Family attended diabetes structured education program;http://snomed.info/sct;SNOMED-CT
+720400005;Family distress;http://snomed.info/sct;SNOMED-CT
+64571000119104;Family history of abdominal wall defect;http://snomed.info/sct;SNOMED-CT
+789240000;Family history of acetylcholinesterase deficiency;http://snomed.info/sct;SNOMED-CT
+64121000119107;Family history of achondroplasia;http://snomed.info/sct;SNOMED-CT
+441120009;Family history of acquired immune deficiency syndrome;http://snomed.info/sct;SNOMED-CT
+160953001;Family history of acute medical disorder;http://snomed.info/sct;SNOMED-CT
+699057005;Family history of Addison disease;http://snomed.info/sct;SNOMED-CT
+266890009;Family history of alcoholism;http://snomed.info/sct;SNOMED-CT
+64431000119101;Family history of alpha thalassemia;http://snomed.info/sct;SNOMED-CT
+431912005;Family history of alpha-1-antitrypsin deficiency;http://snomed.info/sct;SNOMED-CT
+64651000119109;Family history of ambiguous genitalia;http://snomed.info/sct;SNOMED-CT
+430728001;Family history of amnesia;http://snomed.info/sct;SNOMED-CT
+430727006;Family history of amyotrophic lateral sclerosis;http://snomed.info/sct;SNOMED-CT
+160418004;Family history of anencephaly;http://snomed.info/sct;SNOMED-CT
+725118003;Family history of aneurysm of abdominal aorta;http://snomed.info/sct;SNOMED-CT
+430102007;Family history of aneurysm of artery;http://snomed.info/sct;SNOMED-CT
+10624451000119103;Family history of aneurysm of blood vessel of brain;http://snomed.info/sct;SNOMED-CT
+430753003;Family history of aneurysm of thoracic aorta;http://snomed.info/sct;SNOMED-CT
+433306000;Family history of anorexia nervosa;http://snomed.info/sct;SNOMED-CT
+108891000119103;Family history of antithrombin III deficiency;http://snomed.info/sct;SNOMED-CT
+160377001;Family history of asthma;http://snomed.info/sct;SNOMED-CT
+433276002;Family history of atrial fibrillation;http://snomed.info/sct;SNOMED-CT
+429950008;Family history of attention deficit hyperactivity disorder;http://snomed.info/sct;SNOMED-CT
+433380009;"Family history of attention deficit hyperactivity disorder; predominantly inattentive type";http://snomed.info/sct;SNOMED-CT
+412750001;Family history of autism;http://snomed.info/sct;SNOMED-CT
+63761000119101;Family history of autism in sibling;http://snomed.info/sct;SNOMED-CT
+65011000119103;Family history of autosomal aneuploidy;http://snomed.info/sct;SNOMED-CT
+144171000119108;Family history of autosomal translocation;http://snomed.info/sct;SNOMED-CT
+429976008;Family history of backache;http://snomed.info/sct;SNOMED-CT
+430552005;Family history of benign prostatic hyperplasia;http://snomed.info/sct;SNOMED-CT
+64371000119105;Family history of beta thalassemia;http://snomed.info/sct;SNOMED-CT
+108801000119109;Family history of blood coagulation disorder;http://snomed.info/sct;SNOMED-CT
+429740004;Family history of breast cancer;http://snomed.info/sct;SNOMED-CT
+431330007;Family history of breast cancer 1 gene mutation;http://snomed.info/sct;SNOMED-CT
+431331006;Family history of breast cancer 2 gene mutation;http://snomed.info/sct;SNOMED-CT
+31881000119108;Family history of breast cancer gene BRCA mutation;http://snomed.info/sct;SNOMED-CT
+143691000119102;Family history of breast cancer gene mutation in first degree relative;http://snomed.info/sct;SNOMED-CT
+433277006;Family history of bulimia nervosa;http://snomed.info/sct;SNOMED-CT
+98011000119108;Family history of butyrylcholinesterase deficiency;http://snomed.info/sct;SNOMED-CT
+98251000119101;Family history of Canavan disease;http://snomed.info/sct;SNOMED-CT
+275937001;Family history of cancer;http://snomed.info/sct;SNOMED-CT
+312824007;Family history of cancer of colon;http://snomed.info/sct;SNOMED-CT
+430331003;Family history of cancer of the esophagus;http://snomed.info/sct;SNOMED-CT
+698248002;Family history of cardiac arrhythmia;http://snomed.info/sct;SNOMED-CT
+275120007;Family history of cardiac disorder;http://snomed.info/sct;SNOMED-CT
+438825005;Family history of cardiovascular disease in first degree female relative less than 65 years of age;http://snomed.info/sct;SNOMED-CT
+439724007;Family history of cardiovascular disease in first degree male relative less than 55 years of age;http://snomed.info/sct;SNOMED-CT
+430329007;Family history of celiac disease;http://snomed.info/sct;SNOMED-CT
+430674005;Family history of cerebral artery occlusion;http://snomed.info/sct;SNOMED-CT
+440697006;Family history of cerebral infarction;http://snomed.info/sct;SNOMED-CT
+429970002;Family history of Charcot-Marie-Tooth disease;http://snomed.info/sct;SNOMED-CT
+160425006;Family history of chromosomal anomaly;http://snomed.info/sct;SNOMED-CT
+266970001;Family history of chronic medical disorder;http://snomed.info/sct;SNOMED-CT
+430330002;Family history of chronic myeloid leukemia;http://snomed.info/sct;SNOMED-CT
+297241004;Family history of chronic obstructive lung disease;http://snomed.info/sct;SNOMED-CT
+430560006;Family history of chronic renal impairment;http://snomed.info/sct;SNOMED-CT
+151181000119106;Family history of chronic respiratory disease;http://snomed.info/sct;SNOMED-CT
+430729009;Family history of chronic ulcerative proctitis;http://snomed.info/sct;SNOMED-CT
+14580001000004104;Family history of Churg Strauss syndrome;http://snomed.info/sct;SNOMED-CT
+429954004;Family history of cleft lip;http://snomed.info/sct;SNOMED-CT
+430086009;Family history of cleft palate;http://snomed.info/sct;SNOMED-CT
+433279009;Family history of cleft palate with cleft lip;http://snomed.info/sct;SNOMED-CT
+13961000119104;Family history of clubfoot;http://snomed.info/sct;SNOMED-CT
+430336008;Family history of color blindness;http://snomed.info/sct;SNOMED-CT
+1421000119104;Family history of colorectal cancer;http://snomed.info/sct;SNOMED-CT
+64111000119100;Family history of combined hyperlipidemia;http://snomed.info/sct;SNOMED-CT
+281022002;Family history of complete trisomy 21 syndrome;http://snomed.info/sct;SNOMED-CT
+64041000119100;Family history of complex congenital heart disease;http://snomed.info/sct;SNOMED-CT
+429958001;Family history of conduction disorder of the heart;http://snomed.info/sct;SNOMED-CT
+266908007;Family history of congenital anomaly of cardiovascular system;http://snomed.info/sct;SNOMED-CT
+429977004;Family history of congenital cataract;http://snomed.info/sct;SNOMED-CT
+160417009;Family history of congenital disease;http://snomed.info/sct;SNOMED-CT
+700191004;Family history of congenital hip dysplasia;http://snomed.info/sct;SNOMED-CT
+63941000119102;Family history of congenital hydrocephalus;http://snomed.info/sct;SNOMED-CT
+50050161000188101;Family history of congenital immunodeficiency disease;http://snomed.info/sct;SNOMED-CT
+1148759006;Family history of congenital microcephaly;http://snomed.info/sct;SNOMED-CT
+433305001;Family history of congestive heart failure;http://snomed.info/sct;SNOMED-CT
+65001000119101;Family history of connective tissue disorder;http://snomed.info/sct;SNOMED-CT
+160475008;Family history of consanguinity;http://snomed.info/sct;SNOMED-CT
+430091005;Family history of coronary arteriosclerosis;http://snomed.info/sct;SNOMED-CT
+65031000119108;Family history of Cowden syndrome;http://snomed.info/sct;SNOMED-CT
+94721000119105;Family history of craniosynostosis;http://snomed.info/sct;SNOMED-CT
+160309002;Family history of cystic fibrosis;http://snomed.info/sct;SNOMED-CT
+64911000119103;Family history of cystic hygroma;http://snomed.info/sct;SNOMED-CT
+430288004;Family history of death due to natural cause;http://snomed.info/sct;SNOMED-CT
+430289007;Family history of death of unknown cause;http://snomed.info/sct;SNOMED-CT
+431812006;Family history of degenerative disorder of macula;http://snomed.info/sct;SNOMED-CT
+429961000;Family history of dementia;http://snomed.info/sct;SNOMED-CT
+412749001;Family history of development disorder;http://snomed.info/sct;SNOMED-CT
+160303001;Family history of diabetes mellitus;http://snomed.info/sct;SNOMED-CT
+416855002;Family history of diabetes mellitus in first degree relative;http://snomed.info/sct;SNOMED-CT
+430678008;Family history of diabetes mellitus type 1;http://snomed.info/sct;SNOMED-CT
+430679000;Family history of diabetes mellitus type 2;http://snomed.info/sct;SNOMED-CT
+698650004;Family history of diabetes mellitus with complication;http://snomed.info/sct;SNOMED-CT
+1254722009;Family history of disability;http://snomed.info/sct;SNOMED-CT
+281666001;Family history of disorder;http://snomed.info/sct;SNOMED-CT
+737367001;Family history of disorder of immune function;http://snomed.info/sct;SNOMED-CT
+430564002;Family history of disorder of lung;http://snomed.info/sct;SNOMED-CT
+430685007;Family history of disorder of pancreas;http://snomed.info/sct;SNOMED-CT
+431882002;Family history of disorder of peripheral nervous system;http://snomed.info/sct;SNOMED-CT
+704009004;Family history of disorder of vein;http://snomed.info/sct;SNOMED-CT
+430568004;Family history of dissection of aorta;http://snomed.info/sct;SNOMED-CT
+433163001;Family history of diverticulitis of colon;http://snomed.info/sct;SNOMED-CT
+109271000119105;Family history of double heterozygous familial hypercholesterolemia;http://snomed.info/sct;SNOMED-CT
+429951007;Family history of eating disorder;http://snomed.info/sct;SNOMED-CT
+473071007;Family history of edema of lower extremity;http://snomed.info/sct;SNOMED-CT
+429978009;Family history of endocarditis;http://snomed.info/sct;SNOMED-CT
+160301004;Family history of endocrine disorders;http://snomed.info/sct;SNOMED-CT
+109241000119103;Family history of eruptive xanthoma;http://snomed.info/sct;SNOMED-CT
+94691000119101;Family history of familial dysautonomia;http://snomed.info/sct;SNOMED-CT
+443454007;Family history of familial hypercholesterolemia;http://snomed.info/sct;SNOMED-CT
+709090007;Family history of familial multiple polyposis syndrome;http://snomed.info/sct;SNOMED-CT
+297246009;Family history of female genital tract disorder;http://snomed.info/sct;SNOMED-CT
+430693007;Family history of fracture of proximal end of femur;http://snomed.info/sct;SNOMED-CT
+65071000119106;Family history of fragile X syndrome;http://snomed.info/sct;SNOMED-CT
+64081000119105;Family history of galactosemia;http://snomed.info/sct;SNOMED-CT
+138701000119105;Family history of gene mutation;http://snomed.info/sct;SNOMED-CT
+430695000;Family history of genetic disorder carrier;http://snomed.info/sct;SNOMED-CT
+1099601000119106;Family history of genetic mutation for Lynch syndrome;http://snomed.info/sct;SNOMED-CT
+64251000119106;Family history of glycogen storage disease;http://snomed.info/sct;SNOMED-CT
+118651000119105;Family history of Hashimoto thyroiditis;http://snomed.info/sct;SNOMED-CT
+429963002;Family history of headache disorder;http://snomed.info/sct;SNOMED-CT
+439750006;Family history of hearing loss;http://snomed.info/sct;SNOMED-CT
+429959009;Family history of heart failure;http://snomed.info/sct;SNOMED-CT
+309631001;Family history of helminth infection;http://snomed.info/sct;SNOMED-CT
+138081000119104;Family history of hematuria;http://snomed.info/sct;SNOMED-CT
+401119001;Family history of hemochromatosis;http://snomed.info/sct;SNOMED-CT
+64501000119109;Family history of hemoglobinopathy;http://snomed.info/sct;SNOMED-CT
+64391000119106;Family history of hemoglobinopathy E;http://snomed.info/sct;SNOMED-CT
+429962007;Family history of hereditary disease;http://snomed.info/sct;SNOMED-CT
+1098871000119109;Family history of hereditary nonpolyposis colon cancer;http://snomed.info/sct;SNOMED-CT
+81651000119109;Family history of heritable malignancy;http://snomed.info/sct;SNOMED-CT
+433495007;Family history of Hodgkin's disease;http://snomed.info/sct;SNOMED-CT
+438998000;Family history of human immunodeficiency virus infection;http://snomed.info/sct;SNOMED-CT
+71261000119101;Family history of hydronephrosis;http://snomed.info/sct;SNOMED-CT
+74131000119101;Family history of hyperbetalipoproteinemia;http://snomed.info/sct;SNOMED-CT
+130771000119102;Family history of hypercoagulable state;http://snomed.info/sct;SNOMED-CT
+725117008;Family history of hyperlipidemia;http://snomed.info/sct;SNOMED-CT
+109331000119100;Family history of hyperlipoproteinemia a;http://snomed.info/sct;SNOMED-CT
+430089002;Family history of hyperthyroidism;http://snomed.info/sct;SNOMED-CT
+275939003;Family history of hypertriglyceridemia;http://snomed.info/sct;SNOMED-CT
+74171000119103;Family history of hypoalphalipoproteinemia;http://snomed.info/sct;SNOMED-CT
+71201000119102;Family history of hypospadias;http://snomed.info/sct;SNOMED-CT
+429971003;Family history of impaired glucose tolerance;http://snomed.info/sct;SNOMED-CT
+160279000;Family history of infectious disease;http://snomed.info/sct;SNOMED-CT
+763598005;Family history of intellectual disability;http://snomed.info/sct;SNOMED-CT
+430088005;Family history of intestinal obstruction;http://snomed.info/sct;SNOMED-CT
+429964008;Family history of irritable colon;http://snomed.info/sct;SNOMED-CT
+297242006;Family history of ischemic heart disease;http://snomed.info/sct;SNOMED-CT
+430696004;Family history of juvenile idiopathic arthritis;http://snomed.info/sct;SNOMED-CT
+289916006;Family history of kidney disease;http://snomed.info/sct;SNOMED-CT
+275102003;Family history of learning disability;http://snomed.info/sct;SNOMED-CT
+160292002;Family history of leukemia;http://snomed.info/sct;SNOMED-CT
+700192006;Family history of long QT syndrome;http://snomed.info/sct;SNOMED-CT
+433164007;Family history of lupus erythematosus;http://snomed.info/sct;SNOMED-CT
+94741000119104;Family history of macrocephaly;http://snomed.info/sct;SNOMED-CT
+297245008;Family history of male genital tract disorder;http://snomed.info/sct;SNOMED-CT
+1149514007;Family history of malignant epithelial neoplasm;http://snomed.info/sct;SNOMED-CT
+71241000119100;Family history of malignant hematopoietic neoplasm;http://snomed.info/sct;SNOMED-CT
+429965009;Family history of malignant lymphoma;http://snomed.info/sct;SNOMED-CT
+427858005;Family history of malignant melanoma;http://snomed.info/sct;SNOMED-CT
+428994006;Family history of malignant neoplasm of biliary tract;http://snomed.info/sct;SNOMED-CT
+429252007;Family history of malignant neoplasm of bone;http://snomed.info/sct;SNOMED-CT
+429251000;Family history of malignant neoplasm of brain;http://snomed.info/sct;SNOMED-CT
+767310001;Family history of malignant neoplasm of breast at under age 50 in second degree female relative;http://snomed.info/sct;SNOMED-CT
+143451000119105;Family history of malignant neoplasm of breast at under age 50 in second degree relative;http://snomed.info/sct;SNOMED-CT
+154141000119104;Family history of malignant neoplasm of breast diagnosed before 45 years of age;http://snomed.info/sct;SNOMED-CT
+430292006;Family history of malignant neoplasm of breast in first degree relative;http://snomed.info/sct;SNOMED-CT
+143461000119107;Family history of malignant neoplasm of breast in first degree relative less than 50 years of age;http://snomed.info/sct;SNOMED-CT
+428047000;Family history of malignant neoplasm of cervix uteri;http://snomed.info/sct;SNOMED-CT
+154051000119101;Family history of malignant neoplasm of colon over age 50;http://snomed.info/sct;SNOMED-CT
+430813008;Family history of malignant neoplasm of digestive organ;http://snomed.info/sct;SNOMED-CT
+154031000119107;Family history of malignant neoplasm of endometrium;http://snomed.info/sct;SNOMED-CT
+428935009;Family history of malignant neoplasm of eye proper;http://snomed.info/sct;SNOMED-CT
+429006005;Family history of malignant neoplasm of gastrointestinal tract;http://snomed.info/sct;SNOMED-CT
+430954001;Family history of malignant neoplasm of genital structure;http://snomed.info/sct;SNOMED-CT
+428037003;Family history of malignant neoplasm of ileum;http://snomed.info/sct;SNOMED-CT
+430703009;Family history of malignant neoplasm of kidney;http://snomed.info/sct;SNOMED-CT
+429236009;Family history of malignant neoplasm of liver;http://snomed.info/sct;SNOMED-CT
+429011007;Family history of malignant neoplasm of lung;http://snomed.info/sct;SNOMED-CT
+428748002;Family history of malignant neoplasm of male breast;http://snomed.info/sct;SNOMED-CT
+430705002;Family history of malignant neoplasm of ovary;http://snomed.info/sct;SNOMED-CT
+2301000119106;Family history of malignant neoplasm of ovary in first degree relative;http://snomed.info/sct;SNOMED-CT
+2291000119105;Family history of malignant neoplasm of ovary in second degree relative;http://snomed.info/sct;SNOMED-CT
+429000004;Family history of malignant neoplasm of pancreas;http://snomed.info/sct;SNOMED-CT
+430298005;Family history of malignant neoplasm of pharynx;http://snomed.info/sct;SNOMED-CT
+429405004;Family history of malignant neoplasm of skin;http://snomed.info/sct;SNOMED-CT
+430527008;Family history of malignant neoplasm of testis;http://snomed.info/sct;SNOMED-CT
+430677003;Family history of malignant neoplasm of thoracic cavity structure;http://snomed.info/sct;SNOMED-CT
+430534005;Family history of malignant neoplasm of thyroid;http://snomed.info/sct;SNOMED-CT
+428269004;Family history of malignant neoplasm of trachea;http://snomed.info/sct;SNOMED-CT
+71221000119106;Family history of malignant neoplasm of ureter;http://snomed.info/sct;SNOMED-CT
+71231000119109;Family history of malignant neoplasm of urethra;http://snomed.info/sct;SNOMED-CT
+430542006;Family history of malignant neoplasm of urinary bladder;http://snomed.info/sct;SNOMED-CT
+788921007;Family history of malignant neoplasm of urinary tract;http://snomed.info/sct;SNOMED-CT
+429637009;Family history of malignant neoplasm of uterus;http://snomed.info/sct;SNOMED-CT
+428276009;Family history of malignant neoplasm of vagina;http://snomed.info/sct;SNOMED-CT
+64181000119106;Family history of Marfan syndrome;http://snomed.info/sct;SNOMED-CT
+430754009;Family history of mastoiditis;http://snomed.info/sct;SNOMED-CT
+160324006;Family history of mental disorder;http://snomed.info/sct;SNOMED-CT
+160305008;Family history of metabolic disorder;http://snomed.info/sct;SNOMED-CT
+64131000119105;Family history of methylmalonic aciduria;http://snomed.info/sct;SNOMED-CT
+94761000119100;Family history of microcephaly;http://snomed.info/sct;SNOMED-CT
+473070008;Family history of mitochondrial disease;http://snomed.info/sct;SNOMED-CT
+430730004;Family history of mitral valve regurgitation;http://snomed.info/sct;SNOMED-CT
+443868006;Family history of morphea;http://snomed.info/sct;SNOMED-CT
+430809001;Family history of movement disorder;http://snomed.info/sct;SNOMED-CT
+138751000119109;Family history of Muir-Torré syndrome;http://snomed.info/sct;SNOMED-CT
+64731000119106;Family history of multiple congenital anomalies;http://snomed.info/sct;SNOMED-CT
+117351000119101;Family history of multiple endocrine neoplasia;http://snomed.info/sct;SNOMED-CT
+434462008;Family history of multiple myeloma;http://snomed.info/sct;SNOMED-CT
+401066000;Family history of myocardial infarct in first degree female relative less than 65 years of age;http://snomed.info/sct;SNOMED-CT
+439154009;Family history of myocarditis;http://snomed.info/sct;SNOMED-CT
+430041006;Family history of Ménière disease;http://snomed.info/sct;SNOMED-CT
+266883004;Family history of neoplasm;http://snomed.info/sct;SNOMED-CT
+430090006;Family history of neoplasm of brain;http://snomed.info/sct;SNOMED-CT
+313102001;Family history of neoplasm of breast;http://snomed.info/sct;SNOMED-CT
+1149519002;Family history of neoplasm of bronchus;http://snomed.info/sct;SNOMED-CT
+297247000;Family history of neoplasm of lung;http://snomed.info/sct;SNOMED-CT
+1149518005;Family history of neoplasm of trachea;http://snomed.info/sct;SNOMED-CT
+439220002;Family history of neoplasm of upper aerodigestive tract;http://snomed.info/sct;SNOMED-CT
+1149524004;Family history of neoplasm of urinary system;http://snomed.info/sct;SNOMED-CT
+430808009;Family history of nephrotic syndrome;http://snomed.info/sct;SNOMED-CT
+65021000119105;Family history of neurofibromatosis;http://snomed.info/sct;SNOMED-CT
+64021000119106;Family history of neurological developmental delay;http://snomed.info/sct;SNOMED-CT
+297239000;Family history of neurological disorder;http://snomed.info/sct;SNOMED-CT
+430814002;Family history of neuropathy;http://snomed.info/sct;SNOMED-CT
+329351000119105;Family history of non-glaucomatous eye disorder;http://snomed.info/sct;SNOMED-CT
+433450000;Family history of non-Hodgkin's lymphoma;http://snomed.info/sct;SNOMED-CT
+71251000119103;Family history of nonleukemic lymphatic malignancy;http://snomed.info/sct;SNOMED-CT
+737366005;Family history of nutritional disorder;http://snomed.info/sct;SNOMED-CT
+98041000119107;Family history of osteogenesis imperfecta;http://snomed.info/sct;SNOMED-CT
+430716009;Family history of osteopenia;http://snomed.info/sct;SNOMED-CT
+160313009;Family history of osteoporosis;http://snomed.info/sct;SNOMED-CT
+297240003;Family history of Parkinson's disease;http://snomed.info/sct;SNOMED-CT
+431170009;Family history of perinatal disorder;http://snomed.info/sct;SNOMED-CT
+430807004;Family history of periodic limb movement disorder;http://snomed.info/sct;SNOMED-CT
+297243001;Family history of pernicious anemia;http://snomed.info/sct;SNOMED-CT
+64161000119102;Family history of phenylketonuria;http://snomed.info/sct;SNOMED-CT
+412783008;Family history of polycystic ovary;http://snomed.info/sct;SNOMED-CT
+781073000;Family history of polycystic ovary syndrome;http://snomed.info/sct;SNOMED-CT
+429969003;Family history of polyp of colon;http://snomed.info/sct;SNOMED-CT
+64851000119105;Family history of Prader-Willi syndrome;http://snomed.info/sct;SNOMED-CT
+700190003;Family history of pre-eclampsia;http://snomed.info/sct;SNOMED-CT
+433278001;Family history of presenile dementia;http://snomed.info/sct;SNOMED-CT
+430334006;Family history of problem behavior;http://snomed.info/sct;SNOMED-CT
+414205003;Family history of prostate cancer;http://snomed.info/sct;SNOMED-CT
+109001000119105;Family history of protein C deficiency;http://snomed.info/sct;SNOMED-CT
+109011000119108;Family history of protein C resistance;http://snomed.info/sct;SNOMED-CT
+108981000119107;Family history of protein S deficiency;http://snomed.info/sct;SNOMED-CT
+430543001;Family history of psoriasis with psoriatic arthritis;http://snomed.info/sct;SNOMED-CT
+266969002;Family history of psychotic illness;http://snomed.info/sct;SNOMED-CT
+430801003;Family history of pulmonary embolism;http://snomed.info/sct;SNOMED-CT
+429953005;Family history of pulmonary emphysema;http://snomed.info/sct;SNOMED-CT
+417648007;Family history of pulmonary infundibular stenosis;http://snomed.info/sct;SNOMED-CT
+430681003;Family history of Raynaud phenomenon;http://snomed.info/sct;SNOMED-CT
+741021002;Family history of relative killed;http://snomed.info/sct;SNOMED-CT
+433381008;Family history of renal cell carcinoma;http://snomed.info/sct;SNOMED-CT
+430682005;Family history of renal failure syndrome;http://snomed.info/sct;SNOMED-CT
+416519002;Family history of renal stone;http://snomed.info/sct;SNOMED-CT
+430565001;Family history of restless legs syndrome;http://snomed.info/sct;SNOMED-CT
+11718821000119109;Family history of retinal detachment;http://snomed.info/sct;SNOMED-CT
+71271000119107;Family history of retinitis pigmentosa;http://snomed.info/sct;SNOMED-CT
+63921000119108;Family history of Rett syndrome;http://snomed.info/sct;SNOMED-CT
+430777009;Family history of rheumatic fever;http://snomed.info/sct;SNOMED-CT
+430778004;Family history of sarcoidosis;http://snomed.info/sct;SNOMED-CT
+430544007;Family history of scoliosis deformity of spine;http://snomed.info/sct;SNOMED-CT
+138721000119101;Family history of sebaceous adenoma;http://snomed.info/sct;SNOMED-CT
+138711000119108;Family history of sebaceous carcinoma;http://snomed.info/sct;SNOMED-CT
+430711004;Family history of seizure disorder;http://snomed.info/sct;SNOMED-CT
+64921000119105;Family history of sex chromosome aneuploidy;http://snomed.info/sct;SNOMED-CT
+69731000119107;Family history of short stature;http://snomed.info/sct;SNOMED-CT
+160320002;Family history of sickle cell anemia;http://snomed.info/sct;SNOMED-CT
+85951000119104;Family history of single congenital anomaly;http://snomed.info/sct;SNOMED-CT
+430337004;Family history of sleep apnea;http://snomed.info/sct;SNOMED-CT
+443877004;Family history of smoking;http://snomed.info/sct;SNOMED-CT
+428932007;Family history of speech and language disorder;http://snomed.info/sct;SNOMED-CT
+160419007;Family history of Spina bifida;http://snomed.info/sct;SNOMED-CT
+430709008;Family history of spinal stenosis;http://snomed.info/sct;SNOMED-CT
+63881000119101;Family history of spinocerebellar ataxia;http://snomed.info/sct;SNOMED-CT
+700193001;Family history of squamous cell carcinoma of skin;http://snomed.info/sct;SNOMED-CT
+63931000119106;Family history of Steinert myotonic dystrophy;http://snomed.info/sct;SNOMED-CT
+429952000;Family history of stenosis of aortic valve;http://snomed.info/sct;SNOMED-CT
+275104002;Family history of stroke;http://snomed.info/sct;SNOMED-CT
+10624401000119102;Family history of stroke due to aneurysm;http://snomed.info/sct;SNOMED-CT
+134591000119102;Family history of substance abuse;http://snomed.info/sct;SNOMED-CT
+1254977008;Family history of substance dependency;http://snomed.info/sct;SNOMED-CT
+117361000119104;Family history of sudden cardiac death;http://snomed.info/sct;SNOMED-CT
+430283008;Family history of sudden death;http://snomed.info/sct;SNOMED-CT
+430815001;Family history of syncope;http://snomed.info/sct;SNOMED-CT
+431479003;Family history of synovial cyst of popliteal space;http://snomed.info/sct;SNOMED-CT
+15627891000119105;Family history of systemic lupus erythematosus;http://snomed.info/sct;SNOMED-CT
+443720007;Family history of systemic sclerosis;http://snomed.info/sct;SNOMED-CT
+63901000119104;Family history of Tay-Sachs disease;http://snomed.info/sct;SNOMED-CT
+699108005;Family history of tendinous xanthoma in first degree relative;http://snomed.info/sct;SNOMED-CT
+699109002;Family history of tendinous xanthoma in second degree relative;http://snomed.info/sct;SNOMED-CT
+430710003;Family history of thromboembolic disorder;http://snomed.info/sct;SNOMED-CT
+430719002;Family history of tinnitus;http://snomed.info/sct;SNOMED-CT
+160363004;Family history of transient ischemic attack;http://snomed.info/sct;SNOMED-CT
+430726002;Family history of tremor;http://snomed.info/sct;SNOMED-CT
+433496008;Family history of trigeminal neuralgia;http://snomed.info/sct;SNOMED-CT
+64831000119104;Family history of trisomy 13;http://snomed.info/sct;SNOMED-CT
+64841000119108;Family history of trisomy 18;http://snomed.info/sct;SNOMED-CT
+417001009;Family history of tuberous sclerosis;http://snomed.info/sct;SNOMED-CT
+64861000119107;Family history of Turner syndrome;http://snomed.info/sct;SNOMED-CT
+297244007;Family history of urological disorder;http://snomed.info/sct;SNOMED-CT
+430805007;Family history of uveitis;http://snomed.info/sct;SNOMED-CT
+433449000;Family history of ventricular premature beats;http://snomed.info/sct;SNOMED-CT
+430723005;Family history of visual disturbance;http://snomed.info/sct;SNOMED-CT
+64971000119106;Family history of Von Hippel-Lindau syndrome;http://snomed.info/sct;SNOMED-CT
+64521000119100;Family history of Von Willebrand disease;http://snomed.info/sct;SNOMED-CT
+160340009;Family history: Cerebral palsy;http://snomed.info/sct;SNOMED-CT
+275132006;Family history: Gynecological problem;http://snomed.info/sct;SNOMED-CT
+160378006;Family history: Occupational lung disease;http://snomed.info/sct;SNOMED-CT
+266966009;Family illness;http://snomed.info/sct;SNOMED-CT
+288001000119103;Family member absent due to military deployment;http://snomed.info/sct;SNOMED-CT
+740604001;Family member deceased;http://snomed.info/sct;SNOMED-CT
+160436004;Father deceased;http://snomed.info/sct;SNOMED-CT
+275140000;Father left home;http://snomed.info/sct;SNOMED-CT
+160806000;Father remarried;http://snomed.info/sct;SNOMED-CT
+161077003;Father smokes;http://snomed.info/sct;SNOMED-CT
+720436008;Father with learning disability;http://snomed.info/sct;SNOMED-CT
+315626001;FH angina female first degree age known;http://snomed.info/sct;SNOMED-CT
+315627005;FH angina female first degree age unknown;http://snomed.info/sct;SNOMED-CT
+315623009;FH angina male first degree age known;http://snomed.info/sct;SNOMED-CT
+315625002;FH angina male first degree age unknown;http://snomed.info/sct;SNOMED-CT
+315621006;FH myocardial infarction female first degree age known;http://snomed.info/sct;SNOMED-CT
+315622004;FH myocardial infarction female first degree age unknown;http://snomed.info/sct;SNOMED-CT
+315619001;FH myocardial infarction male first degree age known;http://snomed.info/sct;SNOMED-CT
+315620007;FH myocardial infarction male first degree age unknown;http://snomed.info/sct;SNOMED-CT
+420259009;FH: Age at death;http://snomed.info/sct;SNOMED-CT
+160469004;FH: Allergy;http://snomed.info/sct;SNOMED-CT
+160409001;FH: Alopecia;http://snomed.info/sct;SNOMED-CT
+394877006;FH: Alzheimer's disease;http://snomed.info/sct;SNOMED-CT
+266888008;FH: Anemia;http://snomed.info/sct;SNOMED-CT
+275121006;FH: Angina;http://snomed.info/sct;SNOMED-CT
+275911004;FH: Angina at greater than 60 years;http://snomed.info/sct;SNOMED-CT
+275932007;FH: Angina at less than 60 years;http://snomed.info/sct;SNOMED-CT
+413302005;FH: angina grandparent;http://snomed.info/sct;SNOMED-CT
+401065001;FH: Angina in 1st degree female relative <65 years;http://snomed.info/sct;SNOMED-CT
+401122004;FH: Angina in 1st degree male relative <55 years;http://snomed.info/sct;SNOMED-CT
+394990003;FH: Ankylosing spondylitis;http://snomed.info/sct;SNOMED-CT
+160332003;FH: Anxiety state;http://snomed.info/sct;SNOMED-CT
+395125009;FH: Aortic aneurysm;http://snomed.info/sct;SNOMED-CT
+275134007;FH: Arthritis;http://snomed.info/sct;SNOMED-CT
+160362009;FH: Atherosclerosis;http://snomed.info/sct;SNOMED-CT
+160474007;FH: Atopy;http://snomed.info/sct;SNOMED-CT
+300933005;FH: Autoimmune disease;http://snomed.info/sct;SNOMED-CT
+266903003;FH: Biliary disease;http://snomed.info/sct;SNOMED-CT
+275118009;FH: Blindness;http://snomed.info/sct;SNOMED-CT
+266893006;FH: Blindness/low vision;http://snomed.info/sct;SNOMED-CT
+160316001;FH: Blood disorder;http://snomed.info/sct;SNOMED-CT
+275109007;FH: Bowel cancer;http://snomed.info/sct;SNOMED-CT
+275940001;FH: Brain disorder;http://snomed.info/sct;SNOMED-CT
+160392000;FH: Breast disease;http://snomed.info/sct;SNOMED-CT
+275125002;FH: Bronchitis;http://snomed.info/sct;SNOMED-CT
+266899005;FH: Bronchitis/COAD;http://snomed.info/sct;SNOMED-CT
+275110002;FH: Bronchus cancer;http://snomed.info/sct;SNOMED-CT
+160445003;FH: Brother alive and well;http://snomed.info/sct;SNOMED-CT
+160446002;FH: Brother alive with problem;http://snomed.info/sct;SNOMED-CT
+390915000;FH: Cardiomyopathy;http://snomed.info/sct;SNOMED-CT
+266894000;FH: Cardiovascular disease;http://snomed.info/sct;SNOMED-CT
+160348002;FH: Cataract;http://snomed.info/sct;SNOMED-CT
+266891008;FH: CNS disorder;http://snomed.info/sct;SNOMED-CT
+266901001;FH: Colitis;http://snomed.info/sct;SNOMED-CT
+160424005;FH: Cong. orthopedic anomaly;http://snomed.info/sct;SNOMED-CT
+160422009;FH: Congenital GIT anomaly;http://snomed.info/sct;SNOMED-CT
+160423004;FH: Congenital GU anomaly;http://snomed.info/sct;SNOMED-CT
+160364005;FH: Congenital heart disease;http://snomed.info/sct;SNOMED-CT
+160421002;FH: Congenital RS anomaly;http://snomed.info/sct;SNOMED-CT
+275124003;FH: Coronary thrombosis;http://snomed.info/sct;SNOMED-CT
+160386006;FH: Crohn's disease;http://snomed.info/sct;SNOMED-CT
+160455004;FH: Daughter alive and well;http://snomed.info/sct;SNOMED-CT
+160456003;FH: Daughter alive with problem;http://snomed.info/sct;SNOMED-CT
+160353007;FH: Deafness;http://snomed.info/sct;SNOMED-CT
+160473001;FH: Death under 60 years;http://snomed.info/sct;SNOMED-CT
+160329001;FH: Depression;http://snomed.info/sct;SNOMED-CT
+160402005;FH: Diabetes in pregnancy;http://snomed.info/sct;SNOMED-CT
+275127005;FH: Duodenal ulcer;http://snomed.info/sct;SNOMED-CT
+390794009;FH: Dyslexia;http://snomed.info/sct;SNOMED-CT
+160352002;FH: Ear disorder;http://snomed.info/sct;SNOMED-CT
+160394004;FH: Early menarche;http://snomed.info/sct;SNOMED-CT
+160397006;FH: Early menopause;http://snomed.info/sct;SNOMED-CT
+160407004;FH: Eczema;http://snomed.info/sct;SNOMED-CT
+412784002;FH: Enuresis;http://snomed.info/sct;SNOMED-CT
+160341008;FH: Epilepsy;http://snomed.info/sct;SNOMED-CT
+160346003;FH: Eye disorder;http://snomed.info/sct;SNOMED-CT
+160434001;FH: Father alive and well;http://snomed.info/sct;SNOMED-CT
+160435000;FH: Father alive with problem;http://snomed.info/sct;SNOMED-CT
+160437008;FH: Father deaf;http://snomed.info/sct;SNOMED-CT
+160391007;FH: Female infertility;http://snomed.info/sct;SNOMED-CT
+391098008;FH: Fragility fracture;http://snomed.info/sct;SNOMED-CT
+275131004;FH: Gallbladder disease;http://snomed.info/sct;SNOMED-CT
+275128000;FH: Gastric ulcer;http://snomed.info/sct;SNOMED-CT
+160381001;FH: Gastrointestinal disease;http://snomed.info/sct;SNOMED-CT
+266904009;FH: Genitourinary disease;http://snomed.info/sct;SNOMED-CT
+160347007;FH: Glaucoma;http://snomed.info/sct;SNOMED-CT
+160282005;FH: Gonorrhea;http://snomed.info/sct;SNOMED-CT
+160308005;FH: Gout;http://snomed.info/sct;SNOMED-CT
+160379003;FH: Hay fever;http://snomed.info/sct;SNOMED-CT
+160338004;FH: Hemiplegia;http://snomed.info/sct;SNOMED-CT
+266889000;FH: Hemophilia;http://snomed.info/sct;SNOMED-CT
+275130003;FH: Hepatitis;http://snomed.info/sct;SNOMED-CT
+160318000;FH: Hereditary spherocytosis;http://snomed.info/sct;SNOMED-CT
+391097003;FH: Hip fracture in first degree relative;http://snomed.info/sct;SNOMED-CT
+160410006;FH: Hirsutism;http://snomed.info/sct;SNOMED-CT
+160336000;FH: Huntington's chorea;http://snomed.info/sct;SNOMED-CT
+160314003;FH: Hypercholesterolemia;http://snomed.info/sct;SNOMED-CT
+417072001;FH: Hypercholesterolemia in first degree relative;http://snomed.info/sct;SNOMED-CT
+160357008;FH: Hypertension;http://snomed.info/sct;SNOMED-CT
+300934004;FH: Hypothyroidism;http://snomed.info/sct;SNOMED-CT
+266896003;FH: Ischemic heart disease at greater than 60 years;http://snomed.info/sct;SNOMED-CT
+266895004;FH: Ischemic heart disease at less than 60 years;http://snomed.info/sct;SNOMED-CT
+160396002;FH: Late menarche;http://snomed.info/sct;SNOMED-CT
+160398001;FH: Late menopause;http://snomed.info/sct;SNOMED-CT
+266902008;FH: Liver disease;http://snomed.info/sct;SNOMED-CT
+160269002;FH: Longevity;http://snomed.info/sct;SNOMED-CT
+275119001;FH: Low vision;http://snomed.info/sct;SNOMED-CT
+160390008;FH: Male infertility;http://snomed.info/sct;SNOMED-CT
+401052005;FH: Malignant hyperpyrexia;http://snomed.info/sct;SNOMED-CT
+160331005;FH: Manic-depressive state;http://snomed.info/sct;SNOMED-CT
+391096007;FH: Maternal hip fracture;http://snomed.info/sct;SNOMED-CT
+416072008;FH: maternal hip fracture before age 75;http://snomed.info/sct;SNOMED-CT
+160393005;FH: Menstrual disorder;http://snomed.info/sct;SNOMED-CT
+160342001;FH: Migraine;http://snomed.info/sct;SNOMED-CT
+160428008;FH: Mother alive and well;http://snomed.info/sct;SNOMED-CT
+160429000;FH: Mother alive with problem;http://snomed.info/sct;SNOMED-CT
+160344000;FH: Motor neurone disease;http://snomed.info/sct;SNOMED-CT
+266906006;FH: Multiple pregnancy;http://snomed.info/sct;SNOMED-CT
+160337009;FH: Multiple sclerosis;http://snomed.info/sct;SNOMED-CT
+160343006;FH: Muscular dystrophy;http://snomed.info/sct;SNOMED-CT
+266907002;FH: Musculoskeletal disease;http://snomed.info/sct;SNOMED-CT
+401067009;FH: Myocardial infarct in 1st degree male relative <55 years;http://snomed.info/sct;SNOMED-CT
+266897007;FH: Myocardial infarction;http://snomed.info/sct;SNOMED-CT
+275123009;FH: Myocardial infarction at greater than 60;http://snomed.info/sct;SNOMED-CT
+275122004;FH: Myocardial infarction at less than 60;http://snomed.info/sct;SNOMED-CT
+160298003;FH: neoplasm of cervix;http://snomed.info/sct;SNOMED-CT
+395089003;FH: Neoplasm of CNS;http://snomed.info/sct;SNOMED-CT
+266886007;FH: neoplasm of female genital organ;http://snomed.info/sct;SNOMED-CT
+160290005;FH: neoplasm of male genital organ;http://snomed.info/sct;SNOMED-CT
+160297008;FH: neoplasm of ovary;http://snomed.info/sct;SNOMED-CT
+160288009;FH: neoplasm of skin;http://snomed.info/sct;SNOMED-CT
+160299006;FH: neoplasm of uterus;http://snomed.info/sct;SNOMED-CT
+160472006;FH: Non-accidental injury to child;http://snomed.info/sct;SNOMED-CT
+160306009;FH: Nutritional deficiency;http://snomed.info/sct;SNOMED-CT
+160311006;FH: Obesity;http://snomed.info/sct;SNOMED-CT
+160414002;FH: Osteoarthritis;http://snomed.info/sct;SNOMED-CT
+160354001;FH: Otosclerosis;http://snomed.info/sct;SNOMED-CT
+160339007;FH: Paraplegia;http://snomed.info/sct;SNOMED-CT
+275117004;FH: Parkinsonism;http://snomed.info/sct;SNOMED-CT
+266900000;FH: Peptic ulceration;http://snomed.info/sct;SNOMED-CT
+160389004;FH: Polycystic kidney;http://snomed.info/sct;SNOMED-CT
+160310007;FH: Porphyria;http://snomed.info/sct;SNOMED-CT
+134439009;FH: premature coronary heart disease;http://snomed.info/sct;SNOMED-CT
+160408009;FH: Psoriasis;http://snomed.info/sct;SNOMED-CT
+160403000;FH: Puerperal depression;http://snomed.info/sct;SNOMED-CT
+160401003;FH: Raised B.P. in pregnancy;http://snomed.info/sct;SNOMED-CT
+266887003;FH: Raised blood lipids;http://snomed.info/sct;SNOMED-CT
+266898002;FH: Respiratory disease;http://snomed.info/sct;SNOMED-CT
+160413008;FH: Rheumatoid arthritis;http://snomed.info/sct;SNOMED-CT
+160328009;FH: Schizophrenia;http://snomed.info/sct;SNOMED-CT
+160325007;FH: Senile dementia;http://snomed.info/sct;SNOMED-CT
+275136009;FH: Serious disease;http://snomed.info/sct;SNOMED-CT
+160321003;FH: Sickle cell trait;http://snomed.info/sct;SNOMED-CT
+160440008;FH: Sister alive and well;http://snomed.info/sct;SNOMED-CT
+160441007;FH: Sister alive with problem;http://snomed.info/sct;SNOMED-CT
+160406008;FH: Skin disease;http://snomed.info/sct;SNOMED-CT
+160450009;FH: Son alive and well;http://snomed.info/sct;SNOMED-CT
+160451008;FH: Son alive with problem;http://snomed.info/sct;SNOMED-CT
+308746008;FH: Spherocytosis;http://snomed.info/sct;SNOMED-CT
+160350005;FH: Squint;http://snomed.info/sct;SNOMED-CT
+275108004;FH: Stomach cancer;http://snomed.info/sct;SNOMED-CT
+160471004;FH: Sudden infant death;http://snomed.info/sct;SNOMED-CT
+160333008;FH: Suicide;http://snomed.info/sct;SNOMED-CT
+160281003;FH: Syphilis;http://snomed.info/sct;SNOMED-CT
+160319008;FH: Thalassemia;http://snomed.info/sct;SNOMED-CT
+310247005;FH: Thrombosis;http://snomed.info/sct;SNOMED-CT
+160302006;FH: Thyroid disorder;http://snomed.info/sct;SNOMED-CT
+160280002;FH: Tuberculosis;http://snomed.info/sct;SNOMED-CT
+275133001;FH: Twin pregnancy;http://snomed.info/sct;SNOMED-CT
+275129008;FH: Ulcerative colitis;http://snomed.info/sct;SNOMED-CT
+288256007;H/O - maternal psychiatric problem;http://snomed.info/sct;SNOMED-CT
+726626004;H/O: neonatal death;http://snomed.info/sct;SNOMED-CT
+161811009;H/O: perinatal fetal loss;http://snomed.info/sct;SNOMED-CT
+726630001;H/O: postneonatal death;http://snomed.info/sct;SNOMED-CT
+726627008;H/O: previous baby bottle fed;http://snomed.info/sct;SNOMED-CT
+444094009;History of diabetes mellitus in child of subject;http://snomed.info/sct;SNOMED-CT
+737015006;History of previous baby bottle and breast fed;http://snomed.info/sct;SNOMED-CT
+737014005;History of previous baby breast fed;http://snomed.info/sct;SNOMED-CT
+444180005;History of schizophrenia in child of subject;http://snomed.info/sct;SNOMED-CT
+719648007;Husband alive;http://snomed.info/sct;SNOMED-CT
+722193000;Husband deceased;http://snomed.info/sct;SNOMED-CT
+160860008;Husband in prison;http://snomed.info/sct;SNOMED-CT
+719173008;Husband unwell;http://snomed.info/sct;SNOMED-CT
+719168002;Husband well;http://snomed.info/sct;SNOMED-CT
+160859003;Imprisonment of family member;http://snomed.info/sct;SNOMED-CT
+739682007;Infant of patient deceased;http://snomed.info/sct;SNOMED-CT
+161067000;Legal problem in family;http://snomed.info/sct;SNOMED-CT
+302172001;Marital status of parents;http://snomed.info/sct;SNOMED-CT
+704071002;Maternal exposure to radiation;http://snomed.info/sct;SNOMED-CT
+413308009;Maternal history of congenital dislocated hip;http://snomed.info/sct;SNOMED-CT
+704141008;Maternal history of connective tissue disease;http://snomed.info/sct;SNOMED-CT
+704144000;Maternal history of diabetes mellitus;http://snomed.info/sct;SNOMED-CT
+719761003;Maternal history of diabetes mellitus type 1;http://snomed.info/sct;SNOMED-CT
+719763000;Maternal history of diabetes mellitus type 2;http://snomed.info/sct;SNOMED-CT
+281667005;Maternal history of disorder;http://snomed.info/sct;SNOMED-CT
+721151003;Maternal history of gestational diabetes;http://snomed.info/sct;SNOMED-CT
+444161008;Maternal history of insulin dependence;http://snomed.info/sct;SNOMED-CT
+704145004;Maternal history of insulin dependent diabetes mellitus;http://snomed.info/sct;SNOMED-CT
+704146003;Maternal history of non-insulin dependent diabetes mellitus;http://snomed.info/sct;SNOMED-CT
+785846009;Maternal history of pyrexia in labor;http://snomed.info/sct;SNOMED-CT
+704143006;Maternal history of systemic lupus erythematosus;http://snomed.info/sct;SNOMED-CT
+1237570003;Maternal history of viral hepatitis B;http://snomed.info/sct;SNOMED-CT
+288252009;Maternal infection;http://snomed.info/sct;SNOMED-CT
+268858006;Maternal injury;http://snomed.info/sct;SNOMED-CT
+288254005;Maternal nutritional disorder;http://snomed.info/sct;SNOMED-CT
+268861007;Maternal placental insufficiency;http://snomed.info/sct;SNOMED-CT
+268862000;Maternal prolapsed cord;http://snomed.info/sct;SNOMED-CT
+297224001;Maternal pyrexia;http://snomed.info/sct;SNOMED-CT
+288251002;Maternal renal/urinary disorder;http://snomed.info/sct;SNOMED-CT
+866041003;Mother currently breastfeeding;http://snomed.info/sct;SNOMED-CT
+160430005;Mother deceased;http://snomed.info/sct;SNOMED-CT
+275141001;Mother left home;http://snomed.info/sct;SNOMED-CT
+160807009;Mother remarried;http://snomed.info/sct;SNOMED-CT
+161078008;Mother smokes;http://snomed.info/sct;SNOMED-CT
+50040131000188105;Mother under medication treatment;http://snomed.info/sct;SNOMED-CT
+720407008;Mother victim of domestic violence;http://snomed.info/sct;SNOMED-CT
+160274005;No family history diabetes;http://snomed.info/sct;SNOMED-CT
+704008007;No family history of asthma;http://snomed.info/sct;SNOMED-CT
+160252004;No family history of cardiovascular accident or stroke;http://snomed.info/sct;SNOMED-CT
+408552005;No family history of chronic obstructive pulmonary disease;http://snomed.info/sct;SNOMED-CT
+160250007;No family history of malignancy;http://snomed.info/sct;SNOMED-CT
+408553000;No family history of respiratory disease;http://snomed.info/sct;SNOMED-CT
+297250002;No family history of stroke;http://snomed.info/sct;SNOMED-CT
+160271002;No family history of stroke and/or transient ischemic attack;http://snomed.info/sct;SNOMED-CT
+160268005;No FH: Allergy;http://snomed.info/sct;SNOMED-CT
+275106000;No FH: Angina;http://snomed.info/sct;SNOMED-CT
+313376005;No FH: breast carcinoma;http://snomed.info/sct;SNOMED-CT
+160270001;No FH: Cardiovascular disease;http://snomed.info/sct;SNOMED-CT
+160267000;No FH: Glaucoma;http://snomed.info/sct;SNOMED-CT
+160273004;No FH: Hypertension;http://snomed.info/sct;SNOMED-CT
+266882009;No FH: Ischemic heart disease;http://snomed.info/sct;SNOMED-CT
+310251007;No FH: Osteoporosis;http://snomed.info/sct;SNOMED-CT
+313342001;No FH: Venous thrombosis;http://snomed.info/sct;SNOMED-CT
+568071000005101;One parent or sibling has allergy;http://snomed.info/sct;SNOMED-CT
+1254718004;Parent has disability;http://snomed.info/sct;SNOMED-CT
+415036007;Parent has physical disability;http://snomed.info/sct;SNOMED-CT
+413316000;Parent on probation;http://snomed.info/sct;SNOMED-CT
+281577004;Parent unemployed;http://snomed.info/sct;SNOMED-CT
+716053000;Parental health issue;http://snomed.info/sct;SNOMED-CT
+739678005;Parents deceased;http://snomed.info/sct;SNOMED-CT
+266947009;Parents separated;http://snomed.info/sct;SNOMED-CT
+704502000;Partner pregnant;http://snomed.info/sct;SNOMED-CT
+722417007;Paternal alcohol abuse;http://snomed.info/sct;SNOMED-CT
+439213009;Paternal drug misuse;http://snomed.info/sct;SNOMED-CT
+703520001;Patient's child aware of diagnosis;http://snomed.info/sct;SNOMED-CT
+473316003;Relative aware of prognosis;http://snomed.info/sct;SNOMED-CT
+415289003;Relative dying;http://snomed.info/sct;SNOMED-CT
+248541003;Relative with terminal illness;http://snomed.info/sct;SNOMED-CT
+739679002;Sibling deceased;http://snomed.info/sct;SNOMED-CT
+1254719007;Sibling has disability;http://snomed.info/sct;SNOMED-CT
+275142008;Sick child;http://snomed.info/sct;SNOMED-CT
+160442000;Sister deceased;http://snomed.info/sct;SNOMED-CT
+275105001;Smoker in the family;http://snomed.info/sct;SNOMED-CT
+160452001;Son deceased;http://snomed.info/sct;SNOMED-CT
+739677000;Spouse deceased;http://snomed.info/sct;SNOMED-CT
+1254720001;Spouse has disability;http://snomed.info/sct;SNOMED-CT
+275113000;Spouse hemophiliac;http://snomed.info/sct;SNOMED-CT
+444221003;Spouse of subject is victim of crime;http://snomed.info/sct;SNOMED-CT
+266971002;Spouse unwell;http://snomed.info/sct;SNOMED-CT
+161075006;Spouse works away from home;http://snomed.info/sct;SNOMED-CT
+281662004;Unemployed father;http://snomed.info/sct;SNOMED-CT
+281663009;Unemployed mother;http://snomed.info/sct;SNOMED-CT
+160891002;Vulnerable child in family;http://snomed.info/sct;SNOMED-CT
+160886003;Wife alive;http://snomed.info/sct;SNOMED-CT
+722227004;Wife deceased;http://snomed.info/sct;SNOMED-CT
+160884000;Wife pregnant;http://snomed.info/sct;SNOMED-CT
+763381006;Wife unable to cope;http://snomed.info/sct;SNOMED-CT
+719174002;Wife unwell;http://snomed.info/sct;SNOMED-CT
+160885004;Wife well;http://snomed.info/sct;SNOMED-CT

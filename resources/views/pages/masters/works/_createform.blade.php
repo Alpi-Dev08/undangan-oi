@@ -1,6 +1,7 @@
 <form id="kt_modal_add_permission_form" method="POST" class="form" action="{{ route('works.store') }}">
-{{ csrf_field() }}
-<!--begin::Scroll-->
+    {{ csrf_field() }}
+
+    <!--begin::Scroll-->
     <div class="d-flex flex-column flex-row-fluid">
         <!--begin::Input group-->
         <div class="fv-row mb-7">
@@ -19,6 +20,7 @@
         <!--end::Input group-->
     </div>
     <!--end::Scroll-->
+    
     <!--begin::Actions-->
     <div class="text-center pt-15">
         <button type="reset" class="btn btn-light me-3" data-kt-works-modal-action="cancel">Discard</button>

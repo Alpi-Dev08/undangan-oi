@@ -11,38 +11,25 @@ use Illuminate\Support\Facades\Route;
 class RouteServiceProvider extends ServiceProvider
 {
     /**
-     * The path to the "home" route for your application.
-     *
-     * This is used by Laravel authentication to redirect users after login.
-     *
-     * @var string
+     * Path ke direktori route
      */
-    public const HOME = '/';
+    public const HOME = '/dashboard';
 
     /**
-     * The controller namespace for the application.
-     *
-     * When present, controller route declarations will automatically be prefixed with this namespace.
-     *
-     * @var string|null
+     * Konfigurasi rate limiting dan route caching
      */
-    // protected $namespace = 'App\\Http\\Controllers';
-
-    /**
-     * Define your route model bindings, pattern filters, etc.
-     *
-     * @return void
-     */
-    public function boot()
+    public function boot(): void
     {
         $this->configureRateLimiting();
 
         $this->routes(function () {
+            // API Routes
             Route::prefix('api')
                 ->middleware('api')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
 
+            // Web Routes
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
@@ -50,14 +37,16 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Configure the rate limiters for the application.
-     *
-     * @return void
+     * Konfigurasi rate limiting untuk API
      */
-    protected function configureRateLimiting()
+    protected function configureRateLimiting(): void
     {
         RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
+            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
+        RateLimiter::for('uploads', function (Request $request) {
+            return Limit::perMinute(10)->by($request->user()?->id ?: $request->ip());
         });
     }
 }

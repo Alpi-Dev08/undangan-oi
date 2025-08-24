@@ -28,13 +28,19 @@ class DrugsDataTable extends DataTable
             ->rawColumns(['action'])
             ->addIndexColumn()
             ->addColumn('unit', function (Drug $model) {
-                return $model->unit->name;
+		if($model->unit){
+			return $model->unit->name;
+		}
+                return "-";
             })
             ->addColumn('name', function (Drug $model) {
                 return $model->name;
             })
             ->addColumn('price', function (Drug $model) {
                 return $model->price;
+            })
+            ->addColumn('stock', function (Drug $model) {
+                return $model->stock;
             })
             ->addColumn('action', function (Drug $model) {
                 return view('pages.klinik.drugs._action', compact('model'));
@@ -85,7 +91,8 @@ class DrugsDataTable extends DataTable
             Column::make('DT_RowIndex')->title('No')->orderable(false)->searchable(false),
             Column::make('unit')->title(__('Drug Unit'))->searchable(true),
             Column::make('name')->title(__('Name'))->searchable(true),
-            Column::make('price')->title(__('price'))->searchable(true),
+            Column::make('price')->title(__('Price'))->searchable(true),
+            Column::make('stock')->title(__('Stock'))->searchable(true),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
@@ -95,7 +102,7 @@ class DrugsDataTable extends DataTable
     }
 
     /**
-     * Get filename for export.
+     * Get filename for export. 
      */
     protected function filename(): string
     {

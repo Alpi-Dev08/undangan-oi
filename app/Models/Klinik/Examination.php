@@ -3,6 +3,7 @@
     namespace App\Models\Klinik;
 
     use App\Core\Traits\SpatieLogsActivity;
+    use App\Models\JenisPasien;
     use App\Models\User;
     use Illuminate\Database\Eloquent\Factories\HasFactory;
     use Illuminate\Database\Eloquent\Model;
@@ -41,8 +42,18 @@
             'bukti_penyampaian_informasi',
             'bukti_persetujuan_tindakan_medis',
             'psikososial',
-            'encounter_id'
+            'encounter_id',
+            'encounter',
+            'encounter_status',
+            'jenis_pasien_id',
+            'sick_letter_number',
+            'sick_letter_data',
         ];
+
+        public function jenisPasien()
+        {
+            return $this->belongsTo(JenisPasien::class);
+        }
 
         public function user()
         {

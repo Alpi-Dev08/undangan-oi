@@ -4,6 +4,7 @@
     use App\Core\Adapters\Util;
     use App\Models\Klinik\Additionals;
     use App\Models\Klinik\Anamnesis;
+    use App\Models\Klinik\Organization;
     use App\Models\Klinik\Physical;
     use App\Models\Klinik\Service;
     use App\Models\Klinik\Transaction;
@@ -375,4 +376,114 @@
 
     function cekNIK($str) {
         return ctype_digit($str) && strlen($str) === 16;
+    }
+
+    function getPenyakitDahulu($id) {
+        $penyakit = \App\Models\Klinik\PersonalDiseaseHistory::where('code',$id)->first();
+        return $penyakit;
+    }
+
+    function getPenyakitKeluarga($id) {
+        $penyakit = \App\Models\Klinik\FamilyDiseaseHistory::where('code',$id)->first();
+        return $penyakit;
+    }
+
+    function organization() {
+        $organization = Organization::with(['province','city','district','sub_district'])->first();
+        return $organization;
+    }
+
+    /**
+     * Get formatted organization address and contact information
+     *
+     * @param string $format Format type ('full', 'compact', 'minimal')
+     * @return string Formatted organization information
+     */
+    function organizationInfo($format = 'full')
+    {
+        $org = organization();
+
+        switch ($format) {
+            case 'compact':
+                return $org->address . ', ' . $org->sub_district->name . '<br>' .
+                    $org->city->name . ', ' . $org->province->name . ' ' . $org->postal_code . '<br>' .
+                    $org->phone . ' | ' . $org->email . ' | ' . $org->url;
+
+            case 'minimal':
+                return $org->address . '<br>' .
+                    $org->city->name . ', ' . $org->province->name . '<br>' .
+                    $org->phone . ' | ' . $org->email;
+
+            case 'full':
+            default:
+                return $org->address . '<br>' .
+                    $org->sub_district->name . ', ' . $org->district->name . ', ' . $org->city->name . ', ' . $org->province->name . ' - ' . $org->postal_code . '<br>' .
+                    $org->phone . ' - ' . $org->email . '<br>' .
+                    $org->url;
+        }
+    }
+
+    if (! function_exists('terbilang')) {
+        /**
+         * Convert number to Indonesian words
+         *
+         * @param int|float $angka Number to convert
+         * @return string Indonesian words representation of the number
+         */
+        function terbilang($angka)
+        {
+            $angka = abs($angka);
+            $huruf = [
+                '', 'satu', 'dua', 'tiga', 'empat', 'lima', 'enam', 'tujuh', 'delapan', 'sembilan',
+                'sepuluh', 'sebelas'
+            ];
+
+            $temp = '';
+
+            if ($angka < 12) {
+                $temp = ' ' . $huruf[$angka];
+            } elseif ($angka < 20) {
+                $temp = terbilang($angka - 10) . ' belas';
+            } elseif ($angka < 100) {
+                $temp = terbilang($angka / 10) . ' puluh' . terbilang($angka % 10);
+            } elseif ($angka < 200) {
+                $temp = ' seratus' . terbilang($angka - 100);
+            } elseif ($angka < 1000) {
+                $temp = terbilang($angka / 100) . ' ratus' . terbilang($angka % 100);
+            } elseif ($angka < 2000) {
+                $temp = ' seribu' . terbilang($angka - 1000);
+            } elseif ($angka < 1000000) {
+                $temp = terbilang($angka / 1000) . ' ribu' . terbilang($angka % 1000);
+            } elseif ($angka < 1000000000) {
+                $temp = terbilang($angka / 1000000) . ' juta' . terbilang($angka % 1000000);
+            } elseif ($angka < 1000000000000) {
+                $temp = terbilang($angka / 1000000000) . ' milyar' . terbilang($angka % 1000000000);
+            } elseif ($angka < 1000000000000000) {
+                $temp = terbilang($angka / 1000000000000) . ' trilyun' . terbilang($angka % 1000000000000);
+            }
+
+            return $temp;
+        }
+    }
+
+    if (! function_exists('terbilangRupiah')) {
+        /**
+         * Convert number to Indonesian Rupiah words
+         *
+         * @param int|float $angka Number to convert
+         * @return string Indonesian Rupiah words representation
+         */
+        function terbilangRupiah($angka)
+        {
+            $angka = number_format($angka, 2, ',', '.');
+            $bagian = explode(',', $angka);
+            $rupiah = terbilang($bagian[0]);
+
+            if ($bagian[1] > 0) {
+                $sen = terbilang($bagian[1]);
+                return ucfirst($rupiah) . ' rupiah ' . $sen . ' sen';
+            } else {
+                return ucfirst($rupiah) . ' rupiah';
+            }
+        }
     }

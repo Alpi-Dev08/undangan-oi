@@ -29,7 +29,7 @@ class TransactionsDataTable extends DataTable
                     $query->where('invoice_number', 'like', '%'.$search['value'].'%');
                 }
             })
-            ->rawColumns(['action', 'invoice_number'])
+            ->rawColumns(['action', 'invoice_number', 'amount'])
             ->addIndexColumn()
             ->addColumn('invoice_number', function (Transaction $model) {
                 if (isset($model->examination->user->name)) {
@@ -39,7 +39,25 @@ class TransactionsDataTable extends DataTable
                 return $model->invoice_number;
             })
             ->addColumn('amount', function (Transaction $model) {
-                return $model->amount;
+                // Hitung total resep dari examination
+                $total_resep = 0;
+                if ($model->examination && $model->examination->resep) {
+                    $resep = json_decode($model->examination->resep);
+                    if (isset($resep->obat)) {
+                        $obat = $resep->obat;
+                        $qty = $resep->qty;
+                        foreach ($obat as $key => $value) {
+                            if (isset(getObat($value)->name)) {
+                                $total_resep += $qty[$key] * getObat($value)->price;
+                            }
+                        }
+                    }
+                }
+
+                // Tampilkan amount asli + total resep
+                $total_amount = $model->amount + $total_resep;
+
+                return 'Rp ' . number_format($total_amount, 0, ',', '.') . ',-';
             })
             ->addColumn('status', function (Transaction $model) {
                 return $model->status;
@@ -91,7 +109,7 @@ class TransactionsDataTable extends DataTable
         return [
             Column::make('DT_RowIndex')->title('No')->orderable(false)->searchable(false),
             Column::make('invoice_number')->title(__('Invoice Number'))->searchable(true),
-            Column::make('amount')->title(__('Amount'))->searchable(true),
+            Column::make('amount')->title(__('Total Amount'))->searchable(true),
             Column::make('status')->title(__('Status'))->searchable(true),
             Column::computed('action')
                 ->exportable(false)

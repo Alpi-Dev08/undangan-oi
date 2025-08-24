@@ -2,38 +2,43 @@
 
     namespace App\Http\Controllers\Klinik;
 
-    use App\DataTables\Klinik\ExaminationsDataTable;
-    use App\Http\Controllers\Controller;
-    use App\Http\Requests\Klinik\StoreExaminationRequest;
-    use App\Http\Requests\Klinik\UpdateExaminationRequest;
-    use App\Models\Klinik\AdditionalCategory;
-    use App\Models\Klinik\AdditionalExamination;
-    use App\Models\Klinik\AnamnesisCategory;
-    use App\Models\Klinik\AnamnesisExamination;
-    use App\Models\Klinik\Drug;
-    use App\Models\Klinik\Examination;
-    use App\Models\Klinik\HealthProfesional;
-    use App\Models\Klinik\Icdten;
-    use App\Models\Klinik\LaboratoryExamination;
-    use App\Models\Klinik\OtherExamination;
-    use App\Models\Klinik\Package;
-    use App\Models\Klinik\PemeriksaanAwal;
-    use App\Models\Klinik\PhysicalCategory;
-    use App\Models\Klinik\PhysicalExamination;
-    use App\Models\Klinik\Plan;
-    use App\Models\Klinik\Service;
-    use App\Models\Klinik\ServiceCategory;
-    use App\Models\Klinik\Transaction;
-    use App\Models\Klinik\TransactionDetail;
-    use App\Models\Klinik\VitalityExamination;
-    use App\Models\User;
-    use Barryvdh\DomPDF\Facade\Pdf;
-    use Doctrine\DBAL\Driver\PDO\Exception;
-    use Illuminate\Http\Request;
-    use Illuminate\Support\Facades\Auth;
-    use Illuminate\Support\Facades\Storage;
-    use QrCode;
-    use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
+use App\DataTables\Klinik\ExaminationsDataTable;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Klinik\{StoreExaminationRequest, UpdateExaminationRequest};
+use App\Models\Klinik\{
+    AdditionalCategory,
+    AdditionalExamination,
+    AnamnesisCategory,
+    AnamnesisExamination,
+    Drug,
+    Examination,
+    FamilyDiseaseHistory,
+    HealthProfesional,
+    Icdten,
+    LaboratoryExamination,
+    OtherExamination,
+    Package,
+    PemeriksaanAwal,
+    PersonalDiseaseHistory,
+    PhysicalCategory,
+    PhysicalExamination,
+    Plan,
+    Service,
+    ServiceCategory,
+    Transaction,
+    TransactionDetail,
+    VitalityExamination
+};
+use App\Models\{Master\OdontogramSymbol, User};
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
+use Doctrine\DBAL\Driver\PDO\Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\{Auth, DB, Log, Storage};
+use QrCode;
+use Satusehat\Integration\FHIR\{Condition, Encounter};
+use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
+
 
     class ExaminationsController extends Controller
     {
@@ -143,16 +148,20 @@
             $plans                  = Plan::all();
             $drugs                  = Drug::all();
             $icdtens                = Icdten::all();
+            $personaldiseasehistories = PersonalDiseaseHistory::all();
+            $familydiseasehistories   = FamilyDiseaseHistory::all();
             $anamnesiscategories    = [];
             $physicalscategories    = [];
             $otherscategories       = [];
             $additionalsscategories = [];
             $laboratoryexamination  = null;
-            if ($examination->service_category->is_mcu == 1) {
-                $anamnesiscategories    = AnamnesisCategory::all();
-                $physicalscategories    = PhysicalCategory::where('id', '<>', 15)->get();
-                $otherscategories       = PhysicalCategory::where('id', 15)->get();
-                $additionalsscategories = AdditionalCategory::all();
+            if (isset($examination->service_category->is_mcu)) {
+                if ($examination->service_category->is_mcu == 1) {
+                    $anamnesiscategories    = AnamnesisCategory::all();
+                    $physicalscategories    = PhysicalCategory::where('id', '<>', 15)->get();
+                    $otherscategories       = PhysicalCategory::where('id', 15)->get();
+                    $additionalsscategories = AdditionalCategory::all();
+                }
             }
 
             if ($examination->is_lab) {
@@ -169,16 +178,31 @@
             $additionalexamination = AdditionalExamination::where('examination_id', $examination->id)->first();
             //$vitalityexaminations = VitalityExamination::where('user_id', $examination->user_id)->orderBy('created_at', 'desc')->get();
 
+            $odontogramsymbols = OdontogramSymbol::all();
+
             $info             = $user->info;
             $pemeriksaan_awal = PemeriksaanAwal::where('examination_id', $examination->id)
                                                ->orWhere('user_id', $examination->user_id)
                                                ->first();
 
+            // Ambil data examination berdasarkan ID
+            $examination = Examination::findOrFail($id);
+
+            // Ambil semua data SBAR terkait dengan examination
+            //$sbars = Sbar::where('examination_id', $examination->id)->get();
+
+            // Kirimkan data ke view
+            //return view('pages.klinik.examinations._editform', compact('examination', 'sbars'));
+
             $qr = QrCode::size(150)
                         ->style('square')
-                        ->generate('https://klinik.dharma.or.id/bukti-penyampaian-infomasi/' . $examination->id);
+                        ->generate('https://klinik.dharma.or.id/bukti-penyampaian-informasi/' . $examination->id);
 
-            return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories', 'anamnesisexamination', 'examinations', 'physicalscategories', 'physicalexamination', 'otherscategories', 'otherexamination', 'additionalsscategories', 'additionalexamination', 'laboratoryexamination', 'pemeriksaan_awal', 'drugs', 'qr'));
+            $qr_persetujuan_tindakan_medis = QrCode::size(150)
+                                                   ->style('square')
+                                                   ->generate('https://klinik.dharma.or.id/persetujuan-tindakan-medis/' . $examination->id);
+
+            return view('pages.klinik.examinations.edit', compact('examination', 'user', 'healthprofesionals', 'info', 'plans', 'icdtens', 'anamnesiscategories', 'anamnesisexamination', 'examinations', 'physicalscategories', 'physicalexamination', 'otherscategories', 'otherexamination', 'additionalsscategories', 'additionalexamination', 'laboratoryexamination', 'pemeriksaan_awal', 'drugs', 'qr', 'qr_persetujuan_tindakan_medis', 'odontogramsymbols', 'personaldiseasehistories', 'familydiseasehistories'));
         }
 
         /**
@@ -209,6 +233,17 @@
             $transaction        = Transaction::where('examination_id', $examination->id)->first();
             $transaction_detail = TransactionDetail::where('transaction_id', $transaction->id)->get();
 
+            // Pastikan direktori invoice ada sebelum menyimpan QR code
+            $invoiceDir = storage_path('app/public/invoice');
+            if (!file_exists($invoiceDir)) {
+                mkdir($invoiceDir, 0755, true);
+                Log::info('Created invoice directory: ' . $invoiceDir);
+            }
+
+            $qr = QrCode::format('svg')->size(100)
+                        ->style('square')
+                        ->generate('https://klinik.dharma.or.id/invoice/' . $transaction->invoice_number, storage_path('app/public/invoice/'.$transaction->invoice_number.'.svg'));
+
             // get the default inner page
             return view('pages.klinik.examinations.invoice', compact([
                 'user',
@@ -216,7 +251,65 @@
                 'examination',
                 'transaction',
                 'transaction_detail',
+                'qr',
             ]));
+        }
+
+        /**
+         * Download invoice sebagai PDF
+         *
+         * @param Request $request
+         * @return \Illuminate\Http\Response
+         */
+        public function invoicePdf(Request $request)
+        {
+            $id                 = $request->id;
+            $examination        = Examination::find($id);
+            $user               = User::find($examination->user_id);
+            $info               = $user->info;
+            $transaction        = Transaction::where('examination_id', $examination->id)->first();
+            $transaction_detail = TransactionDetail::where('transaction_id', $transaction->id)->get();
+
+            // Hitung total resep jika ada
+            $total_resep = 0;
+            $resep = json_decode($examination->resep);
+            if (isset($resep->obat)) {
+                $obat = $resep->obat;
+                $qty = $resep->qty;
+                foreach ($obat as $key => $value) {
+                    if (isset(getObat($value)->name)) {
+                        $total_resep += $qty[$key] * getObat($value)->price;
+                    }
+                }
+            }
+
+            $data = compact([
+                'user',
+                'info',
+                'examination',
+                'transaction',
+                'transaction_detail',
+                'total_resep',
+            ]);
+
+            // Generate PDF dengan DomPDF
+            $pdf = Pdf::loadView('pages.klinik.examinations.invoice-pdf', $data);
+
+            // Set paper size dan orientasi
+            $pdf->setPaper('A4', 'portrait');
+
+            // Set options untuk kualitas yang lebih baik
+            $pdf->setOptions([
+                'dpi' => 150,
+                'defaultFont' => 'sans-serif',
+                'isHtml5ParserEnabled' => true,
+                'isPhpEnabled' => true
+            ]);
+
+            // Download PDF dengan nama file yang sesuai
+            $filename = 'Invoice_' . $transaction->invoice_number . '_' . date('Y-m-d') . '.pdf';
+
+            return $pdf->download($filename);
         }
 
         public function payments(Request $request)
@@ -234,18 +327,56 @@
             ]));
         }
 
+        /**
+         * Membuat pembayaran untuk transaksi
+         *
+         * @param Request $request
+         * @return RedirectResponse
+         */
         public function createPayment(Request $request)
         {
-            $id                  = $request->id;
-            $transaction         = Transaction::find($id);
-            $transaction->status = 'paid';
-            $transaction->save();
+            try {
+                DB::beginTransaction();
 
-            $examination         = Examination::find($transaction->examination_id);
-            $examination->status = 'done';
-            $examination->save();
+                $id = $request->id;
+                $transaction = Transaction::find($id);
 
-            return redirect()->route('transactions.index');
+                if (!$transaction) {
+                    Log::error('Transaction not found: ' . $id);
+                    return redirect()->route('transactions.index')
+                                   ->with('error', 'Transaksi tidak ditemukan');
+                }
+
+                // Konfirmasi pembayaran dengan user yang sedang login
+                $paymentConfirmed = $transaction->confirmPayment();
+
+                if (!$paymentConfirmed) {
+                    DB::rollBack();
+                    Log::error('Failed to confirm payment for transaction: ' . $id);
+                    return redirect()->route('transactions.index')
+                                   ->with('error', 'Gagal mengkonfirmasi pembayaran');
+                }
+
+                // Update status examination
+                $examination = Examination::find($transaction->examination_id);
+                if ($examination) {
+                    $examination->status = 'done';
+                    $examination->save();
+                    Log::info('Examination status updated to done: ' . $examination->id);
+                }
+
+                DB::commit();
+                Log::info('Payment created successfully for transaction: ' . $id . ' by user: ' . Auth::id());
+
+                return redirect()->route('transactions.index')
+                            ->with('success', 'Pembayaran berhasil dikonfirmasi');
+
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error('Error creating payment: ' . $e->getMessage());
+                return redirect()->route('transactions.index')
+                            ->with('error', 'Terjadi kesalahan saat mengkonfirmasi pembayaran');
+            }
         }
 
         public function services(Request $request)
@@ -275,62 +406,240 @@
             ]));
         }
 
+        /**
+         * Menyimpan layanan pemeriksaan dan membuat detail transaksi
+         *
+         * @param Request $request
+         * @return \Illuminate\Http\RedirectResponse
+         * @throws \Exception
+         */
         public function storeservices(Request $request)
         {
-            $examination = Examination::find($request->examination_id);
-            $transaction = Transaction::where('examination_id', $examination->id)->first();
+            // Log aktivitas awal
+            \Log::info('Memulai proses penyimpanan layanan pemeriksaan', [
+                'examination_id' => $request->examination_id,
+                'user_id' => Auth::id()
+            ]);
 
-            if ($examination->is_appointment == 1) {
-                $examination->examination_date   = date('Y-m-d H:i:s');
-                $examination->appointment_status = 1;
-                $examination->save();
-            }
 
-            $total = 0;
 
-            if ($examination->package_id != null) {
-                $package = Package::find($examination->package_id);
-                TransactionDetail::create([
+            // Validasi input request
+            $validatedData = $request->validate([
+                'examination_id' => 'required|exists:examinations,id',
+                'service_id' => 'nullable|array',
+                'service_id.*' => 'exists:services,id',
+                'payment' => 'nullable|boolean'
+            ]);
+
+
+            try {
+                // Mulai database transaction
+                \DB::beginTransaction();
+
+                // Ambil data examination dengan relasi yang diperlukan
+                $examination = Examination::find($validatedData['examination_id']);
+                // Ambil atau buat transaksi
+                $transaction = Transaction::firstOrCreate(
+                    ['examination_id' => $examination->id],
+                    [
+                        'amount' => 0,
+                        'status' => 'pending',
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]
+                );
+
+
+
+                // Update status appointment jika diperlukan
+                $this->updateAppointmentStatus($examination);
+
+                // Proses layanan dan hitung total
+                $total = $this->processServices($examination, $transaction, $validatedData);
+
+                // Update total transaksi
+                $transaction->update(['amount' => $total]);
+
+                // Commit transaction
+                \DB::commit();
+
+                // Log sukses
+                \Log::info('Berhasil menyimpan layanan pemeriksaan', [
+                    'examination_id' => $examination->id,
                     'transaction_id' => $transaction->id,
-                    'status'         => 'waiting payment',
-                    'service_id'     => $package->id,
-                    'name'           => $package->name,
-                    'price'          => $package->price,
-                    'total'          => $package->price,
+                    'total_amount' => $total
                 ]);
 
-                $total = $package->price;
-            } else {
-                TransactionDetail::where('transaction_id', $transaction->id)->delete();
-                foreach ($request->service_id as $service_id) {
-                    $service = Service::find($service_id);
 
+                // Redirect berdasarkan pilihan payment
+                return $this->handleRedirect($request, $transaction, $examination);
+
+            } catch (\Exception $e) {
+                // Rollback transaction jika terjadi error
+                \DB::rollback();
+
+                // Log error
+                \Log::error('Gagal menyimpan layanan pemeriksaan', [
+                    'examination_id' => $request->examination_id,
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+
+                // Return dengan error message
+                return redirect()->back()
+                    ->withErrors(['error' => 'Terjadi kesalahan saat menyimpan layanan pemeriksaan.'])
+                    ->withInput();
+            }
+        }
+
+        /**
+         * Update status appointment jika examination adalah appointment
+         *
+         * @param Examination $examination
+         * @return void
+         */
+        private function updateAppointmentStatus(Examination $examination): void
+        {
+            if ($examination->is_appointment == 1) {
+                $examination->update([
+                    'examination_date' => now(),
+                    'appointment_status' => 1
+                ]);
+
+                \Log::info('Status appointment berhasil diupdate', [
+                    'examination_id' => $examination->id
+                ]);
+            }
+        }
+
+        /**
+         * Proses layanan dan hitung total biaya
+         *
+         * @param Examination $examination
+         * @param Transaction $transaction
+         * @param array $validatedData
+         * @return float
+         */
+        private function processServices(Examination $examination, Transaction $transaction, array $validatedData): float
+        {
+            $total = 0;
+
+            if ($examination->package_id !== null) {
+                // Proses package
+                $total = $this->processPackageService($examination, $transaction);
+            } else {
+                // Proses individual services
+                $total = $this->processIndividualServices($transaction, $validatedData);
+            }
+
+            return $total;
+        }
+
+        /**
+         * Proses layanan package
+         *
+         * @param Examination $examination
+         * @param Transaction $transaction
+         * @return float
+         */
+        private function processPackageService(Examination $examination, Transaction $transaction): float
+        {
+            $package = Package::findOrFail($examination->package_id);
+
+            // Hapus detail transaksi yang ada
+            TransactionDetail::where('transaction_id', $transaction->id)->delete();
+
+            // Buat detail transaksi untuk package
+            TransactionDetail::create([
+                'transaction_id' => $transaction->id,
+                'status' => 'waiting payment',
+                'service_id' => $package->id,
+                'name' => $package->name,
+                'price' => $package->price,
+                'total' => $package->price,
+            ]);
+
+            \Log::info('Package service berhasil diproses', [
+                'package_id' => $package->id,
+                'package_name' => $package->name,
+                'price' => $package->price
+            ]);
+
+            return $package->price;
+        }
+
+        /**
+         * Proses layanan individual
+         *
+         * @param Transaction $transaction
+         * @param array $validatedData
+         * @return float
+         */
+        private function processIndividualServices(Transaction $transaction, array $validatedData): float
+        {
+            $total = 0;
+
+            // Hapus detail transaksi yang ada
+            TransactionDetail::where('transaction_id', $transaction->id)->delete();
+
+            if (isset($validatedData['service_id']) && is_array($validatedData['service_id'])) {
+                $services = Service::whereIn('id', $validatedData['service_id'])->get();
+
+                foreach ($services as $service) {
                     TransactionDetail::create([
                         'transaction_id' => $transaction->id,
-                        'status'         => 'waiting payment',
-                        'service_id'     => $service->id,
-                        'name'           => $service->name,
-                        'price'          => $service->price,
-                        'total'          => $service->price,
+                        'status' => 'waiting payment',
+                        'service_id' => $service->id,
+                        'name' => $service->name,
+                        'price' => $service->price,
+                        'total' => $service->price,
                     ]);
 
-                    $total = $total + $service->price;
+                    $total += $service->price;
                 }
+
+                \Log::info('Individual services berhasil diproses', [
+                    'service_count' => count($services),
+                    'total_amount' => $total
+                ]);
             }
 
-            $transaction->amount = $total;
-            $transaction->save();
+            return $total;
+        }
 
+        /**
+         * Handle redirect berdasarkan pilihan payment
+         *
+         * @param Request $request
+         * @param Transaction $transaction
+         * @param Examination $examination
+         * @return \Illuminate\Http\RedirectResponse
+         */
+        private function handleRedirect(Request $request, Transaction $transaction, Examination $examination)
+        {
             if ($request->payment == 1) {
-                return redirect()->route('transactions.edit', ['transaction' => $transaction->id]);
-            } else {
-                // get the default inner page
-                if (Auth()->user()->hasRole('admin')) {
-                    return redirect()->route('patients.index');
-                }
+                \Log::info('Redirect ke halaman payment', [
+                    'transaction_id' => $transaction->id
+                ]);
 
-                return redirect()->route('examinations.vitality', ['id' => $examination->id]);
+                return redirect()->route('transactions.edit', ['transaction' => $transaction->id])
+                    ->with('success', 'Layanan berhasil disimpan. Silakan lanjutkan ke pembayaran.');
             }
+
+            // Redirect berdasarkan role user
+            if (Auth::user()->hasRole('admin')) {
+                \Log::info('Admin redirect ke patients index');
+
+                return redirect()->route('patients.index')
+                    ->with('success', 'Layanan berhasil disimpan.');
+            }
+
+            \Log::info('Redirect ke vitality examination', [
+                'examination_id' => $examination->id
+            ]);
+
+            return redirect()->route('examinations.vitality', ['id' => $examination->id])
+                ->with('success', 'Layanan berhasil disimpan. Silakan lanjutkan ke pemeriksaan vitalitas.');
         }
 
         public function vitality(Request $request)
@@ -339,33 +648,41 @@
             $examination         = Examination::find($id);
             $vitalityexamination = VitalityExamination::where('examination_id', $examination->id)->first();
 
-            if ($examination->encounter_id && $examination->encounter_status != "finished") {
-                $encounter = json_decode($examination->encounter, true);
+            if ($examination->encounter_id && $examination->encounter_status == "arrived") {
+                $_encounter  = json_decode($examination->encounter);
+                $location    = $_encounter->location[0]->location;
+                $participant = $_encounter->participant[0]->individual;
 
-                if ($encounter['status'] == 'arrived') {
-                    $encounter['status']          = 'in-progress';
-                    $encounter['statusHistory'][] = [
-                        "status" => "in-progress",
-                        "period" => [
-                            "start" => date('Y-m-d\TH:i:sP') //"2024-05-29T20:43:24+00:00"
-                        ]
-                    ];
 
-                    foreach ($encounter['statusHistory'] as $key => $value) {
-                        if ($value['status'] == 'arrived') {
-                            $encounter['statusHistory'][$key]['period']['end'] = date('Y-m-d\TH:i:sP');
+                $encounter = new Encounter;
+                foreach ($_encounter->identifier as $identifier) {
+                    $encounter->addRegistrationId($identifier->value); // e.g., http://sys-ids.kemkes.go.id/patient/P02478375538
+                }
+
+                foreach ($_encounter->statusHistory as $history) {
+                    if ($_encounter->status == "arrived") {
+                        if ($history->status == "arrived") {
+                            $encounter->setArrived($history->period->start);
+                            $encounter->setInProgress(Carbon::now()->toDateTimeString(), Carbon::now()
+                                                                                               ->toDateTimeString());
                         }
                     }
                 }
 
-                $encounter_ = satu_sehat('update', 'Encounter', $encounter, $examination->encounter_id);
+                $encounter->setConsultationMethod('RAJAL'); // RAJAL, IGD, RANAP, HOMECARE, TELEKONSULTASI
+                $encounter->setSubject(str_replace('Patient/', '', $_encounter->subject->reference), $_encounter->subject->display);
+                $encounter->addParticipant(str_replace('Practitioner/', '', $participant->reference), $participant->display); // ID SATUSEHAT Dokter, Nama Dokter
+                $encounter->addLocation(str_replace('Location/', '', $location->reference), $location->display);              // ID SATUSEHAT Location, Nama Poli
 
-                $encounter_ = json_decode($encounter_);
+                [$status, $res] = $encounter->put($examination->encounter_id);
+                if ($status == 200) {
+                    $encounter = json_encode($res);
 
-                $examination->encounter        = json_encode($encounter_);
-                $examination->encounter_status = $encounter_->status;
+                    $examination->encounter        = $encounter;
+                    $examination->encounter_status = $res->status;
 
-                $examination->save();
+                    $examination->save();
+                }
             }
 
             $user             = User::find($examination->user_id);
@@ -451,16 +768,34 @@
 
             $data = json_decode(json_encode($request->all()));
 
-            // get the default inner page
-            /*return view('pages.klinik.examinations.sakit', compact([
-                'user', 'info', 'examination', 'data'
-            ]));*/
+            // Generate unique sick letter number
+            $sick_letter_number = 'SK-' . date('Ymd') . '-' . str_pad($examination->id, 4, '0', STR_PAD_LEFT);
+
+            // Store sick letter data in examination
+            $examination->update([
+                'sick_letter_number' => $sick_letter_number,
+                'sick_letter_data' => json_encode($data)
+            ]);
+
+            // Pastikan direktori sick-letter ada sebelum menyimpan QR code
+            $sickLetterDir = storage_path('app/public/sick-letter');
+            if (!file_exists($sickLetterDir)) {
+                mkdir($sickLetterDir, 0755, true);
+                Log::info('Created sick letter directory: ' . $sickLetterDir);
+            }
+
+            // Generate QR code for verification
+            $qr = QrCode::format('svg')->size(100)
+                        ->style('square')
+                        ->generate('https://klinik.dharma.or.id/sick-letter/' . $sick_letter_number, storage_path('app/public/sick-letter/'.$sick_letter_number.'.svg'));
 
             $pdf = Pdf::loadView('pages.klinik.examinations.sakit', compact([
                 'user',
                 'info',
                 'examination',
                 'data',
+                'sick_letter_number',
+                'qr',
             ]));
 
             return $pdf->download('surat_keterangan_sakit_' . $user->name . '.pdf');
@@ -514,6 +849,30 @@
             return $pdf->download('surat_keterangan_persetujuan_' . $user->name . '.pdf');
         }
 
+        public function surgicalsafetychecklist(Request $request)
+        {
+            $examination = Examination::find($request->id);
+            $user        = User::find($examination->user_id);
+            $info        = $user->info;
+
+            // get the default inner page
+            $data = json_decode(json_encode($request->all()));
+            //echo json_encode($data);exit;
+            /* return view('pages.klinik.examinations.surgicalsafetychecklist', compact([
+                 'user', 'info', 'examination', 'data'
+             ]));*/
+
+
+            $pdf = Pdf::loadView('pages.klinik.examinations.surgicalsafetychecklist', compact([
+                'user',
+                'info',
+                'examination',
+                'data',
+            ]));
+
+            return $pdf->download('surat_surgicalsafetychecklist_' . $user->name . '.pdf');
+        }
+
         public function psikososial(Request $request)
         {
             $data        = $request->all();
@@ -545,113 +904,105 @@
                 abort(403, 'Sorry !! You are Unauthorized to edit any master date !');
             }
 
+
             // Validation Data
             $validated = $request->validated();
 
+            $riwayat_kesehatan = "";
+            if(isset($examination->psikososial)){
+                $riwayat_kesehatan = json_decode($examination->psikososial);
+                $riwayat_kesehatan = $riwayat_kesehatan->riwayat_kesehatan ?? "";
+            }
+
             $encounter  = json_decode($examination->encounter, true);
             $encounter_ = '';
-            if ($examination->encounter_id && $examination->encounter_status != "finished") {
-                $assessment  = explode(' | ', $validated['assessment']);
-                $assessment_ = [];
-                $n           = 1;
+            if ($examination->encounter_id && $examination->encounter_status == "in-progress" && !empty($validated['assessment'])) {
+                $assessment = explode(' | ', $validated['assessment']);
+
+                $_encounter  = json_decode($examination->encounter);
+                $location    = $_encounter->location[0]->location;
+                $participant = $_encounter->participant[0]->individual;
+
+                if(isset($riwayat_kesehatan->penyakit_dahulu) && is_array($riwayat_kesehatan->penyakit_dahulu)) {
+                    foreach ($riwayat_kesehatan->penyakit_dahulu as $key => $value) {
+                        $condition = new PersonalDisease;
+                        $condition->addClinicalStatus('active');                  // active, inactive, resolved. Default bila tidak dideklarasi = active
+                        $condition->addCategory('previous-condition');            // Diagnosis, Keluhan. Default : Diagnosis
+                        $condition->addCode($value);                              // Kode ICD10
+                        $condition->setOnsetDateTime(Carbon::now()
+                                                           ->toDateTimeString()); // timestamp onset. Timestamp sekarang
+                        $condition->setSubject(str_replace('Patient/', '', $_encounter->subject->reference), $_encounter->subject->display);
+                        $condition->setRecordedDate(Carbon::now()
+                                                          ->toDateTimeString());  // timestamp recorded. Timestamp sekarang
+                        $condition->setEncounter($examination->encounter_id);
+                        $condition->post();
+                    }
+                }
+
+                if(isset($riwayat_kesehatan->penyakit_keluarga) && is_array($riwayat_kesehatan->penyakit_keluarga)) {
+                    foreach ($riwayat_kesehatan->penyakit_keluarga as $key => $value) {
+                        $condition = new FamilyDisease;
+                        $condition->addClinicalStatus('active');                  // active, inactive, resolved. Default bila tidak dideklarasi = active
+                        $condition->addCategory('FAMMEMB');            // Diagnosis, Keluhan. Default : Diagnosis
+                        $condition->addCode($value);                              // Kode ICD10
+                        $condition->setOnsetDateTime(Carbon::now()
+                                                           ->toDateTimeString()); // timestamp onset. Timestamp sekarang
+                        $condition->setSubject(str_replace('Patient/', '', $_encounter->subject->reference), $_encounter->subject->display);
+                        $condition->setRecordedDate(Carbon::now()
+                                                          ->toDateTimeString());  // timestamp recorded. Timestamp sekarang
+                        $condition->setEncounter($examination->encounter_id);
+                        $condition->post();
+                    }
+                }
+
+                $encounter = new Encounter;
                 foreach ($assessment as $row) {
                     $row_ = explode(' - ', $row);
                     if (isset($row_[1])) {
+                        $condition = new Condition;
+                        $condition->addClinicalStatus('active'); // active, inactive, resolved. Default bila tidak dideklarasi = active
+                        $condition->addCategory('diagnosis');    // Diagnosis, Keluhan. Default : Diagnosis
+                        $condition->addCode($row_[0]);           // Kode ICD10
+                        $condition->setSubject(str_replace('Patient/', '', $_encounter->subject->reference), $_encounter->subject->display);
+                        $condition->setEncounter($examination->encounter_id);     // ID SATUSEHAT Encounter
+                        $condition->setOnsetDateTime(Carbon::now()
+                                                           ->toDateTimeString()); // timestamp onset. Timestamp sekarang
+                        $condition->setRecordedDate(Carbon::now()
+                                                          ->toDateTimeString());  // timestamp recorded. Timestamp sekarang
+                        [$statusC, $resC] = $condition->post();
 
-                        $reqCondition = [
-                            "resourceType"   => "Condition",
-                            "clinicalStatus" => [
-                                "coding" => [
-                                    [
-                                        "system"  => "http://terminology.hl7.org/CodeSystem/condition-clinical",
-                                        "code"    => "active",
-                                        "display" => "Active",
-                                    ],
-                                ],
-                            ],
-                            "category"       => [
-                                [
-                                    "coding" => [
-                                        [
-                                            "system"  => "http://terminology.hl7.org/CodeSystem/condition-category",
-                                            "code"    => "encounter-diagnosis",
-                                            "display" => "Encounter Diagnosis",
-                                        ],
-                                    ],
-                                ],
-                            ],
-                            "code"           => [
-                                "coding" => [
-                                    [
-                                        "system"  => "http://hl7.org/fhir/sid/icd-10",
-                                        "code"    => $row_[0],
-                                        "display" => $row_[1],
-                                    ],
-                                ],
-                            ],
-                            "subject"        => [
-                                "reference" => "Patient/" . $examination->patient->his_number,
-                                "display"   => $examination->patient->user->name,
-                            ],
-                            "encounter"      => [
-                                "reference" => "Encounter/" . $examination->encounter_id,
-                            ],
-                            "onsetDateTime"  => date('Y-m-d\TH:i:sP'),
-                            "recordedDate"   => date('Y-m-d\TH:i:sP')
-                        ];
-
-                        $condition = satu_sehat('create', 'Condition', $reqCondition);
-
-                        $condition = json_decode($condition);
-                        if (isset($condition->id)) {
-                            $encounter["diagnosis"][] = [
-                                "condition" => [
-                                    "reference" => "Condition/" . $condition->id,
-                                    "display"   => trim(str_replace('|', '', $row_[1])),
-                                ],
-                                "use"       => [
-                                    "coding" => [
-                                        [
-                                            "system"  => "http://terminology.hl7.org/CodeSystem/diagnosis-role",
-                                            "code"    => "DD",
-                                            "display" => "Discharge diagnosis",
-                                        ],
-                                    ],
-                                ],
-                                "rank"      => $n,
-                            ];
-
-                            $n++;
-                        }
-
+                        $encounter->addDiagnosis($resC->id, $row_[0]);
                     }
                 }
 
-                if ($encounter['status'] == 'in-progress') {
-                    $encounter['status'] = 'finished';
 
-                    $encounter['statusHistory'][] = [
-                        "status" => "finished",
-                        "period" => [
-                            "start" => date('Y-m-d\TH:i:sP'),
-                            "end"   => date('Y-m-d\TH:i:sP')
-                        ]
-                    ];
+                foreach ($_encounter->identifier as $identifier) {
+                    $encounter->addRegistrationId($identifier->value); // e.g., http://sys-ids.kemkes.go.id/patient/P02478375538
+                }
 
-                    foreach ($encounter['statusHistory'] as $key => $value) {
-                        if ($value['status'] == 'in-progress') {
-                            $encounter['statusHistory'][$key]['period']['end'] = date('Y-m-d\TH:i:sP');
+                foreach ($_encounter->statusHistory as $history) {
+                    if ($_encounter->status == "in-progress") {
+                        if ($history->status == "arrived") {
+                            $encounter->setArrived($history->period->start);
+                        }
+
+                        if ($history->status == "in-progress") {
+                            $encounter->setInProgress($history->period->start, Carbon::now()->toDateTimeString());
+                            $encounter->setFinished(Carbon::now()->toDateTimeString());
                         }
                     }
                 }
 
-                $encounter_ = satu_sehat('update', 'Encounter', $encounter, $examination->encounter_id);
-                if (isset($encounter_)) {
-                    if ($encounter_ != null || $encounter_ != "") {
-                        $encounter_                    = json_decode($encounter_);
-                        $validated['encounter_status'] = $encounter_->status;
-                        $validated['encounter']        = json_encode($encounter_);
-                    }
+                $encounter->setConsultationMethod('RAJAL'); // RAJAL, IGD, RANAP, HOMECARE, TELEKONSULTASI
+                $encounter->setSubject(str_replace('Patient/', '', $_encounter->subject->reference), $_encounter->subject->display);
+                $encounter->addParticipant(str_replace('Practitioner/', '', $participant->reference), $participant->display); // ID SATUSEHAT Dokter, Nama Dokter
+                $encounter->addLocation(str_replace('Location/', '', $location->reference), $location->display);              // ID SATUSEHAT Location, Nama Poli
+
+                [$status, $res] = $encounter->put($examination->encounter_id);
+                if ($status == 200) {
+                    $encounter                     = json_encode($res);
+                    $validated['encounter']        = $encounter;
+                    $validated['encounter_status'] = $res->status;
                 }
             }
 
@@ -660,7 +1011,7 @@
                 // Process Data
                 try {
                     $validated['status'] = 'done';
-                    $validated['resep'] = json_encode($request->resep);
+                    $validated['resep']  = json_encode($request->resep);
                     $examination->update($validated);
                 } catch (Exception $e) {
                     report($e);
@@ -703,4 +1054,155 @@
 
             return $pdf->download('penandaan_lokasi_operasi' . $user->name . '.pdf');
         }
+
+        public function komunikasi_efektif(Request $request)
+        {
+            // Validasi input
+            $validatedData = $request->validate([
+                'id'                     => 'required|exists:examinations,id',
+                'health_professional_id' => 'required|exists:health_professionals,id',
+                'situation'              => 'required',
+                'background'             => 'required',
+                'assessment'             => 'required',
+                'recommendation'         => 'required',
+            ]);
+
+            // Simpan data ke dalam database
+            $examination = Examination::find($request->id);
+            $examination->situations()->create([
+                'health_professional_id' => $request->health_professional_id,
+                'situation'              => $request->input('situation'),
+                'background'             => $request->input('background'),
+                'assessment'             => $request->input('assessment'),
+                'recommendation'         => $request->input('recommendation'),
+            ]);
+
+            // Redirect ke halaman list untuk melihat status
+            return redirect()->route('komunikasi.efektif.status', $examination->id)
+                             ->with('success', 'Data berhasil disimpan dan bisa dilihat di daftar status.');
+        }
+
+        /**
+         * Verifikasi kebenaran invoice melalui QR code
+         *
+         * @param string $invoice_number
+         * @return \Illuminate\Http\Response
+         */
+        public function verifyInvoice($invoice_number)
+        {
+            try {
+                // Log akses verifikasi invoice
+                Log::info('Invoice verification accessed for: ' . $invoice_number);
+
+                // Cari transaksi berdasarkan nomor invoice
+                $transaction = Transaction::where('invoice_number', $invoice_number)->first();
+
+                if (!$transaction) {
+                    Log::warning('Invoice not found: ' . $invoice_number);
+                    return view('pages.klinik.examinations.invoice-verify', [
+                        'status' => 'not_found',
+                        'message' => 'Invoice tidak ditemukan',
+                        'invoice_number' => $invoice_number
+                    ]);
+                }
+
+                // Ambil data terkait
+                $examination = Examination::find($transaction->examination_id);
+                $user = User::find($examination->user_id);
+                $info = $user->info;
+                $transaction_detail = TransactionDetail::where('transaction_id', $transaction->id)->get();
+
+                // Hitung total resep
+                $total_resep = 0;
+                $resep = json_decode($examination->resep);
+                if (isset($resep->obat)) {
+                    $obat = $resep->obat;
+                    $qty = $resep->qty;
+                    foreach ($obat as $key => $value) {
+                        if (isset(getObat($value)->name)) {
+                            $total_resep += $qty[$key] * getObat($value)->price;
+                        }
+                    }
+                }
+                foreach ($transaction_detail as $detail) {
+                    if ($detail->drug_id) {
+                        $total_resep += $detail->price * $detail->quantity;
+                    }
+                }
+
+                Log::info('Invoice verification successful for: ' . $invoice_number);
+
+                return view('pages.klinik.examinations.invoice-verify', [
+                    'status' => 'valid',
+                    'message' => 'Invoice valid dan terverifikasi',
+                    'invoice_number' => $invoice_number,
+                    'transaction' => $transaction,
+                    'examination' => $examination,
+                    'user' => $user,
+                    'info' => $info,
+                    'transaction_detail' => $transaction_detail,
+                    'total_resep' => $total_resep
+                ]);
+
+            } catch (\Exception $e) {
+                Log::error('Error verifying invoice: ' . $e->getMessage());
+                return view('pages.klinik.examinations.invoice-verify', [
+                    'status' => 'error',
+                    'message' => 'Terjadi kesalahan saat memverifikasi invoice',
+                    'invoice_number' => $invoice_number
+                ]);
+            }
+        }
+
+        /**
+         * Verifikasi kebenaran surat sakit melalui QR code
+         *
+         * @param string $sick_letter_number
+         * @return \Illuminate\Http\Response
+         */
+        public function verifySickLetter($sick_letter_number)
+        {
+            try {
+                // Log akses verifikasi surat sakit
+                Log::info('Sick letter verification accessed for: ' . $sick_letter_number);
+
+                // Cari examination berdasarkan nomor surat sakit
+                $examination = Examination::where('sick_letter_number', $sick_letter_number)->first();
+
+                if (!$examination) {
+                    Log::warning('Sick letter not found: ' . $sick_letter_number);
+                    return view('pages.klinik.examinations.sick-letter-verify', [
+                        'status' => 'not_found',
+                        'message' => 'Surat sakit tidak ditemukan',
+                        'sick_letter_number' => $sick_letter_number
+                    ]);
+                }
+
+                // Ambil data terkait
+                $user = User::find($examination->user_id);
+                $info = $user->info;
+                $sick_letter_data = json_decode($examination->sick_letter_data);
+
+                Log::info('Sick letter verification successful for: ' . $sick_letter_number);
+
+                return view('pages.klinik.examinations.sick-letter-verify', [
+                    'status' => 'valid',
+                    'message' => 'Surat sakit valid dan terverifikasi',
+                    'sick_letter_number' => $sick_letter_number,
+                    'examination' => $examination,
+                    'user' => $user,
+                    'info' => $info,
+                    'sick_letter_data' => $sick_letter_data
+                ]);
+
+            } catch (\Exception $e) {
+                Log::error('Error verifying sick letter: ' . $e->getMessage());
+                return view('pages.klinik.examinations.sick-letter-verify', [
+                    'status' => 'error',
+                    'message' => 'Terjadi kesalahan saat memverifikasi surat sakit',
+                    'sick_letter_number' => $sick_letter_number
+                ]);
+            }
+        }
+
     }

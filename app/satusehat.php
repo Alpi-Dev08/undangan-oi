@@ -6,9 +6,10 @@
 
     function generateToken()
     {
-        $clientId     = env('SATU_SEHAT_CLIENT_ID');
-        $clientSecret = env('SATU_SEHAT_CLIENT_SECRET');
-        $url          = env('SATU_SEHAT_AUTH_URL') . '/accesstoken?grant_type=client_credentials';
+        $clientId     = env('CLIENTID_PROD');
+        $clientSecret = env('CLIENTSECRET_PROD');
+        $env          = env('SATUSEHAT_BASE_URL_PROD').env('SATUSEHAT_AUTH_ENDPOINT');
+        $url          = $env . '/accesstoken?grant_type=client_credentials';
 
         $data    = [
             'client_id'     => $clientId,

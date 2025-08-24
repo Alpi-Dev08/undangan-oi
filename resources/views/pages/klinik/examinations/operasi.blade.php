@@ -57,12 +57,11 @@
             margin-bottom: 120px;
         }
 
-
         #point {
             position: absolute;
-            width: 15px;
-            height: 15px;
-            background-color: red;
+            width: 40px;
+            height: 40px;
+            border: 3px solid black;
             border-radius: 50%;
             left: {{ $data->coordinate_x ?? 0 }}px; /* Adjust the position of the point */
             top:{{ $data->coordinate_y+218 ?? 0 }}px;
@@ -83,10 +82,7 @@
             </td>
             <td style="width: 50%; vertical-align:top">
                 <p style="margin:0px; margin-top:10px; font-size:12px;text-align: right;color:#000;">
-                    Ruko C17, Pasar Intermoda BSD<br>
-                    Sampora, Cisauk, Kab. Tangerang, Banten - 15414<br>
-                    +62 21 5020 8805 - klinik@dharma.or.id<br>
-                    https://klinik.dharma.or.id
+                    {!! organizationInfo('full') !!}
                 </p>
             </td>
         </tr>
@@ -125,14 +121,28 @@
     &nbsp;<br>
         Petugas Kesehatan<br><br><br><br><br><br>
 
-    <b>{{ (!in_array($examination->health_profesional->user->info->title_prefix,['','-']) ? $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.(!in_array($examination->health_profesional->user->info->title_suffix,['','-']) ? ', '.$examination->health_profesional->user->info->title_suffix : '') }}</b><br>
+    <b>{{
+        $examination->health_profesional->user->info &&
+        (!in_array($examination->health_profesional->user->info->title_prefix ?? '',['','-']) ?
+            $examination->health_profesional->user->info->title_prefix.'. ' : '').$examination->health_profesional->user->name.
+        ($examination->health_profesional->user->info &&
+        !in_array($examination->health_profesional->user->info->title_suffix ?? '',['','-']) ?
+            ', '.$examination->health_profesional->user->info->title_suffix : '')
+    }}</b><br>
     <b>{{ $examination->health_profesional->sip_number ? 'SIP.'.$examination->health_profesional->sip_number : '' }}</b>
     </div>
     <div style="width:300px;float:right;text-align:center">
         Kab. Tangerang, {{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }}<br>
         Pasien/Keluarga Pasien<br><br><br><br><br>
 
-        <b>{{ (!in_array($user->info->title_prefix,['','-']) ? $user->info->title_prefix.'. ' : '').$user->name.(!in_array($user->info->title_suffix,['','-']) ? ', '.$user->info->title_suffix : '') }}</b>
+        <b>{{
+            $user->info &&
+            (!in_array($user->info->title_prefix ?? '',['','-']) ?
+                $user->info->title_prefix.'. ' : '').$user->name.
+            ($user->info &&
+            !in_array($user->info->title_suffix ?? '',['','-']) ?
+                ', '.$user->info->title_suffix : '')
+        }}</b>
     </div>
 </main>
 

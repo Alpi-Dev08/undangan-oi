@@ -7,7 +7,7 @@ return [
         'view' => 'index',
         'layout' => [
             'page-title' => [
-                'description' => true,
+                'description' => false,
                 'breadcrumb' => false,
             ],
         ],
@@ -368,6 +368,57 @@ return [
                 ],
             ],
         ],
+        'odontogramsymbols' => [
+            '*' => [
+                'title' => 'Daftar Singkatan Odontogram',
+            ],
+            'assets' => [
+                'custom' => [
+                    'css' => [
+                        'plugins/custom/datatables/datatables.bundle.css',
+                    ],
+                    'js' => [
+                        'plugins/custom/datatables/datatables.bundle.js',
+                    ],
+                ],
+            ],
+        ],
+    ],
+
+    'pcare' => [
+        'title' => 'PCare',
+        'diagnosa' => [
+            'title' => 'Diagnosa'
+        ],
+        'dokter' => [
+            'title' => 'Dokter'
+        ],
+        'kesadaran' => [
+            'title' => 'Kesadaran'
+        ],
+        'poli' => [
+            'title' => 'Poli'
+        ],
+        'provider' => [
+            'title' => 'Provider'
+        ],
+        'spesialis' => [
+            'title' => 'Spesialis'
+        ],
+        'subspesialis' => [
+            'title' => 'Sub Spesialis'
+        ],
+        'sarana' => [
+            'title' => 'Sarana'
+        ],
+        'khusus' => [
+            'title' => 'Khusus'
+        ],
+        [
+            'rujukan-subspesialis' => [
+            'title' => 'Rujukan Sub Spesialis'
+            ]
+        ]
     ],
 
     'klinik' => [
@@ -682,6 +733,66 @@ return [
                 ],
             ],
         ],
+        'icdten' => [
+            '*' => [
+                'title' => 'ICD-10',
+            ],
+            'assets' => [
+                'custom' => [
+                    'css' => [
+                        'plugins/custom/datatables/datatables.bundle.css',
+                    ],
+                    'js' => [
+                        'plugins/custom/datatables/datatables.bundle.js',
+                    ],
+                ],
+            ],
+        ],
+        'jenis-pasien' => [
+            '*' => [
+                'title' => 'Jenis Pasien',
+            ],
+            'assets' => [
+                'custom' => [
+                    'css' => [
+                        'plugins/custom/datatables/datatables.bundle.css',
+                    ],
+                    'js' => [
+                        'plugins/custom/datatables/datatables.bundle.js',
+                    ],
+                ],
+            ],
+        ],
+        'personal-disease-histories' => [
+            '*' => [
+                'title' => 'Jenis Riwayat Penyakit Pribadi',
+            ],
+            'assets' => [
+                'custom' => [
+                    'css' => [
+                        'plugins/custom/datatables/datatables.bundle.css',
+                    ],
+                    'js' => [
+                        'plugins/custom/datatables/datatables.bundle.js',
+                    ],
+                ],
+            ],
+        ],
+        'family-disease-histories' => [
+            '*' => [
+                'title' => 'Jenis Riwayat Penyakit Keluarga',
+            ],
+            'assets' => [
+                'custom' => [
+                    'css' => [
+                        'plugins/custom/datatables/datatables.bundle.css',
+                    ],
+                    'js' => [
+                        'plugins/custom/datatables/datatables.bundle.js',
+                    ],
+                ],
+            ],
+        ],
 
         'units' => [
             '*' => [
@@ -702,6 +813,36 @@ return [
         'drugs' => [
             '*' => [
                 'title' => 'Drug',
+            ],
+            'assets' => [
+                'custom' => [
+                    'css' => [
+                        'plugins/custom/datatables/datatables.bundle.css',
+                    ],
+                    'js' => [
+                        'plugins/custom/datatables/datatables.bundle.js',
+                    ],
+                ],
+            ],
+        ],
+        'skriningexaminations' => [
+            '*' => [
+                'title' => 'Examinations',
+            ],
+            'assets' => [
+                'custom' => [
+                    'css' => [
+                        'plugins/custom/datatables/datatables.bundle.css',
+                    ],
+                    'js' => [
+                        'plugins/custom/datatables/datatables.bundle.js',
+                    ],
+                ],
+            ],
+        ],
+        'locationexaminations' => [
+            '*' => [
+                'title' => 'Location Examinations',
             ],
             'assets' => [
                 'custom' => [

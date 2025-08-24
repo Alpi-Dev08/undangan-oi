@@ -16,4 +16,9 @@ class Physical extends Model
         'name',
         'options',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(PhysicalCategory::class, 'physical_category_id', 'id');
+    }
 }

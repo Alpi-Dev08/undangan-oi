@@ -15,6 +15,7 @@ use App\Models\Master\Province;
 use App\Models\Master\Religion;
 use App\Models\Master\SubDistrict;
 use App\Models\Master\Work;
+use App\Models\Master\OdontogramSymbol;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
@@ -82,6 +83,16 @@ class UserInfo extends Model
     public function religion()
     {
         return $this->belongsTo(Religion::class);
+    }
+
+    /**
+     * User Info relation to odontogramsymbol model
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function odontogramsymbol()
+    {
+        return $this->belongsTo(OdontogramSymbol::class);
     }
 
     /**

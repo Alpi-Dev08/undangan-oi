@@ -27,6 +27,7 @@
                 'unit_id' => 'required|exists:units,id',
                 'name'    => 'required|max:100|unique:drugs,name,' . $this->drug->id . ',id,unit_id,' . $this->unit_id,
                 'price'   => 'nullable|numeric',
+                'stock'   => 'nullable|numeric',
             ];
         }
     }

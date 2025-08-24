@@ -145,7 +145,7 @@
             <td style="width:30%;font-size:12px;">
                 : {{  Carbon::parse($user->info->date_of_birth)->locale('id')->translatedFormat('d F Y') }}
             <td>
-            <td style="width:20%;font-size:12px;font-weight:bold">Dokter Pengirim
+            <td style="width:20%;font-size:12px;font-weight:bold">Petugas Pemeriksa
             <td>
             <td style="width:30%;font-size:12px;">: {{ $laboratoryexaminations->laboratory_name }}
             <td>

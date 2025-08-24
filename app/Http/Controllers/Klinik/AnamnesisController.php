@@ -1,170 +1,218 @@
 <?php
 
-    namespace App\Http\Controllers\Klinik;
+namespace App\Http\Controllers\Klinik;
 
-    use App\DataTables\Klinik\AnamnesisDataTable;
-    use App\Http\Controllers\Controller;
-    use App\Models\Klinik\Anamnesis;
-    use App\Http\Requests\Klinik\StoreAnamnesisRequest;
-    use App\Http\Requests\Klinik\UpdateAnamnesisRequest;
-    use App\Models\Klinik\AnamnesisCategory;
-    use Doctrine\DBAL\Driver\PDO\Exception;
-    use Illuminate\Support\Facades\Auth;
+use App\DataTables\Klinik\AnamnesisDataTable;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Klinik\{StoreAnamnesisRequest, UpdateAnamnesisRequest};
+use App\Models\Klinik\{Anamnesis, AnamnesisCategory};
+use Illuminate\Http\{JsonResponse, RedirectResponse};
+use Illuminate\Support\Facades\{Auth, DB, Log};
+use Illuminate\View\View;
+use Exception;
 
+class AnamnesisController extends Controller
+{
+    public $user;
 
-    class AnamnesisController extends Controller
+    /**
+     * Initialize middleware for user authentication
+     */
+    public function __construct()
     {
-        public $user;
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::guard('web')->user();
+            return $next($request);
+        });
+    }
 
-        public function __construct()
-        {
-            $this->middleware(function ($request, $next) {
-                $this->user = Auth::guard('web')->user();
-                return $next($request);
-            });
+    /**
+     * Display a listing of anamnesis records
+     *
+     * @param AnamnesisDataTable $dataTable
+     * @return JsonResponse
+     */
+    public function index(AnamnesisDataTable $dataTable): JsonResponse|View
+    {
+        if (is_null($this->user) || !$this->user->can('klinik.read')) {
+            abort(403, 'Sorry !! You are Unauthorized to view any master data !');
         }
 
-        /**
-         * Display a listing of the resource.
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function index(AnamnesisDataTable $dataTable)
-        {
-            if (is_null($this->user) || !$this->user->can('klinik.read')) {
-                abort(403, 'Sorry !! You are Unauthorized to view any master data !');
-            }
+        Log::info('Anamnesis index accessed', ['user_id' => $this->user->id]);
 
-            return $dataTable->render('pages.klinik.anamnesis.index');
+        return $dataTable->render('pages.klinik.anamnesis.index');
+    }
+
+    /**
+     * Show the form for creating a new anamnesis record
+     *
+     * @return View
+     */
+    public function create(): View
+    {
+        if (is_null($this->user) || !$this->user->can('klinik.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any master data !');
         }
 
-        /**
-         * Show the form for creating a new resource.
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function create()
-        {
-            if (is_null($this->user) || !$this->user->can('klinik.create')) {
-                abort(403, 'Sorry !! You are Unauthorized to create any master data !');
-            }
+        Log::info('Anamnesis create form accessed', ['user_id' => $this->user->id]);
 
-            $categories = AnamnesisCategory::all();
-            return view('pages.klinik.anamnesis.create', compact('categories'));
+        $categories = AnamnesisCategory::all();
+        return view('pages.klinik.anamnesis.create', compact('categories'));
+    }
+
+    /**
+     * Store a newly created anamnesis record in storage
+     *
+     * @param StoreAnamnesisRequest $request
+     * @return RedirectResponse
+     */
+    public function store(StoreAnamnesisRequest $request): RedirectResponse
+    {
+        if (is_null($this->user) || !$this->user->can('klinik.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any master data !');
         }
 
-        /**
-         * Store a newly created resource in storage.
-         *
-         * @param \App\Http\Requests\Klinik\StoreAnamnesisRequest $request
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function store(StoreAnamnesisRequest $request)
-        {
-            if (is_null($this->user) || !$this->user->can('klinik.create')) {
-                abort(403, 'Sorry !! You are Unauthorized to create any master data !');
-            }
+        $validated = $request->validated();
 
-            // Validation Data
-            $validated = $request->validated();
+        try {
+            DB::beginTransaction();
 
-            // Process Data
-            if ($validated) {
-                try {
-                    Anamnesis::create($validated);
-                } catch (Exception $e) {
-                    report($e);
-                    return redirect()->back()->with('error', $e->getMessage());
-                    //return false;
-                }
+            $anamnesis = Anamnesis::create($validated);
 
-                session()->flash('success', 'Anamnesis has been created !!');
-                return redirect()->route('anamnesis.index');
-            }
-            return redirect()->back()->withInput();
+            DB::commit();
+
+            Log::info('Anamnesis created successfully', [
+                'anamnesis_id' => $anamnesis->id,
+                'user_id' => $this->user->id,
+                'data' => $validated
+            ]);
+
+            session()->flash('success', 'Anamnesis has been created !!');
+            return redirect()->route('anamnesis.index');
+
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            Log::error('Failed to create anamnesis', [
+                'error' => $e->getMessage(),
+                'user_id' => $this->user->id,
+                'data' => $validated
+            ]);
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Failed to create anamnesis: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Show the form for editing the specified anamnesis record
+     *
+     * @param int $id
+     * @return View
+     */
+    public function edit(int $id): View
+    {
+        if (is_null($this->user) || !$this->user->can('klinik.update')) {
+            abort(403, 'Sorry !! You are Unauthorized to edit any master data !');
         }
 
-        /**
-         * Display the specified resource.
-         *
-         * @param \App\Models\Klinik\Anamnesis $anamnesis
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function show(Anamnesis $anamnesis)
-        {
-            //
+        $anamnesis = Anamnesis::findOrFail($id);
+        $categories = AnamnesisCategory::all();
+
+        Log::info('Anamnesis edit form accessed', [
+            'anamnesis_id' => $id,
+            'user_id' => $this->user->id
+        ]);
+
+        return view('pages.klinik.anamnesis.edit', compact('anamnesis', 'categories'));
+    }
+
+    /**
+     * Update the specified anamnesis record in storage
+     *
+     * @param UpdateAnamnesisRequest $request
+     * @param Anamnesis $anamnesi
+     * @return RedirectResponse
+     */
+    public function update(UpdateAnamnesisRequest $request, Anamnesis $anamnesi): RedirectResponse
+    {
+        if (is_null($this->user) || !$this->user->can('klinik.update')) {
+            abort(403, 'Sorry !! You are Unauthorized to edit any master data !');
         }
 
-        /**
-         * Show the form for editing the specified resource.
-         *
-         * @param  $id
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function edit($id)
-        {
-            if (is_null($this->user) || !$this->user->can('klinik.update')) {
-                abort(403, 'Sorry !! You are Unauthorized to edit any master data !');
-            }
+        $validated = $request->validated();
 
-            $anamnesis = Anamnesis::find($id);
-            $categories = AnamnesisCategory::all();
-            return view('pages.klinik.anamnesis.edit', compact('anamnesis', 'categories'));
+        try {
+            DB::beginTransaction();
+
+            $anamnesi->update($validated);
+
+            DB::commit();
+
+            Log::info('Anamnesis updated successfully', [
+                'anamnesis_id' => $anamnesi->id,
+                'user_id' => $this->user->id,
+                'data' => $validated
+            ]);
+
+            session()->flash('success', 'Anamnesis has been updated !!');
+            return redirect()->route('anamnesis.index');
+
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            Log::error('Failed to update anamnesis', [
+                'anamnesis_id' => $anamnesi->id,
+                'error' => $e->getMessage(),
+                'user_id' => $this->user->id,
+                'data' => $validated
+            ]);
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Failed to update anamnesis: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Remove the specified anamnesis record from storage
+     *
+     * @param Anamnesis $anamnesis
+     * @return RedirectResponse
+     */
+    public function destroy(Anamnesis $anamnesis): RedirectResponse
+    {
+        if (is_null($this->user) || !$this->user->can('klinik.delete')) {
+            abort(403, 'Sorry !! You are Unauthorized to delete any master data !');
         }
 
-        /**
-         * Update the specified resource in storage.
-         *
-         * @param \App\Http\Requests\Klinik\UpdateAnamnesisRequest $request
-         * @param \App\Models\Klinik\Anamnesis                     $anamnesis
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function update(UpdateAnamnesisRequest $request, Anamnesis $anamnesi)
-        {
-            if (is_null($this->user) || !$this->user->can('klinik.update')) {
-                abort(403, 'Sorry !! You are Unauthorized to edit any master date !');
-            }
-
-            // Validation Data
-            $validated = $request->validated();
-
-            // Process Data
-            if ($validated) {
-                // Process Data
-                try {
-                    $anamnesi->update($validated);
-                } catch (Exception $e) {
-                    report($e);
-                    return false;
-                }
-
-                session()->flash('success', 'Anamnesis has been updated !!');
-                return redirect()->route('anamnesis.index');
-            }
-
-            return false;
-        }
-
-        /**
-         * Remove the specified resource from storage.
-         *
-         * @param \App\Models\Klinik\Anamnesis $anamnesis
-         *
-         * @return \Illuminate\Http\Response
-         */
-        public function destroy(Anamnesis $anamnesis)
-        {
-            if (is_null($this->user) || !$this->user->can('klinik.delete')) {
-                abort(403, 'Sorry !! You are Unauthorized to delete any master date !');
-            }
+        try {
+            DB::beginTransaction();
 
             $anamnesis->delete();
 
+            DB::commit();
+
+            Log::info('Anamnesis deleted successfully', [
+                'anamnesis_id' => $anamnesis->id,
+                'user_id' => $this->user->id
+            ]);
+
             session()->flash('success', 'Anamnesis has been deleted !!');
             return redirect()->route('anamnesis.index');
+
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            Log::error('Failed to delete anamnesis', [
+                'anamnesis_id' => $anamnesis->id,
+                'error' => $e->getMessage(),
+                'user_id' => $this->user->id
+            ]);
+
+            return redirect()->back()
+                ->with('error', 'Failed to delete anamnesis: ' . $e->getMessage());
         }
     }
+}

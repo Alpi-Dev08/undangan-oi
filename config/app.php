@@ -181,7 +181,8 @@ return [
         Yajra\DataTables\ButtonsServiceProvider::class,
 
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-        Webklex\PDFMerger\Providers\PDFMergerServiceProvider::class
+        Webklex\PDFMerger\Providers\PDFMergerServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
 
     ],
 
@@ -237,6 +238,8 @@ return [
 
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'PDFMerger' => Webklex\PDFMerger\Facades\PDFMergerFacade::class,
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
 
     ],
 

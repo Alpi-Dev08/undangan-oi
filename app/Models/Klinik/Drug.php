@@ -14,11 +14,20 @@ class Drug extends Model
     protected $fillable = [
         'unit_id',
         'name',
-        'price'
+        'price',
+        'stock'
     ];
 
     public function unit()
     {
         return $this->belongsTo(Unit::class);
+    }
+
+    /**
+     * Relasi ke model DrugUsage
+     */
+    public function drugUsages()
+    {
+        return $this->hasMany(DrugUsage::class);
     }
 }

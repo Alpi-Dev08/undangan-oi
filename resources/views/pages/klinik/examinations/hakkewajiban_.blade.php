@@ -1,5 +1,4 @@
-@php use Carbon\Carbon; @endphp
-    <!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -37,24 +36,22 @@
 
         /** Define the header rules **/
         header {
-            position: fixed;
             top: 0cm;
             left: 0cm;
             right: 0cm;
-            height: 6.5cm;
+            height: 3cm;
 
         }
 
         /** Define the footer rules **/
         footer {
-            position: fixed;
             bottom: 0cm;
             left: 0cm;
             right: 0cm;
         }
 
         body {
-            margin-top: 3cm;
+            margin-top: 0cm;
             margin-bottom: 120px;
         }
 
@@ -81,30 +78,14 @@
             </td>
             <td style="width: 50%; vertical-align:top">
                 <p style="margin:0px; margin-top:10px; font-size:12px;text-align: right;color:#000;">
-                    Ruko C17, Pasar Intermoda BSD<br>
-                    Sampora, Cisauk, Kab. Tangerang, Banten - 15414<br>
-                    +62 21 5020 8805 - klinik@dharma.or.id<br>
-                    https://klinik.dharma.or.id
+                    {!! organizationInfo('full') !!}
                 </p>
             </td>
         </tr>
     </table>
 </header>
-<footer>
-    <table style="width:100%;border-top-width: 1px;border-top-style: solid">
-        <tr>
-            <td style="width:50%;text-align: left;vertical-align: top;height:100px">
-                <h2 style="margin:0px;text-transform: uppercase;font-size: 16px;font-weight: bold">WISHING YOU GOOD HEALTH AND HAPPINESS</h2>
-                <p style="margin:0px;text-transform: uppercase;font-size: 14px;">SEMOGA SEHAT DAN BAHAGIA SELALU</p>
-            </td>
-            <td style="width:50%;text-align: right;vertical-align: bottom;float: right;height:100px">
-                <img src="{{ asset(theme()->getMediaUrlPath() . 'logos/qr.jpeg') }}" style="height:85px;margin-right:5px;"><img src="{{ asset(theme()->getMediaUrlPath() . 'logos/logo-yayasan.png') }}" style="height:75px;">
-            </td>
-        </tr>
-    </table>
-</footer>
 <main style="font-size:12px!important;">
-    <p style="color:#000;margin:0px;font-size:22px;text-align:center;font-weight:bolder;text-transform:uppercase;font-family: 'Roboto Condensed', sans-serif;margin-bottom:50px;margin-top:20px;        text-decoration:underline;">BUKTI PENYAMPAIAN INFORMASI</p>
+    <p style="color:#000;margin:0px;font-size:22px;text-align:center;font-weight:bolder;text-transform:uppercase;font-family: 'Roboto Condensed', sans-serif;margin-bottom:50px;margin-top:00px;        text-decoration:underline;">BUKTI PENYAMPAIAN INFORMASI</p>
     <p>Saya yang bertanda tangan di bawah ini menyatakan BENAR telah disampaikan informasi tentang hak dan kewajiban saya selaku pasien yang menggunakan jasa pelayanan di Klinik Satriabudi Dharma Medika Perawatan Mampu sebagai berikut :
     </p>
     <br>
@@ -143,7 +124,7 @@
     <p>Rumah sakit rujukan yang bekerjasama dengan Klinik Satriabudi Dharma Medika adalah Rumah Sakit Medika BSD</p>
 
     <div style="width:500px;text-align:center">
-        Kab. Tangerang, {{ Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }}<br>
+        Kab. Tangerang, {{ \Carbon\Carbon::parse($examination->examination_date)->locale('id')->format('d F Y') }}<br>
         Pasien/Keluarga Pasien<br><br>
         <div id="signature"></div>
         <form id="signature_form" method="POST" enctype="multipart/form-data" action="{{ route('buktipenyampaianinformasi.store') }}">
@@ -155,6 +136,7 @@
                 </button>
                 <button type="button" id="save_signature" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-400 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300" style="display:none">OK</button>
                 <button type="submit">Save</button>
+                <button type="button" id="download_pdf" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-400 hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-300" style="display:none">Download PDF</button>
             </div>
 
         </form>
@@ -163,6 +145,19 @@
     </div>
 </main>
 
+<footer>
+    <table style="width:100%;border-top-width: 1px;border-top-style: solid">
+        <tr>
+            <td style="width:50%;text-align: left;vertical-align: top;height:100px">
+                <h2 style="margin:0px;text-transform: uppercase;font-size: 16px;font-weight: bold">WISHING YOU GOOD HEALTH AND HAPPINESS</h2>
+                <p style="margin:0px;text-transform: uppercase;font-size: 14px;">SEMOGA SEHAT DAN BAHAGIA SELALU</p>
+            </td>
+            <td style="width:50%;text-align: right;vertical-align: bottom;float: right;height:100px">
+                <img src="{{ asset(theme()->getMediaUrlPath() . 'logos/qr.jpeg') }}" style="height:85px;margin-right:5px;"><img src="{{ asset(theme()->getMediaUrlPath() . 'logos/logo-yayasan.png') }}" style="height:75px;">
+            </td>
+        </tr>
+    </table>
+</footer>
 <!--end::Text-->
 <script>
     $(function () {
@@ -194,7 +189,7 @@
             $(":submit").attr("disabled", true);
             $("canvas").css("pointer-events", "");
             $("#sign").val("");
-        })
+        });
 
         $("#signature_form").submit(function () {
             if ($("#sign").val() === "") {
@@ -212,8 +207,8 @@
                 });
             }
         });
-    })
+
+    });
 </script>
 </body>
 </html>
-

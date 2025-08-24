@@ -4,163 +4,270 @@ namespace App\Http\Controllers\Klinik;
 
 use App\DataTables\Klinik\UnitDataTable;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Klinik\StoreUnitRequest;
-use App\Http\Requests\Klinik\UpdateUnitRequest;
+use App\Http\Requests\Klinik\{StoreUnitRequest, UpdateUnitRequest};
 use App\Models\Klinik\Unit;
-use Doctrine\DBAL\Driver\PDO\Exception;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\{RedirectResponse, Response};
+use Illuminate\Support\Facades\{Auth, DB, Log};
+use Illuminate\View\View;
+use Exception;
 
+/**
+ * Controller untuk mengelola unit klinik
+ * Menangani CRUD operations untuk unit
+ */
 class UnitController extends Controller
 {
     public $user;
 
+    /**
+     * Inisialisasi middleware untuk autentikasi
+     */
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
             $this->user = Auth::guard('web')->user();
-
             return $next($request);
         });
     }
 
     /**
-     * Display a listing of the resource.
+     * Menampilkan daftar unit
      *
-     * @return \Illuminate\Http\Response
+     * @param UnitDataTable $dataTable
+     * @return Response|View
      */
     public function index(UnitDataTable $dataTable)
     {
-        if (is_null($this->user) || ! $this->user->can('klinik.read')) {
-            abort(403, 'Sorry !! You are Unauthorized to view any master data !');
+        Log::info('Mengakses halaman index unit', ['user_id' => $this->user?->id]);
+
+        if (is_null($this->user) || !$this->user->can('klinik.read')) {
+            Log::warning('Akses ditolak untuk melihat unit', ['user_id' => $this->user?->id]);
+            abort(403, 'Maaf! Anda tidak memiliki izin untuk melihat data unit!');
         }
 
         return $dataTable->render('pages.klinik.units.index');
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Menampilkan form untuk membuat unit baru
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
-        if (is_null($this->user) || ! $this->user->can('klinik.create')) {
-            abort(403, 'Sorry !! You are Unauthorized to create any master data !');
+        Log::info('Mengakses form create unit', ['user_id' => $this->user?->id]);
+
+        if (is_null($this->user) || !$this->user->can('klinik.create')) {
+            Log::warning('Akses ditolak untuk membuat unit', ['user_id' => $this->user?->id]);
+            abort(403, 'Maaf! Anda tidak memiliki izin untuk membuat unit!');
         }
 
         return view('pages.klinik.units.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Menyimpan unit baru ke database
      *
-     *
-     * @return \Illuminate\Http\Response
+     * @param StoreUnitRequest $request
+     * @return RedirectResponse
      */
-    public function store(StoreUnitRequest $request)
+    public function store(StoreUnitRequest $request): RedirectResponse
     {
-        if (is_null($this->user) || ! $this->user->can('klinik.create')) {
-            abort(403, 'Sorry !! You are Unauthorized to create any master data !');
+        Log::info('Memulai proses store unit', [
+            'user_id' => $this->user?->id,
+            'unit_name' => $request->name
+        ]);
+
+        if (is_null($this->user) || !$this->user->can('klinik.create')) {
+            Log::warning('Akses ditolak untuk menyimpan unit', ['user_id' => $this->user?->id]);
+            abort(403, 'Maaf! Anda tidak memiliki izin untuk membuat unit!');
         }
 
-        // Validation Data
-        $validated = $request->validated();
+        try {
+            DB::beginTransaction();
 
-        // Process Data
-        if ($validated) {
-            try {
-                Unit::create(['name' => $request->name]);
-            } catch(Exception $e) {
-                report($e);
+            // Validasi data sudah dilakukan di StoreUnitRequest
+            $validated = $request->validated();
 
-                return false;
-            }
+            // Buat unit baru
+            $unit = Unit::create($validated);
 
-            session()->flash('success', 'Unit has been created !!');
+            DB::commit();
 
+            Log::info('Berhasil menyimpan unit', [
+                'unit_id' => $unit->id,
+                'unit_name' => $unit->name
+            ]);
+
+            session()->flash('success', 'Unit berhasil dibuat!');
             return redirect()->route('units.index');
-        }
 
-        return false;
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('Gagal menyimpan unit', [
+                'error' => $e->getMessage(),
+                'unit_name' => $request->name
+            ]);
+
+            session()->flash('error', 'Terjadi kesalahan saat menyimpan unit!');
+            return redirect()->back()->withInput();
+        }
     }
 
     /**
-     * Display the specified resource.
+     * Menampilkan detail unit
      *
-     *
-     * @return \Illuminate\Http\Response
+     * @param Unit $unit
+     * @return Response
      */
     public function show(Unit $unit)
     {
-            //
+        Log::info('Mengakses detail unit', [
+            'user_id' => $this->user?->id,
+            'unit_id' => $unit->id
+        ]);
+
+        // TODO: Implementasi show method
+        return response()->json(['message' => 'Method belum diimplementasi']);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Menampilkan form edit unit
      *
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return View|RedirectResponse
      */
-    public function edit($id)
+    public function edit(int $id)
     {
-        if (is_null($this->user) || ! $this->user->can('klinik.update')) {
-            abort(403, 'Sorry !! You are Unauthorized to edit any master data !');
+        Log::info('Mengakses form edit unit', [
+            'user_id' => $this->user?->id,
+            'unit_id' => $id
+        ]);
+
+        if (is_null($this->user) || !$this->user->can('klinik.update')) {
+            Log::warning('Akses ditolak untuk edit unit', ['user_id' => $this->user?->id]);
+            abort(403, 'Maaf! Anda tidak memiliki izin untuk mengedit unit!');
         }
 
-        $unit = Unit::find($id);
+        try {
+            $unit = Unit::findOrFail($id);
 
-        return view('pages.klinik.units.edit', compact('unit'));
-    }
+            Log::info('Berhasil memuat form edit unit', ['unit_id' => $id]);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateUnitRequest $request, Unit $unit)
-    {
-        if (is_null($this->user) || ! $this->user->can('klinik.update')) {
-            abort(403, 'Sorry !! You are Unauthorized to edit any master date !');
-        }
+            return view('pages.klinik.units.edit', compact('unit'));
 
-        // Validation Data
-        $validated = $request->validated();
+        } catch (Exception $e) {
+            Log::error('Gagal memuat form edit unit', [
+                'error' => $e->getMessage(),
+                'unit_id' => $id
+            ]);
 
-        // Process Data
-        if ($validated) {
-            // Process Data
-            try {
-                $unit->update($validated);
-            } catch(Exception $e) {
-                report($e);
-
-                return false;
-            }
-
-            session()->flash('success', 'Unit has been updated !!');
-
+            session()->flash('error', 'Unit tidak ditemukan!');
             return redirect()->route('units.index');
         }
-
-        return false;
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Update unit yang sudah ada
      *
-     *
-     * @return \Illuminate\Http\Response
+     * @param UpdateUnitRequest $request
+     * @param Unit $unit
+     * @return RedirectResponse
      */
-    public function destroy(Unit $unit)
+    public function update(UpdateUnitRequest $request, Unit $unit): RedirectResponse
     {
-        if (is_null($this->user) || ! $this->user->can('klinik.delete')) {
-            abort(403, 'Sorry !! You are Unauthorized to delete any master date !');
+        Log::info('Memulai proses update unit', [
+            'user_id' => $this->user?->id,
+            'unit_id' => $unit->id,
+            'unit_name' => $request->name
+        ]);
+
+        if (is_null($this->user) || !$this->user->can('klinik.update')) {
+            Log::warning('Akses ditolak untuk update unit', ['user_id' => $this->user?->id]);
+            abort(403, 'Maaf! Anda tidak memiliki izin untuk mengedit unit!');
         }
 
-        $unit->delete();
+        try {
+            DB::beginTransaction();
 
-        session()->flash('success', 'Unit has been deleted !!');
+            // Validasi data sudah dilakukan di UpdateUnitRequest
+            $validated = $request->validated();
 
-        return redirect()->route('units.index');
+            // Update unit
+            $unit->update($validated);
+
+            DB::commit();
+
+            Log::info('Berhasil update unit', [
+                'unit_id' => $unit->id,
+                'unit_name' => $unit->name
+            ]);
+
+            session()->flash('success', 'Unit berhasil diperbarui!');
+            return redirect()->route('units.index');
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('Gagal update unit', [
+                'error' => $e->getMessage(),
+                'unit_id' => $unit->id
+            ]);
+
+            session()->flash('error', 'Terjadi kesalahan saat memperbarui unit!');
+            return redirect()->back()->withInput();
+        }
+    }
+
+    /**
+     * Hapus unit
+     *
+     * @param Unit $unit
+     * @return RedirectResponse
+     */
+    public function destroy(Unit $unit): RedirectResponse
+    {
+        Log::info('Memulai proses hapus unit', [
+            'user_id' => $this->user?->id,
+            'unit_id' => $unit->id
+        ]);
+
+        if (is_null($this->user) || !$this->user->can('klinik.delete')) {
+            Log::warning('Akses ditolak untuk hapus unit', ['user_id' => $this->user?->id]);
+            abort(403, 'Maaf! Anda tidak memiliki izin untuk menghapus unit!');
+        }
+
+        try {
+            DB::beginTransaction();
+
+            // Cek apakah unit masih digunakan oleh drugs
+            if ($unit->drugs()->exists()) {
+                Log::warning('Unit tidak dapat dihapus karena masih digunakan', [
+                    'unit_id' => $unit->id,
+                    'drugs_count' => $unit->drugs()->count()
+                ]);
+
+                session()->flash('error', 'Unit tidak dapat dihapus karena masih digunakan oleh obat!');
+                return redirect()->route('units.index');
+            }
+
+            $unit->delete();
+
+            DB::commit();
+
+            Log::info('Berhasil hapus unit', ['unit_id' => $unit->id]);
+
+            session()->flash('success', 'Unit berhasil dihapus!');
+            return redirect()->route('units.index');
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('Gagal hapus unit', [
+                'error' => $e->getMessage(),
+                'unit_id' => $unit->id
+            ]);
+
+            session()->flash('error', 'Terjadi kesalahan saat menghapus unit!');
+            return redirect()->route('units.index');
+        }
     }
 }

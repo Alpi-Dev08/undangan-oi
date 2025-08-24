@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
             PermissionsSeeder::class,
             UsersSeeder::class,
             MasterSeeder::class,
-            HmsSeeder::class
+            HmsSeeder::class,
+            JenisPasienSeeder::class
         ]);
     }
 }
