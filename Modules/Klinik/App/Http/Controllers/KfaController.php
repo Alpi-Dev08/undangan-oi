@@ -100,12 +100,24 @@ class KfaController extends Controller
                 'total' => $response['total'] ?? 0
             ]);
 
+            if($response[0]== "200"){
+                $response = $response[1];
+                return response()->json([
+                    'total' => $response->total ?? 0,
+                    'page' => $page,
+                    'size' => $size,
+                    'items' => [
+                        'data' => $response->items->data ?? []
+                    ]
+            ]);
+            }
+
             return response()->json([
-                'total' => $response['total'] ?? 0,
+                'total' => 0,
                 'page' => $page,
                 'size' => $size,
                 'items' => [
-                    'data' => $response['entry'] ?? []
+                    'data' => []
                 ]
             ]);
 
@@ -113,7 +125,8 @@ class KfaController extends Controller
             Log::error('KFA Products API Error', [
                 'error' => $e->getMessage(),
                 'product_type' => $request->product_type,
-                'keyword' => $request->keyword
+                'keyword' => $request->keyword,
+                'page' => $page
             ]);
 
             return response()->json([
@@ -203,20 +216,28 @@ class KfaController extends Controller
      *
      * @return JsonResponse
      */
-    public function getDrugsWithKfa(): JsonResponse
+    public function getDrugsWithKfa(Request $request): JsonResponse
     {
         Log::info('Get Drugs with KFA Data', [
+            'request' => $request->all(),
             'user_id' => auth()->id() ?? null
         ]);
 
         try {
+            $page = $request->input('page', 1);
+            $perPage = $request->input('per_page', 10);
+
             $drugs = Drug::whereNotNull('kfa_code')
                 ->select(['id', 'name', 'kfa_code', 'price', 'stock', 'kfa_data'])
-                ->paginate(20);
+                ->paginate($perPage);
 
             return response()->json([
                 'success' => true,
-                'data' => $drugs
+                'data' => $drugs->items(),
+                'total' => $drugs->total(),
+                'page' => $drugs->currentPage(),
+                'per_page' => $drugs->perPage(),
+                'last_page' => $drugs->lastPage()
             ]);
 
         } catch (\Exception $e) {
