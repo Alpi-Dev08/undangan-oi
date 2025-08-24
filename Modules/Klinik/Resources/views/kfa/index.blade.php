@@ -35,7 +35,19 @@
 
                             <!-- KFA Products DataTable -->
                             <div class="table-responsive">
-                                {{ $kfaProductsDataTable->table(['class' => 'table table-striped table-row-bordered gy-5 gs-7']) }}
+                                <table id="kfa-products-table" class="table table-striped table-row-bordered gy-5 gs-7">
+                                    <thead>
+                                        <tr>
+                                            <th>Aksi</th>
+                                            <th>Kode</th>
+                                            <th>Nama Produk</th>
+                                            <th>Merk</th>
+                                            <th>Manufaktur</th>
+                                            <th>Harga</th>
+                                            <th>Tipe</th>
+                                        </tr>
+                                    </thead>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -51,7 +63,18 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                {{ $kfaSyncedDrugsDataTable->table(['class' => 'table table-striped table-row-bordered gy-5 gs-7']) }}
+                                <table id="kfa-synced-drugs-table" class="table table-striped table-row-bordered gy-5 gs-7">
+                                    <thead>
+                                        <tr>
+                                            <th>Aksi</th>
+                                            <th>Kode Obat</th>
+                                            <th>Nama Obat</th>
+                                            <th>Kode KFA</th>
+                                            <th>Harga</th>
+                                            <th>Tanggal Sinkronisasi</th>
+                                        </tr>
+                                    </thead>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -90,18 +113,19 @@
 
     {{-- Inject Scripts --}}
     @push('customscript')
-        {{ $kfaProductsDataTable->scripts() }}
-        {{ $kfaSyncedDrugsDataTable->scripts() }}
-        
         <script>
             $(document).ready(function() {
+                // Initialize DataTables
+                initializeKfaProductsTable();
+                initializeKfaSyncedDrugsTable();
+                
                 // Load drugs for sync modal
                 loadDrugsForSelect();
 
                 // Search form submission
                 $('#kfaSearchForm').on('submit', function(e) {
                     e.preventDefault();
-                    LaravelDataTables['kfa-products-table'].ajax.reload();
+                    $('#kfa-products-table').DataTable().ajax.reload();
                 });
 
                 // Sync button click
@@ -120,6 +144,47 @@
                     viewKfaDetail(kfaCode);
                 });
             });
+
+            function initializeKfaProductsTable() {
+                $('#kfa-products-table').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: '/api/v1/kfa/products',
+                        data: function(d) {
+                            d.product_type = $('#productType').val();
+                            d.keyword = $('#keyword').val();
+                        }
+                    },
+                    columns: [
+                        { data: 'action', name: 'action', orderable: false, searchable: false },
+                        { data: 'code', name: 'code' },
+                        { data: 'name', name: 'name' },
+                        { data: 'brand', name: 'brand' },
+                        { data: 'manufacturer', name: 'manufacturer' },
+                        { data: 'price', name: 'price' },
+                        { data: 'type', name: 'type' }
+                    ],
+                    order: [[1, 'asc']]
+                });
+            }
+
+            function initializeKfaSyncedDrugsTable() {
+                $('#kfa-synced-drugs-table').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: '/api/v1/kfa/drugs-with-kfa',
+                    columns: [
+                        { data: 'action', name: 'action', orderable: false, searchable: false },
+                        { data: 'drug_code', name: 'drug_code' },
+                        { data: 'drug_name', name: 'drug_name' },
+                        { data: 'kfa_code', name: 'kfa_code' },
+                        { data: 'price', name: 'price' },
+                        { data: 'synced_at', name: 'synced_at' }
+                    ],
+                    order: [[5, 'desc']]
+                });
+            }
 
             function loadDrugsForSelect() {
                 $.ajax({
@@ -179,8 +244,8 @@
                         bootstrap.Modal.getInstance(document.getElementById('syncModal')).hide();
                         
                         // Reload both DataTables
-                        LaravelDataTables['kfa-products-table'].ajax.reload();
-                        LaravelDataTables['kfa-synced-drugs-table'].ajax.reload();
+                        $('#kfa-products-table').DataTable().ajax.reload();
+                        $('#kfa-synced-drugs-table').DataTable().ajax.reload();
                     } else {
                         alert('Gagal menyinkronisasi: ' + data.message);
                     }
