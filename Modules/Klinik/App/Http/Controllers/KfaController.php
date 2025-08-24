@@ -65,17 +65,16 @@ class KfaController extends Controller
     /**
      * Get products from KFA API for DataTables
      *
-     * @param Request $request
+     * @param \App\DataTables\Klinik\KfaProductsDataTable $dataTable
      * @return mixed
      */
-    public function getProducts(Request $request)
+    public function getProducts(\App\DataTables\Klinik\KfaProductsDataTable $dataTable)
     {
         Log::info('KFA Products DataTable Request', [
-            'request' => $request->all(),
             'user_id' => Auth::id()
         ]);
 
-        return app(\App\DataTables\Klinik\KfaProductsDataTable::class)->render($request);
+        return $dataTable->ajax();
     }
 
     /**
@@ -150,25 +149,22 @@ class KfaController extends Controller
      */
     public function index()
     {
-        $kfaProductsDataTable = app(\App\DataTables\Klinik\KfaProductsDataTable::class);
-        $kfaSyncedDrugsDataTable = app(\App\DataTables\Klinik\KfaSyncedDrugsDataTable::class);
-        
-        return view('klinik::kfa.index', compact('kfaProductsDataTable', 'kfaSyncedDrugsDataTable'));
+        return view('klinik::kfa.index');
     }
 
     /**
      * Get drugs with KFA data for DataTables
      *
+     * @param \App\DataTables\Klinik\KfaSyncedDrugsDataTable $dataTable
      * @return mixed
      */
-    public function getDrugsWithKfa(Request $request)
+    public function getDrugsWithKfa(\App\DataTables\Klinik\KfaSyncedDrugsDataTable $dataTable)
     {
         Log::info('Get Drugs with KFA DataTable Request', [
-            'request' => $request->all(),
             'user_id' => Auth::id()
         ]);
 
-        return app(\App\DataTables\Klinik\KfaSyncedDrugsDataTable::class)->render($request);
+        return $dataTable->ajax();
     }
 
     /**
