@@ -1,0 +1,11 @@
+{
+    "name": "Klinik",
+    "alias": "klinik",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Klinik\\App\\Providers\\KlinikServiceProvider"
+    ],
+    "files": []
+}

@@ -15,9 +15,7 @@ use Modules\Klinik\App\Http\Controllers\KfaController;
     |
 */
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->name('api.')->group(function () {
-    Route::get('klinik', fn (Request $request) => $request->user())->name('klinik');
-    
+Route::prefix('v1')->name('api.')->group(function () {
     // KFA Integration Routes
     Route::prefix('kfa')->name('kfa.')->group(function () {
         Route::get('product-detail', [KfaController::class, 'getProductDetail'])->name('product-detail');
@@ -25,4 +23,8 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->name('api.')->group(function 
         Route::post('sync-drug', [KfaController::class, 'syncDrugWithKfa'])->name('sync-drug');
         Route::get('drugs-with-kfa', [KfaController::class, 'getDrugsWithKfa'])->name('drugs-with-kfa');
     });
+
 });
+
+
+
