@@ -24,6 +24,11 @@ Route::prefix('v1')->name('api.')->group(function () {
         Route::get('drugs-with-kfa', [KfaController::class, 'getDrugsWithKfa'])->name('drugs-with-kfa');
     });
 
+    // Drugs Routes
+    Route::prefix('drugs')->name('drugs.')->group(function () {
+        Route::get('select-options', [KfaController::class, 'getDrugsForSelect'])->name('select-options');
+    });
+
 });
 
 

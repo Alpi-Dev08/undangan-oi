@@ -4,11 +4,13 @@ namespace Modules\Klinik\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Klinik\Drug;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Satusehat\Integration\Terminology\Kfa;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Satusehat\Integration\Terminology\Kfa;
 
 class KfaController extends Controller
 {
@@ -22,7 +24,7 @@ class KfaController extends Controller
     {
         Log::info('KFA Product Detail Request', [
             'request' => $request->all(),
-            'user_id' => optional(auth()->user())->id
+            'user_id' => Auth::id()
         ]);
 
         $request->validate([
@@ -61,79 +63,19 @@ class KfaController extends Controller
     }
 
     /**
-     * Get paginated products from KFA API
+     * Get products from KFA API for DataTables
      *
      * @param Request $request
-     * @return JsonResponse
+     * @return mixed
      */
-    public function getProducts(Request $request): JsonResponse
+    public function getProducts(Request $request)
     {
-        Log::info('KFA Products Request', [
+        Log::info('KFA Products DataTable Request', [
             'request' => $request->all(),
-            'user_id' => optional(auth()->user())->id
+            'user_id' => Auth::id()
         ]);
 
-        $request->validate([
-            'product_type' => 'required|string|in:alkes,farmasi',
-            'keyword' => 'nullable|string',
-            'page' => 'integer|min:1',
-            'size' => 'integer|min:1|max:1000'
-        ]);
-
-        $page = $request->input('page', 1);
-        $size = $request->input('size', 10);
-
-        try {
-            $kfa = new Kfa();
-            $response = $kfa->getProducts(
-                $request->product_type,
-                $request->keyword,
-                $page,
-                $size
-            );
-
-            Log::info('KFA Products Response', [
-                'product_type' => $request->product_type,
-                'keyword' => $request->keyword,
-                'page' => $page,
-                'size' => $size,
-                'total' => $response['total'] ?? 0
-            ]);
-
-            if($response[0]== "200"){
-                $response = $response[1];
-                return response()->json([
-                    'total' => $response->total ?? 0,
-                    'page' => $page,
-                    'size' => $size,
-                    'items' => [
-                        'data' => $response->items->data ?? []
-                    ]
-            ]);
-            }
-
-            return response()->json([
-                'total' => 0,
-                'page' => $page,
-                'size' => $size,
-                'items' => [
-                    'data' => []
-                ]
-            ]);
-
-        } catch (\Exception $e) {
-            Log::error('KFA Products API Error', [
-                'error' => $e->getMessage(),
-                'product_type' => $request->product_type,
-                'keyword' => $request->keyword,
-                'page' => $page
-            ]);
-
-            return response()->json([
-                'error' => 'Gagal mengambil data produk dari KFA',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        return app(\App\DataTables\Klinik\KfaProductsDataTable::class)->render($request);
     }
 
     /**
@@ -146,7 +88,7 @@ class KfaController extends Controller
     {
         Log::info('Sync Drug with KFA Request', [
             'request' => $request->all(),
-            'user_id' => optional(auth()->user())->id
+            'user_id' => Auth::id()
         ]);
 
         $request->validate([
@@ -208,46 +150,54 @@ class KfaController extends Controller
      */
     public function index()
     {
-        return view('klinik::kfa.index');
+        $kfaProductsDataTable = app(\App\DataTables\Klinik\KfaProductsDataTable::class);
+        $kfaSyncedDrugsDataTable = app(\App\DataTables\Klinik\KfaSyncedDrugsDataTable::class);
+        
+        return view('klinik::kfa.index', compact('kfaProductsDataTable', 'kfaSyncedDrugsDataTable'));
     }
 
     /**
-     * Get drugs with KFA data
+     * Get drugs with KFA data for DataTables
+     *
+     * @return mixed
+     */
+    public function getDrugsWithKfa(Request $request)
+    {
+        Log::info('Get Drugs with KFA DataTable Request', [
+            'request' => $request->all(),
+            'user_id' => Auth::id()
+        ]);
+
+        return app(\App\DataTables\Klinik\KfaSyncedDrugsDataTable::class)->render($request);
+    }
+
+    /**
+     * Get drugs for select dropdown
      *
      * @return JsonResponse
      */
-    public function getDrugsWithKfa(Request $request): JsonResponse
+    public function getDrugsForSelect(): JsonResponse
     {
-        Log::info('Get Drugs with KFA Data', [
-            'request' => $request->all(),
-            'user_id' => optional(auth()->user())->id
-        ]);
-
         try {
-            $page = $request->input('page', 1);
-            $perPage = $request->input('per_page', 10);
-
-            $drugs = Drug::whereNotNull('kfa_code')
-                ->select(['id', 'name', 'kfa_code', 'price', 'stock', 'kfa_data'])
-                ->paginate($perPage);
+            $drugs = Drug::select(['id', 'name'])
+                ->whereNull('kfa_code')
+                ->orderBy('name')
+                ->get();
 
             return response()->json([
                 'success' => true,
-                'data' => $drugs->items(),
-                'total' => $drugs->total(),
-                'page' => $drugs->currentPage(),
-                'per_page' => $drugs->perPage(),
-                'last_page' => $drugs->lastPage()
+                'data' => $drugs
             ]);
 
-        } catch (\Exception $e) {
-            Log::error('Get Drugs with KFA Error', [
-                'error' => $e->getMessage()
+        } catch (Exception $e) {
+            Log::error('Error getting drugs for select', [
+                'error' => $e->getMessage(),
+                'user_id' => Auth::id()
             ]);
 
             return response()->json([
-                'error' => 'Gagal mengambil data obat dengan KFA',
-                'message' => $e->getMessage()
+                'success' => false,
+                'message' => 'Gagal mengambil data obat'
             ], 500);
         }
     }
