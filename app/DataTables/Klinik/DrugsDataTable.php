@@ -42,6 +42,9 @@ class DrugsDataTable extends DataTable
             ->addColumn('stock', function (Drug $model) {
                 return $model->stock;
             })
+            ->addColumn('kfa_code', function (Drug $model) {
+                return $model->kfa_code ? '<span class="badge badge-light-success">✓</span>' : '<span class="badge badge-light-warning">✗</span>';
+            })
             ->addColumn('action', function (Drug $model) {
                 return view('pages.klinik.drugs._action', compact('model'));
             });
@@ -93,6 +96,7 @@ class DrugsDataTable extends DataTable
             Column::make('name')->title(__('Name'))->searchable(true),
             Column::make('price')->title(__('Price'))->searchable(true),
             Column::make('stock')->title(__('Stock'))->searchable(true),
+            Column::make('kfa_code')->title(__('KFA'))->searchable(false),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)

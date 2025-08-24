@@ -11,11 +11,19 @@ class Drug extends Model
 {
     use SpatieLogsActivity, HasFactory, SoftDeletes;
 
+    protected $casts = [
+        'kfa_data' => 'array',
+        'price' => 'decimal:2',
+        'stock' => 'integer'
+    ];
+
     protected $fillable = [
         'unit_id',
         'name',
         'price',
-        'stock'
+        'stock',
+        'kfa_code',
+        'kfa_data'
     ];
 
     public function unit()
