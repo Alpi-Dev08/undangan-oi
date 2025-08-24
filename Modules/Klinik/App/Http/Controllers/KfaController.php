@@ -22,7 +22,7 @@ class KfaController extends Controller
     {
         Log::info('KFA Product Detail Request', [
             'request' => $request->all(),
-            'user_id' => auth()->id()
+            'user_id' => auth()->id() ?? null
         ]);
 
         $request->validate([
@@ -70,7 +70,7 @@ class KfaController extends Controller
     {
         Log::info('KFA Products Request', [
             'request' => $request->all(),
-            'user_id' => auth()->id()
+            'user_id' => auth()->id() ?? null
         ]);
 
         $request->validate([
@@ -133,7 +133,7 @@ class KfaController extends Controller
     {
         Log::info('Sync Drug with KFA Request', [
             'request' => $request->all(),
-            'user_id' => auth()->id()
+            'user_id' => auth()->id() ?? null
         ]);
 
         $request->validate([
@@ -206,7 +206,7 @@ class KfaController extends Controller
     public function getDrugsWithKfa(): JsonResponse
     {
         Log::info('Get Drugs with KFA Data', [
-            'user_id' => auth()->id()
+            'user_id' => auth()->id() ?? null
         ]);
 
         try {
