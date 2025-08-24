@@ -38,13 +38,11 @@
                                 <table id="kfa-products-table" class="table table-striped table-row-bordered gy-5 gs-7">
                                     <thead>
                                         <tr>
-                                            <th>Aksi</th>
                                             <th>Kode</th>
                                             <th>Nama Produk</th>
-                                            <th>Merk</th>
                                             <th>Manufaktur</th>
                                             <th>Harga</th>
-                                            <th>Tipe</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -66,12 +64,11 @@
                                 <table id="kfa-synced-drugs-table" class="table table-striped table-row-bordered gy-5 gs-7">
                                     <thead>
                                         <tr>
-                                            <th>Aksi</th>
-                                            <th>Kode Obat</th>
+                                            <th>ID</th>
                                             <th>Nama Obat</th>
                                             <th>Kode KFA</th>
-                                            <th>Harga</th>
-                                            <th>Tanggal Sinkronisasi</th>
+                                            <th>Harga KFA</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -111,98 +108,148 @@
         </div>
     </div>
 
-    {{-- Inject Scripts --}}
     @push('customscript')
         <script>
             $(document).ready(function() {
                 // Initialize DataTables
-                initializeKfaProductsTable();
-                initializeKfaSyncedDrugsTable();
-                
-                // Load drugs for sync modal
-                loadDrugsForSelect();
+            initializeKfaProductsTable();
+            initializeKfaSyncedDrugsTable();
+            
+            // Load drugs for sync modal
+            loadDrugsForSelect();
 
-                // Search form submission
-                $('#kfaSearchForm').on('submit', function(e) {
-                    e.preventDefault();
-                    $('#kfa-products-table').DataTable().ajax.reload();
-                });
-
-                // Sync button click
-                $('#syncButton').on('click', syncDrugWithKfa);
-
-                // Handle sync button clicks on DataTable
-                $('#kfa-products-table').on('click', '.sync-btn', function() {
-                    const kfaCode = $(this).data('kfa-code');
-                    const productCode = $(this).data('product-code');
-                    openSyncModal(kfaCode, 'kfa');
-                });
-
-                // Handle view detail clicks on synced drugs DataTable
-                $('#kfa-synced-drugs-table').on('click', '.view-btn', function() {
-                    const kfaCode = $(this).data('kfa-code');
-                    viewKfaDetail(kfaCode);
-                });
+            // Search form submission
+            $('#kfaSearchForm').on('submit', function(e) {
+                e.preventDefault();
+                $('#kfa-products-table').DataTable().ajax.reload();
             });
 
-            function initializeKfaProductsTable() {
-                $('#kfa-products-table').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: {
-                        url: '/api/v1/kfa/products',
-                        data: function(d) {
-                            d.product_type = $('#productType').val();
-                            d.keyword = $('#keyword').val();
+            // Sync button click
+            $('#syncButton').on('click', syncDrugWithKfa);
+        });
+
+        function initializeKfaProductsTable() {
+            $('#kfa-products-table').DataTable({
+                processing: true,
+                serverSide: false,
+                ajax: {
+                    url: '/api/v1/kfa/products',
+                    type: 'GET',
+                    data: function(d) {
+                        d.product_type = $('#productType').val();
+                        d.keyword = $('#keyword').val();
+                    }
+                },
+                columns: [
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', title: 'No', orderable: false, searchable: false },
+                    { data: 'kfa_code', name: 'kfa_code', title: 'Kode KFA' },
+                    { data: 'name', name: 'name', title: 'Nama Produk' },
+                    { data: 'manufacturer', name: 'manufacturer', title: 'Produsen' },
+                    { data: 'fix_price', name: 'fix_price', title: 'Harga Fix', render: function(data) {
+                        return 'Rp ' + new Intl.NumberFormat('id-ID').format(data || 0);
+                    }},
+                    { data: 'het_price', name: 'het_price', title: 'HET', render: function(data) {
+                        return 'Rp ' + new Intl.NumberFormat('id-ID').format(data || 0);
+                    }},
+                    { 
+                        data: 'action', 
+                        name: 'action', 
+                        title: 'Aksi', 
+                        orderable: false, 
+                        searchable: false,
+                        render: function(data, type, row) {
+                            return '<button class="btn btn-sm btn-primary sync-btn" data-kfa-code="' + (row.kfa_code || '') + '" data-product-code="' + (row.product_code || '') + '">Sinkronkan</button>';
+                        }
+                    }
+                ],
+                responsive: true,
+                autoWidth: true,
+                scrollX: true,
+                pageLength: 10,
+                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
+            });
+
+            // Handle sync button clicks
+            $('#kfa-products-table').on('click', '.sync-btn', function() {
+                const kfaCode = $(this).data('kfa-code');
+                const productCode = $(this).data('product-code');
+                openSyncModal(kfaCode, 'kfa');
+            });
+        }
+
+        function initializeKfaSyncedDrugsTable() {
+            $('#kfa-synced-drugs-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '/api/v1/kfa/drugs-with-kfa',
+                    type: 'GET'
+                },
+                columns: [
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', title: 'No', orderable: false, searchable: false },
+                    { data: 'name', name: 'name', title: 'Nama Obat' },
+                    {
+                        data: 'kfa_code', 
+                        name: 'kfa_code', 
+                        title: 'Kode KFA',
+                        render: function(data, type, row) {
+                            return data ? '<span class="badge badge-light-success">✓ ' + data + '</span>' : '<span class="badge badge-light-warning">✗</span>';
                         }
                     },
-                    columns: [
-                        { data: 'action', name: 'action', orderable: false, searchable: false },
-                        { data: 'code', name: 'code' },
-                        { data: 'name', name: 'name' },
-                        { data: 'brand', name: 'brand' },
-                        { data: 'manufacturer', name: 'manufacturer' },
-                        { data: 'price', name: 'price' },
-                        { data: 'type', name: 'type' }
-                    ],
-                    order: [[1, 'asc']]
-                });
-            }
+                    { 
+                        data: 'price', 
+                        name: 'price', 
+                        title: 'Harga',
+                        render: function(data, type, row) {
+                            return 'Rp ' + new Intl.NumberFormat('id-ID').format(data || 0);
+                        }
+                    },
+                    { data: 'stock', name: 'stock', title: 'Stok' },
+                    { 
+                        data: 'action', 
+                        name: 'action', 
+                        title: 'Aksi', 
+                        orderable: false, 
+                        searchable: false,
+                        render: function(data, type, row) {
+                            return `<button class="btn btn-sm btn-info view-btn" 
+                                data-kfa-code="${row.kfa_code}">
+                                Lihat Detail
+                            </button>`;
+                        }
+                    }
+                ],
+                responsive: true,
+                autoWidth: true,
+                scrollX: true,
+                pageLength: 10,
+                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
+            });
 
-            function initializeKfaSyncedDrugsTable() {
-                $('#kfa-synced-drugs-table').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: '/api/v1/kfa/drugs-with-kfa',
-                    columns: [
-                        { data: 'action', name: 'action', orderable: false, searchable: false },
-                        { data: 'drug_code', name: 'drug_code' },
-                        { data: 'drug_name', name: 'drug_name' },
-                        { data: 'kfa_code', name: 'kfa_code' },
-                        { data: 'price', name: 'price' },
-                        { data: 'synced_at', name: 'synced_at' }
-                    ],
-                    order: [[5, 'desc']]
-                });
-            }
+            // Handle view detail clicks
+            $('#kfa-synced-drugs-table').on('click', '.view-btn', function() {
+                const kfaCode = $(this).data('kfa-code');
+                viewKfaDetail(kfaCode);
+            });
+        }
 
             function loadDrugsForSelect() {
                 $.ajax({
                     url: '/api/v1/drugs/select-options',
                     method: 'GET',
                     success: function(response) {
-                        const select = $('#drugSelect');
-                        select.empty();
-                        select.append('<option value="">Pilih obat...</option>');
+                        const drugSelect = $('#drugSelect');
+                        drugSelect.empty();
+                        drugSelect.append('<option value="">Pilih obat...</option>');
                         
-                        if (response.data) {
+                        if (response.success && response.data) {
                             response.data.forEach(function(drug) {
-                                select.append(`<option value="${drug.id}">${drug.name}</option>`);
+                                drugSelect.append(`<option value="${drug.id}">${drug.name}</option>`);
                             });
                         }
                     },
                     error: function() {
-                        console.error('Failed to load drugs for select');
+                        console.error('Failed to load drugs');
                     }
                 });
             }
@@ -228,7 +275,8 @@
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Accept': 'application/json'
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         body: JSON.stringify({
                             drug_id: drugId,
@@ -242,10 +290,13 @@
                     if (response.ok) {
                         alert('Obat berhasil disinkronisasi dengan KFA');
                         bootstrap.Modal.getInstance(document.getElementById('syncModal')).hide();
-                        
+
                         // Reload both DataTables
                         $('#kfa-products-table').DataTable().ajax.reload();
                         $('#kfa-synced-drugs-table').DataTable().ajax.reload();
+                        
+                        // Reload drugs select options
+                        loadDrugsForSelect();
                     } else {
                         alert('Gagal menyinkronisasi: ' + data.message);
                     }
