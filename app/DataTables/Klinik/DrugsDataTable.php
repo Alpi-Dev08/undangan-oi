@@ -25,7 +25,7 @@ class DrugsDataTable extends DataTable
                         ->orWhereRelation('unit', 'name', 'like', '%'.$search['value'].'%');
                 }
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','kfa_code'])
             ->addIndexColumn()
             ->addColumn('unit', function (Drug $model) {
 		if($model->unit){
@@ -43,7 +43,10 @@ class DrugsDataTable extends DataTable
                 return $model->stock;
             })
             ->addColumn('kfa_code', function (Drug $model) {
-                return $model->kfa_code ? '<span class="badge badge-light-success">✓</span>' : '<span class="badge badge-light-warning">✗</span>';
+                if ($model->kfa_code) {
+                    return '<a href="'.route('drugs.detail', ['drug' => $model->id]).'" class="badge badge-light-primary" title="Lihat detail: '.e($model->kfa_code).'">'.e($model->kfa_code).'</a>';
+                }
+                return '<span class="badge badge-light-warning">✗</span>';
             })
             ->addColumn('action', function (Drug $model) {
                 return view('pages.klinik.drugs._action', compact('model'));
@@ -106,7 +109,7 @@ class DrugsDataTable extends DataTable
     }
 
     /**
-     * Get filename for export. 
+     * Get filename for export.
      */
     protected function filename(): string
     {
