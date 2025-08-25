@@ -5,7 +5,7 @@ namespace Modules\Klinik\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Modules\Klinik\Models\KfaProduct;
-use Modules\Klinik\App\Services\Kfa;
+use Satusehat\Integration\Terminology\Kfa;
 
 class UpdateKfaDataCommand extends Command
 {
@@ -47,7 +47,7 @@ class UpdateKfaDataCommand extends Command
                     $this->info("Updating product: {$product->kfa_code} - {$product->name}");
                     
                     // Ambil detail produk dari API
-                    $apiProduct = $kfa->getProductDetail($product->kfa_code);
+                    $apiProduct = $kfa->get_by_id($product->kfa_code);
                     
                     if ($apiProduct) {
                         

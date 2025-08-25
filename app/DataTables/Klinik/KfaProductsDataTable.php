@@ -47,14 +47,12 @@ class KfaProductsDataTable extends DataTable
         
         $products = Cache::remember($cacheKey, 300, function () use ($productType, $keyword) {
             $kfa = new Kfa();
-            $response = $kfa->getProducts($productType, $keyword, 1, 1000);
+            $searchKeyword = $keyword ?: 'a'; // Default keyword untuk menampilkan semua produk
+            $products = $kfa->getProducts($searchKeyword, $productType, 1000);
             
-            if ($response[0] == "200" && isset($response[1]->items->data)) {
-                return collect($response[1]->items->data)->map(function ($item) {
-                    return (array) $item;
-                })->toArray();
-            }
-            return [];
+            return collect($products)->map(function ($item) {
+                return (array) $item;
+            })->toArray();
         });
         
         return collect($products);

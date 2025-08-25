@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-use Modules\Klinik\App\Services\Kfa;
+use Satusehat\Integration\Terminology\Kfa;
 use Modules\Klinik\Models\KfaProduct;
 
 class KfaController extends Controller
@@ -80,7 +80,7 @@ class KfaController extends Controller
             ]);
 
             $kfa = new Kfa();
-            $apiProduct = $kfa->getProductDetail($kfaCode);
+            $apiProduct = $kfa->get_by_id($kfaCode);
 
             Log::info('KFA API Response', [
                 'kfa_code' => $kfaCode,
@@ -194,7 +194,7 @@ class KfaController extends Controller
                 // Ambil data dari API
                 $kfa = new Kfa();
                 $searchKeyword = $keyword ?? 'a'; // Default keyword untuk menampilkan semua produk
-                $products = $kfa->searchProducts($searchKeyword, $productType, 1000);
+                $products = $kfa->getProducts($searchKeyword, $productType, 1000);
 
                 if (is_array($products) && count($products) > 0) {
                     // Simpan data ke database dengan transaction
