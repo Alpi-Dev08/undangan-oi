@@ -182,32 +182,32 @@ class KfaController extends Controller
             $productType = $request->product_type;
             $keyword = $request->keyword;
 
-            // Cek apakah ada data yang perlu diupdate (lebih dari 1 minggu)
-            $needsUpdate = KfaProduct::byProductType($productType)
-                ->where('last_sync', '<', now()->subWeek())
-                ->exists();
+            // Cari data di database terlebih dahulu
+            $products = KfaProduct::byProductType($productType)
+                ->search($keyword)
+                ->orderBy('name')
+                ->get();
 
-            // Jika ada data yang perlu diupdate atau belum ada data sama sekali
-            if ($needsUpdate || KfaProduct::byProductType($productType)->count() === 0) {
-                Log::info('Fetching fresh data from KFA API', [
+            // Jika tidak ada data di database, ambil dari API
+            if ($products->isEmpty()) {
+                Log::info('No data found in database, fetching from KFA API', [
                     'product_type' => $productType,
-                    'keyword' => $keyword,
-                    'needs_update' => $needsUpdate
+                    'keyword' => $keyword
                 ]);
 
                 // Ambil data dari API
                 $kfa = new Kfa();
                 $searchKeyword = $keyword ?? 'asam'; // Default keyword untuk menampilkan semua produk
-                $apiResponse = $kfa->getProducts($productType, $searchKeyword, 1);
+                $apiResponse = $kfa->getProducts($productType, $searchKeyword, 1, 1000);
                 if($apiResponse[0]=='200'){
                     $apiResponse = $apiResponse[1]->items;
                 }
 
                 if ($apiResponse && isset($apiResponse->data) && is_array($apiResponse->data)) {
-                    $products = $apiResponse->data;
+                    $apiProducts = $apiResponse->data;
                     // Simpan data ke database dengan transaction
-                    DB::transaction(function () use ($products, $productType) {
-                        foreach ($products as $product) {
+                    DB::transaction(function () use ($apiProducts, $productType) {
+                        foreach ($apiProducts as $product) {
                             $productData = is_object($product) ? (array) $product : $product;
                             KfaProduct::updateOrCreate(
                                 ['kfa_code' => (string) ($productData['kfa_code'] ?? $productData['kfa_code'] ?? '')],
@@ -231,6 +231,12 @@ class KfaController extends Controller
                             );
                         }
                     });
+
+                    // Ambil data yang baru disimpan
+                    $products = KfaProduct::byProductType($productType)
+                        ->search($keyword)
+                        ->orderBy('name')
+                        ->get();
                 }
             }
 
