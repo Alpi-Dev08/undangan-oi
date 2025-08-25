@@ -59,20 +59,26 @@
 
 @push('scripts')
 <script>
-let currentDrugId = null;
-let currentDrugName = null;
+// Define global variables at the top level
+window.currentDrugId = null;
+window.currentDrugName = null;
 
-function openKfaModal(drugId, drugName) {
-    currentDrugId = drugId;
-    currentDrugName = drugName;
+// Define global function at the top level
+window.openKfaModal = function(drugId, drugName) {
+    console.log('Opening KFA modal for:', drugName, 'ID:', drugId);
+    window.currentDrugId = drugId;
+    window.currentDrugName = drugName;
     
-    document.getElementById('drugId').value = currentDrugId;
-    document.getElementById('drugNameDisplay').value = currentDrugName;
+    document.getElementById('drugId').value = window.currentDrugId;
+    document.getElementById('drugNameDisplay').value = window.currentDrugName;
+    
+    // Update modal title
+    document.getElementById('kfaModalLabel').textContent = `Pilih KFA untuk: ${drugName}`;
     
     // Auto search saat modal dibuka
-    document.getElementById('kfaSearch').value = currentDrugName;
-    searchKfa(currentDrugName);
-}
+    document.getElementById('kfaSearch').value = window.currentDrugName;
+    searchKfa(window.currentDrugName);
+};
 
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -158,8 +164,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         const kfaName = this.dataset.kfaName;
                         
                         if (confirm(`Yakin ingin menghubungkan dengan ${kfaName}?`)) {
-                            updateKfaCode(currentDrugId, kfaCode, kfaName);
-                        }
+                              updateKfaCode(kfaCode, kfaName);
+                          }
                     });
                 });
             } else {
