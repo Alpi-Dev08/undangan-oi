@@ -90,6 +90,7 @@
                     datatable = $('#kfa-products-table').DataTable({
                         processing: true,
                         serverSide: false,
+                        searching: false,
                         ajax: {
                             url: "{{ route('kfa.products') }}",
                             type: 'GET',
@@ -134,7 +135,6 @@
                         responsive: true,
                         autoWidth: false,
                         language: {
-                            url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/en.json',
                             paginate: {
                                 first: '<i class="fas fa-angle-double-left"></i>',
                                 previous: '<i class="fas fa-angle-left"></i>',
@@ -210,6 +210,22 @@
                             success: function(response) {
                                 if (response.success && response.data) {
                                     let data = response.data;
+                                    let dosageForm = data.dosage_form || '-';
+                                    try {
+                                        if (typeof data.dosage_form === 'string' && data.dosage_form
+                                            .startsWith('{') || data.dosage_form.startsWith('[')) {
+                                            dosageForm = JSON.parse(data.dosage_form);
+                                            if (Array.isArray(dosageForm)) {
+                                                dosageForm = dosageForm.join(', ');
+                                            } else if (typeof dosageForm === 'object') {
+                                                dosageForm = dosageForm.name || dosageForm.form || JSON
+                                                    .stringify(dosageForm);
+                                            }
+                                        }
+                                    } catch (e) {
+                                        // Keep original dosageForm if parsing fails
+                                    }
+
                                     let html = `
                                     <div class="row">
                                         <div class="col-md-6">
@@ -247,6 +263,43 @@
                                             ${data.packaging || '-'}
                                         </div>
                                     </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <strong>Bentuk Sediaan:</strong><br>
+                                            ${dosageForm}
+                                        </div>
+                                        <div class="col-md-4">
+                                            <strong>Kekuatan:</strong><br>
+                                            ${data.strength || '-'} ${data.unit || ''}
+                                        </div>
+                                        <div class="col-md-4">
+                                            <strong>No. Registrasi:</strong><br>
+                                            ${data.registration_number || '-'}
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>Tanggal Registrasi:</strong><br>
+                                            ${data.registration_date ? new Date(data.registration_date).toLocaleDateString('id-ID') : '-'}
+                                        </div>
+                                        <div class="col-md-6">
+                                            <strong>Tanggal Kadaluarsa:</strong><br>
+                                            ${data.expiry_date ? new Date(data.expiry_date).toLocaleDateString('id-ID') : '-'}
+                                        </div>
+                                    </div>
+                                    ${data.description ? `
+                                                            <hr>
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <strong>Deskripsi:</strong><br>
+                                                                    <div class="border p-3 rounded bg-light">
+                                                                        ${data.description}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            ` : ''}
                                 `;
                                     $('#kfaDetailContent').html(html);
                                 } else {

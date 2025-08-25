@@ -89,9 +89,9 @@ class KfaProduct extends Model
         }
 
         return $query->where(function ($q) use ($keyword) {
-            $q->where('name', 'ilike', "%{$keyword}%")
-              ->orWhere('kfa_code', 'ilike', "%{$keyword}%")
-              ->orWhere('manufacturer', 'ilike', "%{$keyword}%");
+            $q->where('name', 'like', "%{$keyword}%")
+              ->orWhere('kfa_code', 'like', "%{$keyword}%")
+              ->orWhere('manufacturer', 'like', "%{$keyword}%");
         });
     }
 
