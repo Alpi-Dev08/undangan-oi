@@ -13,11 +13,12 @@
     @endif
     @if (Auth::user()->can('klinik.update'))
         <button type="button" 
-                class="btn btn-icon btn-bg-light btn-active-light-info btn-sm me-1 kfa-sync-btn"
+                class="btn btn-icon btn-bg-light btn-active-light-info btn-sm me-1"
                 data-drug-id="{{ $model->id }}"
                 data-drug-name="{{ $model->name }}"
                 data-bs-toggle="modal" 
-                data-bs-target="#kfaModal">
+                data-bs-target="#kfaModal"
+                onclick="openKfaModal('{{ $model->id }}', '{{ $model->name }}')">
             <i class="bi bi-search svg-icon-3"></i>
         </button>
     @endif

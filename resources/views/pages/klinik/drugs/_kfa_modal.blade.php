@@ -59,24 +59,22 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    let currentDrugId = null;
-    let currentDrugName = null;
+let currentDrugId = null;
+let currentDrugName = null;
 
-    // Event handler untuk tombol KFA sync
-    document.querySelectorAll('.kfa-sync-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            currentDrugId = this.dataset.drugId;
-            currentDrugName = this.dataset.drugName;
-            
-            document.getElementById('drugId').value = currentDrugId;
-            document.getElementById('drugNameDisplay').value = currentDrugName;
-            
-            // Auto search saat modal dibuka
-            document.getElementById('kfaSearch').value = currentDrugName;
-            searchKfa(currentDrugName);
-        });
-    });
+function openKfaModal(drugId, drugName) {
+    currentDrugId = drugId;
+    currentDrugName = drugName;
+    
+    document.getElementById('drugId').value = currentDrugId;
+    document.getElementById('drugNameDisplay').value = currentDrugName;
+    
+    // Auto search saat modal dibuka
+    document.getElementById('kfaSearch').value = currentDrugName;
+    searchKfa(currentDrugName);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
 
     // Event handler untuk tombol search
     document.getElementById('searchKfaBtn').addEventListener('click', function() {
@@ -97,6 +95,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function searchKfa(searchTerm) {
+        console.log('Mencari KFA dengan term:', searchTerm);
+        
         const loadingSpinner = document.getElementById('loadingSpinner');
         const noResults = document.getElementById('noResults');
         const kfaTable = document.getElementById('kfaTable');
@@ -106,11 +106,19 @@ document.addEventListener('DOMContentLoaded', function() {
         noResults.style.display = 'none';
         kfaTable.style.display = 'none';
 
+        const csrfToken = document.querySelector('meta[name="csrf-token"]');
+        if (!csrfToken) {
+            console.error('CSRF token tidak ditemukan');
+            alert('CSRF token tidak ditemukan. Silakan refresh halaman.');
+            return;
+        }
+
         fetch(`/klinik/drugs/kfa-search?drug_name=${encodeURIComponent(searchTerm)}`, {
             method: 'GET',
             headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Accept': 'application/json'
+                'X-CSRF-TOKEN': csrfToken.content,
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
             }
         })
         .then(response => response.json())
@@ -161,17 +169,27 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => {
             loadingSpinner.style.display = 'none';
             console.error('Error:', error);
-            alert('Terjadi kesalahan saat mencari data KFA');
+            alert('Terjadi kesalahan saat mencari data KFA: ' + error.message);
         });
     }
 
     function updateKfaCode(drugId, kfaCode, kfaName) {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]');
+        if (!csrfToken) {
+            console.error('CSRF token tidak ditemukan');
+            alert('CSRF token tidak ditemukan. Silakan refresh halaman.');
+            return;
+        }
+
+        console.log('Mengupdate KFA code untuk drug:', drugId, 'dengan kfaCode:', kfaCode);
+        
         fetch(`/klinik/drugs/${drugId}/update-kfa-code`, {
             method: 'POST',
             headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'X-CSRF-TOKEN': csrfToken.content,
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
             },
             body: JSON.stringify({
                 kfa_code: kfaCode,
@@ -199,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Terjadi kesalahan saat memperbarui data KFA');
+            alert('Terjadi kesalahan saat memperbarui data KFA: ' + error.message);
         });
     }
 });
