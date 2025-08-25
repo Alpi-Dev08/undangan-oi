@@ -8,7 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Satusehat\Integration\Terminology\Kfa;
+use Illuminate\Support\Facades\DB;
+use Modules\Klinik\App\Services\Kfa;
+use Modules\Klinik\Models\KfaProduct;
 
 class KfaController extends Controller
 {
@@ -23,7 +25,7 @@ class KfaController extends Controller
     }
 
     /**
-     * Get single product detail from KFA API
+     * Get single product detail from database with fallback to KFA API
      *
      * @param Request $request
      * @return JsonResponse
@@ -39,27 +41,97 @@ class KfaController extends Controller
             'kfa_code' => 'required|string'
         ]);
 
+        $kfaCode = $request->kfa_code;
+
         try {
-            $kfa = new Kfa();
-            $response = $kfa->getProduct('kfa', $request->kfa_code);
+            // Coba ambil dari database dulu
+            $product = KfaProduct::where('kfa_code', $kfaCode)->first();
 
-            Log::info('KFA API Response', [
-                'kfa_code' => $request->kfa_code,
-                'response' => $response
-            ]);
+            if ($product) {
+                Log::info('Serving product detail from database', [
+                    'kfa_code' => $kfaCode,
+                    'last_sync' => $product->last_sync
+                ]);
 
-            if (is_array($response) && isset($response[1])) {
-                $product = (array) $response[1];
                 return response()->json([
                     'success' => true,
                     'data' => [
-                        'kfa_code' => $product['kfa_code'] ?? '',
-                        'name' => $product['name'] ?? '',
-                        'manufacturer' => $product['manufacturer'] ?? '',
-                        'manufacturer_country' => $product['manufacturer_country'] ?? '',
-                        'fix_price' => $product['fix_price'] ?? 0,
-                        'het_price' => $product['het_price'] ?? 0,
-                        'packaging' => $product['packaging'] ?? '',
+                        'kfa_code' => $product->kfa_code,
+                        'name' => $product->name,
+                        'manufacturer' => $product->manufacturer,
+                        'manufacturer_country' => '',
+                        'fix_price' => $product->fix_price ?? 0,
+                        'het_price' => $product->het_price ?? 0,
+                        'packaging' => $product->packaging ?? '',
+                        'dosage_form' => $product->dosage_form ?? '',
+                        'strength' => $product->strength ?? '',
+                        'unit' => $product->unit ?? '',
+                        'registration_number' => $product->registration_number ?? '',
+                        'registration_date' => $product->registration_date ?? '',
+                        'expiry_date' => $product->expiry_date ?? '',
+                        'description' => $product->description ?? ''
+                    ]
+                ]);
+            }
+
+            // Jika tidak ada di database, ambil dari API
+            Log::info('Fetching product detail from KFA API', [
+                'kfa_code' => $kfaCode
+            ]);
+
+            $kfa = new Kfa();
+            $apiProduct = $kfa->getProductDetail($kfaCode);
+
+            Log::info('KFA API Response', [
+                'kfa_code' => $kfaCode,
+                'response' => $apiProduct
+            ]);
+
+            if ($apiProduct) {
+                
+                // Simpan ke database
+                $product = KfaProduct::updateOrCreate(
+                    ['kfa_code' => $kfaCode],
+                    [
+                        'name' => $apiProduct['name'] ?? '',
+                        'manufacturer' => $apiProduct['manufacturer'] ?? '',
+                        'product_type' => 'farmasi',
+                        'dosage_form' => $apiProduct['dosage_form'] ?? null,
+                        'strength' => $apiProduct['strength'] ?? null,
+                        'unit' => $apiProduct['unit'] ?? null,
+                        'packaging' => $apiProduct['packaging'] ?? null,
+                        'fix_price' => $apiProduct['fix_price'] ?? null,
+                        'het_price' => $apiProduct['het_price'] ?? null,
+                        'registration_number' => $apiProduct['registration_number'] ?? null,
+                        'registration_date' => $apiProduct['registration_date'] ?? null,
+                        'expiry_date' => $apiProduct['expiry_date'] ?? null,
+                        'description' => $apiProduct['description'] ?? null,
+                        'raw_data' => json_encode($apiProduct),
+                        'last_sync' => now()
+                    ]
+                );
+
+                Log::info('Product detail saved to database', [
+                    'kfa_code' => $kfaCode
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'data' => [
+                        'kfa_code' => $product->kfa_code,
+                        'name' => $product->name,
+                        'manufacturer' => $product->manufacturer,
+                        'manufacturer_country' => $apiProduct['manufacturer_country'] ?? '',
+                        'fix_price' => $product->fix_price ?? 0,
+                        'het_price' => $product->het_price ?? 0,
+                        'packaging' => $product->packaging ?? '',
+                        'dosage_form' => $product->dosage_form ?? '',
+                        'strength' => $product->strength ?? '',
+                        'unit' => $product->unit ?? '',
+                        'registration_number' => $product->registration_number ?? '',
+                        'registration_date' => $product->registration_date ?? '',
+                        'expiry_date' => $product->expiry_date ?? '',
+                        'description' => $product->description ?? ''
                     ]
                 ]);
             }
@@ -72,19 +144,20 @@ class KfaController extends Controller
         } catch (Exception $e) {
             Log::error('KFA API Error', [
                 'error' => $e->getMessage(),
-                'identifier' => $request->identifier,
-                'code' => $request->code
+                'kfa_code' => $kfaCode,
+                'trace' => $e->getTraceAsString()
             ]);
 
             return response()->json([
-                'error' => 'Gagal mengambil data dari KFA',
-                'message' => $e->getMessage()
+                'success' => false,
+                'message' => 'Gagal mengambil data dari KFA',
+                'error' => $e->getMessage()
             ], 500);
         }
     }
 
     /**
-     * Get products list from KFA API
+     * Get products list from KFA API with database caching
      *
      * @param Request $request
      * @return JsonResponse
@@ -102,53 +175,97 @@ class KfaController extends Controller
         ]);
 
         try {
-            $kfa = new Kfa();
-            
-            // Get products based on type and keyword
-            $keyword = $request->keyword ?? 'a'; // Default keyword untuk menampilkan semua produk
-            $response = $kfa->getProducts($request->product_type, $keyword, 1, 1000);
+            $productType = $request->product_type;
+            $keyword = $request->keyword;
 
-            Log::info('KFA API Products Response', [
-                'product_type' => $request->product_type,
-                'keyword' => $request->keyword,
-                'count' => count($response['data'] ?? [])
+            // Cek apakah ada data yang perlu diupdate (lebih dari 1 minggu)
+            $needsUpdate = KfaProduct::byProductType($productType)
+                ->where('last_sync', '<', now()->subWeek())
+                ->exists();
+
+            // Jika ada data yang perlu diupdate atau belum ada data sama sekali
+            if ($needsUpdate || KfaProduct::byProductType($productType)->count() === 0) {
+                Log::info('Fetching fresh data from KFA API', [
+                    'product_type' => $productType,
+                    'keyword' => $keyword,
+                    'needs_update' => $needsUpdate
+                ]);
+
+                // Ambil data dari API
+                $kfa = new Kfa();
+                $searchKeyword = $keyword ?? 'a'; // Default keyword untuk menampilkan semua produk
+                $products = $kfa->searchProducts($searchKeyword, $productType, 1000);
+
+                if (is_array($products) && count($products) > 0) {
+                    // Simpan data ke database dengan transaction
+                    DB::transaction(function () use ($products, $productType) {
+                        foreach ($products as $product) {
+                            $product = (array) $product;
+                            KfaProduct::updateOrCreate(
+                                ['kfa_code' => $product['kfa_code']],
+                                [
+                                    'name' => $product['name'] ?? '',
+                                    'manufacturer' => $product['manufacturer'] ?? '',
+                                    'product_type' => $productType,
+                                    'dosage_form' => $product['dosage_form'] ?? null,
+                                    'strength' => $product['strength'] ?? null,
+                                    'unit' => $product['unit'] ?? null,
+                                    'packaging' => $product['packaging'] ?? null,
+                                    'fix_price' => $product['fix_price'] ?? null,
+                                    'het_price' => $product['het_price'] ?? null,
+                                    'registration_number' => $product['registration_number'] ?? null,
+                                    'registration_date' => $product['registration_date'] ?? null,
+                                    'expiry_date' => $product['expiry_date'] ?? null,
+                                    'description' => $product['description'] ?? null,
+                                    'raw_data' => json_encode($product),
+                                    'last_sync' => now()
+                                ]
+                            );
+                        }
+                    });
+                }
+            }
+
+            // Ambil data dari database
+            $products = KfaProduct::byProductType($productType)
+                ->search($keyword)
+                ->orderBy('name')
+                ->get();
+
+            Log::info('Serving products from database', [
+                'product_type' => $productType,
+                'keyword' => $keyword,
+                'count' => $products->count()
             ]);
 
-            if (is_array($response) && isset($response[1]->items->data)) {
-                $data = collect($response[1]->items->data)->map(function ($item, $index) {
-                    return [
-                        'DT_RowIndex' => $index + 1,
-                        'kfa_code' => $item->kfa_code ?? '',
-                        'name' => $item->name ?? '',
-                        'manufacturer' => $item->manufacturer ?? '',
-                        'fix_price' => $item->fix_price ? 'Rp ' . number_format($item->fix_price, 0, ',', '.') : '-',
-                        'het_price' => $item->het_price ? 'Rp ' . number_format($item->het_price, 0, ',', '.') : '-',
-                        'action' => '<button class="btn btn-sm btn-info" onclick="viewKfaDetail(\'' . ($item->kfa_code ?? '') . '\')">Lihat Detail</button>'
-                    ];
-                })->toArray();
-                
-                return response()->json([
-                    'data' => $data,
-                    'recordsTotal' => $response[1]->items->total ?? count($data),
-                    'recordsFiltered' => $response[1]->items->total ?? count($data)
-                ]);
-            }
-            
+            $data = $products->map(function ($product, $index) {
+                return [
+                    'DT_RowIndex' => $index + 1,
+                    'kfa_code' => $product->kfa_code,
+                    'name' => $product->name,
+                    'manufacturer' => $product->manufacturer,
+                    'fix_price' => $product->fix_price ? 'Rp ' . number_format($product->fix_price, 0, ',', '.') : '-',
+                    'het_price' => $product->het_price ? 'Rp ' . number_format($product->het_price, 0, ',', '.') : '-',
+                    'action' => '<button class="btn btn-sm btn-info" onclick="viewKfaDetail(\'' . $product->kfa_code . '\')">Lihat Detail</button>'
+                ];
+            })->toArray();
+
             return response()->json([
-                'data' => [],
-                'recordsTotal' => 0,
-                'recordsFiltered' => 0
+                'data' => $data,
+                'recordsTotal' => count($data),
+                'recordsFiltered' => count($data)
             ]);
 
         } catch (Exception $e) {
-            Log::error('KFA API Products Error', [
+            Log::error('KFA Products Error', [
                 'error' => $e->getMessage(),
                 'product_type' => $request->product_type,
-                'keyword' => $request->keyword
+                'keyword' => $request->keyword,
+                'trace' => $e->getTraceAsString()
             ]);
 
             return response()->json([
-                'error' => 'Gagal mengambil data produk dari KFA',
+                'error' => 'Gagal mengambil data produk',
                 'message' => $e->getMessage()
             ], 500);
         }

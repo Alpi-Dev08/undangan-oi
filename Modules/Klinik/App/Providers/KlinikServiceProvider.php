@@ -3,6 +3,7 @@
 namespace Modules\Klinik\App\Providers;
 
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider;
 
 class KlinikServiceProvider extends ServiceProvider
@@ -37,7 +38,9 @@ class KlinikServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        // $this->commands([]);
+        $this->commands([
+            \Modules\Klinik\Console\UpdateKfaDataCommand::class,
+        ]);
     }
 
     /**
@@ -45,10 +48,10 @@ class KlinikServiceProvider extends ServiceProvider
      */
     protected function registerCommandSchedules(): void
     {
-        // $this->app->booted(function () {
-        //     $schedule = $this->app->make(Schedule::class);
-        //     $schedule->command('inspire')->hourly();
-        // });
+        $this->app->booted(function () {
+            $schedule = $this->app->make(Schedule::class);
+            $schedule->command('klinik:update-kfa-data')->weekly();
+        });
     }
 
     /**
