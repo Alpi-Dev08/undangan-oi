@@ -29,37 +29,37 @@
 </div>
 
 <script>
-/**
- * Show KFA detail modal
- * @param {string} kfaCode - KFA product code
- */
-function showKfaDetail(kfaCode) {
-    // Reset modal content
-    document.getElementById('kfaDetailContent').innerHTML = `
+    /**
+     * Show KFA detail modal
+     * @param {string} kfaCode - KFA product code
+     */
+    function showKfaDetail(kfaCode) {
+        // Reset modal content
+        document.getElementById('kfaDetailContent').innerHTML = `
         <div class="d-flex justify-content-center align-items-center" style="min-height: 200px;">
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
     `;
-    
-    // Show modal
-    const modal = new bootstrap.Modal(document.getElementById('kfaDetailModal'));
-    modal.show();
-    
-    // Fetch KFA detail
-    fetch(`/klinik/kfa/product-detail?kfa_code=${encodeURIComponent(kfaCode)}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            const product = data.data;
-            document.getElementById('kfaDetailContent').innerHTML = `
+
+        // Show modal
+        const modal = new bootstrap.Modal(document.getElementById('kfaDetailModal'));
+        modal.show();
+
+        // Fetch KFA detail
+        fetch(`/klinik/kfa/product-detail?kfa_code=${encodeURIComponent(kfaCode)}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const product = data.data;
+                    document.getElementById('kfaDetailContent').innerHTML = `
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
@@ -94,11 +94,37 @@ function showKfaDetail(kfaCode) {
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold">Kemasan</label>
-                            <div class="text-gray-800">${product.packaging || '-'}</div>
+                            <div class="text-gray-800">
+                                ${(() => {
+                                    try {
+                                        const packaging = product.packaging;
+                                        if (typeof packaging === 'string' && packaging.trim().startsWith('{')) {
+                                            const parsed = JSON.parse(packaging);
+                                            return parsed.name || '-';
+                                        }
+                                        return packaging || '-';
+                                    } catch (e) {
+                                        return packaging || '-';
+                                    }
+                                })()}
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold">Bentuk Sediaan</label>
-                            <div class="text-gray-800">${product.dosage_form || '-'}</div>
+                            <div class="text-gray-800">
+                                ${(() => {
+                                    try {
+                                        const dosageForm = product.dosage_form;
+                                        if (typeof dosageForm === 'string' && dosageForm.trim().startsWith('{')) {
+                                            const parsed = JSON.parse(dosageForm);
+                                            return parsed.name || '-';
+                                        }
+                                        return dosageForm || '-';
+                                    } catch (e) {
+                                        return dosageForm    || '-';
+                                    }
+                                })()}
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold">Kekuatan</label>
@@ -106,7 +132,20 @@ function showKfaDetail(kfaCode) {
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold">Satuan</label>
-                            <div class="text-gray-800">${product.unit || '-'}</div>
+                            <div class="text-gray-800">
+                                ${(() => {
+                                    try {
+                                        const unit = product.unit;
+                                        if (typeof unit === 'string' && unit.trim().startsWith('{')) {
+                                            const parsed = JSON.parse(unit);
+                                            return parsed.name || '-';
+                                        }
+                                        return unit || '-';
+                                    } catch (e) {
+                                        return unit || '-';
+                                    }
+                                })()}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -121,8 +160,8 @@ function showKfaDetail(kfaCode) {
                 </div>
                 ` : ''}
             `;
-        } else {
-            document.getElementById('kfaDetailContent').innerHTML = `
+                } else {
+                    document.getElementById('kfaDetailContent').innerHTML = `
                 <div class="text-center py-5">
                     <div class="text-gray-500">
                         <i class="ki-duotone ki-information-2 fs-3x mb-4"></i>
@@ -131,11 +170,11 @@ function showKfaDetail(kfaCode) {
                     </div>
                 </div>
             `;
-        }
-    })
-    .catch(error => {
-        console.error('Error fetching KFA detail:', error);
-        document.getElementById('kfaDetailContent').innerHTML = `
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching KFA detail:', error);
+                document.getElementById('kfaDetailContent').innerHTML = `
             <div class="text-center py-5">
                 <div class="text-danger">
                     <i class="ki-duotone ki-information-2 fs-3x mb-4"></i>
@@ -144,6 +183,6 @@ function showKfaDetail(kfaCode) {
                 </div>
             </div>
         `;
-    });
-}
+            });
+    }
 </script>
