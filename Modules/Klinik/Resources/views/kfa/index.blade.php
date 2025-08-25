@@ -89,6 +89,7 @@
 </x-base-layout>
 
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         "use strict";
 
@@ -132,11 +133,39 @@
 
             var handleSearchDatatable = function () {
                 $('#searchBtn').on('click', function () {
-                    datatable.ajax.reload();
+                    var keyword = $('#keyword').val().trim();
+                    if (keyword.length < 1) {
+                        Swal.fire({
+                            title: 'Peringatan',
+                            text: 'Silakan masukkan kata kunci pencarian',
+                            icon: 'warning',
+                            confirmButtonText: 'OK'
+                        });
+                        return;
+                    }
+                    
+                    var btn = $(this);
+                    btn.prop('disabled', true);
+                    btn.html('<i class="fas fa-spinner fa-spin"></i> Mencari...');
+                    
+                    datatable.ajax.reload(function() {
+                        btn.prop('disabled', false);
+                        btn.html('<i class="fas fa-search"></i> Cari');
+                    });
                 });
 
                 $('#keyword').on('keypress', function (e) {
                     if (e.which == 13) {
+                        var keyword = $(this).val().trim();
+                        if (keyword.length < 1) {
+                            Swal.fire({
+                                title: 'Peringatan',
+                                text: 'Silakan masukkan kata kunci pencarian',
+                                icon: 'warning',
+                                confirmButtonText: 'OK'
+                            });
+                            return;
+                        }
                         datatable.ajax.reload();
                     }
                 });

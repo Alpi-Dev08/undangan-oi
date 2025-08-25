@@ -98,14 +98,15 @@ class KfaController extends Controller
 
         $request->validate([
             'product_type' => 'required|string|in:farmasi,alkes',
-            'keyword' => 'required|string|min:3'
+            'keyword' => 'nullable|string|min:1'
         ]);
 
         try {
             $kfa = new Kfa();
             
             // Get products based on type and keyword
-            $response = $kfa->getProducts($request->product_type, $request->keyword, 1, 1000);
+            $keyword = $request->keyword ?? 'a'; // Default keyword untuk menampilkan semua produk
+            $response = $kfa->getProducts($request->product_type, $keyword, 1, 1000);
 
             Log::info('KFA API Products Response', [
                 'product_type' => $request->product_type,
