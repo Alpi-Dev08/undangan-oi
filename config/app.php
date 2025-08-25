@@ -175,6 +175,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\MigrationServiceProvider::class,
+        App\Providers\KfaServiceProvider::class,
 
         Yajra\DataTables\DataTablesServiceProvider::class,
         Yajra\DataTables\HtmlServiceProvider::class,
