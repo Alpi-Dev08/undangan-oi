@@ -215,6 +215,55 @@ class KfaDrugSyncService
     }
 
     /**
+     * Mencari produk KFA berdasarkan nama untuk modal popup
+     *
+     * @param string $drugName
+     * @param int $limit
+     * @return array
+     */
+    public function searchKfaProducts(string $drugName, int $limit = 10): array
+    {
+        try {
+            $kfaProducts = KfaProduct::query()
+                ->where('product_type', 'farmasi')
+                ->where(function ($query) use ($drugName) {
+                    $query->where('name', 'like', '%' . $drugName . '%')
+                          ->orWhere('name', 'like', '%' . $this->similarityService->normalizeString($drugName) . '%');
+                })
+                ->orderBy('name')
+                ->limit($limit)
+                ->get();
+
+            $results = [];
+            foreach ($kfaProducts as $product) {
+                $results[] = [
+                    'kfa_code' => $product->kfa_code,
+                    'name' => $product->name,
+                    'manufacturer' => $product->manufacturer,
+                    'strength' => $product->strength,
+                    'form' => $product->form,
+                    'unit' => $product->unit,
+                    'packaging' => $product->packaging,
+                    'price' => $product->price,
+                    'similarity_score' => $this->similarityService->calculateCombinedScore(
+                        $drugName,
+                        $product->name
+                    )
+                ];
+            }
+
+            return $results;
+
+        } catch (\Exception $e) {
+            Log::error('Error saat mencari produk KFA', [
+                'drug_name' => $drugName,
+                'error' => $e->getMessage()
+            ]);
+            return [];
+        }
+    }
+
+    /**
      * Mendapatkan drugs yang belum tersinkronisasi
      */
     public function getPendingDrugs(int $limit = 50): \Illuminate\Support\Collection

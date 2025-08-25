@@ -73,4 +73,7 @@
         <!--end::Card body-->
     </div>
     <!--end::Card-->
+
+    <!-- KFA Modal -->
+    @include('pages.klinik.drugs._kfa_modal')
 </x-base-layout>

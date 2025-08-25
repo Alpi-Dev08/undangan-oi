@@ -614,6 +614,127 @@ class DrugsController extends Controller
     }
 
     /**
+     * Mencari data KFA berdasarkan nama obat
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function kfaSearch(Request $request): JsonResponse
+    {
+        $request->validate([
+            'drug_name' => 'required|string|min:2'
+        ]);
+
+        try {
+            $drugName = $request->input('drug_name');
+            
+            // Gunakan KfaDrugSyncService untuk mencari data KFA
+            $kfaService = app(\Modules\Klinik\App\Services\KfaDrugSyncService::class);
+            $results = $kfaService->searchKfaProducts($drugName);
+
+            Log::info('Pencarian KFA berhasil', [
+                'user_id' => $this->user?->id,
+                'drug_name' => $drugName,
+                'results_count' => count($results)
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'data' => $results
+            ]);
+
+        } catch (Exception $e) {
+            Log::error('Gagal mencari data KFA', [
+                'user_id' => $this->user?->id,
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat mencari data KFA'
+            ], 500);
+        }
+    }
+
+    /**
+     * Memperbarui kfa_code untuk obat tertentu
+     *
+     * @param Request $request
+     * @param Drug $drug
+     * @return JsonResponse
+     */
+    public function updateKfaCode(Request $request, Drug $drug): JsonResponse
+    {
+        $request->validate([
+            'kfa_code' => 'required|string',
+            'kfa_name' => 'required|string',
+            'kfa_manufacturer' => 'nullable|string',
+            'kfa_strength' => 'nullable|string',
+            'kfa_form' => 'nullable|string'
+        ]);
+
+        if (is_null($this->user) || !$this->user->can('klinik.update')) {
+            Log::warning('Akses ditolak untuk update KFA code', [
+                'user_id' => $this->user?->id,
+                'drug_id' => $drug->id
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Maaf! Anda tidak memiliki izin untuk mengedit data master!'
+            ], 403);
+        }
+
+        DB::beginTransaction();
+        try {
+            $oldKfaCode = $drug->kfa_code;
+            
+            $drug->update([
+                'kfa_code' => $request->input('kfa_code'),
+                'kfa_name' => $request->input('kfa_name'),
+                'kfa_manufacturer' => $request->input('kfa_manufacturer'),
+                'kfa_strength' => $request->input('kfa_strength'),
+                'kfa_form' => $request->input('kfa_form'),
+                'kfa_updated_at' => now()
+            ]);
+
+            DB::commit();
+
+            Log::info('KFA code berhasil diperbarui', [
+                'user_id' => $this->user->id,
+                'drug_id' => $drug->id,
+                'drug_name' => $drug->name,
+                'old_kfa_code' => $oldKfaCode,
+                'new_kfa_code' => $request->input('kfa_code'),
+                'kfa_name' => $request->input('kfa_name')
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'KFA code berhasil diperbarui',
+                'data' => [
+                    'kfa_code' => $drug->kfa_code,
+                    'kfa_name' => $drug->kfa_name
+                ]
+            ]);
+
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            Log::error('Gagal memperbarui KFA code', [
+                'user_id' => $this->user->id,
+                'drug_id' => $drug->id,
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat memperbarui KFA code'
+            ], 500);
+        }
+    }
+
+    /**
      * Menampilkan form untuk import obat
      *
      * @return View

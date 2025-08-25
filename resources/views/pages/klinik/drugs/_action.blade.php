@@ -12,6 +12,16 @@
         </a>
     @endif
     @if (Auth::user()->can('klinik.update'))
+        <button type="button" 
+                class="btn btn-icon btn-bg-light btn-active-light-info btn-sm me-1 kfa-sync-btn"
+                data-drug-id="{{ $model->id }}"
+                data-drug-name="{{ $model->name }}"
+                data-bs-toggle="modal" 
+                data-bs-target="#kfaModal">
+            <i class="bi bi-search svg-icon-3"></i>
+        </button>
+    @endif
+    @if (Auth::user()->can('klinik.update'))
         <a href="{{ route('drugs.reduceDetail', ['drug' => $model->id]) }}"
             class="btn btn-icon btn-bg-light btn-active-light-primary btn-sm me-1">
             <i class="bi bi-dash-circle-fill svg-icon-3"></i>
