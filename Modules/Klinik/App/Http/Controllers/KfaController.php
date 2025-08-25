@@ -3,17 +3,25 @@
 namespace Modules\Klinik\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Klinik\Drug;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Satusehat\Integration\Terminology\Kfa;
 
 class KfaController extends Controller
 {
+    /**
+     * Display KFA products listing page
+     *
+     * @return \Illuminate\View\View
+     */
+    public function index()
+    {
+        return view('klinik::kfa.index');
+    }
+
     /**
      * Get single product detail from KFA API
      *
@@ -28,27 +36,40 @@ class KfaController extends Controller
         ]);
 
         $request->validate([
-            'identifier' => 'required|string|in:kfa,lkpp,nie',
-            'code' => 'required|string'
+            'kfa_code' => 'required|string'
         ]);
 
         try {
             $kfa = new Kfa();
-            $response = $kfa->getProduct($request->identifier, $request->code);
+            $response = $kfa->getProduct('kfa', $request->kfa_code);
 
             Log::info('KFA API Response', [
-                'identifier' => $request->identifier,
-                'code' => $request->code,
+                'kfa_code' => $request->kfa_code,
                 'response' => $response
             ]);
 
+            if (is_array($response) && isset($response[1])) {
+                $product = (array) $response[1];
+                return response()->json([
+                    'success' => true,
+                    'data' => [
+                        'kfa_code' => $product['kfa_code'] ?? '',
+                        'name' => $product['name'] ?? '',
+                        'manufacturer' => $product['manufacturer'] ?? '',
+                        'manufacturer_country' => $product['manufacturer_country'] ?? '',
+                        'fix_price' => $product['fix_price'] ?? 0,
+                        'het_price' => $product['het_price'] ?? 0,
+                        'packaging' => $product['packaging'] ?? '',
+                    ]
+                ]);
+            }
+
             return response()->json([
-                'search_code' => $request->code,
-                'search_identifier' => $request->identifier,
-                'result' => $response
+                'success' => false,
+                'message' => 'Produk tidak ditemukan'
             ]);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('KFA API Error', [
                 'error' => $e->getMessage(),
                 'identifier' => $request->identifier,
@@ -63,137 +84,71 @@ class KfaController extends Controller
     }
 
     /**
-     * Get products from KFA API for DataTables
-     *
-     * @param \App\DataTables\Klinik\KfaProductsDataTable $dataTable
-     * @return mixed
-     */
-    public function getProducts(\App\DataTables\Klinik\KfaProductsDataTable $dataTable)
-    {
-        Log::info('KFA Products DataTable Request', [
-            'user_id' => Auth::id()
-        ]);
-
-        return $dataTable->ajax();
-    }
-
-    /**
-     * Sync drug with KFA data
+     * Get products list from KFA API
      *
      * @param Request $request
      * @return JsonResponse
      */
-    public function syncDrugWithKfa(Request $request): JsonResponse
+    public function getProducts(Request $request): JsonResponse
     {
-        Log::info('Sync Drug with KFA Request', [
+        Log::info('KFA Products List Request', [
             'request' => $request->all(),
             'user_id' => Auth::id()
         ]);
 
         $request->validate([
-            'drug_id' => 'required|exists:drugs,id',
-            'kfa_code' => 'required|string',
-            'identifier' => 'required|string|in:kfa,lkpp,nie'
+            'product_type' => 'required|string|in:farmasi,alkes',
+            'keyword' => 'required|string|min:3'
         ]);
 
-        DB::beginTransaction();
-
         try {
-            $drug = Drug::findOrFail($request->drug_id);
-
-            // Get KFA data
             $kfa = new Kfa();
-            $kfaData = $kfa->getProduct($request->identifier, $request->kfa_code);
+            
+            // Get products based on type and keyword
+            $response = $kfa->getProducts($request->product_type, $request->keyword, 1, 1000);
 
-            // Update drug with KFA data
-            $drug->update([
-                'kfa_code' => $request->kfa_code,
-                'kfa_data' => json_encode($kfaData),
-                'name' => $kfaData['product_name'] ?? $drug->name,
-                'price' => $kfaData['price'] ?? $drug->price
+            Log::info('KFA API Products Response', [
+                'product_type' => $request->product_type,
+                'keyword' => $request->keyword,
+                'count' => count($response['data'] ?? [])
             ]);
 
-            DB::commit();
-
-            Log::info('Drug synced with KFA', [
-                'drug_id' => $drug->id,
-                'kfa_code' => $request->kfa_code,
-                'identifier' => $request->identifier
-            ]);
-
+            if (is_array($response) && isset($response[1]->items->data)) {
+                $data = collect($response[1]->items->data)->map(function ($item, $index) {
+                    return [
+                        'DT_RowIndex' => $index + 1,
+                        'kfa_code' => $item->kfa_code ?? '',
+                        'name' => $item->name ?? '',
+                        'manufacturer' => $item->manufacturer ?? '',
+                        'fix_price' => $item->fix_price ? 'Rp ' . number_format($item->fix_price, 0, ',', '.') : '-',
+                        'het_price' => $item->het_price ? 'Rp ' . number_format($item->het_price, 0, ',', '.') : '-',
+                        'action' => '<button class="btn btn-sm btn-info" onclick="viewKfaDetail(\'' . ($item->kfa_code ?? '') . '\')">Lihat Detail</button>'
+                    ];
+                })->toArray();
+                
+                return response()->json([
+                    'data' => $data,
+                    'recordsTotal' => $response[1]->items->total ?? count($data),
+                    'recordsFiltered' => $response[1]->items->total ?? count($data)
+                ]);
+            }
+            
             return response()->json([
-                'success' => true,
-                'message' => 'Obat berhasil disinkronisasi dengan data KFA',
-                'data' => $drug->fresh()
-            ]);
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Sync Drug with KFA Error', [
-                'error' => $e->getMessage(),
-                'drug_id' => $request->drug_id,
-                'kfa_code' => $request->kfa_code
-            ]);
-
-            return response()->json([
-                'error' => 'Gagal menyinkronisasi obat dengan KFA',
-                'message' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Display KFA integration interface
-     *
-     * @return \Illuminate\View\View
-     */
-    public function index()
-    {
-        return view('klinik::kfa.index');
-    }
-
-    /**
-     * Get drugs with KFA data for DataTables
-     *
-     * @param \App\DataTables\Klinik\KfaSyncedDrugsDataTable $dataTable
-     * @return mixed
-     */
-    public function getDrugsWithKfa(\App\DataTables\Klinik\KfaSyncedDrugsDataTable $dataTable)
-    {
-        Log::info('Get Drugs with KFA DataTable Request', [
-            'user_id' => Auth::id()
-        ]);
-
-        return $dataTable->ajax();
-    }
-
-    /**
-     * Get drugs for select dropdown
-     *
-     * @return JsonResponse
-     */
-    public function getDrugsForSelect(): JsonResponse
-    {
-        try {
-            $drugs = Drug::select(['id', 'name'])
-                ->whereNull('kfa_code')
-                ->orderBy('name')
-                ->get();
-
-            return response()->json([
-                'success' => true,
-                'data' => $drugs
+                'data' => [],
+                'recordsTotal' => 0,
+                'recordsFiltered' => 0
             ]);
 
         } catch (Exception $e) {
-            Log::error('Error getting drugs for select', [
+            Log::error('KFA API Products Error', [
                 'error' => $e->getMessage(),
-                'user_id' => Auth::id()
+                'product_type' => $request->product_type,
+                'keyword' => $request->keyword
             ]);
 
             return response()->json([
-                'success' => false,
-                'message' => 'Gagal mengambil data obat'
+                'error' => 'Gagal mengambil data produk dari KFA',
+                'message' => $e->getMessage()
             ], 500);
         }
     }

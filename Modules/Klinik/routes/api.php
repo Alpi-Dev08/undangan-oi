@@ -20,13 +20,6 @@ Route::prefix('v1')->name('api.')->group(function () {
     Route::prefix('kfa')->name('kfa.')->group(function () {
         Route::get('product-detail', [KfaController::class, 'getProductDetail'])->name('product-detail');
         Route::get('products', [KfaController::class, 'getProducts'])->name('products');
-        Route::post('sync-drug', [KfaController::class, 'syncDrugWithKfa'])->name('sync-drug');
-        Route::get('drugs-with-kfa', [KfaController::class, 'getDrugsWithKfa'])->name('drugs-with-kfa');
-    });
-
-    // Drugs Routes
-    Route::prefix('drugs')->name('drugs.')->group(function () {
-        Route::get('select-options', [KfaController::class, 'getDrugsForSelect'])->name('select-options');
     });
 
 });

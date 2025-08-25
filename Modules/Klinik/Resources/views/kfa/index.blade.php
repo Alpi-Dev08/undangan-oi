@@ -1,78 +1,56 @@
-<x-base-layout>
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Integrasi KFA (National Formulary) SATUSEHAT</h3>
-        </div>
-        <div class="card-body">
-            <!-- Search Form -->
-            <div class="row mb-4">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Cari Produk KFA</h4>
-                        </div>
-                        <div class="card-body">
-                            <form id="kfaSearchForm" class="mb-4">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label class="form-label">Tipe Produk</label>
-                                        <select class="form-select" id="productType" required>
-                                            <option value="farmasi">Farmasi</option>
-                                            <option value="alkes">Alat Kesehatan</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Kata Kunci</label>
-                                        <input type="text" class="form-control" id="keyword"
-                                            placeholder="Masukkan nama produk...">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">&nbsp;</label>
-                                        <button type="submit" class="btn btn-primary d-block">Cari</button>
-                                    </div>
-                                </div>
-                            </form>
+@extends('layouts.app')
 
-                            <!-- KFA Products DataTable -->
-                            <div class="table-responsive">
-                                <table id="kfa-products-table" class="table table-striped table-row-bordered gy-5 gs-7">
-                                    <thead>
-                                        <tr>
-                                            <th>Kode</th>
-                                            <th>Nama Produk</th>
-                                            <th>Manufaktur</th>
-                                            <th>Harga</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
+@section('title', 'Daftar Produk KFA')
+
+@section('content')
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Daftar Produk KFA</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Synced Drugs DataTable -->
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Obat yang Sudah Disinkronkan</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="kfa-synced-drugs-table" class="table table-striped table-row-bordered gy-5 gs-7">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Nama Obat</th>
-                                            <th>Kode KFA</th>
-                                            <th>Harga KFA</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                </table>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="productType">Jenis Produk</label>
+                                <select class="form-control" id="productType">
+                                    <option value="farmasi">Farmasi</option>
+                                    <option value="alkes">Alat Kesehatan</option>
+                                </select>
                             </div>
+                            <div class="col-md-6">
+                                <label for="keyword">Kata Kunci</label>
+                                <input type="text" class="form-control" id="keyword" placeholder="Masukkan nama produk atau kode KFA">
+                            </div>
+                            <div class="col-md-2">
+                                <label>&nbsp;</label>
+                                <button type="button" class="btn btn-primary btn-block" id="searchBtn">
+                                    <i class="fas fa-search"></i> Cari
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped" id="kfa-products-table" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Kode KFA</th>
+                                        <th>Nama Produk</th>
+                                        <th>Produsen</th>
+                                        <th>Harga Fix</th>
+                                        <th>HET</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -80,60 +58,37 @@
         </div>
     </div>
 
-    <!-- Modal for Drug Sync -->
-    <div class="modal fade" id="syncModal" tabindex="-1">
-        <div class="modal-dialog">
+    <!-- Modal Detail Produk -->
+    <div class="modal fade" id="kfaDetailModal" tabindex="-1" role="dialog" aria-labelledby="kfaDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Sinkronisasi dengan Obat</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title" id="kfaDetailModalLabel">Detail Produk KFA</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
-                    <form id="syncForm">
-                        <div class="mb-3">
-                            <label class="form-label">Pilih Obat</label>
-                            <select class="form-select" id="drugSelect" required>
-                                <option value="">Pilih obat...</option>
-                            </select>
-                        </div>
-                        <input type="hidden" id="kfaCode" value="">
-                        <input type="hidden" id="kfaIdentifier" value="">
-                    </form>
+                    <div id="kfaDetailContent">
+                        <!-- Content will be loaded here -->
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-primary" id="syncButton">Sinkronkan</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </div>
     </div>
+@endsection
 
-    @push('customscript')
-        <script>
-            $(document).ready(function() {
-                // Initialize DataTables
-            initializeKfaProductsTable();
-            initializeKfaSyncedDrugsTable();
-            
-            // Load drugs for sync modal
-            loadDrugsForSelect();
-
-            // Search form submission
-            $('#kfaSearchForm').on('submit', function(e) {
-                e.preventDefault();
-                $('#kfa-products-table').DataTable().ajax.reload();
-            });
-
-            // Sync button click
-            $('#syncButton').on('click', syncDrugWithKfa);
-        });
-
-        function initializeKfaProductsTable() {
-            $('#kfa-products-table').DataTable({
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            let kfaProductsTable = $('#kfa-products-table').DataTable({
                 processing: true,
                 serverSide: false,
                 ajax: {
-                    url: '/api/v1/kfa/products',
+                    url: "{{ route('kfa.products') }}",
                     type: 'GET',
                     data: function(d) {
                         d.product_type = $('#productType').val();
@@ -141,183 +96,92 @@
                     }
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'DT_RowIndex', title: 'No', orderable: false, searchable: false },
-                    { data: 'kfa_code', name: 'kfa_code', title: 'Kode KFA' },
-                    { data: 'name', name: 'name', title: 'Nama Produk' },
-                    { data: 'manufacturer', name: 'manufacturer', title: 'Produsen' },
-                    { data: 'fix_price', name: 'fix_price', title: 'Harga Fix', render: function(data) {
-                        return 'Rp ' + new Intl.NumberFormat('id-ID').format(data || 0);
-                    }},
-                    { data: 'het_price', name: 'het_price', title: 'HET', render: function(data) {
-                        return 'Rp ' + new Intl.NumberFormat('id-ID').format(data || 0);
-                    }},
-                    { 
-                        data: 'action', 
-                        name: 'action', 
-                        title: 'Aksi', 
-                        orderable: false, 
-                        searchable: false,
-                        render: function(data, type, row) {
-                            return '<button class="btn btn-sm btn-primary sync-btn" data-kfa-code="' + (row.kfa_code || '') + '" data-product-code="' + (row.product_code || '') + '">Sinkronkan</button>';
-                        }
-                    }
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                    { data: 'kfa_code', name: 'kfa_code' },
+                    { data: 'name', name: 'name' },
+                    { data: 'manufacturer', name: 'manufacturer' },
+                    { data: 'fix_price', name: 'fix_price' },
+                    { data: 'het_price', name: 'het_price' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false }
                 ],
                 responsive: true,
-                autoWidth: true,
-                scrollX: true,
-                pageLength: 10,
-                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
-            });
-
-            // Handle sync button clicks
-            $('#kfa-products-table').on('click', '.sync-btn', function() {
-                const kfaCode = $(this).data('kfa-code');
-                const productCode = $(this).data('product-code');
-                openSyncModal(kfaCode, 'kfa');
-            });
-        }
-
-        function initializeKfaSyncedDrugsTable() {
-            $('#kfa-synced-drugs-table').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    url: '/api/v1/kfa/drugs-with-kfa',
-                    type: 'GET'
-                },
-                columns: [
-                    { data: 'DT_RowIndex', name: 'DT_RowIndex', title: 'No', orderable: false, searchable: false },
-                    { data: 'name', name: 'name', title: 'Nama Obat' },
-                    {
-                        data: 'kfa_code', 
-                        name: 'kfa_code', 
-                        title: 'Kode KFA',
-                        render: function(data, type, row) {
-                            return data ? '<span class="badge badge-light-success">✓ ' + data + '</span>' : '<span class="badge badge-light-warning">✗</span>';
-                        }
-                    },
-                    { 
-                        data: 'price', 
-                        name: 'price', 
-                        title: 'Harga',
-                        render: function(data, type, row) {
-                            return 'Rp ' + new Intl.NumberFormat('id-ID').format(data || 0);
-                        }
-                    },
-                    { data: 'stock', name: 'stock', title: 'Stok' },
-                    { 
-                        data: 'action', 
-                        name: 'action', 
-                        title: 'Aksi', 
-                        orderable: false, 
-                        searchable: false,
-                        render: function(data, type, row) {
-                            return `<button class="btn btn-sm btn-info view-btn" 
-                                data-kfa-code="${row.kfa_code}">
-                                Lihat Detail
-                            </button>`;
-                        }
-                    }
-                ],
-                responsive: true,
-                autoWidth: true,
-                scrollX: true,
-                pageLength: 10,
-                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
-            });
-
-            // Handle view detail clicks
-            $('#kfa-synced-drugs-table').on('click', '.view-btn', function() {
-                const kfaCode = $(this).data('kfa-code');
-                viewKfaDetail(kfaCode);
-            });
-        }
-
-            function loadDrugsForSelect() {
-                $.ajax({
-                    url: '/api/v1/drugs/select-options',
-                    method: 'GET',
-                    success: function(response) {
-                        const drugSelect = $('#drugSelect');
-                        drugSelect.empty();
-                        drugSelect.append('<option value="">Pilih obat...</option>');
-                        
-                        if (response.success && response.data) {
-                            response.data.forEach(function(drug) {
-                                drugSelect.append(`<option value="${drug.id}">${drug.name}</option>`);
-                            });
-                        }
-                    },
-                    error: function() {
-                        console.error('Failed to load drugs');
-                    }
-                });
-            }
-
-            function openSyncModal(kfaCode, identifier) {
-                $('#kfaCode').val(kfaCode);
-                $('#kfaIdentifier').val(identifier);
-                new bootstrap.Modal(document.getElementById('syncModal')).show();
-            }
-
-            async function syncDrugWithKfa() {
-                const drugId = $('#drugSelect').val();
-                const kfaCode = $('#kfaCode').val();
-                const identifier = $('#kfaIdentifier').val();
-
-                if (!drugId) {
-                    alert('Pilih obat terlebih dahulu');
-                    return;
+                autoWidth: false,
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json'
                 }
+            });
 
-                try {
-                    const response = await fetch('/api/v1/kfa/sync-drug', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json',
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        body: JSON.stringify({
-                            drug_id: drugId,
-                            kfa_code: kfaCode,
-                            identifier: identifier
-                        })
-                    });
+            $('#searchBtn').click(function() {
+                kfaProductsTable.ajax.reload();
+            });
 
-                    const data = await response.json();
+            $('#keyword').keypress(function(e) {
+                if (e.which == 13) {
+                    kfaProductsTable.ajax.reload();
+                }
+            });
+        });
 
-                    if (response.ok) {
-                        alert('Obat berhasil disinkronisasi dengan KFA');
-                        bootstrap.Modal.getInstance(document.getElementById('syncModal')).hide();
+        function viewKfaDetail(kfaCode) {
+            if (!kfaCode) return;
 
-                        // Reload both DataTables
-                        $('#kfa-products-table').DataTable().ajax.reload();
-                        $('#kfa-synced-drugs-table').DataTable().ajax.reload();
-                        
-                        // Reload drugs select options
-                        loadDrugsForSelect();
+            $('#kfaDetailContent').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Memuat...</div>');
+            $('#kfaDetailModal').modal('show');
+
+            $.ajax({
+                url: `{{ route('kfa.product-detail') }}`,
+                type: 'GET',
+                data: { kfa_code: kfaCode },
+                success: function(response) {
+                    if (response.success && response.data) {
+                        let data = response.data;
+                        let html = `
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <strong>Kode KFA:</strong><br>
+                                    ${data.kfa_code || '-'}
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Nama Produk:</strong><br>
+                                    ${data.name || '-'}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <strong>Produsen:</strong><br>
+                                    ${data.manufacturer || '-'}
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Negara Produsen:</strong><br>
+                                    ${data.manufacturer_country || '-'}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <strong>Harga Fix:</strong><br>
+                                    ${data.fix_price ? 'Rp ' + new Intl.NumberFormat('id-ID').format(data.fix_price) : '-'}
+                                </div>
+                                <div class="col-md-4">
+                                    <strong>HET:</strong><br>
+                                    ${data.het_price ? 'Rp ' + new Intl.NumberFormat('id-ID').format(data.het_price) : '-'}
+                                </div>
+                                <div class="col-md-4">
+                                    <strong>Kemasan:</strong><br>
+                                    ${data.packaging || '-'}
+                                </div>
+                            </div>
+                        `;
+                        $('#kfaDetailContent').html(html);
                     } else {
-                        alert('Gagal menyinkronisasi: ' + data.message);
+                        $('#kfaDetailContent').html('<div class="alert alert-danger">' + (response.message || 'Gagal memuat detail produk.') + '</div>');
                     }
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('Gagal menyinkronisasi obat');
+                },
+                error: function() {
+                    $('#kfaDetailContent').html('<div class="alert alert-danger">Terjadi kesalahan saat memuat data.</div>');
                 }
-            }
-
-            function viewKfaDetail(kfaCode) {
-                // Redirect to detail page or open modal with details
-                window.open(`/api/v1/kfa/product-detail?identifier=kfa&code=${kfaCode}`, '_blank');
-            }
-        </script>
-    @endpush
-
-    @section('styles')
-        <style>
-            .dataTables_filter {
-                display: none;
-            }
-        </style>
-    @endsection
-</x-base-layout>
+            });
+        }
+    </script>
+@endpush

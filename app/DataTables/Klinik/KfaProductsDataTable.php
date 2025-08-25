@@ -22,7 +22,7 @@ class KfaProductsDataTable extends DataTable
             ->collection($query)
             ->addIndexColumn()
             ->addColumn('action', function ($product) {
-                return '<button class="btn btn-sm btn-primary sync-btn" data-kfa-code="' . ($product['kfa_code'] ?? '') . '" data-product-code="' . ($product['product_code'] ?? '') . '">Sinkronkan</button>';
+                return '<button class="btn btn-sm btn-primary" onclick="viewKfaDetail(\'' . ($product['kfa_code'] ?? '') . '\')">Lihat Detail</button>';
             })
             ->editColumn('fix_price', function ($product) {
                 return isset($product['fix_price']) ? 'Rp ' . number_format($product['fix_price'], 0, ',', '.') : '-';
@@ -105,6 +105,7 @@ class KfaProductsDataTable extends DataTable
             Column::make('fix_price')->title('Harga Fix'),
             Column::make('het_price')->title('HET'),
             Column::computed('action')
+                ->title('Aksi')
                 ->exportable(false)
                 ->printable(false)
                 ->addClass('text-center')

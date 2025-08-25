@@ -20,5 +20,7 @@ Route::middleware(['auth'])->group(function () {
     // KFA Integration Routes
     Route::prefix('kfa')->name('kfa.')->group(function () {
         Route::get('/', [KfaController::class, 'index'])->name('index');
+        Route::get('products', [KfaController::class, 'getProducts'])->name('products');
+        Route::get('product-detail', [KfaController::class, 'getProductDetail'])->name('product-detail');
     });
 });
