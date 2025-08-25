@@ -32,6 +32,7 @@ class KfaController extends Controller
      */
     public function getProductDetail(Request $request): JsonResponse
     {
+
         Log::info('KFA Product Detail Request', [
             'request' => $request->all(),
             'user_id' => Auth::id()
@@ -80,7 +81,7 @@ class KfaController extends Controller
             ]);
 
             $kfa = new Kfa();
-            $apiProduct = $kfa->get_by_id($kfaCode);
+            $apiProduct = $kfa->get_by_id($kfaCode, 'farmasi');
 
             Log::info('KFA API Response', [
                 'kfa_code' => $kfaCode,
@@ -88,25 +89,27 @@ class KfaController extends Controller
             ]);
 
             if ($apiProduct) {
-                
+                // Convert to array if it's an object
+                $productData = is_object($apiProduct) ? (array) $apiProduct : $apiProduct;
+
                 // Simpan ke database
                 $product = KfaProduct::updateOrCreate(
-                    ['kfa_code' => $kfaCode],
+                    ['kfa_code' => (string) $kfaCode],
                     [
-                        'name' => $apiProduct['name'] ?? '',
-                        'manufacturer' => $apiProduct['manufacturer'] ?? '',
+                        'name' => (string) ($productData['name'] ?? $productData['name'] ?? ''),
+                        'manufacturer' => (string) ($productData['manufacturer'] ?? $productData['manufacturer'] ?? ''),
                         'product_type' => 'farmasi',
-                        'dosage_form' => $apiProduct['dosage_form'] ?? null,
-                        'strength' => $apiProduct['strength'] ?? null,
-                        'unit' => $apiProduct['unit'] ?? null,
-                        'packaging' => $apiProduct['packaging'] ?? null,
-                        'fix_price' => $apiProduct['fix_price'] ?? null,
-                        'het_price' => $apiProduct['het_price'] ?? null,
-                        'registration_number' => $apiProduct['registration_number'] ?? null,
-                        'registration_date' => $apiProduct['registration_date'] ?? null,
-                        'expiry_date' => $apiProduct['expiry_date'] ?? null,
-                        'description' => $apiProduct['description'] ?? null,
-                        'raw_data' => json_encode($apiProduct),
+                        'dosage_form' => isset($productData['dosage_form']) ? (string) $productData['dosage_form'] : null,
+                        'strength' => isset($productData['strength']) ? (string) $productData['strength'] : null,
+                        'unit' => isset($productData['unit']) ? (string) $productData['unit'] : null,
+                        'packaging' => isset($productData['packaging']) ? (string) $productData['packaging'] : null,
+                        'fix_price' => isset($productData['fix_price']) ? (float) $productData['fix_price'] : null,
+                        'het_price' => isset($productData['het_price']) ? (float) $productData['het_price'] : null,
+                        'registration_number' => isset($productData['registration_number']) ? (string) $productData['registration_number'] : null,
+                        'registration_date' => isset($productData['registration_date']) ? (string) $productData['registration_date'] : null,
+                        'expiry_date' => isset($productData['expiry_date']) ? (string) $productData['expiry_date'] : null,
+                        'description' => isset($productData['description']) ? (string) $productData['description'] : null,
+                        'raw_data' => json_encode($productData),
                         'last_sync' => now()
                     ]
                 );
@@ -193,32 +196,33 @@ class KfaController extends Controller
 
                 // Ambil data dari API
                 $kfa = new Kfa();
-                $searchKeyword = $keyword ?? 'a'; // Default keyword untuk menampilkan semua produk
-                $products = $kfa->getProducts($searchKeyword, $productType, 1000);
+                $searchKeyword = $keyword ?? 'asam'; // Default keyword untuk menampilkan semua produk
+                $apiResponse = $kfa->getProducts($productType, $searchKeyword, 1);
 
-                if (is_array($products) && count($products) > 0) {
+                if ($apiResponse && isset($apiResponse->data) && is_array($apiResponse->data)) {
+                    $products = $apiResponse->data;
                     // Simpan data ke database dengan transaction
                     DB::transaction(function () use ($products, $productType) {
                         foreach ($products as $product) {
-                            $product = (array) $product;
+                            $productData = is_object($product) ? (array) $product : $product;
                             KfaProduct::updateOrCreate(
-                                ['kfa_code' => $product['kfa_code']],
+                                ['kfa_code' => (string) ($productData['kfa_code'] ?? $productData['kfa_code'] ?? '')],
                                 [
-                                    'name' => $product['name'] ?? '',
-                                    'manufacturer' => $product['manufacturer'] ?? '',
-                                    'product_type' => $productType,
-                                    'dosage_form' => $product['dosage_form'] ?? null,
-                                    'strength' => $product['strength'] ?? null,
-                                    'unit' => $product['unit'] ?? null,
-                                    'packaging' => $product['packaging'] ?? null,
-                                    'fix_price' => $product['fix_price'] ?? null,
-                                    'het_price' => $product['het_price'] ?? null,
-                                    'registration_number' => $product['registration_number'] ?? null,
-                                    'registration_date' => $product['registration_date'] ?? null,
-                                    'expiry_date' => $product['expiry_date'] ?? null,
-                                    'description' => $product['description'] ?? null,
-                                    'raw_data' => json_encode($product),
-                                    'last_sync' => now()
+                                    'name'                => (string) ($productData['name'] ?? $productData['name'] ?? ''),
+                                    'manufacturer'        => (string) ($productData['manufacturer'] ?? $productData['manufacturer'] ?? ''),
+                                    'product_type'        => $productType,
+                                    'dosage_form'         => isset($productData['dosage_form']) ? (string) $productData['dosage_form'] : null,
+                                    'strength'            => isset($productData['strength']) ? (string) $productData['strength'] : null,
+                                    'unit'                => isset($productData['unit']) ? (string) $productData['unit'] : null,
+                                    'packaging'           => isset($productData['packaging']) ? (string) $productData['packaging'] : null,
+                                    'fix_price'           => isset($productData['fix_price']) ? (float) $productData['fix_price'] : null,
+                                    'het_price'           => isset($productData['het_price']) ? (float) $productData['het_price'] : null,
+                                    'registration_number' => isset($productData['registration_number']) ? (string) $productData['registration_number'] : null,
+                                    'registration_date'   => isset($productData['registration_date']) ? (string) $productData['registration_date'] : null,
+                                    'expiry_date'         => isset($productData['expiry_date']) ? (string) $productData['expiry_date'] : null,
+                                    'description'         => isset($productData['description']) ? (string) $productData['description'] : null,
+                                    'raw_data'            => json_encode($productData),
+                                    'last_sync'           => now()
                                 ]
                             );
                         }

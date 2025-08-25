@@ -90,7 +90,6 @@
                     datatable = $('#kfa-products-table').DataTable({
                         processing: true,
                         serverSide: false,
-                        searching: false,
                         ajax: {
                             url: "{{ route('kfa.products') }}",
                             type: 'GET',

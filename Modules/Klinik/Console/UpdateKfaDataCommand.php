@@ -47,25 +47,27 @@ class UpdateKfaDataCommand extends Command
                     $this->info("Updating product: {$product->kfa_code} - {$product->name}");
                     
                     // Ambil detail produk dari API
-                    $apiProduct = $kfa->get_by_id($product->kfa_code);
+                    $apiProduct = $kfa->get_by_id($product->kfa_code, $product->product_type);
                     
                     if ($apiProduct) {
+                        // Convert to array if it's an object for consistent handling
+                        $productData = is_object($apiProduct) ? (array) $apiProduct : $apiProduct;
                         
                         // Update data produk
                         $product->update([
-                            'name' => $apiProduct->name ?? $product->name,
-                            'manufacturer' => $apiProduct->manufacturer ?? $product->manufacturer,
-                            'dosage_form' => $apiProduct->dosage_form ?? $product->dosage_form,
-                            'strength' => $apiProduct->strength ?? $product->strength,
-                            'unit' => $apiProduct->unit ?? $product->unit,
-                            'packaging' => $apiProduct->packaging ?? $product->packaging,
-                            'fix_price' => $apiProduct->fix_price ?? $product->fix_price,
-                            'het_price' => $apiProduct->het_price ?? $product->het_price,
-                            'registration_number' => $apiProduct->registration_number ?? $product->registration_number,
-                            'registration_date' => $apiProduct->registration_date ?? $product->registration_date,
-                            'expiry_date' => $apiProduct->expiry_date ?? $product->expiry_date,
-                            'description' => $apiProduct->description ?? $product->description,
-                            'raw_data' => json_encode($apiProduct),
+                            'name' => (string) ($productData['name'] ?? $productData['name'] ?? $product->name),
+                            'manufacturer' => (string) ($productData['manufacturer'] ?? $productData['manufacturer'] ?? $product->manufacturer),
+                            'dosage_form' => isset($productData['dosage_form']) ? (string) $productData['dosage_form'] : $product->dosage_form,
+                            'strength' => isset($productData['strength']) ? (string) $productData['strength'] : $product->strength,
+                            'unit' => isset($productData['unit']) ? (string) $productData['unit'] : $product->unit,
+                            'packaging' => isset($productData['packaging']) ? (string) $productData['packaging'] : $product->packaging,
+                            'fix_price' => isset($productData['fix_price']) ? (float) $productData['fix_price'] : $product->fix_price,
+                            'het_price' => isset($productData['het_price']) ? (float) $productData['het_price'] : $product->het_price,
+                            'registration_number' => isset($productData['registration_number']) ? (string) $productData['registration_number'] : $product->registration_number,
+                            'registration_date' => isset($productData['registration_date']) ? (string) $productData['registration_date'] : $product->registration_date,
+                            'expiry_date' => isset($productData['expiry_date']) ? (string) $productData['expiry_date'] : $product->expiry_date,
+                            'description' => isset($productData['description']) ? (string) $productData['description'] : $product->description,
+                            'raw_data' => json_encode($productData),
                             'last_sync' => now()
                         ]);
                         
