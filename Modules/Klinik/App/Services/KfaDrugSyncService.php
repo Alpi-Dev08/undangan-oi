@@ -264,6 +264,23 @@ class KfaDrugSyncService
     }
 
     /**
+     * Update drug dengan hasil match dari KFA
+     */
+    private function updateDrugWithMatch(Drug $drug, array $matchResult): void
+    {
+        $drug->update([
+            'kfa_code' => $matchResult['kfa_code'],
+            'similarity_score' => $matchResult['similarity_score'],
+            'matching_metadata' => json_encode([
+                'kfa_name' => $matchResult['kfa_name'],
+                'manufacturer' => $matchResult['manufacturer'],
+                'matched_at' => now()->toDateTimeString()
+            ]),
+            'last_sync_attempt' => now()
+        ]);
+    }
+
+    /**
      * Batch update dari data KFA
      */
     public function batchUpdateFromKfa(array $kfaCodes): array

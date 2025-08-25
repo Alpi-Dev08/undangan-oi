@@ -31,6 +31,12 @@ class KlinikServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(module_path('Klinik', '/Routes/web.php'));
         $this->loadViewsFrom(module_path('Klinik', '/Resources/views'), 'klinik');
         $this->loadTranslationsFrom(module_path('Klinik', '/Resources/lang'), 'klinik');
-        $this->loadCommandsFrom(module_path('Klinik', '/Console/Commands'));
+        
+        // Daftarkan commands secara manual
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                \Modules\Klinik\Console\Commands\SyncKfaDrugsCommand::class,
+            ]);
+        }
     }
 }
