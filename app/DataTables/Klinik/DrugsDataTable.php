@@ -44,20 +44,7 @@ class DrugsDataTable extends DataTable
             })
             ->addColumn('kfa_code', function (Drug $model) {
                 if ($model->kfa_code) {
-                    // Get KFA service instance
-                    $kfaService = app('App\Services\KfaService');
-
-                    // Get KFA product detail
-                    $kfaData = $kfaService->getProductDetail($model->kfa_code);
-
-                    if ($kfaData) {
-                        // Build tooltip content with KFA details
-                        $tooltipContent = $kfaService->formatTooltipData($kfaData);
-
-                        return '<a href="'.route('drugs.detail', ['drug' => $model->id]).'" class="badge badge-light-primary" title="'.e($tooltipContent).'" data-bs-toggle="tooltip" data-bs-placement="top">'.e($model->kfa_code).'</a>';
-                    }
-
-                    return '<a href="'.route('drugs.detail', ['drug' => $model->id]).'" class="badge badge-light-primary" title="KFA Code: '.e($model->kfa_code).'">'.e($model->kfa_code).'</a>';
+                    return '<button type="button" class="badge badge-light-primary border-0 cursor-pointer" onclick="showKfaDetail(\''.e($model->kfa_code).'\')">'.e($model->kfa_code).'</button>';
                 }
                 return '<span class="badge badge-light-warning">✗</span>';
             })
@@ -94,16 +81,7 @@ class DrugsDataTable extends DataTable
             ->autoWidth(true)
             ->parameters([
                 'scrollX' => true,
-                'drawCallback' => 'function() {
-                    KTMenu.createInstances();
-                    // Initialize tooltips for KFA codes
-                    if (typeof bootstrap !== "undefined") {
-                        var tooltipTriggerList = [].slice.call(document.querySelectorAll(\'[data-bs-toggle="tooltip"]\'));
-                        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                            return new bootstrap.Tooltip(tooltipTriggerEl);
-                        });
-                    }
-                }',
+                'drawCallback' => 'function() { KTMenu.createInstances(); }',
             ])
             ->addTableClass('align-middle table-row-dashed fs-6 gy-5');
     }

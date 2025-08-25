@@ -822,4 +822,93 @@ class DrugsController extends Controller
             return redirect()->back();
         }
     }
+
+    /**
+     * Get KFA product detail for modal display
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getKfaProductDetail(Request $request): JsonResponse
+    {
+        $request->validate([
+            'kfa_code' => 'required|string'
+        ]);
+
+        try {
+            $kfaCode = $request->input('kfa_code');
+            
+            // Use the KfaService to get product detail
+            $kfaService = app(\Modules\Klinik\App\Services\Kfa::class);
+            
+            // Try to get from database first
+            $product = \Modules\Klinik\Models\KfaProduct::where('kfa_code', $kfaCode)->first();
+            
+            if (!$product) {
+                // If not in database, fetch from API
+                $apiProduct = $kfaService->get_by_id($kfaCode, 'farmasi');
+                
+                if (!$apiProduct) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Produk tidak ditemukan'
+                    ]);
+                }
+                
+                // Save to database
+                $productData = is_object($apiProduct) ? (array) $apiProduct : $apiProduct;
+                $product = \Modules\Klinik\Models\KfaProduct::updateOrCreate(
+                    ['kfa_code' => $kfaCode],
+                    [
+                        'name' => $productData['name'] ?? '',
+                        'manufacturer' => $productData['manufacturer'] ?? '',
+                        'product_type' => 'farmasi',
+                        'dosage_form' => $productData['dosage_form'] ?? null,
+                        'strength' => $productData['strength'] ?? null,
+                        'unit' => $productData['unit'] ?? null,
+                        'packaging' => $productData['packaging'] ?? null,
+                        'fix_price' => $productData['fix_price'] ?? null,
+                        'het_price' => $productData['het_price'] ?? null,
+                        'registration_number' => $productData['registration_number'] ?? null,
+                        'registration_date' => $productData['registration_date'] ?? null,
+                        'expiry_date' => $productData['expiry_date'] ?? null,
+                        'description' => $productData['description'] ?? null,
+                        'raw_data' => json_encode($productData),
+                        'last_sync' => now()
+                    ]
+                );
+            }
+            
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'kfa_code' => $product->kfa_code,
+                    'name' => $product->name,
+                    'manufacturer' => $product->manufacturer,
+                    'manufacturer_country' => '',
+                    'fix_price' => $product->fix_price ?? 0,
+                    'het_price' => $product->het_price ?? 0,
+                    'packaging' => $product->packaging ?? '',
+                    'dosage_form' => $product->dosage_form ?? '',
+                    'strength' => $product->strength ?? '',
+                    'unit' => $product->unit ?? '',
+                    'registration_number' => $product->registration_number ?? '',
+                    'registration_date' => $product->registration_date ?? '',
+                    'expiry_date' => $product->expiry_date ?? '',
+                    'description' => $product->description ?? ''
+                ]
+            ]);
+
+        } catch (Exception $e) {
+            Log::error('Error fetching KFA product detail', [
+                'error' => $e->getMessage(),
+                'kfa_code' => $request->input('kfa_code')
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengambil data produk KFA'
+            ], 500);
+        }
+    }
 }
