@@ -11,7 +11,7 @@
                     <input type="text" id="drugNameDisplay" class="form-control" readonly>
                     <input type="hidden" id="drugId" value="">
                 </div>
-                
+
                 <div class="mb-3">
                     <label class="form-label">Cari KFA:</label>
                     <div class="input-group">
@@ -29,7 +29,7 @@
                         </div>
                         <p class="mt-2">Mencari data KFA...</p>
                     </div>
-                    
+
                     <div id="noResults" class="text-center py-5" style="display: none;">
                         <i class="bi bi-search fs-1 text-muted"></i>
                         <p class="text-muted mt-2">Tidak ada data KFA yang cocok</p>
@@ -57,68 +57,68 @@
     </div>
 </div>
 
-@push('scripts')
-<script>
-// Define global variables at the top level
-window.currentDrugId = null;
-window.currentDrugName = null;
+@push('customscript')
+    <script>
+        // Define global variables at the top level
+        window.currentDrugId = null;
+        window.currentDrugName = null;
 
-// Define global function at the top level
-window.openKfaModal = function(drugId, drugName) {
-    console.log('Opening KFA modal for:', drugName, 'ID:', drugId);
-    window.currentDrugId = drugId;
-    window.currentDrugName = drugName;
-    
-    document.getElementById('drugId').value = window.currentDrugId;
-    document.getElementById('drugNameDisplay').value = window.currentDrugName;
-    
-    // Update modal title
-    document.getElementById('kfaModalLabel').textContent = `Pilih KFA untuk: ${drugName}`;
-    
-    // Auto search saat modal dibuka
-    document.getElementById('kfaSearch').value = window.currentDrugName;
-    searchKfa(window.currentDrugName);
-};
+        // Define global function at the top level
+        window.openKfaModal = function(drugId, drugName) {
+            console.log('Opening KFA modal for:', drugName, 'ID:', drugId);
+            window.currentDrugId = drugId;
+            window.currentDrugName = drugName;
 
-// Define searchKfa as global function
-window.searchKfa = function(searchTerm) {
-        console.log('Mencari KFA dengan term:', searchTerm);
-        
-        const loadingSpinner = document.getElementById('loadingSpinner');
-        const noResults = document.getElementById('noResults');
-        const kfaTable = document.getElementById('kfaTable');
-        const kfaTableBody = document.getElementById('kfaTableBody');
+            document.getElementById('drugId').value = window.currentDrugId;
+            document.getElementById('drugNameDisplay').value = window.currentDrugName;
 
-        loadingSpinner.style.display = 'block';
-        noResults.style.display = 'none';
-        kfaTable.style.display = 'none';
+            // Update modal title
+            document.getElementById('kfaModalLabel').textContent = `Pilih KFA untuk: ${drugName}`;
 
-        const csrfToken = document.querySelector('meta[name="csrf-token"]');
-        if (!csrfToken) {
-            console.error('CSRF token tidak ditemukan');
-            alert('CSRF token tidak ditemukan. Silakan refresh halaman.');
-            return;
-        }
+            // Auto search saat modal dibuka
+            document.getElementById('kfaSearch').value = window.currentDrugName;
+            searchKfa(window.currentDrugName);
+        };
 
-        fetch(`/klinik/drugs/kfa-search?drug_name=${encodeURIComponent(searchTerm)}`, {
-            method: 'GET',
-            headers: {
-                'X-CSRF-TOKEN': csrfToken.content,
-                'Accept': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
+        // Define searchKfa as global function
+        window.searchKfa = function(searchTerm) {
+            console.log('Mencari KFA dengan term:', searchTerm);
+
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const noResults = document.getElementById('noResults');
+            const kfaTable = document.getElementById('kfaTable');
+            const kfaTableBody = document.getElementById('kfaTableBody');
+
+            loadingSpinner.style.display = 'block';
+            noResults.style.display = 'none';
+            kfaTable.style.display = 'none';
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]');
+            if (!csrfToken) {
+                console.error('CSRF token tidak ditemukan');
+                alert('CSRF token tidak ditemukan. Silakan refresh halaman.');
+                return;
             }
-        })
-        .then(response => response.json())
-        .then(data => {
-            loadingSpinner.style.display = 'none';
-            kfaTableBody.innerHTML = '';
 
-            if (data.success && data.data.length > 0) {
-                kfaTable.style.display = 'table';
-                
-                data.data.forEach(item => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
+            fetch(`/klinik/drugs/kfa-search?drug_name=${encodeURIComponent(searchTerm)}`, {
+                    method: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken.content,
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    loadingSpinner.style.display = 'none';
+                    kfaTableBody.innerHTML = '';
+
+                    if (data.success && data.data.length > 0) {
+                        kfaTable.style.display = 'table';
+
+                        data.data.forEach(item => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
                         <td>${item.name}</td>
                         <td>${item.manufacturer || '-'}</td>
                         <td>${item.kfa_code}</td>
@@ -128,107 +128,106 @@ window.searchKfa = function(searchTerm) {
                             </span>
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-primary select-kfa-btn" 
-                                    data-kfa-code="${item.kfa_code}" 
+                            <button class="btn btn-sm btn-primary select-kfa-btn"
+                                    data-kfa-code="${item.kfa_code}"
                                     data-kfa-name="${item.name}">
                                 <i class="bi bi-check"></i> Pilih
                             </button>
                         </td>
                     `;
-                    kfaTableBody.appendChild(row);
-                });
+                            kfaTableBody.appendChild(row);
+                        });
 
-                // Event handler untuk tombol select
-                document.querySelectorAll('.select-kfa-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const kfaCode = this.dataset.kfaCode;
-                        const kfaName = this.dataset.kfaName;
-                        
-                        if (confirm(`Yakin ingin menghubungkan dengan ${kfaName}?`)) {
-                              updateKfaCode(kfaCode, kfaName);
-                          }
-                    });
-                });
-            } else {
-                noResults.style.display = 'block';
-            }
-        })
-        .catch(error => {
-            loadingSpinner.style.display = 'none';
-            console.error('Error:', error);
-            alert('Terjadi kesalahan saat mencari data KFA: ' + error.message);
-        });
-    }
+                        // Event handler untuk tombol select
+                        document.querySelectorAll('.select-kfa-btn').forEach(btn => {
+                            btn.addEventListener('click', function() {
+                                const kfaCode = this.dataset.kfaCode;
+                                const kfaName = this.dataset.kfaName;
 
-// Define updateKfaCode as global function
-window.updateKfaCode = function(kfaCode, kfaName) {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]');
-        if (!csrfToken) {
-            console.error('CSRF token tidak ditemukan');
-            alert('CSRF token tidak ditemukan. Silakan refresh halaman.');
-            return;
+                                if (confirm(`Yakin ingin menghubungkan dengan ${kfaName}?`)) {
+                                    updateKfaCode(kfaCode, kfaName);
+                                }
+                            });
+                        });
+                    } else {
+                        noResults.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    loadingSpinner.style.display = 'none';
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat mencari data KFA: ' + error.message);
+                });
         }
 
-        console.log('Mengupdate KFA code untuk drug:', window.currentDrugId, 'dengan kfaCode:', kfaCode);
-        
-        fetch(`/klinik/drugs/${window.currentDrugId}/update-kfa-code`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': csrfToken.content,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: JSON.stringify({
-                kfa_code: kfaCode,
-                kfa_name: kfaName
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Data KFA berhasil diperbarui');
-                
-                // Tutup modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById('kfaModal'));
-                modal.hide();
-                
-                // Reload DataTable
-                if (window.LaravelDataTables && window.LaravelDataTables['drugs-table']) {
-                    window.LaravelDataTables['drugs-table'].ajax.reload();
-                } else {
-                    location.reload();
+        // Define updateKfaCode as global function
+        window.updateKfaCode = function(kfaCode, kfaName) {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]');
+            if (!csrfToken) {
+                console.error('CSRF token tidak ditemukan');
+                alert('CSRF token tidak ditemukan. Silakan refresh halaman.');
+                return;
+            }
+
+            console.log('Mengupdate KFA code untuk drug:', window.currentDrugId, 'dengan kfaCode:', kfaCode);
+
+            fetch(`/klinik/drugs/${window.currentDrugId}/update-kfa-code`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken.content,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        kfa_code: kfaCode,
+                        kfa_name: kfaName
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Data KFA berhasil diperbarui');
+
+                        // Tutup modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('kfaModal'));
+                        modal.hide();
+
+                        // Reload DataTable
+                        if (window.LaravelDataTables && window.LaravelDataTables['drugs-table']) {
+                            window.LaravelDataTables['drugs-table'].ajax.reload();
+                        } else {
+                            location.reload();
+                        }
+                    } else {
+                        alert(data.message || 'Gagal memperbarui data KFA');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat memperbarui data KFA: ' + error.message);
+                });
+        }
+
+        // Event handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            // Event handler untuk tombol search
+            document.getElementById('searchKfaBtn').addEventListener('click', function() {
+                const searchTerm = document.getElementById('kfaSearch').value;
+                if (searchTerm.trim()) {
+                    window.searchKfa(searchTerm);
                 }
-            } else {
-                alert(data.message || 'Gagal memperbarui data KFA');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Terjadi kesalahan saat memperbarui data KFA: ' + error.message);
+            });
+
+            // Event handler untuk enter key di search input
+            document.getElementById('kfaSearch').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const searchTerm = this.value;
+                    if (searchTerm.trim()) {
+                        window.searchKfa(searchTerm);
+                    }
+                }
+            });
         });
-    }
-};
-
-// Event handlers
-document.addEventListener('DOMContentLoaded', function() {
-    // Event handler untuk tombol search
-    document.getElementById('searchKfaBtn').addEventListener('click', function() {
-        const searchTerm = document.getElementById('kfaSearch').value;
-        if (searchTerm.trim()) {
-            window.searchKfa(searchTerm);
-        }
-    });
-
-    // Event handler untuk enter key di search input
-    document.getElementById('kfaSearch').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            const searchTerm = this.value;
-            if (searchTerm.trim()) {
-                window.searchKfa(searchTerm);
-            }
-        }
-    });
-});
-</script>
+    </script>
 @endpush

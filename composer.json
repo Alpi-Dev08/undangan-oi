@@ -10,6 +10,7 @@
     "require": {
         "php": "^8.2",
         "aamdsam/bridging-bpjs": "^1.12",
+        "agumil/satusehat-sdk": "^0.8.1",
         "anlutro/l4-settings": "^1.0",
         "barryvdh/laravel-dompdf": "^2.0",
         "daengdeni/log-reader": "^2.4",
