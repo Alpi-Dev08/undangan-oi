@@ -385,6 +385,22 @@ return [
         ],
     ],
 
+    'kfa' => [
+            '*' => [
+                'title' => 'KFA',
+            ],
+            'assets' => [
+                'custom' => [
+                    'css' => [
+                        'plugins/custom/datatables/datatables.bundle.css',
+                    ],
+                    'js' => [
+                        'plugins/custom/datatables/datatables.bundle.js',
+                    ],
+                ],
+            ],
+        ],
+
     'pcare' => [
         'title' => 'PCare',
         'diagnosa' => [
@@ -825,6 +841,7 @@ return [
                 ],
             ],
         ],
+
         'skriningexaminations' => [
             '*' => [
                 'title' => 'Examinations',

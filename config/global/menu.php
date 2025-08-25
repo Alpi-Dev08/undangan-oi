@@ -165,7 +165,12 @@
                             'path'   => 'klinik/drugs',
                             'bullet' => '<span class="bullet bullet-dot"></span>'
                         ],
-
+                        [
+                            'title'      => 'KFA',
+                            'path'       => 'kfa',
+                            'bullet'     => '<span class="bullet bullet-dot"></span>',
+                            'permission' => ['klinik.read'],
+                        ]
                     ]
                 ]
 
@@ -345,12 +350,6 @@
                             'path'       => 'klinik/family-disease-histories',
                             'bullet'     => '<span class="bullet bullet-dot"></span>',
                             'permission' => ['klinik.read'],
-                        ],
-                        [
-                            'title'      => 'KFA Integration',
-                            'path'       => 'kfa',
-                            'bullet'     => '<span class="bullet bullet-dot"></span>',
-                            'permission' => ['klinik.read'],
                         ]
                     ],
                 ],
@@ -461,7 +460,7 @@
             ],
 
             // Skrining Examination
-            [ 
+            [
                 'title'      => 'Skrining Examination',
                 'icon'       => [
                     'svg'  => theme()->getSvgIcon('assets/media/icons/duotune/general/gen005.svg', 'svg-icon-2'),
@@ -470,11 +469,11 @@
                 'classes'    => ['item' => 'menu-accordion'],
                 'attributes' => [
                     'data-kt-menu-trigger' => 'click',
-                ], 
+                ],
                 'role'       => ['admin', 'administrator', 'ners', 'admin-perawat','dokter'],
                 'permission' => ['klinik.read'],
                 'sub'        => [
-                    'class' => 'menu-sub-accordion menu-active-bg', 
+                    'class' => 'menu-sub-accordion menu-active-bg',
                     'items' => [
                         [
                             'title'      => 'Location Examination',
@@ -495,7 +494,7 @@
             ],
 
             // System
-            [ 
+            [
                 'title'      => 'System',
                 'icon'       => [
                     'svg'  => theme()->getSvgIcon('assets/media/icons/duotune/coding/cod001.svg', 'svg-icon-2'),
