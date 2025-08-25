@@ -70,7 +70,8 @@ class KfaController extends Controller
                         'registration_number' => $product->registration_number ?? '',
                         'registration_date' => $product->registration_date ?? '',
                         'expiry_date' => $product->expiry_date ?? '',
-                        'description' => $product->description ?? ''
+                        'description' => $product->description ?? '',
+                        'dosage_form' => $product->dosage_form ?? ''
                     ]
                 ]);
             }
@@ -99,7 +100,7 @@ class KfaController extends Controller
                         'name' => (string) ($productData['name'] ?? $productData['name'] ?? ''),
                         'manufacturer' => (string) ($productData['manufacturer'] ?? $productData['manufacturer'] ?? ''),
                         'product_type' => 'farmasi',
-                        'dosage_form' => isset($productData['dosage_form']) ? (string) $productData['dosage_form'] : null,
+                        'dosage_form' => isset($productData['dosage_form']) ? (is_array($productData['dosage_form']) ? implode(', ', $productData['dosage_form']) : (string) $productData['dosage_form']) : null,
                         'strength' => isset($productData['strength']) ? (string) $productData['strength'] : null,
                         'unit' => isset($productData['unit']) ? (string) $productData['unit'] : null,
                         'packaging' => isset($productData['packaging']) ? (string) $productData['packaging'] : null,
@@ -198,6 +199,9 @@ class KfaController extends Controller
                 $kfa = new Kfa();
                 $searchKeyword = $keyword ?? 'asam'; // Default keyword untuk menampilkan semua produk
                 $apiResponse = $kfa->getProducts($productType, $searchKeyword, 1);
+                if($apiResponse[0]=='200'){
+                    $apiResponse = $apiResponse[1]->items;
+                }
 
                 if ($apiResponse && isset($apiResponse->data) && is_array($apiResponse->data)) {
                     $products = $apiResponse->data;
@@ -211,7 +215,7 @@ class KfaController extends Controller
                                     'name'                => (string) ($productData['name'] ?? $productData['name'] ?? ''),
                                     'manufacturer'        => (string) ($productData['manufacturer'] ?? $productData['manufacturer'] ?? ''),
                                     'product_type'        => $productType,
-                                    'dosage_form'         => isset($productData['dosage_form']) ? (string) $productData['dosage_form'] : null,
+                                    'dosage_form'         => isset($productData['dosage_form']) ? (is_array($productData['dosage_form']) ? implode(', ', $productData['dosage_form']) : (string) $productData['dosage_form']) : null,
                                     'strength'            => isset($productData['strength']) ? (string) $productData['strength'] : null,
                                     'unit'                => isset($productData['unit']) ? (string) $productData['unit'] : null,
                                     'packaging'           => isset($productData['packaging']) ? (string) $productData['packaging'] : null,
