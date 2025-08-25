@@ -80,27 +80,8 @@ window.openKfaModal = function(drugId, drugName) {
     searchKfa(window.currentDrugName);
 };
 
-document.addEventListener('DOMContentLoaded', function() {
-
-    // Event handler untuk tombol search
-    document.getElementById('searchKfaBtn').addEventListener('click', function() {
-        const searchTerm = document.getElementById('kfaSearch').value;
-        if (searchTerm.trim()) {
-            searchKfa(searchTerm);
-        }
-    });
-
-    // Event handler untuk enter key di search input
-    document.getElementById('kfaSearch').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            const searchTerm = this.value;
-            if (searchTerm.trim()) {
-                searchKfa(searchTerm);
-            }
-        }
-    });
-
-    function searchKfa(searchTerm) {
+// Define searchKfa as global function
+window.searchKfa = function(searchTerm) {
         console.log('Mencari KFA dengan term:', searchTerm);
         
         const loadingSpinner = document.getElementById('loadingSpinner');
@@ -179,7 +160,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    function updateKfaCode(drugId, kfaCode, kfaName) {
+// Define updateKfaCode as global function
+window.updateKfaCode = function(kfaCode, kfaName) {
         const csrfToken = document.querySelector('meta[name="csrf-token"]');
         if (!csrfToken) {
             console.error('CSRF token tidak ditemukan');
@@ -187,9 +169,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        console.log('Mengupdate KFA code untuk drug:', drugId, 'dengan kfaCode:', kfaCode);
+        console.log('Mengupdate KFA code untuk drug:', window.currentDrugId, 'dengan kfaCode:', kfaCode);
         
-        fetch(`/klinik/drugs/${drugId}/update-kfa-code`, {
+        fetch(`/klinik/drugs/${window.currentDrugId}/update-kfa-code`, {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': csrfToken.content,
@@ -226,6 +208,27 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Terjadi kesalahan saat memperbarui data KFA: ' + error.message);
         });
     }
+};
+
+// Event handlers
+document.addEventListener('DOMContentLoaded', function() {
+    // Event handler untuk tombol search
+    document.getElementById('searchKfaBtn').addEventListener('click', function() {
+        const searchTerm = document.getElementById('kfaSearch').value;
+        if (searchTerm.trim()) {
+            window.searchKfa(searchTerm);
+        }
+    });
+
+    // Event handler untuk enter key di search input
+    document.getElementById('kfaSearch').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            const searchTerm = this.value;
+            if (searchTerm.trim()) {
+                window.searchKfa(searchTerm);
+            }
+        }
+    });
 });
 </script>
 @endpush
