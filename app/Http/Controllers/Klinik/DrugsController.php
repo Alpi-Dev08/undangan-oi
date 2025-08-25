@@ -846,7 +846,7 @@ class DrugsController extends Controller
             
             if (!$product) {
                 // If not in database, fetch from API
-                $apiProduct = $kfaService->get_by_id($kfaCode, 'farmasi');
+                $apiProduct = $kfaService->getProductDetail($kfaCode);
                 
                 if (!$apiProduct) {
                     return response()->json([
