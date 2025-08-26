@@ -368,4 +368,177 @@ class KfaDrugSyncService
 
         return $results;
     }
+
+    /**
+     * Sinkronisasi data produk dari Satusehat Integration KFA API
+     *
+     * @param string $productType
+     * @param string|null $keyword
+     * @param int $limit
+     * @return array
+     */
+    public function syncProductsFromKfaApi(string $productType = 'farmasi', ?string $keyword = null, int $limit = 1000): array
+    {
+        $results = [
+            'total_fetched' => 0,
+            'new_products' => 0,
+            'updated_products' => 0,
+            'errors' => []
+        ];
+
+        try {
+            // Gunakan service Kfa untuk mengambil data dari API
+            $kfaService = app(\Modules\Klinik\App\Services\Kfa::class);
+            
+            $searchKeyword = $keyword ?: 'a'; // Default keyword untuk menampilkan semua produk
+            $apiProducts = $kfaService->searchProducts($searchKeyword, $productType, $limit);
+
+            if (empty($apiProducts)) {
+                Log::warning('Tidak ada produk yang ditemukan dari KFA API', [
+                    'product_type' => $productType,
+                    'keyword' => $keyword
+                ]);
+                return $results;
+            }
+
+            DB::transaction(function () use (&$results, $apiProducts, $productType) {
+                foreach ($apiProducts as $productData) {
+                    try {
+                        // Validasi data produk
+                        if (!isset($productData['kfa_code']) || empty($productData['kfa_code'])) {
+                            continue;
+                        }
+
+                        // Simpan atau update produk ke database
+                        $kfaProduct = KfaProduct::updateOrCreate(
+                            ['kfa_code' => (string) $productData['kfa_code']],
+                            [
+                                'name' => (string) ($productData['name'] ?? $productData['name'] ?? ''),
+                                'manufacturer' => (string) ($productData['manufacturer'] ?? $productData['manufacturer'] ?? ''),
+                                'product_type' => $productType,
+                                'dosage_form' => isset($productData['dosage_form']) ? 
+                                    (is_array($productData['dosage_form']) ? 
+                                        json_encode($productData['dosage_form']) : 
+                                        (string) $productData['dosage_form']) : null,
+                                'strength' => isset($productData['strength']) ? (string) $productData['strength'] : null,
+                                'unit' => isset($productData['unit']) ? (string) $productData['unit'] : null,
+                                'packaging' => isset($productData['packaging']) ? (string) $productData['packaging'] : null,
+                                'fix_price' => isset($productData['fix_price']) ? (float) $productData['fix_price'] : null,
+                                'het_price' => isset($productData['het_price']) ? (float) $productData['het_price'] : null,
+                                'registration_number' => isset($productData['registration_number']) ? (string) $productData['registration_number'] : null,
+                                'registration_date' => isset($productData['registration_date']) ? $productData['registration_date'] : null,
+                                'expiry_date' => isset($productData['expiry_date']) ? $productData['expiry_date'] : null,
+                                'description' => isset($productData['description']) ? (string) $productData['description'] : null,
+                                'raw_data' => $productData,
+                                'last_sync' => now()
+                            ]
+                        );
+
+                        if ($kfaProduct->wasRecentlyCreated) {
+                            $results['new_products']++;
+                        } else {
+                            $results['updated_products']++;
+                        }
+
+                    } catch (\Exception $e) {
+                        Log::error('Error menyimpan produk KFA', [
+                            'product_data' => $productData,
+                            'error' => $e->getMessage()
+                        ]);
+                        $results['errors'][] = [
+                            'kfa_code' => $productData['kfa_code'] ?? 'unknown',
+                            'error' => $e->getMessage()
+                        ];
+                    }
+                }
+            });
+
+            $results['total_fetched'] = count($apiProducts);
+
+            Log::info('Sinkronisasi produk KFA selesai', [
+                'results' => $results
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error sinkronisasi produk KFA', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            $results['errors'][] = [
+                'error' => $e->getMessage()
+            ];
+        }
+
+        return $results;
+    }
+
+    /**
+     * Sinkronisasi detail produk dari KFA API berdasarkan kode KFA
+     *
+     * @param string $kfaCode
+     * @return array
+     */
+    public function syncProductDetailFromKfaApi(string $kfaCode): array
+    {
+        $results = [
+            'success' => false,
+            'product' => null,
+            'error' => null
+        ];
+
+        try {
+            // Gunakan service Kfa untuk mengambil detail produk dari API
+            $kfaService = app(\Modules\Klinik\App\Services\Kfa::class);
+            $productDetail = $kfaService->getProductDetail($kfaCode);
+
+            if (!$productDetail) {
+                $results['error'] = 'Produk tidak ditemukan di KFA API';
+                return $results;
+            }
+
+            DB::transaction(function () use (&$results, $productDetail, $kfaCode) {
+                // Simpan atau update detail produk ke database
+                $kfaProduct = KfaProduct::updateOrCreate(
+                    ['kfa_code' => (string) $kfaCode],
+                    [
+                        'name' => (string) ($productDetail['name'] ?? $productDetail['name'] ?? ''),
+                        'manufacturer' => (string) ($productDetail['manufacturer'] ?? $productDetail['manufacturer'] ?? ''),
+                        'product_type' => 'farmasi',
+                        'dosage_form' => isset($productDetail['dosage_form']) ? 
+                            (is_array($productDetail['dosage_form']) ? 
+                                json_encode($productDetail['dosage_form']) : 
+                                (string) $productDetail['dosage_form']) : null,
+                        'strength' => isset($productDetail['strength']) ? (string) $productDetail['strength'] : null,
+                        'unit' => isset($productDetail['unit']) ? (string) $productDetail['unit'] : null,
+                        'packaging' => isset($productDetail['packaging']) ? (string) $productDetail['packaging'] : null,
+                        'fix_price' => isset($productDetail['fix_price']) ? (float) $productDetail['fix_price'] : null,
+                        'het_price' => isset($productDetail['het_price']) ? (float) $productDetail['het_price'] : null,
+                        'registration_number' => isset($productDetail['registration_number']) ? (string) $productDetail['registration_number'] : null,
+                        'registration_date' => isset($productDetail['registration_date']) ? $productDetail['registration_date'] : null,
+                        'expiry_date' => isset($productDetail['expiry_date']) ? $productDetail['expiry_date'] : null,
+                        'description' => isset($productDetail['description']) ? (string) $productDetail['description'] : null,
+                        'raw_data' => $productDetail,
+                        'last_sync' => now()
+                    ]
+                );
+
+                $results['success'] = true;
+                $results['product'] = $kfaProduct;
+            });
+
+            Log::info('Detail produk KFA berhasil disinkronisasi', [
+                'kfa_code' => $kfaCode
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error sinkronisasi detail produk KFA', [
+                'kfa_code' => $kfaCode,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            $results['error'] = $e->getMessage();
+        }
+
+        return $results;
+    }
 }
