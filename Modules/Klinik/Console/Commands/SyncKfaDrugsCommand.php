@@ -20,7 +20,8 @@ class SyncKfaDrugsCommand extends Command
                         {--drug= : Sinkronisasi satu drug berdasarkan ID}
                         {--limit= : Batasi jumlah drug yang diproses}
                         {--from-api : Sinkronisasi langsung dari API KFA}
-                        {--kfa-code= : Sinkronisasi satu produk KFA berdasarkan kode}';
+                        {--kfa-code= : Sinkronisasi satu produk KFA berdasarkan kode}
+                        {--from-get-products-api : Sinkronisasi data produk dari API KFA getProducts}';
 
     /**
      * The console command description.
@@ -36,6 +37,11 @@ class SyncKfaDrugsCommand extends Command
     {
         $this->info('🔄 Memulai sinkronisasi KFA - Drugs');
         
+        // Handle sync dari API KFA getProducts
+        if ($this->option('from-get-products-api')) {
+            return $this->syncFromGetProductsApi($syncService);
+        }
+
         // Handle sync dari API KFA
         if ($this->option('from-api')) {
             return $this->syncFromApi($syncService);
@@ -304,6 +310,80 @@ class SyncKfaDrugsCommand extends Command
         } else {
             $this->error("❌ Gagal memproses produk KFA: {$result['reason']}");
         }
+
+        return Command::SUCCESS;
+    }
+
+    /**
+     * Sinkronisasi dari API KFA getProducts
+     */
+    private function syncFromGetProductsApi(KfaDrugSyncService $syncService): int
+    {
+        $this->info('🔄 Memulai sinkronisasi dari API KFA getProducts');
+        
+        // Mode dry-run
+        if ($this->option('dry-run')) {
+            $this->warn('🧪 Mode dry-run - Tidak ada perubahan yang disimpan');
+        }
+
+        $limit = $this->option('limit') ? (int) $this->option('limit') : null;
+        
+        $startTime = microtime(true);
+        $results = $syncService->syncGetProductsFromKfaApi($limit, $this->option('dry-run'));
+        $duration = round(microtime(true) - $startTime, 2);
+
+        $this->newLine();
+        $this->info('✅ Sinkronisasi dari API KFA getProducts selesai!');
+        
+        // Tampilkan hasil
+        $this->table(['Hasil', 'Jumlah'], [
+            ['Total Produk KFA Diproses', $results['total_processed']],
+            ['Produk Baru Ditambahkan', $results['new_products']],
+            ['Produk Diperbarui', $results['updated_products']],
+            ['Produk Gagal Diproses', $results['failed_products']],
+            ['Durasi (detik)', $duration],
+        ]);
+
+        // Tampilkan detail untuk produk yang gagal
+        if ($results['failed_products'] > 0) {
+            $this->newLine();
+            $this->warn('⚠️  Produk KFA yang gagal diproses:');
+            
+            $failedDetails = collect($results['details'])
+                ->where('status', 'failed')
+                ->take(10)
+                ->map(function ($detail) {
+                    return [$detail['kfa_code'], $detail['reason']];
+                })->toArray();
+
+            if (!empty($failedDetails)) {
+                $this->table(['Kode KFA', 'Alasan'], $failedDetails);
+            }
+        }
+
+        // Tampilkan detail untuk produk yang sukses
+        $successfulProducts = collect($results['details'])
+            ->where('status', 'success')
+            ->take(10)
+            ->map(function ($detail) {
+                return [
+                    $detail['kfa_code'],
+                    $detail['product_name'],
+                    $detail['manufacturer'],
+                    $detail['action']
+                ];
+            })->toArray();
+
+        if (!empty($successfulProducts)) {
+            $this->newLine();
+            $this->info('✅ Contoh produk yang berhasil diproses:');
+            $this->table(['Kode KFA', 'Nama Produk', 'Manufacturer', 'Aksi'], $successfulProducts);
+        }
+
+        Log::info('KFA-getProducts API sync completed', [
+            'results' => $results,
+            'duration' => $duration
+        ]);
 
         return Command::SUCCESS;
     }
