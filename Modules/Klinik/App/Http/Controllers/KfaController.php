@@ -100,16 +100,16 @@ class KfaController extends Controller
                         'name' => (string) ($productData['name'] ?? $productData['name'] ?? ''),
                         'manufacturer' => (string) ($productData['manufacturer'] ?? $productData['manufacturer'] ?? ''),
                         'product_type' => 'farmasi',
-                        'dosage_form' => isset($productData['dosage_form']) ? (is_array($productData['dosage_form']) ? implode(', ', $productData['dosage_form']) : (string) $productData['dosage_form']) : null,
-                        'strength' => isset($productData['strength']) ? (string) $productData['strength'] : null,
-                        'unit' => isset($productData['unit']) ? (string) $productData['unit'] : null,
-                        'packaging' => isset($productData['packaging']) ? (string) $productData['packaging'] : null,
+                        'dosage_form'         => isset($productData['dosage_form']) ? (is_array($productData['dosage_form']) ? implode(', ', $productData['dosage_form']) : (is_object($productData['dosage_form']) ? (string) $productData['dosage_form'] : (string) $productData['dosage_form'])) : null,
+                        'strength'            => isset($productData['strength']) ? (is_object($productData['strength']) ? (string) $productData['strength'] : (string) $productData['strength']) : null,
+                        'unit'                => isset($productData['unit']) ? (is_object($productData['unit']) ? (string) $productData['unit'] : (string) $productData['unit']) : null,
+                        'packaging'           => isset($productData['packaging']) ? (is_object($productData['packaging']) ? (string) $productData['packaging'] : (string) $productData['packaging']) : null,
                         'fix_price' => isset($productData['fix_price']) ? (float) $productData['fix_price'] : null,
                         'het_price' => isset($productData['het_price']) ? (float) $productData['het_price'] : null,
-                        'registration_number' => isset($productData['registration_number']) ? (string) $productData['registration_number'] : null,
-                        'registration_date' => isset($productData['registration_date']) ? (string) $productData['registration_date'] : null,
-                        'expiry_date' => isset($productData['expiry_date']) ? (string) $productData['expiry_date'] : null,
-                        'description' => isset($productData['description']) ? (string) $productData['description'] : null,
+                        'registration_number' => isset($productData['registration_number']) ? (is_object($productData['registration_number']) ? (string) $productData['registration_number'] : (string) $productData['registration_number']) : null,
+                        'registration_date'   => isset($productData['registration_date']) ? (is_object($productData['registration_date']) ? (string) $productData['registration_date'] : (string) $productData['registration_date']) : null,
+                        'expiry_date'         => isset($productData['expiry_date']) ? (is_object($productData['expiry_date']) ? (string) $productData['expiry_date'] : (string) $productData['expiry_date']) : null,
+                        'description'         => isset($productData['description']) ? (is_object($productData['description']) ? (string) $productData['description'] : (string) $productData['description']) : null,
                         'raw_data' => json_encode($productData),
                         'last_sync' => now()
                     ]
@@ -199,32 +199,38 @@ class KfaController extends Controller
                 $kfa = new Kfa();
                 $searchKeyword = $keyword ?? 'asam'; // Default keyword untuk menampilkan semua produk
                 $apiResponse = $kfa->getProducts($productType, $searchKeyword, 1, 1000);
-                if($apiResponse[0]=='200'){
-                    $apiResponse = $apiResponse[1]->items;
+
+                $apiProducts = [];
+                if ($apiResponse[0] == '200') {
+                    $responseData = $apiResponse[1];
+                    if (is_object($responseData) && isset($responseData->data)) {
+                        $apiProducts = $responseData->data;
+                    } elseif (is_array($responseData) && isset($responseData['data'])) {
+                        $apiProducts = $responseData['data'];
+                    }
                 }
 
-                if ($apiResponse && isset($apiResponse->data) && is_array($apiResponse->data)) {
-                    $apiProducts = $apiResponse->data;
+                if (!empty($apiProducts)) {
                     // Simpan data ke database dengan transaction
                     DB::transaction(function () use ($apiProducts, $productType) {
                         foreach ($apiProducts as $product) {
                             $productData = is_object($product) ? (array) $product : $product;
                             KfaProduct::updateOrCreate(
-                                ['kfa_code' => (string) ($productData['kfa_code'] ?? $productData['kfa_code'] ?? '')],
+                                ['kfa_code' => (string) ($productData['kfa_code'] ?? $productData['code'] ?? '')],
                                 [
-                                    'name'                => (string) ($productData['name'] ?? $productData['name'] ?? ''),
-                                    'manufacturer'        => (string) ($productData['manufacturer'] ?? $productData['manufacturer'] ?? ''),
+                                    'name'                => (string) ($productData['name'] ?? ''),
+                                    'manufacturer'        => (string) ($productData['manufacturer'] ?? ''),
                                     'product_type'        => $productType,
-                                    'dosage_form'         => isset($productData['dosage_form']) ? (is_array($productData['dosage_form']) ? implode(', ', $productData['dosage_form']) : (string) $productData['dosage_form']) : null,
-                                    'strength'            => isset($productData['strength']) ? (string) $productData['strength'] : null,
-                                    'unit'                => isset($productData['unit']) ? (string) $productData['unit'] : null,
-                                    'packaging'           => isset($productData['packaging']) ? (string) $productData['packaging'] : null,
+                                    'dosage_form'         => isset($productData['dosage_form']) ? (is_array($productData['dosage_form']) ? implode(', ', $productData['dosage_form']) : (is_object($productData['dosage_form']) ? (string) $productData['dosage_form'] : (string) $productData['dosage_form'])) : null,
+                                    'strength'            => isset($productData['strength']) ? (is_object($productData['strength']) ? (string) $productData['strength'] : (string) $productData['strength']) : null,
+                                    'unit'                => isset($productData['unit']) ? (is_object($productData['unit']) ? (string) $productData['unit'] : (string) $productData['unit']) : null,
+                                    'packaging'           => isset($productData['packaging']) ? (is_object($productData['packaging']) ? (string) $productData['packaging'] : (string) $productData['packaging']) : null,
                                     'fix_price'           => isset($productData['fix_price']) ? (float) $productData['fix_price'] : null,
                                     'het_price'           => isset($productData['het_price']) ? (float) $productData['het_price'] : null,
-                                    'registration_number' => isset($productData['registration_number']) ? (string) $productData['registration_number'] : null,
-                                    'registration_date'   => isset($productData['registration_date']) ? (string) $productData['registration_date'] : null,
-                                    'expiry_date'         => isset($productData['expiry_date']) ? (string) $productData['expiry_date'] : null,
-                                    'description'         => isset($productData['description']) ? (string) $productData['description'] : null,
+                                    'registration_number' => isset($productData['registration_number']) ? (is_object($productData['registration_number']) ? (string) $productData['registration_number'] : (string) $productData['registration_number']) : null,
+                                    'registration_date'   => isset($productData['registration_date']) ? (is_object($productData['registration_date']) ? (string) $productData['registration_date'] : (string) $productData['registration_date']) : null,
+                                    'expiry_date'         => isset($productData['expiry_date']) ? (is_object($productData['expiry_date']) ? (string) $productData['expiry_date'] : (string) $productData['expiry_date']) : null,
+                                    'description'         => isset($productData['description']) ? (is_object($productData['description']) ? (string) $productData['description'] : (string) $productData['description']) : null,
                                     'raw_data'            => json_encode($productData),
                                     'last_sync'           => now()
                                 ]
