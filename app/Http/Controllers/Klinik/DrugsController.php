@@ -625,161 +625,49 @@ class DrugsController extends Controller
     public function kfaSearch(Request $request): JsonResponse
     {
         $request->validate([
-            'drug_name' => 'required|string|min:2',
-            'product_type' => 'nullable|string|in:farmasi,alkes|default:farmasi'
+            'drug_name' => 'required|string|min:2'
         ]);
 
         try {
-            $keyword = $request->input('drug_name');
-            $productType = $request->input('product_type', 'farmasi');
+            $drugName = $request->input('drug_name');
 
-            Log::info('Memulai pencarian produk KFA', [
-                'user_id' => $this->user?->id,
-                'keyword' => $keyword,
-                'product_type' => $productType
-            ]);
+            // Gunakan KfaDrugSyncService untuk mencari data KFA
+            $kfaService = app(KfaDrugSyncService::class);
+            $results = $kfaService->searchKfaProducts($drugName);
 
-            // Cari di database terlebih dahulu
-            $products = \Modules\Klinik\Models\KfaProduct::byProductType($productType)
-                ->search($keyword)
-                ->orderBy('name')
-                ->get();
-
-            // Jika tidak ada di database, ambil dari API
-            if ($products->isEmpty()) {
-                Log::info('Tidak ada data di database, mengambil dari API KFA', [
-                    'keyword' => $keyword,
-                    'product_type' => $productType
-                ]);
-
+            if(empty($results)) {
                 // Gunakan service KFA untuk mendapatkan produk
-                $kfaService = app(\Modules\Klinik\App\Services\Kfa::class);
+                $kfaService = app(\Modules\Klinik\App\Http\Controllers\KfaController::class);
 
                 // Panggil API searchProducts
-                $apiProducts = $kfaService->searchProducts($keyword, $productType, 100);
-
-                if (!empty($apiProducts)) {
-                    // Simpan data ke database dengan transaction
-                    DB::transaction(function () use ($apiProducts, $productType) {
-                        foreach ($apiProducts as $product) {
-                            $productData = is_object($product) ? (array) $product : $product;
-
-                            if (isset($productData['kfa_code']) && !empty($productData['kfa_code'])) {
-                                \Modules\Klinik\Models\KfaProduct::updateOrCreate(
-                                    ['kfa_code' => (string) $productData['kfa_code']],
-                                    [
-                                        'name' => (string) ($productData['name'] ?? ''),
-                                        'manufacturer' => (string) ($productData['manufacturer'] ?? ''),
-                                        'product_type' => $productType,
-                                        'dosage_form' => isset($productData['dosage_form']) ?
-                                            (is_array($productData['dosage_form']) ?
-                                                implode(', ', $productData['dosage_form']) :
-                                                (string) $productData['dosage_form']) : null,
-                                        'strength' => isset($productData['strength']) ? (string) $productData['strength'] : null,
-                                        'unit' => isset($productData['unit']) ? (string) $productData['unit'] : null,
-                                        'packaging' => isset($productData['packaging']) ? (string) $productData['packaging'] : null,
-                                        'fix_price' => isset($productData['fix_price']) ? (float) $productData['fix_price'] : null,
-                                        'het_price' => isset($productData['het_price']) ? (float) $productData['het_price'] : null,
-                                        'registration_number' => isset($productData['registration_number']) ? (string) $productData['registration_number'] : null,
-                                        'registration_date' => isset($productData['registration_date']) ? (string) $productData['registration_date'] : null,
-                                        'expiry_date' => isset($productData['expiry_date']) ? (string) $productData['expiry_date'] : null,
-                                        'description' => isset($productData['description']) ? (string) $productData['description'] : null,
-                                        'raw_data' => json_encode($productData),
-                                        'last_sync' => now()
-                                    ]
-                                );
-                            } else if (isset($productData['code']) && !empty($productData['code'])) {
-                                \Modules\Klinik\Models\KfaProduct::updateOrCreate(
-                                    ['kfa_code' => (string) $productData['code']],
-                                    [
-                                        'name' => (string) ($productData['name'] ?? ''),
-                                        'manufacturer' => (string) ($productData['manufacturer'] ?? ''),
-                                        'product_type' => $productType,
-                                        'dosage_form' => isset($productData['dosage_form']) ?
-                                            (is_array($productData['dosage_form']) ?
-                                                implode(', ', $productData['dosage_form']) :
-                                                (string) $productData['dosage_form']) : null,
-                                        'strength' => isset($productData['strength']) ? (string) $productData['strength'] : null,
-                                        'unit' => isset($productData['unit']) ? (string) $productData['unit'] : null,
-                                        'packaging' => isset($productData['packaging']) ? (string) $productData['packaging'] : null,
-                                        'fix_price' => isset($productData['fix_price']) ? (float) $productData['fix_price'] : null,
-                                        'het_price' => isset($productData['het_price']) ? (float) $productData['het_price'] : null,
-                                        'registration_number' => isset($productData['registration_number']) ? (string) $productData['registration_number'] : null,
-                                        'registration_date' => isset($productData['registration_date']) ? (string) $productData['registration_date'] : null,
-                                        'expiry_date' => isset($productData['expiry_date']) ? (string) $productData['expiry_date'] : null,
-                                        'description' => isset($productData['description']) ? (string) $productData['description'] : null,
-                                        'raw_data' => json_encode($productData),
-                                        'last_sync' => now()
-                                    ]
-                                );
-                            }
-                        }
-                    });
-
-                    // Ambil data yang baru disimpan
-                    $products = \Modules\Klinik\Models\KfaProduct::byProductType($productType)
-                        ->search($keyword)
-                        ->orderBy('name')
-                        ->get();
-                }
+                $request['keyword'] = $drugName;
+                $request['product_type'] = 'farmasi';
+                $apiProducts = $kfaService->getProducts($request);
             }
 
-            Log::info('Pencarian produk KFA selesai', [
-                'keyword' => $keyword,
-                'product_type' => $productType,
-                'results_count' => $products->count()
+            Log::info('Pencarian KFA berhasil', [
+                'user_id' => $this->user?->id,
+                'drug_name' => $drugName,
+                'results_count' => count($results)
             ]);
-
-            // Format response
-            $formattedResults = $products->map(function ($product) {
-                return [
-                    'kfa_code' => $product->kfa_code,
-                    'name' => $product->name,
-                    'manufacturer' => $product->manufacturer,
-                    'dosage_form' => $product->dosage_form,
-                    'strength' => $product->strength,
-                    'packaging' => $product->packaging,
-                    'fix_price' => $product->fix_price,
-                    'het_price' => $product->het_price,
-                    'unit' => $product->unit,
-                    'registration_number' => $product->registration_number,
-                    'registration_date' => $product->registration_date,
-                    'expiry_date' => $product->expiry_date,
-                    'description' => $product->description
-                ];
-            });
 
             return response()->json([
                 'success' => true,
-                'data' => $formattedResults,
-                'count' => $formattedResults->count()
+                'data' => $results
             ]);
 
         } catch (Exception $e) {
             Log::error('Gagal mencari data KFA', [
                 'user_id' => $this->user?->id,
-                'keyword' => $request->input('drug_name'),
-                'product_type' => $request->input('product_type', 'farmasi'),
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'error' => $e->getMessage()
             ]);
 
             return response()->json([
                 'success' => false,
-                'message' => 'Terjadi kesalahan saat mencari data KFA',
-                'error' => $e->getMessage()
+                'message' => 'Terjadi kesalahan saat mencari data KFA'
             ], 500);
         }
     }
-
-    /**
-     * Mencari produk KFA menggunakan API getProducts dengan pendekatan yang lebih komprehensif
-     * Menggunakan referensi dari KfaController::getProducts
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-
 
       /**
      * Memperbarui kfa_code untuk obat tertentu

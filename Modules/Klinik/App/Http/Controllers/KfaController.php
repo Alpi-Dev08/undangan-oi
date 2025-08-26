@@ -100,7 +100,7 @@ class KfaController extends Controller
                         'name' => (string) ($productData['name'] ?? $productData['name'] ?? ''),
                         'manufacturer' => (string) ($productData['manufacturer'] ?? $productData['manufacturer'] ?? ''),
                         'product_type' => 'farmasi',
-                        'dosage_form'         => isset($productData['dosage_form']) ? (is_array($productData['dosage_form']) ? implode(', ', $productData['dosage_form']) : (is_object($productData['dosage_form']) ? (string) $productData['dosage_form'] : (string) $productData['dosage_form'])) : null,
+                        'dosage_form'         => isset($productData['dosage_form']) ? (is_array($productData['dosage_form']) ? implode(', ', $productData['dosage_form']) : (is_object($productData['dosage_form']) ? json_encode($productData['dosage_form']) : (string) $productData['dosage_form'])) : null,
                         'strength'            => isset($productData['strength']) ? (is_object($productData['strength']) ? (string) $productData['strength'] : (string) $productData['strength']) : null,
                         'unit'                => isset($productData['unit']) ? (is_object($productData['unit']) ? (string) $productData['unit'] : (string) $productData['unit']) : null,
                         'packaging'           => isset($productData['packaging']) ? (is_object($productData['packaging']) ? (string) $productData['packaging'] : (string) $productData['packaging']) : null,
@@ -200,13 +200,14 @@ class KfaController extends Controller
                 $searchKeyword = $keyword ?? 'asam'; // Default keyword untuk menampilkan semua produk
                 $apiResponse = $kfa->getProducts($productType, $searchKeyword, 1, 1000);
 
+
                 $apiProducts = [];
                 if ($apiResponse[0] == '200') {
                     $responseData = $apiResponse[1];
-                    if (is_object($responseData) && isset($responseData->data)) {
-                        $apiProducts = $responseData->data;
-                    } elseif (is_array($responseData) && isset($responseData['data'])) {
-                        $apiProducts = $responseData['data'];
+                    if (is_object($responseData) && isset($responseData->items)) {
+                        $apiProducts = $responseData->items->data;
+                    } elseif (is_array($responseData) && isset($responseData['items'])) {
+                        $apiProducts = $responseData['items']['data'];
                     }
                 }
 
@@ -221,7 +222,7 @@ class KfaController extends Controller
                                     'name'                => (string) ($productData['name'] ?? ''),
                                     'manufacturer'        => (string) ($productData['manufacturer'] ?? ''),
                                     'product_type'        => $productType,
-                                    'dosage_form'         => isset($productData['dosage_form']) ? (is_array($productData['dosage_form']) ? implode(', ', $productData['dosage_form']) : (is_object($productData['dosage_form']) ? (string) $productData['dosage_form'] : (string) $productData['dosage_form'])) : null,
+                                    'dosage_form'         => isset($productData['dosage_form']) ? (is_array($productData['dosage_form']) ? implode(', ', $productData['dosage_form']) : (is_object($productData['dosage_form']) ? json_encode($productData['dosage_form']) : (string) $productData['dosage_form'])) : null,
                                     'strength'            => isset($productData['strength']) ? (is_object($productData['strength']) ? (string) $productData['strength'] : (string) $productData['strength']) : null,
                                     'unit'                => isset($productData['unit']) ? (is_object($productData['unit']) ? (string) $productData['unit'] : (string) $productData['unit']) : null,
                                     'packaging'           => isset($productData['packaging']) ? (is_object($productData['packaging']) ? (string) $productData['packaging'] : (string) $productData['packaging']) : null,
