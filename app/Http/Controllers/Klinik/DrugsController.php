@@ -699,11 +699,10 @@ class DrugsController extends Controller
                 // Gunakan service KFA untuk mendapatkan produk
                 $kfaService = app(\Modules\Klinik\App\Services\Kfa::class);
                 
-                // Panggil API getProducts
-                $apiResponse = $kfaService->getProducts($productType, $keyword, 1, 100);
+                // Panggil API searchProducts
+                $apiProducts = $kfaService->searchProducts($keyword, $productType, 100);
                 
-                if ($apiResponse[0] == '200' && isset($apiResponse[1]->items)) {
-                    $apiProducts = $apiResponse[1]->items;
+                if (!empty($apiProducts)) {
                     
                     // Simpan data ke database dengan transaction
                     DB::transaction(function () use ($apiProducts, $productType) {
@@ -713,6 +712,30 @@ class DrugsController extends Controller
                             if (isset($productData['kfa_code']) && !empty($productData['kfa_code'])) {
                                 \Modules\Klinik\Models\KfaProduct::updateOrCreate(
                                     ['kfa_code' => (string) $productData['kfa_code']],
+                                    [
+                                        'name' => (string) ($productData['name'] ?? ''),
+                                        'manufacturer' => (string) ($productData['manufacturer'] ?? ''),
+                                        'product_type' => $productType,
+                                        'dosage_form' => isset($productData['dosage_form']) ? 
+                                            (is_array($productData['dosage_form']) ? 
+                                                implode(', ', $productData['dosage_form']) : 
+                                                (string) $productData['dosage_form']) : null,
+                                        'strength' => isset($productData['strength']) ? (string) $productData['strength'] : null,
+                                        'unit' => isset($productData['unit']) ? (string) $productData['unit'] : null,
+                                        'packaging' => isset($productData['packaging']) ? (string) $productData['packaging'] : null,
+                                        'fix_price' => isset($productData['fix_price']) ? (float) $productData['fix_price'] : null,
+                                        'het_price' => isset($productData['het_price']) ? (float) $productData['het_price'] : null,
+                                        'registration_number' => isset($productData['registration_number']) ? (string) $productData['registration_number'] : null,
+                                        'registration_date' => isset($productData['registration_date']) ? (string) $productData['registration_date'] : null,
+                                        'expiry_date' => isset($productData['expiry_date']) ? (string) $productData['expiry_date'] : null,
+                                        'description' => isset($productData['description']) ? (string) $productData['description'] : null,
+                                        'raw_data' => json_encode($productData),
+                                        'last_sync' => now()
+                                    ]
+                                );
+                            } else if (isset($productData['code']) && !empty($productData['code'])) {
+                                \Modules\Klinik\Models\KfaProduct::updateOrCreate(
+                                    ['kfa_code' => (string) $productData['code']],
                                     [
                                         'name' => (string) ($productData['name'] ?? ''),
                                         'manufacturer' => (string) ($productData['manufacturer'] ?? ''),
