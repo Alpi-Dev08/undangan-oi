@@ -290,16 +290,16 @@
                                         </div>
                                     </div>
                                     ${data.description ? `
-                                                            <hr>
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <strong>Deskripsi:</strong><br>
-                                                                    <div class="border p-3 rounded bg-light">
-                                                                        ${data.description}
+                                                                    <hr>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            <strong>Deskripsi:</strong><br>
+                                                                            <div class="border p-3 rounded bg-light">
+                                                                                ${data.description}
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                            ` : ''}
+                                                                    ` : ''}
                                 `;
                                     $('#kfaDetailContent').html(html);
                                 } else {
