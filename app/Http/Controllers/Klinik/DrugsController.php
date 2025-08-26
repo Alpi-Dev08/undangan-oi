@@ -625,59 +625,15 @@ class DrugsController extends Controller
     public function kfaSearch(Request $request): JsonResponse
     {
         $request->validate([
-            'drug_name' => 'required|string|min:2'
-        ]);
-
-        try {
-            $drugName = $request->input('drug_name');
-
-            // Gunakan KfaDrugSyncService untuk mencari data KFA
-            $kfaService = app(KfaDrugSyncService::class);
-            $results = $kfaService->searchKfaProducts($drugName);
-
-            Log::info('Pencarian KFA berhasil', [
-                'user_id' => $this->user?->id,
-                'drug_name' => $drugName,
-                'results_count' => count($results)
-            ]);
-
-            return response()->json([
-                'success' => true,
-                'data' => $results
-            ]);
-
-        } catch (Exception $e) {
-            Log::error('Gagal mencari data KFA', [
-                'user_id' => $this->user?->id,
-                'error' => $e->getMessage()
-            ]);
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat mencari data KFA'
-            ], 500);
-        }
-    }
-
-    /**
-     * Mencari produk KFA menggunakan API getProducts dengan pendekatan yang lebih komprehensif
-     * Menggunakan referensi dari KfaController::getProducts
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function searchKfaProducts(Request $request): JsonResponse
-    {
-        $request->validate([
-            'keyword' => 'required|string|min:2',
+            'drug_name' => 'required|string|min:2',
             'product_type' => 'nullable|string|in:farmasi,alkes|default:farmasi'
         ]);
 
         try {
-            $keyword = $request->input('keyword');
+            $keyword = $request->input('drug_name');
             $productType = $request->input('product_type', 'farmasi');
 
-            Log::info('Memulai pencarian produk KFA menggunakan getProducts', [
+            Log::info('Memulai pencarian produk KFA', [
                 'user_id' => $this->user?->id,
                 'keyword' => $keyword,
                 'product_type' => $productType
@@ -698,17 +654,16 @@ class DrugsController extends Controller
 
                 // Gunakan service KFA untuk mendapatkan produk
                 $kfaService = app(\Modules\Klinik\App\Services\Kfa::class);
-                
+
                 // Panggil API searchProducts
                 $apiProducts = $kfaService->searchProducts($keyword, $productType, 100);
-                
+
                 if (!empty($apiProducts)) {
-                    
                     // Simpan data ke database dengan transaction
                     DB::transaction(function () use ($apiProducts, $productType) {
                         foreach ($apiProducts as $product) {
                             $productData = is_object($product) ? (array) $product : $product;
-                            
+
                             if (isset($productData['kfa_code']) && !empty($productData['kfa_code'])) {
                                 \Modules\Klinik\Models\KfaProduct::updateOrCreate(
                                     ['kfa_code' => (string) $productData['kfa_code']],
@@ -716,9 +671,9 @@ class DrugsController extends Controller
                                         'name' => (string) ($productData['name'] ?? ''),
                                         'manufacturer' => (string) ($productData['manufacturer'] ?? ''),
                                         'product_type' => $productType,
-                                        'dosage_form' => isset($productData['dosage_form']) ? 
-                                            (is_array($productData['dosage_form']) ? 
-                                                implode(', ', $productData['dosage_form']) : 
+                                        'dosage_form' => isset($productData['dosage_form']) ?
+                                            (is_array($productData['dosage_form']) ?
+                                                implode(', ', $productData['dosage_form']) :
                                                 (string) $productData['dosage_form']) : null,
                                         'strength' => isset($productData['strength']) ? (string) $productData['strength'] : null,
                                         'unit' => isset($productData['unit']) ? (string) $productData['unit'] : null,
@@ -740,9 +695,9 @@ class DrugsController extends Controller
                                         'name' => (string) ($productData['name'] ?? ''),
                                         'manufacturer' => (string) ($productData['manufacturer'] ?? ''),
                                         'product_type' => $productType,
-                                        'dosage_form' => isset($productData['dosage_form']) ? 
-                                            (is_array($productData['dosage_form']) ? 
-                                                implode(', ', $productData['dosage_form']) : 
+                                        'dosage_form' => isset($productData['dosage_form']) ?
+                                            (is_array($productData['dosage_form']) ?
+                                                implode(', ', $productData['dosage_form']) :
                                                 (string) $productData['dosage_form']) : null,
                                         'strength' => isset($productData['strength']) ? (string) $productData['strength'] : null,
                                         'unit' => isset($productData['unit']) ? (string) $productData['unit'] : null,
@@ -801,9 +756,9 @@ class DrugsController extends Controller
             ]);
 
         } catch (Exception $e) {
-            Log::error('Gagal mencari produk KFA menggunakan getProducts', [
+            Log::error('Gagal mencari data KFA', [
                 'user_id' => $this->user?->id,
-                'keyword' => $request->input('keyword'),
+                'keyword' => $request->input('drug_name'),
                 'product_type' => $request->input('product_type', 'farmasi'),
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
@@ -811,11 +766,20 @@ class DrugsController extends Controller
 
             return response()->json([
                 'success' => false,
-                'message' => 'Terjadi kesalahan saat mencari data produk KFA',
+                'message' => 'Terjadi kesalahan saat mencari data KFA',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
+
+    /**
+     * Mencari produk KFA menggunakan API getProducts dengan pendekatan yang lebih komprehensif
+     * Menggunakan referensi dari KfaController::getProducts
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+
 
       /**
      * Memperbarui kfa_code untuk obat tertentu

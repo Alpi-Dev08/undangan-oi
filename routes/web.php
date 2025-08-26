@@ -201,7 +201,7 @@
             
             // KFA Integration Routes
             Route::get('drugs/kfa-search', [DrugsController::class, 'kfaSearch'])->name('drugs.kfa-search');
-            Route::get('drugs/search-kfa-products', [DrugsController::class, 'searchKfaProducts'])->name('drugs.search-kfa-products');
+            Route::get('drugs/search-kfa-products', [DrugsController::class, 'kfaSearch'])->name('drugs.search-kfa-products');
             Route::post('drugs/{drug}/update-kfa-code', [DrugsController::class, 'updateKfaCode'])->name('drugs.update-kfa-code');
             Route::post('suket-penandaan-operasi/{id}', [ExaminationsController::class, 'penandaan_operasi'])->name('suket.penandaan_operasi');
             Route::post('suket-surgical-checklist/{id}', [ExaminationsController::class, 'surgical_checklist'])->name('suket.surgical_checklist');
