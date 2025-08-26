@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('kfa_products', function (Blueprint $table) {
-            $table->string('name', 1000)->change();
+            $table->text('name', 500)->change();
         });
     }
 
