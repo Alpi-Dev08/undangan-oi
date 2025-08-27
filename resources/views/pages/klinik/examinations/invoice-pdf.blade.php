@@ -475,14 +475,63 @@
                     <td style="width: 60%; vertical-align: top; padding-right: 20px;">
                         <div class="footer-box">
                             <div class="footer-text">
-                                <div><strong>NPWP:</strong> 94.990.535.0-435.000</div>
-                                <div><strong>Catatan:</strong> Invoice ini berlaku sebagai faktur Pajak sesuai dengan Peraturan Direktur Jenderal Pajak No. 27/PJ/2011, Tanggal 18 September 2011</div>
-                                <div class="mt-2">@include('partials.bank-accounts')</div>
-                                <div class="mt-2">
-                                    <div><strong>Reservasi Rawat Jalan:</strong> {{ organization()->phone }} (Senin-Jumat 08.00-20.00)</div>
-                                    <div><strong>Weekend Clinic:</strong> Sabtu & Minggu 08.00-17.00</div>
+                                <div class="mb-2"><strong>NPWP:</strong> 94.990.535.0-435.000</div>
+                                <div class="mb-2"><strong>Catatan:</strong> Invoice ini berlaku sebagai faktur Pajak sesuai dengan Peraturan Direktur Jenderal Pajak No. 27/PJ/2011, Tanggal 18 September 2011</div>
+                                
+                                <div class="mb-3">@include('partials.bank-accounts')</div>
+                                
+                                <div class="contact-info">
+                                    <div class="contact-item">
+                                        <span class="contact-label">📞 Reservasi Rawat Jalan:</span>
+                                        <span class="contact-value">{{ organization()->phone }}</span>
+                                        <span class="contact-hours">(Senin-Jumat 08.00-20.00)</span>
+                                    </div>
+                                    <div class="contact-item">
+                                        <span class="contact-label">🏥 Weekend Clinic:</span>
+                                        <span class="contact-value">Sabtu & Minggu</span>
+                                        <span class="contact-hours">08.00-17.00</span>
+                                    </div>
                                 </div>
                             </div>
+                            
+                            <style>
+                            .contact-info {
+                                margin-top: 1rem;
+                            }
+                            
+                            .contact-item {
+                                display: flex;
+                                align-items: center;
+                                gap: 0.5rem;
+                                margin-bottom: 0.5rem;
+                                flex-wrap: wrap;
+                            }
+                            
+                            .contact-label {
+                                font-weight: 600;
+                                min-width: 180px;
+                            }
+                            
+                            .contact-value {
+                                font-weight: 500;
+                            }
+                            
+                            .contact-hours {
+                                color: #666;
+                                font-size: 0.9em;
+                            }
+                            
+                            @media print {
+                                .contact-item {
+                                    font-size: 8px;
+                                    margin-bottom: 0.25rem;
+                                }
+                                
+                                .contact-label {
+                                    min-width: 150px;
+                                }
+                            }
+                            </style>
                         </div>
                     </td>
                     <td style="width: 40%; vertical-align: top; text-align: right;">
