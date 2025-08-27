@@ -1,5 +1,5 @@
-<div class="bank-info">
-    <div class="fw-bold mb-2">Pembayaran dapat dilakukan melalui:</div>
+<div class="bank-info" style="margin-bottom: 5px;">
+    <div class="fw-bold mb-2" style="margin-bottom:5px">Pembayaran dapat dilakukan melalui:</div>
     <div class="bank-list">
         <div class="bank-item">
             <span class="bank-name">Bank BRI</span>
@@ -29,7 +29,7 @@
     }
 
     .bank-item {
-        margin-bottom: 0.25rem;
+        margin-bottom: 0px;
     }
 
     .bank-name {
