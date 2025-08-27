@@ -475,14 +475,68 @@
                     <td style="width: 60%; vertical-align: top; padding-right: 20px;">
                         <div class="footer-box">
                             <div class="footer-text">
-                                <div>- Klinik Satriabudi Dharma Medika NPWP : </div>
-                                <div>- Invoice ini berlaku sebagai faktur Pajak sesuai dengan Peraturan</div>
-                                <div>Direktur Jenderal Pajak No. 27/PJ/2011, Tanggal 18 September 2011</div>
-                                <div>- Pembayaran dapat dilakukan melalui :</div>
-                                <div>- Reservasi Rawat Jalan Call Center {{ organization()->phone }} (Senin-Jumat
-                                    08.00-20.00)</div>
-                                <div>- Klinik Hari Sabtu dan Minggu (Weekend Clinic) 08.00-17.00</div>
+                                <div class="mb-1"><strong>Klinik Satriabudi Dharma Medika NPWP:</strong>
+                                    94.990.535.0-435.000</div>
+                                <div class="mb-1"><strong>Catatan:</strong> Invoice ini berlaku sebagai faktur Pajak
+                                    sesuai dengan Peraturan Direktur Jenderal Pajak No. 27/PJ/2011, Tanggal 18 September
+                                    2011
+                                </div>
+
+                                <div class="mb-1">@include('partials.bank-accounts')</div>
+
+                                <div class="contact-info">
+                                    <div class="contact-item">
+                                        <span class="contact-label">Reservasi Rawat Jalan</span>
+                                        <span class="contact-value">{{ organization()->phone }}</span>
+                                        <span class="contact-hours">(Senin-Jumat 08.00-20.00)</span>
+                                    </div>
+                                    <div class="contact-item">
+                                        <span class="contact-label">Weekend Clinic</span>
+                                        <span class="contact-value">Sabtu & Minggu</span>
+                                        <span class="contact-hours">08.00-17.00</span>
+                                    </div>
+                                </div>
                             </div>
+
+                            <style>
+                                .contact-info {
+                                    margin-top: 0px;
+                                }
+
+                                .contact-item {
+                                    margin-bottom: 0px;
+                                }
+
+                                .contact-label {
+                                    font-weight: 600;
+                                    display: inline-block;
+                                    width: 150px;
+                                    vertical-align: top;
+                                }
+
+                                .contact-value {
+                                    font-weight: 500;
+                                    display: inline-block;
+                                    margin-right: 0.5rem;
+                                }
+
+                                .contact-hours {
+                                    color: #666;
+                                    font-size: 0.9em;
+                                    display: inline-block;
+                                }
+
+                                @media print {
+                                    .contact-item {
+                                        font-size: 8px;
+                                        margin-bottom: 0.25rem;
+                                    }
+
+                                    .contact-label {
+                                        width: 150px;
+                                    }
+                                }
+                            </style>
                         </div>
                     </td>
                     <td style="width: 40%; vertical-align: top; text-align: right;">
