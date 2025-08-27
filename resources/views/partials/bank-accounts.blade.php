@@ -20,47 +20,49 @@
 </div>
 
 <style>
-.bank-info {
-    line-height: 1.6;
-}
-
-.bank-list {
-    margin-left: 1rem;
-}
-
-.bank-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.25rem;
-}
-
-.bank-name {
-    font-weight: 600;
-    min-width: 80px;
-}
-
-.bank-account {
-    font-family: 'Courier New', monospace;
-    font-weight: 500;
-    color: #0066cc;
-}
-
-.account-name {
-    color: #666;
-}
-
-@media print {
-    .bank-item {
-        font-size: 9px;
+    .bank-info {
+        line-height: 1.5;
     }
-    
+
+    .bank-list {
+        margin-left: 1rem;
+    }
+
+    .bank-item {
+        margin-bottom: 0.25rem;
+    }
+
     .bank-name {
         font-weight: 600;
+        display: inline-block;
+        width: 80px;
+        vertical-align: top;
     }
-    
+
     .bank-account {
-        color: black;
+        font-family: 'Courier New', monospace;
+        font-weight: 800;
+        color: #0066cc;
+        display: inline-block;
+        margin-right: 0.5rem;
     }
-}
+
+    .account-name {
+        color: #666;
+        display: inline-block;
+    }
+
+    @media print {
+        .bank-item {
+            font-size: 9px;
+        }
+
+        .bank-name {
+            font-weight: 600;
+        }
+
+        .bank-account {
+            color: black;
+        }
+    }
 </style>
