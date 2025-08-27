@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataTables;
+namespace App\Http\Controllers\Klinik;
 
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Html\Column;
