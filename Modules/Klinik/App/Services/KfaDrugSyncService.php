@@ -1,0 +1,675 @@
+<?php
+
+namespace Modules\Klinik\App\Services;
+
+use App\Models\Klinik\Drug;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Modules\Klinik\Models\KfaProduct;
+
+class KfaDrugSyncService
+{
+    protected $similarityService;
+    protected $defaultThreshold = 70;
+
+    public function __construct(StringSimilarityService $similarityService)
+    {
+        $this->similarityService = $similarityService;
+    }
+
+    /**
+     * Sinkronisasi semua drugs dengan data KFA
+     */
+    public function syncAllDrugs(int $threshold = null, int $limit = null): array
+    {
+        $threshold = $threshold ?? $this->defaultThreshold;
+        
+        $results = [
+            'total_drugs' => 0,
+            'matched_drugs' => 0,
+            'new_matches' => 0,
+            'updated_matches' => 0,
+            'failed_matches' => 0,
+            'threshold' => $threshold,
+            'details' => []
+        ];
+
+        DB::transaction(function () use (&$results, $threshold, $limit) {
+            $query = Drug::query()
+                ->where(function ($q) {
+                    $q->whereNull('kfa_code')
+                      ->orWhere('last_sync_attempt', '<', now()->subDays(7));
+                });
+
+            if ($limit) {
+                $query->limit($limit);
+            }
+
+            $drugs = $query->get();
+            $results['total_drugs'] = $drugs->count();
+
+            foreach ($drugs as $drug) {
+                try {
+                    $matchResult = $this->findKfaMatch($drug, $threshold);
+                    
+                    if ($matchResult['success']) {
+                        $results['matched_drugs']++;
+                        
+                        if ($drug->kfa_code !== $matchResult['kfa_code']) {
+                            $results['new_matches']++;
+                        } else {
+                            $results['updated_matches']++;
+                        }
+
+                        $this->updateDrugWithMatch($drug, $matchResult);
+                        
+                        $results['details'][] = [
+                            'drug_name' => $drug->name,
+                            'kfa_name' => $matchResult['kfa_name'],
+                            'manufacturer' => $matchResult['manufacturer'],
+                            'similarity_score' => $matchResult['similarity_score'],
+                            'status' => 'success'
+                        ];
+                    } else {
+                        $results['failed_matches']++;
+                        $this->markSyncAttempt($drug);
+                        
+                        $results['details'][] = [
+                            'drug_name' => $drug->name,
+                            'status' => 'failed',
+                            'reason' => $matchResult['reason'] ?? 'No suitable match found'
+                        ];
+                    }
+                } catch (\Exception $e) {
+                    Log::error('KFA sync error for drug: ' . $drug->name, [
+                        'error' => $e->getMessage(),
+                        'drug_id' => $drug->id,
+                        'threshold' => $threshold
+                    ]);
+                    
+                    $results['failed_matches']++;
+                    $results['details'][] = [
+                        'drug_name' => $drug->name,
+                        'status' => 'error',
+                        'reason' => $e->getMessage()
+                    ];
+                }
+            }
+        });
+
+        return $results;
+    }
+
+    /**
+     * Mencari kecocokan KFA untuk satu drug
+     */
+    public function findKfaMatch(Drug $drug, int $threshold = null): array
+    {
+        $threshold = $threshold ?? $this->defaultThreshold;
+        
+        // Gunakan query yang lebih efisien dengan membatasi jumlah data
+        $kfaProducts = KfaProduct::query()
+            ->where('product_type', 'farmasi')
+            ->when(strlen($drug->name) > 3, function ($query) use ($drug) {
+                $query->where(function ($q) use ($drug) {
+                    $q->where('name', 'like', '%' . $drug->name . '%')
+                      ->orWhere('name', 'like', '%' . $this->similarityService->normalizeString($drug->name) . '%');
+                });
+            })
+            ->limit(20) // Kurangi dari 100 menjadi 20 untuk menghemat memory
+            ->get();
+
+        if ($kfaProducts->isEmpty()) {
+            return [
+                'success' => false,
+                'reason' => 'No KFA products found for name: ' . $drug->name
+            ];
+        }
+
+        $matches = [];
+        
+        foreach ($kfaProducts as $kfaProduct) {
+            $score = $this->calculateSimilarity($drug, $kfaProduct);
+            
+            if ($score >= $threshold) {
+                $matches[] = [
+                    'kfa_product' => $kfaProduct,
+                    'score' => $score
+                ];
+            }
+        }
+
+        if (empty($matches)) {
+            return [
+                'success' => false,
+                'reason' => 'No match above threshold (' . $threshold . '%)',
+                'best_score' => collect($kfaProducts)->isEmpty() ? 0 : 
+                    $this->calculateSimilarity($drug, $kfaProducts->first())
+            ];
+        }
+
+        // Urutkan berdasarkan score tertinggi
+        usort($matches, function ($a, $b) {
+            return $b['score'] <=> $a['score'];
+        });
+
+        $bestMatch = $matches[0];
+
+        return [
+            'success' => true,
+            'kfa_code' => $bestMatch['kfa_product']->kfa_code,
+            'kfa_name' => $bestMatch['kfa_product']->name,
+            'manufacturer' => $bestMatch['kfa_product']->manufacturer,
+            'similarity_score' => $bestMatch['score'],
+            'kfa_product' => $bestMatch['kfa_product'],
+            'total_candidates' => count($matches)
+        ];
+    }
+
+    /**
+     * Menghitung similarity score antara drug dan KFA product
+     */
+    private function calculateSimilarity(Drug $drug, KfaProduct $kfaProduct): float
+    {
+        // Hitung similarity untuk nama obat
+        $nameSimilarity = $this->similarityService->calculateCombinedScore(
+            $drug->name,
+            $kfaProduct->name
+        );
+
+        // Hitung similarity untuk manufacturer
+        $manufacturerSimilarity = 0;
+        if (!empty($drug->manufacturer) && !empty($kfaProduct->manufacturer)) {
+            $manufacturerSimilarity = $this->similarityService->calculateCombinedScore(
+                $drug->manufacturer,
+                $kfaProduct->manufacturer
+            );
+        } elseif (empty($drug->manufacturer) && empty($kfaProduct->manufacturer)) {
+            // Jika keduanya kosong, beri score 100 untuk manufacturer
+            $manufacturerSimilarity = 100;
+        }
+
+        // Bobot: 80% untuk nama, 20% untuk manufacturer
+        $finalScore = ($nameSimilarity * 0.8) + ($manufacturerSimilarity * 0.2);
+
+        return round($finalScore, 2);
+    }
+
+    /**
+     * Mendapatkan statistik sinkronisasi
+     */
+    public function getSyncStatistics(): array
+    {
+        $totalDrugs = Drug::count();
+        $syncedDrugs = Drug::whereNotNull('kfa_code')->count();
+        $pendingDrugs = Drug::whereNull('kfa_code')->count();
+        $recentlySynced = Drug::where('last_sync_attempt', '>', now()->subDay())->count();
+
+        return [
+            'total_drugs' => $totalDrugs,
+            'synced_drugs' => $syncedDrugs,
+            'pending_drugs' => $pendingDrugs,
+            'recently_synced' => $recentlySynced,
+            'sync_percentage' => $totalDrugs > 0 ? round(($syncedDrugs / $totalDrugs) * 100, 2) : 0
+        ];
+    }
+
+    /**
+     * Mencari produk KFA berdasarkan nama untuk modal popup
+     *
+     * @param string $drugName
+     * @param int $limit
+     * @return array
+     */
+    public function searchKfaProducts(string $drugName, int $limit = 10): array
+    {
+        try {
+            $kfaProducts = KfaProduct::query()
+                ->where('product_type', 'farmasi')
+                ->where(function ($query) use ($drugName) {
+                    $query->where('name', 'like', '%' . $drugName . '%')
+                          ->orWhere('name', 'like', '%' . $this->similarityService->normalizeString($drugName) . '%');
+                })
+                ->orderBy('name')
+                ->limit($limit)
+                ->get();
+
+            $results = [];
+            foreach ($kfaProducts as $product) {
+                $results[] = [
+                    'kfa_code' => $product->kfa_code,
+                    'name' => $product->name,
+                    'manufacturer' => $product->manufacturer,
+                    'strength' => $product->strength,
+                    'form' => $product->form,
+                    'unit' => $product->unit,
+                    'packaging' => $product->packaging,
+                    'price' => $product->price,
+                    'similarity_score' => $this->similarityService->calculateCombinedScore(
+                        $drugName,
+                        $product->name
+                    )
+                ];
+            }
+
+            return $results;
+
+        } catch (\Exception $e) {
+            Log::error('Error saat mencari produk KFA', [
+                'drug_name' => $drugName,
+                'error' => $e->getMessage()
+            ]);
+            return [];
+        }
+    }
+
+    /**
+     * Mendapatkan drugs yang belum tersinkronisasi
+     */
+    public function getPendingDrugs(int $limit = 50): \Illuminate\Support\Collection
+    {
+        return Drug::whereNull('kfa_code')
+            ->orderBy('name')
+            ->limit($limit)
+            ->get(['id', 'name', 'manufacturer', 'created_at']);
+    }
+
+    /**
+     * Mendapatkan drugs yang sudah tersinkronisasi
+     */
+    public function getSyncedDrugs(int $limit = 50): \Illuminate\Support\Collection
+    {
+        return Drug::whereNotNull('kfa_code')
+            ->with(['kfaProduct' => function ($query) {
+                $query->select('kfa_code', 'name', 'manufacturer');
+            }])
+            ->orderBy('last_sync_attempt', 'desc')
+            ->limit($limit)
+            ->get(['id', 'name', 'manufacturer', 'kfa_code', 'similarity_score', 'last_sync_attempt']);
+    }
+
+    /**
+     * Reset semua sinkronisasi
+     */
+    public function resetAllSyncs(): int
+    {
+        return Drug::whereNotNull('kfa_code')
+            ->update([
+                'kfa_code' => null,
+                'similarity_score' => null,
+                'matching_metadata' => null,
+                'last_sync_attempt' => null
+            ]);
+    }
+
+    /**
+     * Menandai sync attempt untuk drug
+     */
+    private function markSyncAttempt(Drug $drug): void
+    {
+        $drug->update([
+            'last_sync_attempt' => now()
+        ]);
+    }
+
+    /**
+     * Update drug dengan hasil match dari KFA
+     */
+    private function updateDrugWithMatch(Drug $drug, array $matchResult): void
+    {
+        $drug->update([
+            'kfa_code' => $matchResult['kfa_code'],
+            'similarity_score' => $matchResult['similarity_score'],
+            'matching_metadata' => json_encode([
+                'kfa_name' => $matchResult['kfa_name'],
+                'manufacturer' => $matchResult['manufacturer'],
+                'matched_at' => now()->toDateTimeString()
+            ]),
+            'last_sync_attempt' => now()
+        ]);
+    }
+
+    /**
+     * Batch update dari data KFA
+     */
+    public function batchUpdateFromKfa(array $kfaCodes): array
+    {
+        $results = ['updated' => 0, 'not_found' => 0, 'errors' => []];
+
+        foreach ($kfaCodes as $kfaCode) {
+            try {
+                $kfaProduct = KfaProduct::where('kfa_code', $kfaCode)->first();
+                
+                if (!$kfaProduct) {
+                    $results['not_found']++;
+                    continue;
+                }
+
+                $drug = Drug::where('name', 'like', '%' . $kfaProduct->name . '%')->first();
+                
+                if ($drug) {
+                    $drug->update([
+                        'kfa_code' => $kfaProduct->kfa_code,
+                        'manufacturer' => $kfaProduct->manufacturer,
+                        'similarity_score' => 100,
+                        'matching_metadata' => [
+                            'sync_method' => 'batch_update',
+                            'kfa_data' => $kfaProduct->toArray()
+                        ],
+                        'last_sync_attempt' => now()
+                    ]);
+                    
+                    $results['updated']++;
+                }
+            } catch (\Exception $e) {
+                $results['errors'][$kfaCode] = $e->getMessage();
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * Sinkronisasi data produk dari Satusehat Integration KFA API
+     *
+     * @param string $productType
+     * @param string|null $keyword
+     * @param int $limit
+     * @return array
+     */
+    public function syncProductsFromKfaApi(string $productType = 'farmasi', ?string $keyword = null, int $limit = 1000): array
+    {
+        $results = [
+            'total_fetched' => 0,
+            'new_products' => 0,
+            'updated_products' => 0,
+            'errors' => []
+        ];
+
+        try {
+            // Gunakan service Kfa untuk mengambil data dari API
+            $kfaService = app(\Modules\Klinik\App\Services\Kfa::class);
+            
+            $searchKeyword = $keyword ?: 'a'; // Default keyword untuk menampilkan semua produk
+            $apiProducts = $kfaService->searchProducts($searchKeyword, $productType, $limit);
+
+            if (empty($apiProducts)) {
+                Log::warning('Tidak ada produk yang ditemukan dari KFA API', [
+                    'product_type' => $productType,
+                    'keyword' => $keyword
+                ]);
+                return $results;
+            }
+
+            DB::transaction(function () use (&$results, $apiProducts, $productType) {
+                foreach ($apiProducts as $productData) {
+                    try {
+                        // Validasi data produk
+                        if (!isset($productData['kfa_code']) || empty($productData['kfa_code'])) {
+                            continue;
+                        }
+
+                        // Simpan atau update produk ke database
+                        $kfaProduct = KfaProduct::updateOrCreate(
+                            ['kfa_code' => (string) $productData['kfa_code']],
+                            [
+                                'name' => (string) ($productData['name'] ?? $productData['name'] ?? ''),
+                                'manufacturer' => (string) ($productData['manufacturer'] ?? $productData['manufacturer'] ?? ''),
+                                'product_type' => $productType,
+                                'dosage_form' => isset($productData['dosage_form']) ? 
+                                    (is_array($productData['dosage_form']) ? 
+                                        json_encode($productData['dosage_form']) : 
+                                        (string) $productData['dosage_form']) : null,
+                                'strength' => isset($productData['strength']) ? (string) $productData['strength'] : null,
+                                'unit' => isset($productData['unit']) ? (string) $productData['unit'] : null,
+                                'packaging' => isset($productData['packaging']) ? (string) $productData['packaging'] : null,
+                                'fix_price' => isset($productData['fix_price']) ? (float) $productData['fix_price'] : null,
+                                'het_price' => isset($productData['het_price']) ? (float) $productData['het_price'] : null,
+                                'registration_number' => isset($productData['registration_number']) ? (string) $productData['registration_number'] : null,
+                                'registration_date' => isset($productData['registration_date']) ? $productData['registration_date'] : null,
+                                'expiry_date' => isset($productData['expiry_date']) ? $productData['expiry_date'] : null,
+                                'description' => isset($productData['description']) ? (string) $productData['description'] : null,
+                                'raw_data' => $productData,
+                                'last_sync' => now()
+                            ]
+                        );
+
+                        if ($kfaProduct->wasRecentlyCreated) {
+                            $results['new_products']++;
+                        } else {
+                            $results['updated_products']++;
+                        }
+
+                    } catch (\Exception $e) {
+                        Log::error('Error menyimpan produk KFA', [
+                            'product_data' => $productData,
+                            'error' => $e->getMessage()
+                        ]);
+                        $results['errors'][] = [
+                            'kfa_code' => $productData['kfa_code'] ?? 'unknown',
+                            'error' => $e->getMessage()
+                        ];
+                    }
+                }
+            });
+
+            $results['total_fetched'] = count($apiProducts);
+
+            Log::info('Sinkronisasi produk KFA selesai', [
+                'results' => $results
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error sinkronisasi produk KFA', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            $results['errors'][] = [
+                'error' => $e->getMessage()
+            ];
+        }
+
+        return $results;
+    }
+
+    /**
+     * Sinkronisasi detail produk dari KFA API berdasarkan kode KFA
+     *
+     * @param string $kfaCode
+     * @return array
+     */
+    public function syncProductDetailFromKfaApi(string $kfaCode): array
+    {
+        $results = [
+            'success' => false,
+            'product' => null,
+            'error' => null
+        ];
+
+        try {
+            // Gunakan service Kfa untuk mengambil detail produk dari API
+            $kfaService = app(\Modules\Klinik\App\Services\Kfa::class);
+            $productDetail = $kfaService->getProductDetail($kfaCode);
+
+            if (!$productDetail) {
+                $results['error'] = 'Produk tidak ditemukan di KFA API';
+                return $results;
+            }
+
+            DB::transaction(function () use (&$results, $productDetail, $kfaCode) {
+                // Simpan atau update detail produk ke database
+                $kfaProduct = KfaProduct::updateOrCreate(
+                    ['kfa_code' => (string) $kfaCode],
+                    [
+                        'name' => (string) ($productDetail['name'] ?? $productDetail['name'] ?? ''),
+                        'manufacturer' => (string) ($productDetail['manufacturer'] ?? $productDetail['manufacturer'] ?? ''),
+                        'product_type' => 'farmasi',
+                        'dosage_form' => isset($productDetail['dosage_form']) ? 
+                            (is_array($productDetail['dosage_form']) ? 
+                                json_encode($productDetail['dosage_form']) : 
+                                (string) $productDetail['dosage_form']) : null,
+                        'strength' => isset($productDetail['strength']) ? (string) $productDetail['strength'] : null,
+                        'unit' => isset($productDetail['unit']) ? (string) $productDetail['unit'] : null,
+                        'packaging' => isset($productDetail['packaging']) ? (string) $productDetail['packaging'] : null,
+                        'fix_price' => isset($productDetail['fix_price']) ? (float) $productDetail['fix_price'] : null,
+                        'het_price' => isset($productDetail['het_price']) ? (float) $productDetail['het_price'] : null,
+                        'registration_number' => isset($productDetail['registration_number']) ? (string) $productDetail['registration_number'] : null,
+                        'registration_date' => isset($productDetail['registration_date']) ? $productDetail['registration_date'] : null,
+                        'expiry_date' => isset($productDetail['expiry_date']) ? $productDetail['expiry_date'] : null,
+                        'description' => isset($productDetail['description']) ? (string) $productDetail['description'] : null,
+                        'raw_data' => $productDetail,
+                        'last_sync' => now()
+                    ]
+                );
+
+                $results['success'] = true;
+                $results['product'] = $kfaProduct;
+            });
+
+            Log::info('Detail produk KFA berhasil disinkronisasi', [
+                'kfa_code' => $kfaCode
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error sinkronisasi detail produk KFA', [
+                'kfa_code' => $kfaCode,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            $results['error'] = $e->getMessage();
+        }
+
+        return $results;
+    }
+
+    /**
+     * Menggunakan fungsi getProducts dari Satusehat\Integration\Terminology\Kfa untuk sinkronisasi ke database
+     *
+     * @param string $productType
+     * @param string|null $keyword
+     * @param int $page
+     * @param int $perPage
+     * @return array
+     */
+    public function syncGetProductsFromKfaApi(string $productType = 'farmasi', ?string $keyword = null, int $page = 1, int $perPage = 1000): array
+    {
+        $results = [
+            'success' => false,
+            'total_synced' => 0,
+            'new_products' => 0,
+            'updated_products' => 0,
+            'errors' => [],
+            'api_response' => null
+        ];
+
+        try {
+            // Gunakan service Kfa untuk mengambil data dari API menggunakan getProducts
+            $kfaService = app(\Modules\Klinik\App\Services\Kfa::class);
+            
+            $searchKeyword = $keyword ?: 'asam'; // Default keyword untuk menampilkan semua produk
+            $apiResponse = $kfaService->getProducts($productType, $searchKeyword, $page, $perPage);
+
+            // Handle response yang berbeda format
+            $products = [];
+            if (is_array($apiResponse)) {
+                if (isset($apiResponse[0]) && $apiResponse[0] == '200' && isset($apiResponse[1]->items)) {
+                    // Format response: [status, object dengan items]
+                    $products = (array) $apiResponse[1]->items;
+                } elseif (isset($apiResponse['data'])) {
+                    // Format response: array dengan key 'data'
+                    $products = $apiResponse['data'];
+                } else {
+                    // Format response: array langsung
+                    $products = $apiResponse;
+                }
+            }
+
+            if (empty($products)) {
+                Log::warning('Tidak ada produk yang ditemukan dari KFA API getProducts', [
+                    'product_type' => $productType,
+                    'keyword' => $keyword,
+                    'response' => $apiResponse
+                ]);
+                $results['errors'][] = 'Tidak ada produk yang ditemukan';
+                return $results;
+            }
+
+            DB::transaction(function () use (&$results, $products) {
+                foreach ($products as $productData) {
+                    try {
+                        // Konversi object ke array jika perlu
+                        if (is_object($productData)) {
+                            $productData = (array) $productData;
+                        }
+
+                        // Validasi data produk
+                        if (!isset($productData['kfa_code']) || empty($productData['kfa_code'])) {
+                            continue;
+                        }
+
+                        // Simpan atau update produk ke database seperti pada KfaController
+                        $kfaProduct = KfaProduct::updateOrCreate(
+                            ['kfa_code' => (string) $productData['kfa_code']],
+                            [
+                                'name' => (string) ($productData['name'] ?? $productData['name'] ?? ''),
+                                'manufacturer' => (string) ($productData['manufacturer'] ?? $productData['manufacturer'] ?? ''),
+                                'product_type' => $productData['product_type'] ?? 'farmasi',
+                                'dosage_form' => isset($productData['dosage_form']) ? 
+                                    (is_array($productData['dosage_form']) ? 
+                                        json_encode($productData['dosage_form']) : 
+                                        (string) $productData['dosage_form']) : null,
+                                'strength' => isset($productData['strength']) ? (string) $productData['strength'] : null,
+                                'unit' => isset($productData['unit']) ? (string) $productData['unit'] : null,
+                                'packaging' => isset($productData['packaging']) ? (string) $productData['packaging'] : null,
+                                'fix_price' => isset($productData['fix_price']) ? (float) $productData['fix_price'] : null,
+                                'het_price' => isset($productData['het_price']) ? (float) $productData['het_price'] : null,
+                                'registration_number' => isset($productData['registration_number']) ? (string) $productData['registration_number'] : null,
+                                'registration_date' => isset($productData['registration_date']) ? $productData['registration_date'] : null,
+                                'expiry_date' => isset($productData['expiry_date']) ? $productData['expiry_date'] : null,
+                                'description' => isset($productData['description']) ? (string) $productData['description'] : null,
+                                'raw_data' => $productData,
+                                'last_sync' => now()
+                            ]
+                        );
+
+                        if ($kfaProduct->wasRecentlyCreated) {
+                            $results['new_products']++;
+                        } else {
+                            $results['updated_products']++;
+                        }
+
+                    } catch (\Exception $e) {
+                        Log::error('Error menyimpan produk KFA dari getProducts', [
+                            'product_data' => $productData,
+                            'error' => $e->getMessage()
+                        ]);
+                        $results['errors'][] = [
+                            'kfa_code' => $productData['kfa_code'] ?? 'unknown',
+                            'error' => $e->getMessage()
+                        ];
+                    }
+                }
+            });
+
+            $results['success'] = true;
+            $results['total_synced'] = count($products);
+
+            Log::info('Sinkronisasi getProducts dari KFA API selesai', [
+                'results' => $results
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error sinkronisasi getProducts dari KFA API', [
+                'product_type' => $productType,
+                'keyword' => $keyword,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            $results['errors'][] = [
+                'error' => $e->getMessage()
+            ];
+        }
+
+        return $results;
+    }
+}

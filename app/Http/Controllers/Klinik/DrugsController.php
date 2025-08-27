@@ -9,9 +9,12 @@ use App\Imports\DrugsImport;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
+use Modules\Klinik\App\Services\Kfa;
+use Modules\Klinik\Models\KfaProduct;
 use App\DataTables\Klinik\DrugsDataTable;
 use App\Models\Klinik\{Drug, DrugUsage, Unit};
 use Illuminate\Support\Facades\{Auth, DB, Log};
+use Modules\Klinik\App\Services\KfaDrugSyncService;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Illuminate\Http\{Request, RedirectResponse, Response};
 use App\Http\Requests\Klinik\{StoreDrugRequest, UpdateDrugRequest};
@@ -20,7 +23,7 @@ class DrugsController extends Controller
 {
     private ?object $user;
 
-    /**
+      /**
      * Konstruktor untuk inisialisasi middleware autentikasi
      */
     public function __construct()
@@ -31,7 +34,7 @@ class DrugsController extends Controller
         });
     }
 
-    /**
+      /**
      * Menampilkan daftar obat
      *
      * @param DrugsDataTable $dataTable
@@ -49,7 +52,7 @@ class DrugsController extends Controller
         return $dataTable->render('pages.klinik.drugs.index');
     }
 
-    /**
+      /**
      * Menampilkan form untuk membuat obat baru
      *
      * @return View
@@ -68,7 +71,7 @@ class DrugsController extends Controller
         return view('pages.klinik.drugs.create', compact('unit'));
     }
 
-    /**
+      /**
      * Menyimpan obat baru ke database
      *
      * @param StoreDrugRequest $request
@@ -92,8 +95,8 @@ class DrugsController extends Controller
             DB::commit();
 
             Log::info('Obat berhasil dibuat', [
-                'user_id' => $this->user->id,
-                'drug_id' => $drug->id,
+                'user_id'   => $this->user->id,
+                'drug_id'   => $drug->id,
                 'drug_name' => $drug->name
             ]);
 
@@ -105,8 +108,8 @@ class DrugsController extends Controller
 
             Log::error('Gagal membuat obat', [
                 'user_id' => $this->user->id,
-                'error' => $e->getMessage(),
-                'data' => $validated
+                'error'   => $e->getMessage(),
+                'data'    => $validated
             ]);
 
             session()->flash('error', 'Terjadi kesalahan saat menyimpan obat!');
@@ -114,7 +117,7 @@ class DrugsController extends Controller
         }
     }
 
-    /**
+      /**
      * Menampilkan detail obat tertentu
      *
      * @param Drug $drug
@@ -138,7 +141,7 @@ class DrugsController extends Controller
         return view('pages.klinik.drugs.show', compact('drug'));
     }
 
-    /**
+      /**
      * Menampilkan form untuk mengedit obat
      *
      * @param Drug $drug
@@ -164,7 +167,7 @@ class DrugsController extends Controller
         return view('pages.klinik.drugs.edit', compact('unit', 'drug'));
     }
 
-    /**
+      /**
      * Memperbarui data obat di database
      *
      * @param UpdateDrugRequest $request
@@ -196,8 +199,8 @@ class DrugsController extends Controller
             DB::commit();
 
             Log::info('Obat berhasil diperbarui', [
-                'user_id' => $this->user->id,
-                'drug_id' => $drug->id,
+                'user_id'  => $this->user->id,
+                'drug_id'  => $drug->id,
                 'old_data' => $oldData,
                 'new_data' => $validated
             ]);
@@ -211,8 +214,8 @@ class DrugsController extends Controller
             Log::error('Gagal memperbarui obat', [
                 'user_id' => $this->user->id,
                 'drug_id' => $drug->id,
-                'error' => $e->getMessage(),
-                'data' => $validated
+                'error'   => $e->getMessage(),
+                'data'    => $validated
             ]);
 
             session()->flash('error', 'Terjadi kesalahan saat memperbarui obat!');
@@ -220,7 +223,7 @@ class DrugsController extends Controller
         }
     }
 
-    /**
+      /**
      * Menghapus obat dari database
      *
      * @param Drug $drug
@@ -249,7 +252,7 @@ class DrugsController extends Controller
             DB::commit();
 
             Log::info('Obat berhasil dihapus', [
-                'user_id' => $this->user->id,
+                'user_id'      => $this->user->id,
                 'deleted_drug' => $drugData
             ]);
 
@@ -262,7 +265,7 @@ class DrugsController extends Controller
             Log::error('Gagal menghapus obat', [
                 'user_id' => $this->user->id,
                 'drug_id' => $drug->id,
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ]);
 
             session()->flash('error', 'Terjadi kesalahan saat menghapus obat!');
@@ -288,9 +291,9 @@ class DrugsController extends Controller
 
         if ($request->isMethod('post')) {
             $validated = $request->validate([
-                'date' => 'required|date',
-                'user_name' => 'required|string|max:255',
-                'quantity' => 'required|integer|min:1',
+                'date'        => 'required|date',
+                'user_name'   => 'required|string|max:255',
+                'quantity'    => 'required|integer|min:1',
                 'description' => 'nullable|string|max:500',
             ]);
 
@@ -299,20 +302,20 @@ class DrugsController extends Controller
                 $drug->increment('stock', $validated['quantity']);
 
                 DrugUsage::create([
-                    'drug_id' => $drug->id,
-                    'date' => $validated['date'],
-                    'user_name' => $validated['user_name'],
-                    'quantity' => $validated['quantity'],
+                    'drug_id'     => $drug->id,
+                    'date'        => $validated['date'],
+                    'user_name'   => $validated['user_name'],
+                    'quantity'    => $validated['quantity'],
                     'description' => $validated['description'],
                 ]);
 
                 DB::commit();
 
                 Log::info('Stok obat berhasil ditambah', [
-                    'user_id' => $this->user?->id,
-                    'drug_id' => $drug->id,
+                    'user_id'        => $this->user?->id,
+                    'drug_id'        => $drug->id,
                     'quantity_added' => $validated['quantity'],
-                    'new_stock' => $drug->fresh()->stock
+                    'new_stock'      => $drug->fresh()->stock
                 ]);
 
                 session()->flash('success', 'Data penggunaan obat berhasil disimpan!');
@@ -324,8 +327,8 @@ class DrugsController extends Controller
                 Log::error('Gagal menambah stok obat', [
                     'user_id' => $this->user?->id,
                     'drug_id' => $drug->id,
-                    'error' => $e->getMessage(),
-                    'data' => $validated
+                    'error'   => $e->getMessage(),
+                    'data'    => $validated
                 ]);
 
                 session()->flash('error', 'Terjadi kesalahan saat menyimpan data!');
@@ -354,13 +357,13 @@ class DrugsController extends Controller
 
         if ($request->isMethod('post')) {
             $validated = $request->validate([
-                'date' => 'required|date',
-                'user_name' => 'required|string|max:255',
-                'quantity' => 'required|integer|min:1',
+                'date'        => 'required|date',
+                'user_name'   => 'required|string|max:255',
+                'quantity'    => 'required|integer|min:1',
                 'description' => 'nullable|string|max:500',
             ]);
 
-            // Validasi stok mencukupi
+              // Validasi stok mencukupi
             if ($drug->stock < $validated['quantity']) {
                 session()->flash('error', 'Stok tidak mencukupi! Stok tersedia: ' . $drug->stock);
                 return redirect()->back()->withInput();
@@ -371,20 +374,20 @@ class DrugsController extends Controller
                 $drug->decrement('stock', $validated['quantity']);
 
                 DrugUsage::create([
-                    'drug_id' => $drug->id,
-                    'date' => $validated['date'],
-                    'user_name' => $validated['user_name'],
-                    'quantity' => -$validated['quantity'], // Negatif untuk pengurangan
+                    'drug_id'     => $drug->id,
+                    'date'        => $validated['date'],
+                    'user_name'   => $validated['user_name'],
+                    'quantity'    => -$validated['quantity'],     // Negatif untuk pengurangan
                     'description' => $validated['description'],
                 ]);
 
                 DB::commit();
 
                 Log::info('Stok obat berhasil dikurangi', [
-                    'user_id' => $this->user?->id,
-                    'drug_id' => $drug->id,
+                    'user_id'          => $this->user?->id,
+                    'drug_id'          => $drug->id,
                     'quantity_reduced' => $validated['quantity'],
-                    'new_stock' => $drug->fresh()->stock
+                    'new_stock'        => $drug->fresh()->stock
                 ]);
 
                 session()->flash('success', 'Data penggunaan obat berhasil disimpan!');
@@ -396,8 +399,8 @@ class DrugsController extends Controller
                 Log::error('Gagal mengurangi stok obat', [
                     'user_id' => $this->user?->id,
                     'drug_id' => $drug->id,
-                    'error' => $e->getMessage(),
-                    'data' => $validated
+                    'error'   => $e->getMessage(),
+                    'data'    => $validated
                 ]);
 
                 session()->flash('error', 'Terjadi kesalahan saat menyimpan data!');
@@ -408,7 +411,7 @@ class DrugsController extends Controller
         return view('pages.klinik.drugs.reducestock', compact('drug'));
     }
 
-    /**
+      /**
      * Memperbarui detail obat dengan penambahan stok (deprecated - gunakan detail())
      *
      * @param Request $request
@@ -423,9 +426,9 @@ class DrugsController extends Controller
         ]);
 
         $validated = $request->validate([
-            'date' => 'required|date',
-            'user_name' => 'required|string|max:255',
-            'quantity' => 'required|integer|min:1',
+            'date'        => 'required|date',
+            'user_name'   => 'required|string|max:255',
+            'quantity'    => 'required|integer|min:1',
             'description' => 'nullable|string|max:500',
         ]);
 
@@ -433,11 +436,11 @@ class DrugsController extends Controller
         try {
             $drug->increment('stock', $validated['quantity']);
 
-            // Simpan ke session (legacy behavior)
+              // Simpan ke session (legacy behavior)
             $history = [
-                'date' => $validated['date'],
-                'user_name' => $validated['user_name'],
-                'quantity' => $validated['quantity'],
+                'date'        => $validated['date'],
+                'user_name'   => $validated['user_name'],
+                'quantity'    => $validated['quantity'],
                 'description' => $validated['description'],
             ];
 
@@ -451,8 +454,8 @@ class DrugsController extends Controller
             DB::commit();
 
             Log::info('Detail obat berhasil diperbarui (legacy)', [
-                'user_id' => $this->user?->id,
-                'drug_id' => $drug->id,
+                'user_id'        => $this->user?->id,
+                'drug_id'        => $drug->id,
                 'quantity_added' => $validated['quantity']
             ]);
 
@@ -465,7 +468,7 @@ class DrugsController extends Controller
             Log::error('Gagal memperbarui detail obat', [
                 'user_id' => $this->user?->id,
                 'drug_id' => $drug->id,
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ]);
 
             session()->flash('error', 'Terjadi kesalahan saat memperbarui detail obat!');
@@ -473,7 +476,7 @@ class DrugsController extends Controller
         }
     }
 
-    /**
+      /**
      * Menampilkan detail obat dengan history (deprecated)
      *
      * @param int $id
@@ -486,14 +489,14 @@ class DrugsController extends Controller
             'drug_id' => $id
         ]);
 
-        $drug = Drug::findOrFail($id);
-        $histories = session('histories', []);
+        $drug          = Drug::findOrFail($id);
+        $histories     = session('histories', []);
         $drugHistories = $histories[$drug->id] ?? [];
 
         return view('pages.klinik.drugs.addstock', compact('drug', 'drugHistories'));
     }
 
-    /**
+      /**
      * Memperbarui detail obat dengan pengurangan stok (deprecated - gunakan reduceDetail())
      *
      * @param Request $request
@@ -508,9 +511,9 @@ class DrugsController extends Controller
         ]);
 
         $validated = $request->validate([
-            'date' => 'required|date',
-            'user_name' => 'required|string|max:255',
-            'quantity' => 'required|integer|min:1',
+            'date'        => 'required|date',
+            'user_name'   => 'required|string|max:255',
+            'quantity'    => 'required|integer|min:1',
             'description' => 'nullable|string|max:500',
         ]);
 
@@ -518,11 +521,11 @@ class DrugsController extends Controller
         try {
             $drug->decrement('stock', $validated['quantity']);
 
-            // Simpan ke session (legacy behavior)
+              // Simpan ke session (legacy behavior)
             $history = [
-                'date' => $validated['date'],
-                'user_name' => $validated['user_name'],
-                'quantity' => $validated['quantity'],
+                'date'        => $validated['date'],
+                'user_name'   => $validated['user_name'],
+                'quantity'    => $validated['quantity'],
                 'description' => $validated['description'],
             ];
 
@@ -536,8 +539,8 @@ class DrugsController extends Controller
             DB::commit();
 
             Log::info('Detail obat berhasil diperbarui dengan pengurangan (legacy)', [
-                'user_id' => $this->user?->id,
-                'drug_id' => $drug->id,
+                'user_id'          => $this->user?->id,
+                'drug_id'          => $drug->id,
                 'quantity_reduced' => $validated['quantity']
             ]);
 
@@ -550,7 +553,7 @@ class DrugsController extends Controller
             Log::error('Gagal memperbarui detail obat dengan pengurangan', [
                 'user_id' => $this->user?->id,
                 'drug_id' => $drug->id,
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ]);
 
             session()->flash('error', 'Terjadi kesalahan saat memperbarui detail obat!');
@@ -558,7 +561,7 @@ class DrugsController extends Controller
         }
     }
 
-    /**
+      /**
      * Menampilkan detail obat dengan history pengurangan (deprecated)
      *
      * @param int $id
@@ -571,14 +574,14 @@ class DrugsController extends Controller
             'drug_id' => $id
         ]);
 
-        $drug = Drug::findOrFail($id);
-        $histories1 = session('histories1', []);
+        $drug           = Drug::findOrFail($id);
+        $histories1     = session('histories1', []);
         $drugHistories1 = $histories1[$drug->id] ?? [];
 
         return view('pages.klinik.drugs.reducestock', compact('drug', 'drugHistories1'));
     }
 
-    /**
+      /**
      * Mengekspor data obat ke Excel
      *
      * @return BinaryFileResponse
@@ -596,7 +599,7 @@ class DrugsController extends Controller
             $filename = 'drugs-' . date('YmdHis') . '.xlsx';
 
             Log::info('Ekspor data obat berhasil', [
-                'user_id' => $this->user->id,
+                'user_id'  => $this->user->id,
                 'filename' => $filename
             ]);
 
@@ -605,7 +608,7 @@ class DrugsController extends Controller
         } catch (Exception $e) {
             Log::error('Gagal mengekspor data obat', [
                 'user_id' => $this->user->id,
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ]);
 
             session()->flash('error', 'Terjadi kesalahan saat mengekspor data!');
@@ -613,7 +616,138 @@ class DrugsController extends Controller
         }
     }
 
-    /**
+      /**
+     * Mencari data KFA berdasarkan nama obat
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function kfaSearch(Request $request): JsonResponse
+    {
+        $request->validate([
+            'drug_name' => 'required|string|min:2'
+        ]);
+
+        try {
+            $drugName = $request->input('drug_name');
+
+            // Gunakan KfaDrugSyncService untuk mencari data KFA
+            $kfaService = app(KfaDrugSyncService::class);
+            $results = $kfaService->searchKfaProducts($drugName);
+
+            if(empty($results)) {
+                // Gunakan service KFA untuk mendapatkan produk
+                $kfaService = app(\Modules\Klinik\App\Http\Controllers\KfaController::class);
+
+                // Panggil API searchProducts
+                $request['keyword'] = $drugName;
+                $request['product_type'] = 'farmasi';
+                $apiProducts = $kfaService->getProducts($request);
+            }
+
+            Log::info('Pencarian KFA berhasil', [
+                'user_id' => $this->user?->id,
+                'drug_name' => $drugName,
+                'results_count' => count($results)
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'data' => $results
+            ]);
+
+        } catch (Exception $e) {
+            Log::error('Gagal mencari data KFA', [
+                'user_id' => $this->user?->id,
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat mencari data KFA'
+            ], 500);
+        }
+    }
+
+      /**
+     * Memperbarui kfa_code untuk obat tertentu
+     *
+     * @param Request $request
+     * @param Drug $drug
+     * @return JsonResponse
+     */
+    public function updateKfaCode(Request $request, Drug $drug): JsonResponse
+    {
+        $request->validate([
+            'kfa_code'         => 'required|string',
+            'kfa_name'         => 'required|string',
+            'kfa_manufacturer' => 'nullable|string',
+            'kfa_strength'     => 'nullable|string',
+            'kfa_form'         => 'nullable|string'
+        ]);
+
+        if (is_null($this->user) || !$this->user->can('klinik.update')) {
+            Log::warning('Akses ditolak untuk update KFA code', [
+                'user_id' => $this->user?->id,
+                'drug_id' => $drug->id
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Maaf! Anda tidak memiliki izin untuk mengedit data master!'
+            ], 403);
+        }
+
+        DB::beginTransaction();
+        try {
+            $oldKfaCode = $drug->kfa_code;
+
+            $drug->update([
+                'kfa_code'         => $request->input('kfa_code'),
+                'kfa_name'         => $request->input('kfa_name'),
+                'kfa_manufacturer' => $request->input('kfa_manufacturer'),
+                'kfa_strength'     => $request->input('kfa_strength'),
+                'kfa_form'         => $request->input('kfa_form'),
+                'kfa_updated_at'   => now()
+            ]);
+
+            DB::commit();
+
+            Log::info('KFA code berhasil diperbarui', [
+                'user_id'      => $this->user->id,
+                'drug_id'      => $drug->id,
+                'drug_name'    => $drug->name,
+                'old_kfa_code' => $oldKfaCode,
+                'new_kfa_code' => $request->input('kfa_code'),
+                'kfa_name'     => $request->input('kfa_name')
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'KFA code berhasil diperbarui',
+                'data'    => [
+                    'kfa_code' => $drug->kfa_code,
+                    'kfa_name' => $drug->kfa_name
+                ]
+            ]);
+
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            Log::error('Gagal memperbarui KFA code', [
+                'user_id' => $this->user->id,
+                'drug_id' => $drug->id,
+                'error'   => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat memperbarui KFA code'
+            ], 500);
+        }
+    }
+
+      /**
      * Menampilkan form untuk import obat
      *
      * @return View
@@ -630,7 +764,7 @@ class DrugsController extends Controller
         return view('pages.klinik.drugs.import');
     }
 
-    /**
+      /**
      * Memproses file import obat
      *
      * @param Request $request
@@ -655,7 +789,7 @@ class DrugsController extends Controller
             Excel::import($import, $request->file('file'));
 
             $failures = $import->failures();
-            $errors = $import->errors();
+            $errors   = $import->errors();
 
             if ($failures->isNotEmpty() || $errors->isNotEmpty()) {
                 $errorMessages = [];
@@ -670,16 +804,16 @@ class DrugsController extends Controller
 
                 Log::warning('Import selesai dengan error', [
                     'user_id' => $this->user->id,
-                    'errors' => $errorMessages
+                    'errors'  => $errorMessages
                 ]);
 
-                DB::commit(); // Commit data yang berhasil
+                DB::commit();  // Commit data yang berhasil
                 session()->flash('warning', 'Import selesai dengan beberapa error: ' . implode(' | ', $errorMessages));
             } else {
                 DB::commit();
 
                 Log::info('Import obat berhasil', [
-                    'user_id' => $this->user->id,
+                    'user_id'  => $this->user->id,
                     'filename' => $request->file('file')->getClientOriginalName()
                 ]);
 
@@ -692,13 +826,102 @@ class DrugsController extends Controller
             DB::rollBack();
 
             Log::error('Gagal mengimpor data obat', [
-                'user_id' => $this->user->id,
-                'error' => $e->getMessage(),
+                'user_id'  => $this->user->id,
+                'error'    => $e->getMessage(),
                 'filename' => $request->file('file')?->getClientOriginalName()
             ]);
 
             session()->flash('error', 'Terjadi kesalahan saat import: ' . $e->getMessage());
             return redirect()->back();
+        }
+    }
+
+      /**
+     * Get KFA product detail for modal display
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getKfaProductDetail(Request $request): JsonResponse
+    {
+        $request->validate([
+            'kfa_code' => 'required|string'
+        ]);
+
+        try {
+            $kfaCode = $request->input('kfa_code');
+
+              // Use the KfaService to get product detail
+            $kfaService = app(Kfa::class);
+
+              // Try to get from database first
+            $product = KfaProduct::where('kfa_code', $kfaCode)->first();
+
+            if (!$product) {
+                  // If not in database, fetch from API
+                $apiProduct = $kfaService->getProductDetail($kfaCode);
+
+                if (!$apiProduct) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Produk tidak ditemukan'
+                    ]);
+                }
+
+                  // Save to database
+                $productData = is_object($apiProduct) ? (array) $apiProduct : $apiProduct;
+                $product     = \Modules\Klinik\Models\KfaProduct::updateOrCreate(
+                    ['kfa_code' => $kfaCode],
+                    [
+                        'name'                => $productData['name'] ?? '',
+                        'manufacturer'        => $productData['manufacturer'] ?? '',
+                        'product_type'        => 'farmasi',
+                        'dosage_form'         => $productData['dosage_form'] ?? null,
+                        'strength'            => $productData['strength'] ?? null,
+                        'unit'                => $productData['unit'] ?? null,
+                        'packaging'           => $productData['packaging'] ?? null,
+                        'fix_price'           => $productData['fix_price'] ?? null,
+                        'het_price'           => $productData['het_price'] ?? null,
+                        'registration_number' => $productData['registration_number'] ?? null,
+                        'registration_date'   => $productData['registration_date'] ?? null,
+                        'expiry_date'         => $productData['expiry_date'] ?? null,
+                        'description'         => $productData['description'] ?? null,
+                        'raw_data'            => json_encode($productData),
+                        'last_sync'           => now()
+                    ]
+                );
+            }
+
+            return response()->json([
+                'success' => true,
+                'data'    => [
+                    'kfa_code'             => $product->kfa_code,
+                    'name'                 => $product->name,
+                    'manufacturer'         => $product->manufacturer,
+                    'manufacturer_country' => '',
+                    'fix_price'            => $product->fix_price ?? 0,
+                    'het_price'            => $product->het_price ?? 0,
+                    'packaging'            => $product->packaging ?? '',
+                    'dosage_form'          => $product->dosage_form ?? '',
+                    'strength'             => $product->strength ?? '',
+                    'unit'                 => $product->unit ?? '',
+                    'registration_number'  => $product->registration_number ?? '',
+                    'registration_date'    => $product->registration_date ?? '',
+                    'expiry_date'          => $product->expiry_date ?? '',
+                    'description'          => $product->description ?? ''
+                ]
+            ]);
+
+        } catch (Exception $e) {
+            Log::error('Error fetching KFA product detail', [
+                'error'    => $e->getMessage(),
+                'kfa_code' => $request->input('kfa_code')
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengambil data produk KFA'
+            ], 500);
         }
     }
 }

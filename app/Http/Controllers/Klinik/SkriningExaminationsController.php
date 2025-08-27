@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Master\Gender;
-// use App\Http\Requests\Klinik\StoreReligionRequest; 
+// use App\Http\Requests\Klinik\StoreReligionRequest;
 // use App\Http\Requests\Klinik\UpdateReligionRequest;
 use Doctrine\DBAL\Driver\PDO\Exception;
 use Illuminate\Support\Facades\Auth;
@@ -52,12 +52,12 @@ class SkriningExaminationsController extends Controller
 
         // Ambil data lokasi untuk dropdown filter
         $locations = SkriningExaminationLocation::select('id', 'name')->get();
- 
+
         return $dataTable->render('pages.klinik.skriningexaminations.index', compact('locations'));
         // // ambil semua data tanpa relasi gender
         // $data = \App\Models\Master\SkriningExamination::all();
-        
-        // // return JSON ke browser 
+
+        // // return JSON ke browser
         // return response()->json($data);
     }
 
@@ -106,7 +106,7 @@ class SkriningExaminationsController extends Controller
             'data' => $data
         ]);
     }
-   
+
     public function export(Request $request)
     {
         $locationId = $request->get('location');
@@ -195,21 +195,21 @@ class SkriningExaminationsController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi awal tanpa aturan panjang nik_bpjs
+          // Validasi awal tanpa aturan panjang nik_bpjs
         $validator = Validator::make($request->all(), [
-            'first_name'           => 'required|string|max:255',
-            'last_name'            => 'required|string|max:255',
-            'date_of_birth'        => 'required|date',
-            'gender_id'            => 'required|exists:genders,id',
-            'location_id'          => 'required|string|max:255',
-            'examination_date'     => 'required|date',
-            'card_type'            => 'required|in:ktp,bpjs',
-            'nik_bpjs'             => 'required|string|max:20',
-            'phone'                => 'nullable|string|max:20',
-            'address'              => 'nullable|string|max:255',
+            'first_name'       => 'required|string|max:255',
+            'last_name'        => 'required|string|max:255',
+            'date_of_birth'    => 'required|date',
+            'gender_id'        => 'required|exists:genders,id',
+            'location_id'      => 'required|string|max:255',
+            'examination_date' => 'required|date',
+            'card_type'        => 'required|in:ktp,bpjs',
+            'nik_bpjs'         => 'required|string|max:20',
+            'phone'            => 'nullable|string|max:20',
+            'address'          => 'nullable|string|max:255',
         ]);
 
-        // Tambahkan validasi panjang nik_bpjs tergantung card_type
+          // Tambahkan validasi panjang nik_bpjs tergantung card_type
         $validator->after(function ($validator) use ($request) {
             $nik_bpjs = $request->nik_bpjs;
 
@@ -222,21 +222,21 @@ class SkriningExaminationsController extends Controller
             }
         });
 
-        // Cek validasi
+          // Cek validasi
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
         $validated = $validator->validated();
 
-        // Hitung usia
+          // Hitung usia
         $validated['age'] = Carbon::parse($validated['date_of_birth'])->age;
 
-        // Generate examination_id
-        $lastExaminationId = SkriningExamination::max('examination_id') ?? 0;
+          // Generate examination_id
+        $lastExaminationId           = SkriningExamination::max('examination_id') ?? 0;
         $validated['examination_id'] = $lastExaminationId + 1;
 
-        // Simpan data
+          // Simpan data
         SkriningExamination::create($validated);
 
         return redirect()->route('skriningexaminations.index')
@@ -255,7 +255,7 @@ class SkriningExaminationsController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any master data !');
         }
 
-        $skriningexamination->delete(); 
+        $skriningexamination->delete();
 
         session()->flash('success', 'Skrining Examination has been deleted !!');
 
@@ -265,12 +265,12 @@ class SkriningExaminationsController extends Controller
     public function result(Request $request)
     {
         $skrining = SkriningExamination::with(['gender', 'location'])->findOrFail($request->id);
- 
+
         // Ambil semua tipe dengan key id
         $types = SkriningExaminationType::all()->keyBy('id');
 
         $result = [];
-    
+
         if (!empty($skrining->hasil)) {
             $decoded = json_decode($skrining->hasil, true);
 
@@ -283,7 +283,7 @@ class SkriningExaminationsController extends Controller
 
                 if ($type) {
                     $result[] = (object) [
-                        'id'           => $item['id'], 
+                        'id'           => $item['id'],
                         'ItemName'     => $type->name,
                         'hasil'        => $item['hasil'] ?? '',
                         'nilai_normal' => $type->nilai_normal ?? '-',
@@ -359,8 +359,7 @@ class SkriningExaminationsController extends Controller
         ])->setPaper('a4');
 
         Storage::put("public/skrining/{$skrining->id}/hasil-skrining.pdf", $pdf->output());
-        
+
         return $pdf->download("skrining-examination.pdf");
     }
 }
- 

@@ -23,7 +23,7 @@
         <div class="col-12 row py-5">
             <div class="col-4">
                 <img src="{{ asset('assets/media/logos/logo-klinik.png') }}" alt="Klinik Satriabudi Dharma Medika"
-                     class="h-70px logo">
+                    class="h-70px logo">
             </div>
             <div class="col-8 border-start border-3 border-klinik p-3" style="text-align:left">
                 <p style="font-size: 16px;font-weight: bold">Ruko C-17, Pasar Modern Intermoda - BSD<br>Jl. Raya Cisauk
@@ -32,7 +32,8 @@
                     <i class="text-klinik fa-brands fa-whatsapp-square fa-lg"></i> 0896 5886 8769
                     <i class="text-klinik fa-solid fa-square-phone fa-lg"></i> 021 5569 8265
                     <i class="text-klinik fa-brands fa-chrome fa-lg"></i> kliniksatriabudi.com
-                    <i class="text-klinik fa-brands fa-instagram-square fa-lg"></i> klinik.satriabudi</p>
+                    <i class="text-klinik fa-brands fa-instagram-square fa-lg"></i> klinik.satriabudi
+                </p>
             </div>
         </div>
     </div>
@@ -95,12 +96,13 @@
                     <span class="fs-5">: {{ $skrining->gender->name ?? '-' }}</span>
                 </div>
             </div>
-             <div class="row col-6 flex-root d-flex flex-row">
+            <div class="row col-6 flex-root d-flex flex-row">
                 <div class="col-5">
                     <span class="fs-5">Tanggal Pemeriksaan</span>
                 </div>
                 <div class="col-7">
-                    <span class="fs-5">: {{ \Carbon\Carbon::parse($skrining->examination_date)->translatedFormat('d F Y') }}</span>
+                    <span class="fs-5">:
+                        {{ \Carbon\Carbon::parse($skrining->examination_date)->translatedFormat('d F Y') }}</span>
                 </div>
             </div>
         </div>
@@ -129,7 +131,7 @@
     <form id="skrining_form" method="POST" class="form"
         action="{{ route('skriningexaminations.result.update', ['skriningexaminations' => $skrining->id]) }}">
         @csrf
-        @method("PUT")
+        @method('PUT')
         <table class="w-100 py-5">
             <thead class="bg-klinik text-white text-capitalize py-5">
                 <tr>
@@ -141,49 +143,52 @@
                 </tr>
             </thead>
             <tbody class="py-5">
-            @if(!empty($result))
-                @foreach($result as $key => $value)
-                    <tr>
-                        <td class="px-5">
-                            {{ $value->ItemName }}
-                            <input type="hidden" name="id[]" value="{{ $value->id }}">
-                        </td>
-                        <td>
-                            <input type="text" class="form-control w-75 text-end" name="hasil[]" value="{{ $value->hasil }}">
-                        </td>
-                        <td>{{ $value->nilai_normal }}</td>
-                        <td>
-                            <input type="text" class="form-control w-75 text-end" name="satuan[]"
-                                value="{{ $value->satuan ?? '' }}"/>
-                        </td>
-                        <td>
-                            <input type="text" class="form-control w-75 text-end" name="keterangan[]" value="{{ $value->keterangan ?? '' }}">
-                        </td>
-                    </tr>
-                @endforeach
-            @else
-                @foreach($types as $key => $value)
-                    <tr>
-                        <td class="px-5">
-                            {{ $value->name }}
-                            <input type="hidden" name="id[]" value="{{ $value->id }}">
-                        </td>
-                        <td>
-                            <input type="text" class="form-control w-75 text-end" name="hasil[]" value="">
-                        </td>
-                        <td>{!! $value->nilai_normal !!}</td>
-                        <td>
-                            <input type="text" class="form-control w-75 text-end" name="satuan[]"
-                                value="{{ $value->satuan ?? '' }}"/>
-                        </td>
-                        <td>
-                            <input type="text" class="form-control w-75 text-end" name="keterangan[]" value="">
-                        </td>
-                    </tr>
-                @endforeach
-            @endif
+                @if (!empty($result))
+                    @foreach ($result as $key => $value)
+                        <tr>
+                            <td class="px-5">
+                                {{ $value->ItemName }}
+                                <input type="hidden" name="id[]" value="{{ $value->id }}">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control w-75 text-end" name="hasil[]"
+                                    value="{{ $value->hasil }}">
+                            </td>
+                            <td>{{ $value->nilai_normal }}</td>
+                            <td>
+                                <input type="text" class="form-control w-75 text-end" name="satuan[]"
+                                    value="{{ $value->satuan ?? '' }}" />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control w-75 text-end" name="keterangan[]"
+                                    value="{{ $value->keterangan ?? '' }}">
+                            </td>
+                        </tr>
+                    @endforeach
+                @else
+                    @foreach ($types as $key => $value)
+                        <tr>
+                            <td class="px-5">
+                                {{ $value->name }}
+                                <input type="hidden" name="id[]" value="{{ $value->id }}">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control w-75 text-end" name="hasil[]" value="">
+                            </td>
+                            <td>{!! $value->nilai_normal !!}</td>
+                            <td>
+                                <input type="text" class="form-control w-75 text-end" name="satuan[]"
+                                    value="{{ $value->satuan ?? '' }}" />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control w-75 text-end" name="keterangan[]"
+                                    value="">
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
             </tbody>
-        </table> 
+        </table>
 
         <!-- Kolom input link sebelum tombol submit -->
         <div class="row col-12 flex-root d-flex flex-row mb-3 mt-3">

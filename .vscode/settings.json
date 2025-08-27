@@ -1,0 +1,5 @@
+{
+    "icube.ai.git.commit.message.return.stream": true,
+    "gitlens.ai.generateCommitMessage.customInstructions": "- Use the following format: <type>(<scope>): <description>. - For example: feat(chat): add chat feature for the commit message. - Use conventional commit message format. - Avoid overly verbose descriptions or unnecessary details. - Start with a short sentence in imperative form. Then leave an empty line and and continue with a more detailed explanation without limitation. - Gunakan Bahasa Indonesia. - Gunakan Deskripsi dalam bentuk List dan detail. - Buat sedetail dan sepanjang mungkin",
+    "kiroAgent.configureMCP": "Disabled"
+}

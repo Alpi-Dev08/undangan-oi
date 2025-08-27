@@ -198,6 +198,11 @@
             // Tambahkan route yang hilang
             Route::post('suket-hak-kewajiban/{id}', [ExaminationsController::class, 'hak_kewajiban'])->name('suket.hak_kewajiban');
             Route::post('suket-persetujuan-tindakan/{id}', [ExaminationsController::class, 'persetujuan_tindakan'])->name('suket.persetujuan_tindakan');
+            
+            // KFA Integration Routes
+            Route::get('drugs/kfa-search', [DrugsController::class, 'kfaSearch'])->name('drugs.kfa-search');
+            Route::get('drugs/search-kfa-products', [DrugsController::class, 'kfaSearch'])->name('drugs.search-kfa-products');
+            Route::post('drugs/{drug}/update-kfa-code', [DrugsController::class, 'updateKfaCode'])->name('drugs.update-kfa-code');
             Route::post('suket-penandaan-operasi/{id}', [ExaminationsController::class, 'penandaan_operasi'])->name('suket.penandaan_operasi');
             Route::post('suket-surgical-checklist/{id}', [ExaminationsController::class, 'surgical_checklist'])->name('suket.surgical_checklist');
 
@@ -273,6 +278,7 @@
             Route::get('drugs/import', [DrugsController::class, 'import'])->name('drugs.import');
             Route::post('drugs/import', [DrugsController::class, 'processImport'])->name('drugs.process-import');
             Route::resource('drugs', DrugsController::class);
+            Route::get('kfa/product-detail', [DrugsController::class, 'getKfaProductDetail'])->name('kfa.product-detail');
             Route::get('drugs/{drug}/detail', [DrugsController::class, 'detail'])->name('drugs.detail');
             Route::put('drugs/{drug}/detail', [DrugsController::class, 'updateDetail'])->name('drugs.detail_');
             Route::get('klinik/drugs/{drug}/detail', [DrugsController::class, 'showDetail'])->name('drugs.detail__');

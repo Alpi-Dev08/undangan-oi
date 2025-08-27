@@ -25,7 +25,7 @@ class DrugsDataTable extends DataTable
                         ->orWhereRelation('unit', 'name', 'like', '%'.$search['value'].'%');
                 }
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','kfa_code'])
             ->addIndexColumn()
             ->addColumn('unit', function (Drug $model) {
 		if($model->unit){
@@ -41,6 +41,12 @@ class DrugsDataTable extends DataTable
             })
             ->addColumn('stock', function (Drug $model) {
                 return $model->stock;
+            })
+            ->addColumn('kfa_code', function (Drug $model) {
+                if ($model->kfa_code) {
+                    return '<button type="button" class="badge badge-light-primary border-0 cursor-pointer" onclick="showKfaDetail(\''.e($model->kfa_code).'\')">'.e($model->kfa_code).'</button>';
+                }
+                return '<span class="badge badge-light-warning">✗</span>';
             })
             ->addColumn('action', function (Drug $model) {
                 return view('pages.klinik.drugs._action', compact('model'));
@@ -93,6 +99,7 @@ class DrugsDataTable extends DataTable
             Column::make('name')->title(__('Name'))->searchable(true),
             Column::make('price')->title(__('Price'))->searchable(true),
             Column::make('stock')->title(__('Stock'))->searchable(true),
+            Column::make('kfa_code')->title(__('KFA'))->searchable(false),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
@@ -102,7 +109,7 @@ class DrugsDataTable extends DataTable
     }
 
     /**
-     * Get filename for export. 
+     * Get filename for export.
      */
     protected function filename(): string
     {

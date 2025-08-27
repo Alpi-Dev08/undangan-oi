@@ -7,8 +7,12 @@
     @endif
 
     @if(Auth::user()->can('klinik.delete'))
-        {!! Form::open(['method' => 'DELETE','route' => ['anamnesis.destroy', $model->id],'class'=>'']) !!}
-        {{ Form::button(theme()->getSvgIcon("icons/duotune/general/gen027.svg", "svg-icon-3"), ['type' => 'submit', 'class' => 'delete btn btn-icon btn-bg-light btn-active-light-danger btn-sm'] )  }}
-        {!! Form::close() !!}
+        <form method="POST" action="{{ route('anamnesis.destroy', $model->id) }}">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="delete btn btn-icon btn-bg-light btn-active-light-danger btn-sm">
+                {!! theme()->getSvgIcon("icons/duotune/general/gen027.svg", "svg-icon-3") !!}
+            </button>
+        </form>
     @endif
 </div>

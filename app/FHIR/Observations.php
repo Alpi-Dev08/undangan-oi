@@ -41,15 +41,15 @@ class Observations extends Observation
     ];
 
     private const SNOMED_CODES = [
-        '7569003' => 'Finger structure',
-        '72914001' => 'Palatal structure',
-        '91636008' => 'Bilateral palatine tonsils',
-        '53505006' => 'Anal structure',
+        '7569003'   => 'Finger structure',
+        '72914001'  => 'Palatal structure',
+        '91636008'  => 'Bilateral palatine tonsils',
+        '53505006'  => 'Anal structure',
         '770812000' => 'Entire nail unit of finger',
-        '29707007' => 'Toe structure',
+        '29707007'  => 'Toe structure',
     ];
 
-    // Define mapping of observation codes to their display names
+      // Define mapping of observation codes to their display names
     private array $observation = ['resourceType' => 'Observation'];
 
     public function addCode(string $observationCode): Observation
@@ -69,7 +69,7 @@ class Observations extends Observation
 
     public function addBodySite(string $snomedCode): Observation
     {
-        $display                   = self::SNOMED_CODES[$snomedCode] ?? '';
+        $display                       = self::SNOMED_CODES[$snomedCode] ?? '';
         $this->observation['bodySite'] = [
             'coding' => [
                 [
@@ -118,7 +118,7 @@ class Observations extends Observation
                 break;
         }
 
-        // NOTE: we currently only support 'vital-signs'
+          // NOTE: we currently only support 'vital-signs'
         $this->observation['category'][] = [
             'coding' => [
                 [

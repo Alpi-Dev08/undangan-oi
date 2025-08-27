@@ -1,0 +1,31 @@
+{
+    "name": "daengdeni/klinik",
+    "description": "",
+    "authors": [
+        {
+            "name": "Daeng Deni Mardaeni",
+            "email": "ddeni05@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Klinik\\": "",
+            "Modules\\Klinik\\App\\": "app/",
+            "Modules\\Klinik\\Database\\Factories\\": "database/factories/",
+            "Modules\\Klinik\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Klinik\\Tests\\": "tests/"
+        }
+    }
+}

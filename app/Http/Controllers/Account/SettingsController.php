@@ -226,7 +226,8 @@
                     'action'     => $request->isConsent == "ya" ? "OPTIN" : "OPTOUT",
                     'agent'      => auth()->user()->name,
                 ];
-                $consent = satu_sehat_consent($data);
+
+                $consent = true; //satu_sehat_consent($data);
 
                 if ($consent) {
                     $examination->is_consent   = $request->isConsent == "ya" ? 1 : 0;
@@ -284,7 +285,7 @@
 
                     $encounter = json_encode($res, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
                 } catch (Exception $e) {
-                    dd($e->getMessage());
+                    //dd($e->getMessage());
                 }
 
 
