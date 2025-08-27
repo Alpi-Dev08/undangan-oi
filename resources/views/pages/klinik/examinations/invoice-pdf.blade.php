@@ -475,13 +475,13 @@
                     <td style="width: 60%; vertical-align: top; padding-right: 20px;">
                         <div class="footer-box">
                             <div class="footer-text">
-                                <div>- Klinik Satriabudi Dharma Medika NPWP : </div>
-                                <div>- Invoice ini berlaku sebagai faktur Pajak sesuai dengan Peraturan</div>
-                                <div>Direktur Jenderal Pajak No. 27/PJ/2011, Tanggal 18 September 2011</div>
-                                <div>- Pembayaran dapat dilakukan melalui :</div>
-                                <div>- Reservasi Rawat Jalan Call Center {{ organization()->phone }} (Senin-Jumat
-                                    08.00-20.00)</div>
-                                <div>- Klinik Hari Sabtu dan Minggu (Weekend Clinic) 08.00-17.00</div>
+                                <div><strong>NPWP:</strong> 94.990.535.0-435.000</div>
+                                <div><strong>Catatan:</strong> Invoice ini berlaku sebagai faktur Pajak sesuai dengan Peraturan Direktur Jenderal Pajak No. 27/PJ/2011, Tanggal 18 September 2011</div>
+                                <div class="mt-2">@include('partials.bank-accounts')</div>
+                                <div class="mt-2">
+                                    <div><strong>Reservasi Rawat Jalan:</strong> {{ organization()->phone }} (Senin-Jumat 08.00-20.00)</div>
+                                    <div><strong>Weekend Clinic:</strong> Sabtu & Minggu 08.00-17.00</div>
+                                </div>
                             </div>
                         </div>
                     </td>
