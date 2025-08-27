@@ -333,7 +333,7 @@
                 <div style="height: 60px;"></div>
                 <div class="border-top border-dark pt-2">
                     <div class="fw-bold text-dark">
-                        {{ $transaction->paymentConfirmationUser?->name ?? ('Dr ' . $examination->health_profesional->user->name ?? 'System') }}
+                        {{ $transaction->paymentConfirmationUser?->name ?? Auth::user()->name }}
                     </div>
                 </div>
             </div>

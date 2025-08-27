@@ -545,7 +545,7 @@
                             <div class="signature-space"></div>
                             <div class="signature-line">
                                 <div class="fw-bold" style="font-size: 9px;">
-                                    {{ $transaction->paymentConfirmationUser?->name ?? ('Dr ' . $examination->health_profesional->user->name ?? 'System') }}
+                                    {{ $transaction->paymentConfirmationUser?->name ?? Auth::user()->name }}
                                 </div>
                             </div>
                         </div>
