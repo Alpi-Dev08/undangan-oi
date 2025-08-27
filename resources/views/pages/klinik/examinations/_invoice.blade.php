@@ -263,22 +263,22 @@
         <div class="col-md-6">
             <div class="border border-dark p-3">
                 <div class="fs-8 text-dark lh-lg">
-                    <div class="mb-2"><strong>Klinik Satriabudi Dharma Medika NPWP:</strong> 94.990.535.0-435.000
+                    <div class="mb-1"><strong>Klinik Satriabudi Dharma Medika NPWP:</strong> 94.990.535.0-435.000
                     </div>
-                    <div class="mb-2"><strong>Catatan:</strong> Invoice ini berlaku sebagai faktur Pajak sesuai
-                        dengan Peraturan
-                        Direktur Jenderal Pajak No. 27/PJ/2011, Tanggal 18 September 2011</div>
+                    <div class="mb-1"><strong>Catatan:</strong> Invoice ini berlaku sebagai faktur Pajak sesuai
+                        dengan Peraturan Direktur Jenderal Pajak No. 27/PJ/2011, Tanggal 18 September 2011
+                    </div>
 
-                    <div class="mb-3">@include('partials.bank-accounts')</div>
+                    <div class="mb-1">@include('partials.bank-accounts')</div>
 
                     <div class="contact-info">
                         <div class="contact-item">
-                            <span class="contact-label">📞 Reservasi Rawat Jalan:</span>
+                            <span class="contact-label">Reservasi Rawat Jalan</span>
                             <span class="contact-value">{{ organization()->phone }}</span>
                             <span class="contact-hours">(Senin-Jumat 08.00-20.00)</span>
                         </div>
                         <div class="contact-item">
-                            <span class="contact-label">🏥 Weekend Clinic:</span>
+                            <span class="contact-label">Weekend Clinic</span>
                             <span class="contact-value">Sabtu & Minggu</span>
                             <span class="contact-hours">08.00-17.00</span>
                         </div>
@@ -287,29 +287,30 @@
 
                 <style>
                     .contact-info {
-                        margin-top: 1rem;
+                        margin-top: 0.5rem;
                     }
 
                     .contact-item {
-                        display: flex;
-                        align-items: center;
-                        gap: 0.5rem;
                         margin-bottom: 0.5rem;
-                        flex-wrap: wrap;
                     }
 
                     .contact-label {
                         font-weight: 600;
-                        min-width: 180px;
+                        display: inline-block;
+                        width: 130px;
+                        vertical-align: top;
                     }
 
                     .contact-value {
                         font-weight: 500;
+                        display: inline-block;
+                        margin-right: 0.5rem;
                     }
 
                     .contact-hours {
                         color: #666;
                         font-size: 0.9em;
+                        display: inline-block;
                     }
 
                     @media print {
@@ -319,7 +320,7 @@
                         }
 
                         .contact-label {
-                            min-width: 150px;
+                            width: 150px;
                         }
                     }
                 </style>
