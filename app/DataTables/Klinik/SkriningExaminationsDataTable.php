@@ -22,12 +22,12 @@ class SkriningExaminationsDataTable extends DataTable
             })
             ->addColumn('skrining_type', function (SkriningExamination $model) {
                 return $model->skriningexaminationtype ? $model->skriningexaminationtype->name : '-';
-            })
+            }) 
             ->addColumn('skrining_location', function (SkriningExamination $model) {
                 return $model->location ? $model->location->name : '-';
             })
-            ->addColumn('examination_date', function (SkriningExamination $model) {
-                return $model->created_at->format('Y-m-d');
+            ->addColumn('tanggal_skrining', function (SkriningExamination $model) {
+                return $model->examination_date;
             })
             ->addColumn('gender', function (SkriningExamination $model) {
                 return $model->gender ? $model->gender->name : '-';
@@ -46,7 +46,7 @@ class SkriningExaminationsDataTable extends DataTable
                     $query->where('location_id', $location);
                 }
                 if (!empty($date)) {
-                    $query->whereDate('created_at', $date);
+                    $query->whereDate('examination_date', $date);
                 }
             });
     }
@@ -63,8 +63,8 @@ class SkriningExaminationsDataTable extends DataTable
             $query->where('location_id', $request->location);
         }
         if ($request->has('date') && $request->date != '') { // konsisten pakai 'date'
-            $query->whereDate('created_at', $request->date);
-        }
+            $query->whereDate('examination_date', $request->date);
+        } 
 
         return $query;
     }
@@ -96,7 +96,7 @@ class SkriningExaminationsDataTable extends DataTable
         return [
             Column::make('DT_RowIndex')->title('NO')->orderable(false)->searchable(false),
             Column::make('patient')->title(__('NAME'))->searchable(true),
-            Column::make('examination_date')->title(__('EXAMINATION DATE'))->searchable(true),
+            Column::make('tanggal_skrining')->title(__('EXAMINATION DATE'))->searchable(true),
             Column::make('skrining_location')->title(__('EXAMINATION LOCATION'))->searchable(true),
             Column::make('file')->title(__('RESULT'))->searchable(false),
             Column::computed('action')
