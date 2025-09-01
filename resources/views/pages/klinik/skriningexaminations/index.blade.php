@@ -165,7 +165,7 @@
                                     <td>${item.first_name} ${item.last_name}</td>
                                     <td>${item.gender?.name || '-'}</td>
                                     <td>${item.location?.name || '-'}</td>
-                                    <td>${item.examination_date}</td>
+                                    <td>${item.tanggal_examination}</td>
                                 </tr>`;
                             });
                             $('#skriningTableBody').html(tbody);
