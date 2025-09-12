@@ -56,7 +56,8 @@ class SkriningExaminationsDataTable extends DataTable
      */
     public function query(SkriningExamination $model)
     {
-        $query = $model->newQuery()->with(['skriningexaminationtype', 'gender', 'location']);
+        $query = $model->newQuery()->with(['skriningexaminationtype', 'gender', 'location'])
+        ->orderBy('created_at', 'desc');
 
         $request = request();
         if ($request->has('location') && $request->location != '') {
@@ -78,7 +79,6 @@ class SkriningExaminationsDataTable extends DataTable
             ->setTableId('skriningexaminations-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->orderBy(1, 'asc')
             ->responsive()
             ->autoWidth(false)
             ->parameters([
