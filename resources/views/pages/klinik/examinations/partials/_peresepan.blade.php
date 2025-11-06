@@ -28,18 +28,23 @@
             <div id="resep-container">
                 <div class="resep-item border rounded p-4 mb-4" data-resep-index="0">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label class="form-label required">Nama Obat</label>
                             <select name="resep[obat][0]" class="form-select form-select-solid resep-obat"
                                 data-placeholder="Pilih obat..." required>
                                 <option value="">Pilih obat...</option>
                                 @foreach ($drugs as $drug)
                                     <option value="{{ $drug->id }}" data-unit="{{ $drug->unit }}"
-                                        data-dosage="{{ $drug->dosage }}">
+                                        data-dosage="{{ $drug->dosage }}" data-kfa="{{ $drug->kfa_code }}">
                                         {{ $drug->name }}
                                     </option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">KFA Code</label>
+                            <input type="text" name="resep[kfa_code][0]" class="form-control form-control-solid resep-kfa"
+                                placeholder="Masukkan kode KFA...">
                         </div>
                         <div class="col-md-2">
                             <label class="form-label required">Jumlah</label>
@@ -49,13 +54,13 @@
                                 <span class="input-group-text resep-unit">unit</span>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="form-label required">Dosis</label>
                             <input type="text" name="resep[dosis][0]"
                                 class="form-control form-control-solid resep-dosis" placeholder="Contoh: 3x1 tablet"
                                 required>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="form-label">Aturan Pakai</label>
                             <select name="resep[aturan_pakai][0]" class="form-select form-select-solid">
                                 <option value="">Pilih aturan pakai...</option>
@@ -152,12 +157,39 @@
         $(document).ready(function() {
             let resepIndex = 1;
 
+            // Inisialisasi Select2 untuk dropdown obat (dengan fallback jika Select2 tidak tersedia)
+            function initResepObatSelect2(context) {
+                const $scope = context ? $(context) : $(document);
+                const $selects = $scope.find('.resep-obat');
+
+                if (typeof $.fn.select2 !== 'function') {
+                    console.warn('Log: Select2 tidak tersedia, dropdown obat tetap standar.');
+                    return;
+                }
+
+                $selects.each(function() {
+                    const $el = $(this);
+                    if ($el.data('select2')) {
+                        return; // Hindari init ulang
+                    }
+                    $el.select2({
+                        placeholder: 'Pilih obat...',
+                        width: '100%',
+                        allowClear: true
+                    });
+                });
+                console.log('Log: Inisialisasi Select2 pada', $selects.length, 'dropdown obat.');
+            }
+
+            // Panggil pada load awal
+            initResepObatSelect2();
+
             // Fungsi untuk menambah item resep
             $('#add-resep-item').click(function() {
                 const newItem = `
             <div class="resep-item border rounded p-4 mb-4" data-resep-index="${resepIndex}">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label required">Nama Obat</label>
                         <select name="resep[obat][${resepIndex}]" class="form-select form-select-solid resep-obat"
                                 data-placeholder="Pilih obat..." required>
@@ -165,11 +197,17 @@
                             @foreach ($drugs as $drug)
                                 <option value="{{ $drug->id }}"
                                         data-unit="{{ $drug->unit }}"
-                                        data-dosage="{{ $drug->dosage }}">
+                                        data-dosage="{{ $drug->dosage }}"
+                                        data-kfa="{{ $drug->kfa_code }}">
                                     {{ $drug->name }}
                                 </option>
                             @endforeach
                         </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">KFA Code</label>
+                        <input type="text" name="resep[kfa_code][${resepIndex}]"
+                               class="form-control form-control-solid resep-kfa" placeholder="Masukkan kode KFA...">
                     </div>
                     <div class="col-md-2">
                         <label class="form-label required">Jumlah</label>
@@ -179,13 +217,13 @@
                             <span class="input-group-text resep-unit">unit</span>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label class="form-label required">Dosis</label>
                         <input type="text" name="resep[dosis][${resepIndex}]"
                                class="form-control form-control-solid resep-dosis"
                                placeholder="Contoh: 3x1 tablet" required>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label class="form-label">Aturan Pakai</label>
                         <select name="resep[aturan_pakai][${resepIndex}]" class="form-select form-select-solid">
                             <option value="">Pilih aturan pakai...</option>
@@ -225,6 +263,10 @@
 
                 // Tampilkan tombol hapus untuk semua item kecuali yang pertama
                 $('.remove-resep-item').show();
+
+                // Inisialisasi Select2 untuk item baru
+                const lastItem = $('#resep-container .resep-item').last();
+                initResepObatSelect2(lastItem);
             });
 
             // Fungsi untuk menghapus item resep
@@ -238,18 +280,26 @@
                 }
             });
 
-            // Update unit saat obat dipilih
+            // Update unit dan auto-isi KFA Code saat obat dipilih
             $(document).on('change', '.resep-obat', function() {
                 const selectedOption = $(this).find('option:selected');
                 const unit = selectedOption.data('unit') || 'unit';
                 const dosage = selectedOption.data('dosage') || '';
+                const kfa = selectedOption.data('kfa') || '';
 
-                $(this).closest('.resep-item').find('.resep-unit').text(unit);
+                $(this).closest('.resep-item').find('.resep-unit').text(unit.name);
 
                 // Isi dosis otomatis jika tersedia
                 if (dosage && !$(this).closest('.resep-item').find('.resep-dosis').val()) {
                     $(this).closest('.resep-item').find('.resep-dosis').val(dosage);
                 }
+
+                // Isi KFA Code otomatis jika tersedia (tetap bisa diubah manual)
+                const kfaInput = $(this).closest('.resep-item').find('.resep-kfa');
+                if (kfa) {
+                    kfaInput.val(kfa);
+                }
+                console.log('Log: Perubahan obat - unit:', unit, ', dosis:', dosage, ', kfa:', kfa || '(kosong)');
             });
 
             // Update total items
@@ -285,6 +335,7 @@
                     const qty = $(this).find('.resep-qty').val();
                     const unit = $(this).find('.resep-unit').text();
                     const dosis = $(this).find('.resep-dosis').val();
+                    const kfaCode = $(this).find('.resep-kfa').val();
                     const aturanPakai = $(this).find('select[name*="aturan_pakai"]').find('option:selected')
                         .text();
                     const keterangan = $(this).find('textarea[name*="keterangan"]').val();
@@ -293,6 +344,7 @@
                     html += `
                 <div class="mb-3">
                     <strong>${index + 1}. ${obat}</strong><br>
+                    <small>KFA: ${kfaCode ? kfaCode : '-'}</small><br>
                     <small>Jumlah: ${qty} ${unit}</small><br>
                     <small>Dosis: ${dosis}</small><br>
                     ${aturanPakai ? `<small>Aturan pakai: ${aturanPakai}</small><br>` : ''}
