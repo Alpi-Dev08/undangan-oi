@@ -2,43 +2,43 @@
 
     namespace App\Http\Controllers\Klinik;
 
-use App\DataTables\Klinik\ExaminationsDataTable;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Klinik\{StoreExaminationRequest, UpdateExaminationRequest};
-use App\Models\Klinik\{
-    AdditionalCategory,
-    AdditionalExamination,
-    AnamnesisCategory,
-    AnamnesisExamination,
-    Drug,
-    Examination,
-    FamilyDiseaseHistory,
-    HealthProfesional,
-    Icdten,
-    LaboratoryExamination,
-    OtherExamination,
-    Package,
-    PemeriksaanAwal,
-    PersonalDiseaseHistory,
-    PhysicalCategory,
-    PhysicalExamination,
-    Plan,
-    Service,
-    ServiceCategory,
-    Transaction,
-    TransactionDetail,
-    VitalityExamination
-};
-use App\Models\{Master\OdontogramSymbol, User};
-use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
-use Doctrine\DBAL\Driver\PDO\Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{Auth, DB, Log, Storage};
-use QrCode;
-use Satusehat\Integration\FHIR\{Condition, Encounter};
-use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
-
+    use App\DataTables\Klinik\ExaminationsDataTable;
+    use App\Http\Controllers\Controller;
+    use App\Http\Requests\Klinik\{StoreExaminationRequest, UpdateExaminationRequest};
+    use App\Models\Klinik\{
+        AdditionalCategory,
+        AdditionalExamination,
+        AnamnesisCategory,
+        AnamnesisExamination,
+        Drug,
+        Examination,
+        FamilyDiseaseHistory,
+        HealthProfesional,
+        Icdten,
+        LaboratoryExamination,
+        OtherExamination,
+        Package,
+        PemeriksaanAwal,
+        PersonalDiseaseHistory,
+        PhysicalCategory,
+        PhysicalExamination,
+        Plan,
+        Service,
+        ServiceCategory,
+        Transaction,
+        TransactionDetail,
+        VitalityExamination
+    };
+    use App\Models\{Master\OdontogramSymbol, User};
+    use Barryvdh\DomPDF\Facade\Pdf;
+    use Carbon\Carbon;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\{Auth, DB, Log, Storage};
+    use QrCode;
+    use Satusehat\Integration\FHIR\{Condition, Encounter};
+    use App\FHIR\{PersonalDisease, FamilyDisease};
+    use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
+    use Exception;
 
     class ExaminationsController extends Controller
     {

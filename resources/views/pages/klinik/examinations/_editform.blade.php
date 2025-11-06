@@ -98,6 +98,22 @@
                 </a>
             </li>
             <!--end::Nav item-->
+
+            <!--begin::Nav item Peresepan-->
+            <li class="nav-item p-0 ms-0">
+                <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab"
+                    data-bs-toggle="tab" href="#peresepan">
+                    <!--begin::Title-->
+                    <span class="nav-text fw-semibold fs-4 mb-3">Peresepan</span>
+                    <!--end::Title-->
+                    <!--begin::Bullet-->
+                    <span
+                        class="bullet-custom position-absolute z-index-2 w-100 h-1px top-100 bottom-n100 bg-primary rounded"></span>
+                    <!--end::Bullet-->
+                </a>
+            </li>
+            <!--end::Nav item-->
+
             <!--begin::Nav item-->
             <li class="nav-item p-0 ms-0">
                 <a class="nav-link btn btn-color-gray-400 flex-center px-3" data-kt-timeline-widget-4="tab"
@@ -138,6 +154,7 @@
             @include('pages.klinik.examinations.partials._profile')
             @include('pages.klinik.examinations.partials._sbar')
             @include('pages.klinik.examinations.partials._medicalrecord')
+            @include('pages.klinik.examinations.partials._peresepan')
             @include('pages.klinik.examinations.partials._lab')
             @include('pages.klinik.examinations.partials._psikososial')
 

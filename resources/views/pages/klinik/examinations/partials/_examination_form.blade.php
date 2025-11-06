@@ -91,6 +91,7 @@
                                         @foreach ($drugs as $drug)
                                             <option value="{{ $drug->id }}"
                                                 {{ $drug->id == $value ? 'selected' : '' }}>{{ $drug->name }}
+                                                {{ $drug->kfa_code ? '| KFA-' . $drug->kfa_code : '' }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -149,7 +150,7 @@
                         <select name="resep[obat][]" class="form-select" data-control="select2" data-placeholder="{{ __('Pilih Obat...') }}">
                             <option value="">{{ __('Pilih Obat...') }}</option>
                             @foreach ($drugs as $drug)
-                <option value="{{ $drug->id }}">{{ $drug->name }}</option>
+                                <option value="{{ $drug->id }}">{{ $drug->name }} {{ $drug->kfa_code ? '| KFA-' . $drug->kfa_code : '' }}</option>
                             @endforeach
                 </select>
             </div>
