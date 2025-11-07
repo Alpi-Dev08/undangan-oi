@@ -115,4 +115,12 @@
             return $this->hasOne(PemeriksaanAwal::class);
         }
 
+        /**
+         * Relasi ke resep (header), satu pemeriksaan dapat memiliki banyak resep
+         */
+        public function prescriptions()
+        {
+            return $this->hasMany(Prescription::class);
+        }
+
     }
