@@ -387,21 +387,56 @@
                     return;
                 }
 
-                // Simpan data via AJAX
+                // Bangun payload sesuai controller PrescriptionsController@store
+                const items = [];
+                $('.resep-item').each(function() {
+                    const $item = $(this);
+                    const selected = $item.find('.resep-obat option:selected');
+                    items.push({
+                        drug_id: $item.find('.resep-obat').val() || null,
+                        drug_name: selected.text() || null,
+                        kfa_code: $item.find('.resep-kfa').val() || null,
+                        qty: parseInt($item.find('.resep-qty').val() || '0', 10),
+                        unit: ($item.find('.resep-unit').text() || '').trim() || null,
+                        dosis: $item.find('.resep-dosis').val() || null,
+                        aturan_pakai: $item.find('select[name^="resep[aturan_pakai]"]').val() || null,
+                        keterangan: $item.find('textarea[name^="resep[keterangan]"]').val() || null,
+                        perintah_perawat: $item.find('textarea[name^="resep[perintah_perawat]"]').val() || null,
+                    });
+                });
+
+                const payload = {
+                    examination_id: {{ $examination->id }},
+                    resep_date: $('input[name="resep_date"]').val() || null,
+                    catatan_umum: $('textarea[name="resep[catatan_umum]"]').val() || null,
+                    items: items
+                };
+
+                const csrf = $('meta[name="csrf-token"]').attr('content') || '{{ csrf_token() }}';
+                console.log('Log: Mengirim payload resep', payload);
+
+                // Simpan data via AJAX ke route prescriptions.store
                 $.ajax({
-                    url: '',
+                    url: '{{ route('prescriptions.store') }}',
                     method: 'POST',
-                    data: $('#resep-form').serialize(),
+                    headers: {
+                        'X-CSRF-TOKEN': csrf
+                    },
+                    contentType: 'application/json',
+                    data: JSON.stringify(payload),
                     success: function(response) {
+                        console.log('Log: Respon simpan resep', response);
                         if (response.success) {
                             alert('Resep berhasil disimpan!');
                             // Refresh atau redirect sesuai kebutuhan
                         } else {
-                            alert('Gagal menyimpan resep: ' + response.message);
+                            alert('Gagal menyimpan resep: ' + (response.message || 'Tidak diketahui'));
                         }
                     },
-                    error: function() {
-                        alert('Terjadi kesalahan saat menyimpan resep!');
+                    error: function(xhr) {
+                        console.error('Log: Error simpan resep', xhr?.responseJSON || xhr);
+                        const msg = xhr?.responseJSON?.message || 'Terjadi kesalahan saat menyimpan resep!';
+                        alert(msg);
                     }
                 });
             });
