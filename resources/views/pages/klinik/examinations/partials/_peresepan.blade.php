@@ -146,6 +146,9 @@
                     <button type="button" class="btn btn-primary" id="print-resep">
                         <i class="fas fa-print"></i> Cetak Resep
                     </button>
+                    <button type="button" class="btn btn-outline-primary" id="download-pdf-resep">
+                        <i class="fas fa-file-pdf"></i> Unduh PDF
+                    </button>
                 </div>
             </div>
         </div>
@@ -156,6 +159,8 @@
     <script>
         $(document).ready(function() {
             let resepIndex = 1;
+            // Simpan ID resep terakhir yang berhasil disimpan (untuk cetak/unduh server-side)
+            window.currentPrescriptionId = window.currentPrescriptionId || null;
 
             // Inisialisasi Select2 untuk dropdown obat (dengan fallback jika Select2 tidak tersedia)
             function initResepObatSelect2(context) {
@@ -630,6 +635,12 @@
                             console.log('Log: Respon simpan resep', response);
                             $btn.prop('disabled', false).removeClass('disabled');
                             if (response.success) {
+                                try {
+                                    window.currentPrescriptionId = response?.data?.id || null;
+                                    console.log('Log: currentPrescriptionId di-set:', window.currentPrescriptionId);
+                                } catch (e) {
+                                    console.warn('Log: Gagal set currentPrescriptionId:', e);
+                                }
                                 if (typeof Swal !== 'undefined') {
                                     Swal.fire({
                                         icon: 'success',
@@ -685,32 +696,63 @@
                 doSave(false);
             });
 
-            // Cetak resep
-            $('#print-resep').click(function() {
-                const printWindow = window.open('', '_blank');
-                generatePreview();
+            // Cetak resep: prioritas ke server-side print jika ID tersedia, fallback ke preview client-side
+            $('#print-resep').off('click').on('click', function() {
+                console.log('Log: Tombol cetak resep diklik');
+                if (window.currentPrescriptionId) {
+                    const urlTpl = '{{ route('prescriptions.print', ['prescription' => '__PID__']) }}';
+                    const url = urlTpl.replace('__PID__', window.currentPrescriptionId);
+                    console.log('Log: Membuka halaman cetak server:', url);
+                    window.open(url, '_blank');
+                    return;
+                }
+                console.warn('Log: Belum ada ID resep, gunakan cetak preview client-side');
+                // Fallback: gunakan fungsi cetak preview yang ada
+                try {
+                    if (typeof generatePreview === 'function') { generatePreview(); }
+                    const printContent = $('#preview-content').html();
+                    const printWindow = window.open('', '_blank');
+                    if (!printWindow) { alert('Tidak dapat membuka jendela cetak.'); return; }
+                    printWindow.document.write(`
+                        <html>
+                            <head>
+                                <title>Resep - {{ $examination->examination_code }}</title>
+                                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+                                <style>
+                                    body { padding: 16px; }
+                                    @media print { .btn { display: none; } }
+                                </style>
+                            </head>
+                            <body>
+                                <div class="container">
+                                    <h5 class="text-center mb-3">Resep Dokter</h5>
+                                    ${printContent}
+                                </div>
+                            </body>
+                        </html>
+                    `);
+                    printWindow.document.close();
+                    printWindow.onload = function(){ try { printWindow.print(); } catch(e){} };
+                } catch (e) {
+                    console.error('Log: Gagal fallback cetak preview:', e);
+                    alert('Terjadi kesalahan saat mencoba mencetak.');
+                }
+            });
 
-                const printContent = $('#preview-content').html();
-                printWindow.document.write(`
-            <html>
-                <head>
-                    <title>Resep - {{ $examination->examination_code }}</title>
-                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-                    <style>
-                        body { padding: 20px; }
-                        @media print { .btn { display: none; } }
-                    </style>
-                </head>
-                <body>
-                    <div class="container">
-                        <h4 class="text-center mb-4">Resep Dokter</h4>
-                        ${printContent}
-                    </div>
-                </body>
-            </html>
-        `);
-                printWindow.document.close();
-                printWindow.print();
+            // Unduh PDF resep
+            $('#download-pdf-resep').off('click').on('click', function() {
+                console.log('Log: Tombol unduh PDF resep diklik');
+                if (!window.currentPrescriptionId) {
+                    const msg = 'Silakan simpan resep terlebih dahulu sebelum mengunduh PDF.';
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({ icon: 'info', title: 'Informasi', text: msg });
+                    } else { alert(msg); }
+                    return;
+                }
+                const urlTpl = '{{ route('prescriptions.pdf', ['prescription' => '__PID__']) }}';
+                const url = urlTpl.replace('__PID__', window.currentPrescriptionId);
+                console.log('Log: Mengunduh PDF dari URL:', url);
+                window.location.href = url;
             });
         });
     </script>

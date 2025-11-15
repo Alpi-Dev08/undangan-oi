@@ -149,7 +149,19 @@
             <p style="margin:0">Kab. Tangerang, {{ \Carbon\Carbon::parse($prescription->resep_date)->locale('id')->format('d F Y') }}</p>
             <br><br><br><br>
             <b>{{ $prescription->doctor?->name ?? '-' }}</b>
-        </div>
+</div>
+
+<script>
+    // Auto-print saat halaman cetak dibuka
+    window.addEventListener('load', function() {
+        try {
+            console.log('Log: Halaman cetak resep dimuat, memanggil window.print()');
+            setTimeout(function(){ window.print(); }, 300);
+        } catch (e) {
+            console.warn('Log: Gagal memanggil print otomatis:', e);
+        }
+    });
+</script>
     </main>
 
     <!-- Tidak memanggil window.print agar konsisten dengan template surat sakit -->
