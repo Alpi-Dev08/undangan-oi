@@ -29,37 +29,18 @@
             font-style: normal;
         }
 
-        /* Layout halaman cetak mengikuti surat sakit */
-        @page {
-            margin: 0.5cm 1.5cm;
-        }
+        /* Layout halaman cetak kompak hemat kertas */
+        @page { size: A4; margin: 1cm; }
 
-        header {
-            position: fixed;
-            top: 0cm;
-            left: 0cm;
-            right: 0cm;
-            height: 6.5cm;
-        }
+        header { position: fixed; top: 0; left: 0; right: 0; height: 2.8cm; }
+        footer { position: fixed; bottom: 0; left: 0; right: 0; height: 2.2cm; }
+        body   { margin-top: 3.2cm; margin-bottom: 2.6cm; }
 
-        footer {
-            position: fixed;
-            bottom: 0cm;
-            left: 0cm;
-            right: 0cm;
-        }
-
-        body {
-            margin-top: 3cm;
-            margin-bottom: 120px;
-        }
-
-        .item-row {
-            border-bottom: 1px dashed #ddd;
-            padding: 6px 0;
-        }
-
-        .small { font-size: 12px; color: #555; }
+        .title { color:#000; margin:6px 0 10px 0; font-size:13px; text-align:center; font-weight:700; text-transform:uppercase; }
+        .meta-table { width:100%; font-size:12px; }
+        .compact-table { width:100%; border-collapse:collapse; font-size:11px; }
+        .compact-table th, .compact-table td { border:1px solid #000; padding:4px; }
+        .small { font-size: 11px; color: #555; }
     </style>
 
     <title>Resep Obat #{{ $prescription->id }}</title>
@@ -68,13 +49,13 @@
 <body style="font-family: 'Nunito Sans', sans-serif;">
     <!-- Header: sama seperti template surat sakit -->
     <header>
-        <table style="width:100%;border-bottom-width:5px;border-bottom-style:double">
+        <table style="width:100%;border-bottom-width:2px;border-bottom-style:solid">
             <tr style="vertical-align:baseline">
                 <td style="width: 50%;vertical-align:top">
-                    <img src="{{ asset(theme()->getMediaUrlPath() . 'logos/logo-klinik.png') }}" style="height:50px;">
+                    <img src="{{ asset(theme()->getMediaUrlPath() . 'logos/logo-klinik.png') }}" style="height:34px;">
                 </td>
                 <td style="width: 50%; vertical-align:top">
-                    <p style="margin:0px; margin-top:10px; font-size:12px;text-align: right;color:#000;">
+                    <p style="margin:0; margin-top:4px; font-size:11px;text-align: right;color:#000;">
                         {!! organizationInfo('full') !!}
                     </p>
                 </td>
@@ -84,73 +65,89 @@
 
     <!-- Footer: sama seperti template surat sakit -->
     <footer>
-        <table style="width:100%;border-top-width: 1px;border-top-style: solid">
+        <table style="width:100%;border-top-width:1px;border-top-style:solid">
             <tr>
-                <td style="width:50%;text-align: left;vertical-align: top;height:100px">
-                    <h2 style="margin:0px;text-transform: uppercase;font-size: 16px;font-weight: bold">WISHING YOU GOOD HEALTH AND HAPPINESS</h2>
-                    <p style="margin:0px;text-transform: uppercase;font-size: 14px;">SEMOGA SEHAT DAN BAHAGIA SELALU</p>
+                <td style="width:60%;text-align: left;vertical-align: middle;height:80px">
+                    <h2 style="margin:0;text-transform: uppercase;font-size: 14px;font-weight: bold">WISHING YOU GOOD HEALTH AND HAPPINESS</h2>
+                    <p style="margin:0;text-transform: uppercase;font-size: 12px;">SEMOGA SEHAT DAN BAHAGIA SELALU</p>
                 </td>
-                <td style="width:50%;text-align: right;vertical-align: bottom;float: right;height:100px">
-                    <img src="{{ asset(theme()->getMediaUrlPath() . 'logos/qr.jpeg') }}" style="height:85px;margin-right:5px;">
-                    <img src="{{ asset(theme()->getMediaUrlPath() . 'logos/logo-yayasan.png') }}" style="height:75px;">
+                <td style="width:40%;text-align: right;vertical-align: middle;height:80px">
+                    <img src="{{ asset(theme()->getMediaUrlPath() . 'logos/qr.jpeg') }}" style="height:65px;margin-right:4px;">
+                    <img src="{{ asset(theme()->getMediaUrlPath() . 'logos/logo-yayasan.png') }}" style="height:60px;">
                 </td>
             </tr>
         </table>
     </footer>
 
     <!-- Konten utama resep -->
-    <main style="font-size:13px!important;">
-        <p style="color:#000;margin:0px;font-size:16px;text-align:center;font-weight:bolder;text-transform:uppercase;font-family: 'Roboto Condensed', sans-serif;margin-top:20px;text-decoration:underline;">
-            Resep Dokter</p>
+    <main style="font-size:12px!important;">
+        <p class="title">RESEP OBAT / PRESCRIPTION</p>
 
-        <table class="table" style="width:100%; margin-top:10px;">
+        <table class="meta-table" style="margin-top:6px;">
             <tbody>
                 <tr>
                     <td style="width:25%;">Tanggal</td>
-                    <td style="width:75%;">: <b>{{ \Carbon\Carbon::parse($prescription->resep_date)->locale('id')->format('d F Y') }}</b></td>
+                    <td style="width:75%; text-align:right"><b>{{ \Carbon\Carbon::parse($prescription->resep_date)->locale('id')->format('d F Y') }}</b></td>
                 </tr>
                 <tr>
-                    <td style="width:25%;">Pemeriksaan</td>
-                    <td style="width:75%;">: <b>{{ $prescription->examination->examination_code ?? '-' }}</b></td>
+                    <td>Pemeriksaan</td>
+                    <td style="text-align:right"><b>{{ $prescription->examination->examination_code ?? '-' }}</b></td>
                 </tr>
                 <tr>
-                    <td style="width:25%;">Pasien</td>
-                    <td style="width:75%;">: <b>{{ $prescription->examination?->patient?->patient_code ?? '-' }}</b></td>
+                    <td>Pasien</td>
+                    <td style="text-align:right"><b>{{ $prescription->examination?->patient?->patient_code ?? '-' }}</b></td>
                 </tr>
                 <tr>
-                    <td style="width:25%;">Dokter</td>
-                    <td style="width:75%;">: <b>{{ $prescription->doctor?->name ?? '-' }}</b></td>
+                    <td>Dokter</td>
+                    <td style="text-align:right"><b>{{ $prescription->doctor?->name ?? '-' }}</b></td>
                 </tr>
             </tbody>
         </table>
 
-        <p style="color:#000;margin:10px 0 5px 0;font-weight:bold">Daftar Resep</p>
-        <div>
-            @forelse($prescription->items as $i)
-                <div class="item-row">
-                    <div style="font-weight:bold">{{ $i->drug_name ?? ($i->drug->name ?? '-') }} <span class="small">{{ $i->kfa_code }}</span></div>
-                    <div>Kuantitas: {{ $i->qty }} {{ $i->unit }} | Dosis: {{ $i->dosis }}</div>
-                    <div>Aturan Pakai: {{ $i->aturan_pakai }}</div>
-                    @if($i->keterangan)
-                        <div class="small">Keterangan: {{ $i->keterangan }}</div>
-                    @endif
-                    @if($i->perintah_perawat)
-                        <div class="small">Perintah Perawat: {{ $i->perintah_perawat }}</div>
-                    @endif
-                </div>
-            @empty
-                <div class="text-muted">Tidak ada item resep.</div>
-            @endforelse
-        </div>
+        <p style="color:#000;margin:6px 0 4px 0;font-weight:bold">Daftar Resep</p>
+        <table class="compact-table">
+            <thead>
+                <tr>
+                    <th style="width:4%">No</th>
+                    <th style="width:28%">Obat</th>
+                    <th style="width:12%">KFA</th>
+                    <th style="width:10%">Qty</th>
+                    <th style="width:10%">Unit</th>
+                    <th style="width:12%">Dosis</th>
+                    <th style="width:12%">Aturan</th>
+                    <th style="width:10%">Keterangan</th>
+                    <th style="width:10%">Perintah</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($prescription->items as $idx => $i)
+                    <tr style="page-break-inside:avoid;">
+                        <td style="text-align:center;">{{ $idx + 1 }}</td>
+                        <td>{{ $i->drug_name ?? ($i->drug->name ?? '-') }}</td>
+                        <td>{{ $i->kfa_code ?? '-' }}</td>
+                        <td style="text-align:center;">{{ $i->qty }}</td>
+                        <td>{{ $i->unit }}</td>
+                        <td>{{ $i->dosis ?? '-' }}</td>
+                        <td>{{ $i->aturan_pakai ?? '-' }}</td>
+                        <td>{{ $i->keterangan ?? '-' }}</td>
+                        <td>{{ $i->perintah_perawat ?? '-' }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="9" class="text-muted">Tidak ada item resep.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
 
         @if($prescription->catatan_umum)
-            <p style="color:#000;margin:10px 0 5px 0;font-weight:bold">Catatan Umum</p>
+            <p style="color:#000;margin:6px 0 4px 0;font-weight:bold">Catatan Umum</p>
             <div class="small">{{ $prescription->catatan_umum }}</div>
         @endif
 
-        <div style="width:300px;float:right;text-align:center;margin-top:20px">
-            <p style="margin:0px">Kab. Tangerang, {{ \Carbon\Carbon::parse($prescription->resep_date)->locale('id')->format('d F Y') }}</p>
-            <br><br><br><br><br>
+        <div style="width:280px;float:right;text-align:center;margin-top:12px">
+            <p style="margin:0">Kab. Tangerang, {{ \Carbon\Carbon::parse($prescription->resep_date)->locale('id')->format('d F Y') }}</p>
+            <br><br><br><br>
             <b>{{ $prescription->doctor?->name ?? '-' }}</b>
         </div>
     </main>
