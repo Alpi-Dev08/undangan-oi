@@ -123,7 +123,7 @@
                     <button type="button" class="btn btn-success" id="save-resep">
                         <i class="fas fa-save"></i> Simpan Resep
                     </button>
-                    <a href="#" class="btn btn-outline-primary ms-3 d-none" id="download-pdf-direct" target="_blank" rel="noopener">
+                    <a href="#" class="btn btn-primary ms-3 d-none" id="download-pdf-direct" target="_blank" rel="noopener">
                         <i class="fas fa-file-pdf"></i> Unduh PDF
                     </a>
                 </div>
@@ -347,9 +347,16 @@
                         if (resp && resp.success && resp.data) {
                             console.log('Log: Resep existing ditemukan', resp.data);
                             window.currentPrescriptionId = resp.data.id;
+                            window.prescriptionStatus = resp.data.status || null;
                             populatePrescription(resp.data);
-                            // Tampilkan tombol Unduh PDF langsung
+                            // Atur UI sesuai status
+                            applyStatusUiLocks();
+                            // Jika tidak terkunci, tampilkan tombol Unduh PDF langsung
                             $('#download-pdf-direct').removeClass('d-none');
+                            if (!isPrescriptionLocked()) {
+                                $('#add-resep-item').removeClass('d-none');
+                                $('#save-resep').removeClass('d-none');
+                            }
                         } else {
                             console.log('Log: Tidak ada resep existing untuk parameter ini');
                             $('#download-pdf-direct').addClass('d-none');
@@ -491,6 +498,40 @@
             // Jalankan cek existing saat halaman siap
             checkExistingPrescription();
 
+            /**
+             * isPrescriptionLocked
+             * Mengecek apakah status resep termasuk terkunci (dispensed/cancelled)
+             * Return: true jika terkunci
+             */
+            function isPrescriptionLocked() {
+                const locked = ['dispensed', 'cancelled'];
+                const status = (window.prescriptionStatus || '').toLowerCase();
+                const result = locked.includes(status);
+                console.log('Log: Status resep', status, 'terkunci?', result);
+                return result;
+            }
+
+            /**
+             * applyStatusUiLocks
+             * Menyembunyikan tombol hapus item dan tombol unduh PDF saat status terkunci
+             * - Tidak mengubah tombol preview/simpan sesuai request
+             * Log: Menandai perubahan tampilan akibat status
+             */
+            function applyStatusUiLocks() {
+                if (isPrescriptionLocked()) {
+                    $('.remove-resep-item').hide();
+                    $('#add-resep-item').addClass('d-none');
+                    $('#save-resep').addClass('d-none');
+                    console.log('Log: UI dikunci karena status resep (hapus & unduh disembunyikan)');
+                } else {
+                    // Kembalikan tombol hapus jika jumlah item > 1
+                    if ($('.resep-item').length > 1) {
+                        $('.remove-resep-item').show();
+                    }
+                    console.log('Log: UI tidak terkunci, tombol hapus dapat tampil jika diperlukan');
+                }
+            }
+
             // Tindakan Unduh PDF langsung
             $('#download-pdf-direct').on('click', function(e) {
                 e.preventDefault();
@@ -501,6 +542,9 @@
                     console.warn('Log: Tidak ada ID resep untuk unduh langsung.');
                 }
             });
+
+            // Terapkan kunci UI awal jika status sudah diketahui dari konteks lain
+            applyStatusUiLocks();
 
             /**
              * generatePreview
