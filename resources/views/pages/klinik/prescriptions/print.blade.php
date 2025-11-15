@@ -34,7 +34,7 @@
 
         header { position: fixed; top: 0; left: 0; right: 0; height: 2.8cm; }
         footer { position: fixed; bottom: 0; left: 0; right: 0; height: 2.2cm; }
-        body   { margin-top: 3.2cm; margin-bottom: 2.6cm; }
+        body   { margin-top: 2cm; margin-bottom: 2.6cm; }
 
         .title { color:#000; margin:6px 0 10px 0; font-size:13px; text-align:center; font-weight:700; text-transform:uppercase; }
         .meta-table { width:100%; font-size:12px; }
@@ -47,12 +47,26 @@
 </head>
 
 <body style="font-family: 'Nunito Sans', sans-serif;">
+    @php
+        // Gunakan file:// + public_path saat render PDF (route prescriptions.pdf), gunakan asset() untuk tampilan web biasa
+        $isPdf = request()->routeIs('prescriptions.pdf');
+        $mediaBase = theme()->getMediaUrlPath();
+        $logoKlinikSrc = $isPdf
+            ? ('file://' . public_path($mediaBase . 'logos/logo-klinik.png'))
+            : asset($mediaBase . 'logos/logo-klinik.png');
+        $qrSrc = $isPdf
+            ? ('file://' . public_path($mediaBase . 'logos/qr.jpeg'))
+            : asset($mediaBase . 'logos/qr.jpeg');
+        $logoYayasanSrc = $isPdf
+            ? ('file://' . public_path($mediaBase . 'logos/logo-yayasan.png'))
+            : asset($mediaBase . 'logos/logo-yayasan.png');
+    @endphp
     <!-- Header: sama seperti template surat sakit -->
     <header>
         <table style="width:100%;border-bottom-width:2px;border-bottom-style:solid">
             <tr style="vertical-align:baseline">
                 <td style="width: 50%;vertical-align:top">
-                    <img src="{{ asset(theme()->getMediaUrlPath() . 'logos/logo-klinik.png') }}" style="height:34px;">
+                    <img src="{{ $logoKlinikSrc }}" style="height:34px;" alt="Logo Klinik">
                 </td>
                 <td style="width: 50%; vertical-align:top">
                     <p style="margin:0; margin-top:4px; font-size:11px;text-align: right;color:#000;">
@@ -72,8 +86,8 @@
                     <p style="margin:0;text-transform: uppercase;font-size: 12px;">SEMOGA SEHAT DAN BAHAGIA SELALU</p>
                 </td>
                 <td style="width:40%;text-align: right;vertical-align: middle;height:80px">
-                    <img src="{{ asset(theme()->getMediaUrlPath() . 'logos/qr.jpeg') }}" style="height:65px;margin-right:4px;">
-                    <img src="{{ asset(theme()->getMediaUrlPath() . 'logos/logo-yayasan.png') }}" style="height:60px;">
+                    <img src="{{ $qrSrc }}" style="height:65px;margin-right:4px;" alt="QR">
+                    <img src="{{ $logoYayasanSrc }}" style="height:60px;" alt="Logo Yayasan">
                 </td>
             </tr>
         </table>

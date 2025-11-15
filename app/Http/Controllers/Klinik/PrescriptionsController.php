@@ -363,6 +363,9 @@ class PrescriptionsController extends Controller
                 'defaultFont' => 'sans-serif',
                 'isHtml5ParserEnabled' => true,
                 'isPhpEnabled' => true,
+                // Pastikan Dompdf boleh akses URL/asset jika diperlukan dan batasi root ke public
+                'isRemoteEnabled' => true,
+                'chroot' => public_path(),
             ]);
 
             $filenameParts = [
