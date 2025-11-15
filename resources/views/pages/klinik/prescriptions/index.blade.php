@@ -57,6 +57,7 @@
                             </td>
                             <td class="d-flex gap-2">
                                 <a href="{{ route('prescriptions.print', $prescription) }}" class="btn btn-sm btn-light-primary">Cetak</a>
+                                <a href="{{ route('prescriptions.pdf', $prescription) }}" class="btn btn-sm btn-light-info" target="_blank" rel="noopener">Unduh PDF</a>
                                 <button class="btn btn-sm btn-light-success" onclick="updatePrescriptionStatus({{ $prescription->id }}, 'dispensed')">Dispensasi</button>
                                 <button class="btn btn-sm btn-light-danger" onclick="updatePrescriptionStatus({{ $prescription->id }}, 'cancelled')">Batalkan</button>
                             </td>

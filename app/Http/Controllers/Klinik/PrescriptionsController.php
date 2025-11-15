@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Klinik\{Examination, Prescription, PrescriptionItem};
 use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
 use Illuminate\Support\Facades\{Auth, DB, Log};
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PrescriptionsController extends Controller
 {
@@ -324,6 +325,66 @@ class PrescriptionsController extends Controller
 
             Log::warning('Redirect back error simpan/update resep');
             return redirect()->back()->withErrors(['error' => 'Gagal menyimpan resep: '.$e->getMessage()])->withInput();
+        }
+    }
+
+    /**
+     * Mengunduh resep sebagai PDF menggunakan DomPDF.
+     *
+     * - Memuat relasi pemeriksaan, pasien, dokter, dan item
+     * - Transaksi baca + logging (commit/rollback)
+     * - Menggunakan view yang sama dengan cetak HTML agar konsisten
+     */
+    public function pdf(Prescription $prescription)
+    {
+        Log::info('Akses unduh PDF resep', [
+            'actor_id' => Auth::id(),
+            'prescription_id' => $prescription->id,
+        ]);
+
+        DB::beginTransaction();
+        try {
+            // Muat relasi yang diperlukan
+            $prescription->load(['examination.patient', 'doctor', 'items']);
+
+            DB::commit();
+            Log::info('Data resep untuk PDF dimuat', [
+                'prescription_id' => $prescription->id,
+                'items' => $prescription->items->count(),
+            ]);
+
+            // Siapkan PDF dari view print yang sudah compact
+            $pdf = Pdf::loadView('pages.klinik.prescriptions.print', compact('prescription'));
+
+            // Set ukuran kertas dan opsi kualitas
+            $pdf->setPaper('A4', 'portrait');
+            $pdf->setOptions([
+                'dpi' => 150,
+                'defaultFont' => 'sans-serif',
+                'isHtml5ParserEnabled' => true,
+                'isPhpEnabled' => true,
+            ]);
+
+            $filenameParts = [
+                'Resep',
+                $prescription->examination?->examination_code,
+                ($prescription->examination?->patient?->patient_code ?? 'Pasien'),
+                ($prescription->resep_date ?? now()->toDateString()),
+            ];
+            $filename = implode('_', array_filter($filenameParts)) . '.pdf';
+
+            Log::info('Mengirim file PDF resep untuk diunduh', [
+                'filename' => $filename,
+            ]);
+
+            return $pdf->download($filename);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Gagal menyiapkan PDF resep', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            abort(500, 'Gagal menyiapkan PDF resep');
         }
     }
 }
