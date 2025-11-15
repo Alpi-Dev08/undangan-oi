@@ -136,7 +136,25 @@
                             <i class="fas fa-clipboard-check me-2"></i>Skrining Awal
                         </h5>
                         <div class="row g-3">
-                            @php $skrining = json_decode($examination->vitality->skrining); @endphp
+                            @php
+                                // Parse data skrining menjadi array aman
+                                // Menghindari error json_decode ketika input sudah berupa array
+                                $rawSkrining = optional($examination->vitality)->skrining;
+                                if (is_array($rawSkrining)) {
+                                    $skrining = $rawSkrining;
+                                } elseif (is_string($rawSkrining)) {
+                                    $decoded = json_decode($rawSkrining, true);
+                                    $skrining = is_array($decoded) ? $decoded : [];
+                                } else {
+                                    $skrining = [];
+                                }
+
+                                // Log: tipe data dan jumlah item setelah parsing
+                                \Log::debug('View _alert skrining parsed', [
+                                    'type' => is_array($rawSkrining) ? 'array' : gettype($rawSkrining),
+                                    'items' => is_array($skrining) ? count($skrining) : 0,
+                                ]);
+                            @endphp
                             @foreach ($skrining as $key => $value)
                                 <div class="col-12">
                                     <div class="row">
