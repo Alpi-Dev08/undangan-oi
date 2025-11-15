@@ -185,15 +185,79 @@ class PrescriptionsController extends Controller
             $examination = Examination::findOrFail($validated['examination_id']);
             Log::info('Examination ditemukan', ['examination_id' => $examination->id]);
 
-            $prescription = Prescription::create([
-                'examination_id' => $examination->id,
-                'doctor_id'      => Auth::id(),
-                'resep_date'     => $validated['resep_date'] ?? now()->toDateString(),
-                'catatan_umum'   => $validated['catatan_umum'] ?? null,
-                'status'         => 'saved',
-            ]);
-            Log::info('Header resep dibuat', ['prescription_id' => $prescription->id]);
+            $resepDate = $validated['resep_date'] ?? now()->toDateString();
 
+            // Cek resep existing (idempotent) berdasarkan pemeriksaan + tanggal
+            $existing = Prescription::where('examination_id', $examination->id)
+                ->whereDate('resep_date', $resepDate)
+                ->orderByDesc('id')
+                ->first();
+
+            if ($existing) {
+                // Jika status final, cegah perubahan
+                if (in_array($existing->status, ['dispensed', 'cancelled'])) {
+                    DB::rollBack();
+                    Log::warning('Resep existing status final, tidak dapat diubah', [
+                        'prescription_id' => $existing->id,
+                        'status' => $existing->status,
+                    ]);
+
+                    if ($request->expectsJson()) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Resep pada tanggal ini berstatus final dan tidak dapat diubah.',
+                            'status'  => $existing->status,
+                        ], 409);
+                    }
+                    return redirect()->back()->with('error', 'Resep pada tanggal ini berstatus final dan tidak dapat diubah.');
+                }
+
+                // Jika belum ada konfirmasi update, minta konfirmasi via front-end (Swal)
+                if (!$request->boolean('confirm_update')) {
+                    DB::rollBack();
+                    Log::info('Konfirmasi update dibutuhkan untuk resep existing', [
+                        'prescription_id' => $existing->id,
+                    ]);
+                    if ($request->expectsJson()) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Resep untuk tanggal ini sudah ada. Konfirmasi untuk memperbarui? ',
+                            'requires_confirmation' => true,
+                            'prescription_id' => $existing->id,
+                        ], 409);
+                    }
+                    return redirect()->back()->with('warning', 'Resep sudah ada pada tanggal ini. Konfirmasi untuk memperbarui.');
+                }
+
+                // Lakukan UPDATE: perbarui header dan ganti items
+                $existing->update([
+                    'doctor_id'    => Auth::id(),
+                    'resep_date'   => $resepDate,
+                    'catatan_umum' => $validated['catatan_umum'] ?? null,
+                    'status'       => 'saved',
+                ]);
+                Log::info('Header resep existing diperbarui', ['prescription_id' => $existing->id]);
+
+                // Ganti semua item
+                $deleted = $existing->items()->delete();
+                Log::info('Item lama dihapus', ['prescription_id' => $existing->id, 'deleted_count' => $deleted]);
+
+                $prescription = $existing;
+                $action = 'updated';
+            } else {
+                // CREATE baru
+                $prescription = Prescription::create([
+                    'examination_id' => $examination->id,
+                    'doctor_id'      => Auth::id(),
+                    'resep_date'     => $resepDate,
+                    'catatan_umum'   => $validated['catatan_umum'] ?? null,
+                    'status'         => 'saved',
+                ]);
+                Log::info('Header resep baru dibuat', ['prescription_id' => $prescription->id]);
+                $action = 'created';
+            }
+
+            // Tulis ulang items
             $totalItems = 0;
             foreach ($validated['items'] as $index => $item) {
                 $row = PrescriptionItem::create([
@@ -209,7 +273,7 @@ class PrescriptionsController extends Controller
                     'perintah_perawat' => $item['perintah_perawat'] ?? null,
                 ]);
                 $totalItems++;
-                Log::info('Item resep berhasil dibuat', [
+                Log::info('Item resep ditulis', [
                     'prescription_item_id' => $row->id,
                     'index' => $index,
                 ]);
@@ -219,26 +283,31 @@ class PrescriptionsController extends Controller
             Log::info('Total items pada header diperbarui', [
                 'prescription_id' => $prescription->id,
                 'total_items' => $totalItems,
+                'action' => $action,
             ]);
 
             DB::commit();
-            Log::info('Transaksi simpan resep berhasil di-commit', ['prescription_id' => $prescription->id]);
+            Log::info('Transaksi simpan/update resep di-commit', [
+                'prescription_id' => $prescription->id,
+                'action' => $action,
+            ]);
 
             if ($request->expectsJson()) {
                 $response = response()->json([
                     'success' => true,
-                    'message' => 'Resep berhasil disimpan',
+                    'message' => $action === 'updated' ? 'Resep diperbarui' : 'Resep berhasil disimpan',
+                    'action'  => $action,
                     'data'    => $prescription->load('items'),
                 ]);
-                Log::info('Mengembalikan response JSON sukses untuk simpan resep');
+                Log::info('Response JSON sukses simpan/update resep');
                 return $response;
             }
 
-            Log::info('Redirect kembali setelah simpan resep', ['prescription_id' => $prescription->id]);
-            return redirect()->back()->with('success', 'Resep berhasil disimpan');
+            Log::info('Redirect back simpan/update resep', ['prescription_id' => $prescription->id, 'action' => $action]);
+            return redirect()->back()->with('success', $action === 'updated' ? 'Resep diperbarui' : 'Resep berhasil disimpan');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Gagal menyimpan resep, transaksi di-rollback', [
+            Log::error('Gagal simpan/update resep, rollback', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
@@ -249,11 +318,11 @@ class PrescriptionsController extends Controller
                     'message' => 'Gagal menyimpan resep',
                     'error'   => $e->getMessage(),
                 ], 422);
-                Log::warning('Mengembalikan response JSON gagal untuk simpan resep');
+                Log::warning('Response JSON gagal simpan/update resep');
                 return $response;
             }
 
-            Log::warning('Redirect back dengan error setelah gagal simpan resep');
+            Log::warning('Redirect back error simpan/update resep');
             return redirect()->back()->withErrors(['error' => 'Gagal menyimpan resep: '.$e->getMessage()])->withInput();
         }
     }

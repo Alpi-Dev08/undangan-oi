@@ -519,6 +519,11 @@
 
             // Simpan resep
             $('#save-resep').click(function() {
+                const $btn = $(this);
+                if ($btn.prop('disabled')) {
+                    console.warn('Log: Klik simpan diabaikan karena sedang proses.');
+                    return;
+                }
                 // Validasi form
                 let isValid = true;
                 $('.resep-item').each(function() {
@@ -565,30 +570,72 @@
                 const csrf = $('meta[name="csrf-token"]').attr('content') || '{{ csrf_token() }}';
                 console.log('Log: Mengirim payload resep', payload);
 
-                // Simpan data via AJAX ke route prescriptions.store
-                $.ajax({
-                    url: '{{ route('prescriptions.store') }}',
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': csrf
-                    },
-                    contentType: 'application/json',
-                    data: JSON.stringify(payload),
-                    success: function(response) {
-                        console.log('Log: Respon simpan resep', response);
-                        if (response.success) {
-                            alert('Resep berhasil disimpan!');
-                            // Refresh atau redirect sesuai kebutuhan
-                        } else {
-                            alert('Gagal menyimpan resep: ' + (response.message || 'Tidak diketahui'));
+                function doSave(confirmUpdate = false) {
+                    const dataToSend = Object.assign({}, payload, { confirm_update: !!confirmUpdate });
+                    $btn.prop('disabled', true).addClass('disabled');
+                    $.ajax({
+                        url: '{{ route('prescriptions.store') }}',
+                        method: 'POST',
+                        headers: { 'X-CSRF-TOKEN': csrf },
+                        contentType: 'application/json',
+                        data: JSON.stringify(dataToSend),
+                        success: function(response) {
+                            console.log('Log: Respon simpan resep', response);
+                            $btn.prop('disabled', false).removeClass('disabled');
+                            if (response.success) {
+                                if (typeof Swal !== 'undefined') {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: response.action === 'updated' ? 'Resep diperbarui' : 'Resep disimpan',
+                                        text: 'Data resep telah ' + (response.action || 'disimpan') + ' dengan sukses.',
+                                    });
+                                } else {
+                                    alert((response.action === 'updated' ? 'Resep diperbarui' : 'Resep disimpan') + ' dengan sukses.');
+                                }
+                                // TODO: optional refresh UI
+                            } else {
+                                const msg = response.message || 'Gagal menyimpan resep';
+                                if (typeof Swal !== 'undefined') {
+                                    Swal.fire({ icon: 'error', title: 'Gagal', text: msg });
+                                } else { alert(msg); }
+                            }
+                        },
+                        error: function(xhr) {
+                            $btn.prop('disabled', false).removeClass('disabled');
+                            const res = xhr?.responseJSON || {};
+                            console.error('Log: Error simpan resep', res);
+                            // Tangani skenario perlu konfirmasi update
+                            if (xhr.status === 409 && res?.requires_confirmation) {
+                                const confirmText = res.message || 'Resep untuk tanggal ini sudah ada. Ingin memperbarui?';
+                                if (typeof Swal !== 'undefined') {
+                                    Swal.fire({
+                                        icon: 'warning',
+                                        title: 'Konfirmasi Pembaruan',
+                                        text: confirmText,
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Ya, perbarui',
+                                        cancelButtonText: 'Batal'
+                                    }).then(function(result) {
+                                        if (result.isConfirmed) {
+                                            doSave(true);
+                                        }
+                                    });
+                                } else {
+                                    if (confirm(confirmText)) { doSave(true); }
+                                }
+                                return;
+                            }
+
+                            const msg = res?.message || 'Terjadi kesalahan saat menyimpan resep!';
+                            if (typeof Swal !== 'undefined') {
+                                Swal.fire({ icon: 'error', title: 'Gagal', text: msg });
+                            } else { alert(msg); }
                         }
-                    },
-                    error: function(xhr) {
-                        console.error('Log: Error simpan resep', xhr?.responseJSON || xhr);
-                        const msg = xhr?.responseJSON?.message || 'Terjadi kesalahan saat menyimpan resep!';
-                        alert(msg);
-                    }
-                });
+                    });
+                }
+
+                // Simpan data via AJAX ke route prescriptions.store (dengan konfirmasi update jika perlu)
+                doSave(false);
             });
 
             // Cetak resep
