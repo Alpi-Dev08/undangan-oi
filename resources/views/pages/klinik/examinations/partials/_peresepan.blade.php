@@ -367,6 +367,156 @@
                 $('#preview-content').html(html);
             }
 
+            /**
+             * generatePrintHtml
+             * Membangun HTML cetak resep dengan Header & Footer seperti surat sakit.
+             * - Header: logo klinik + informasi organisasi
+             * - Footer: slogan + QR + logo yayasan
+             * - Konten: data dokter, tanggal, daftar obat, catatan umum
+             * Log: Menampilkan proses pembuatan HTML cetak
+             */
+            function generatePrintHtml() {
+                console.log('Log: Membuat HTML cetak resep (safe builder)');
+                const tanggal = $('input[name="resep_date"]').val();
+                const dokter = '{{ auth()->user()->name }}';
+                const organisasiHtml = "{!! addslashes(organizationInfo('full')) !!}";
+                const logoKlinik = '{{ asset(theme()->getMediaUrlPath() . 'logos/logo-klinik.png') }}';
+                const logoYayasan = '{{ asset(theme()->getMediaUrlPath() . 'logos/logo-yayasan.png') }}';
+                const logoQr = '{{ asset(theme()->getMediaUrlPath() . 'logos/qr.jpeg') }}';
+
+                // Bangun daftar obat dari form
+                let daftarObatHtml = '';
+                $('.resep-item').each(function(index) {
+                    const obat = $(this).find('.resep-obat option:selected').text();
+                    const qty = $(this).find('.resep-qty').val();
+                    const unit = $(this).find('.resep-unit').text();
+                    const dosis = $(this).find('.resep-dosis').val();
+                    const kfaCode = $(this).find('.resep-kfa').val();
+                    const aturanPakaiText = $(this).find('select[name*="aturan_pakai"]').find('option:selected').text();
+                    const keterangan = $(this).find('textarea[name*="keterangan"]').val();
+                    const perintahPerawat = $(this).find('textarea[name*="perintah_perawat"]').val();
+
+                    daftarObatHtml += '<div style="margin-bottom:12px;">'
+                        + '<div style="font-weight:700;">' + (index + 1) + '. ' + obat + '</div>'
+                        + '<div style="font-size:12px;">KFA: ' + (kfaCode ? kfaCode : '-') + '</div>'
+                        + '<div style="font-size:12px;">Jumlah: ' + qty + ' ' + unit + '</div>'
+                        + '<div style="font-size:12px;">Dosis: ' + dosis + '</div>'
+                        + (aturanPakaiText ? '<div style="font-size:12px;">Aturan pakai: ' + aturanPakaiText + '</div>' : '')
+                        + (keterangan ? '<div style="font-size:12px;">Keterangan: ' + keterangan + '</div>' : '')
+                        + (perintahPerawat ? '<div style="font-size:12px;">Perintah perawat: ' + perintahPerawat + '</div>' : '')
+                        + '</div>';
+                });
+
+                const catatanUmum = $('textarea[name="resep[catatan_umum]"]').val();
+
+                // Bangun HTML menggunakan array-of-lines untuk menghindari konflik template literal
+                const lines = [];
+                lines.push('<!doctype html>');
+                lines.push('<html lang="id">');
+                lines.push('<head>');
+                lines.push('    <meta charset="UTF-8">');
+                lines.push('    <meta name="viewport" content="width=device-width, initial-scale=1.0">');
+                lines.push('    <title>Cetak Resep</title>');
+                lines.push('    <style>');
+                lines.push('        @page { margin: 0.5cm 1.5cm; }');
+                lines.push('        header { position: fixed; top: 0cm; left: 0cm; right: 0cm; height: 6.5cm; }');
+                lines.push('        footer { position: fixed; bottom: 0cm; left: 0cm; right: 0cm; }');
+                lines.push('        body { margin-top: 3cm; margin-bottom: 120px; font-family: Arial, Helvetica, sans-serif; color: #000; }');
+                lines.push('        .title { color:#000; margin:0; font-size:16px; text-align:center; font-weight:800; text-transform:uppercase; text-decoration:underline; }');
+                lines.push('        .section-title { font-weight:700; font-size:14px; margin: 12px 0 6px 0; }');
+                lines.push('        .divider { border-top: 1px solid #000; margin: 10px 0; }');
+                lines.push('        .info-row { display:flex; justify-content:space-between; font-size:13px; margin-bottom:8px; }');
+                lines.push('    </style>');
+                lines.push('</head>');
+                lines.push('<body>');
+                lines.push('    <header>');
+                lines.push('        <table style="width:100%;border-bottom-width:5px;border-bottom-style:double">');
+                lines.push('            <tr style="vertical-align:baseline">');
+                lines.push('                <td style="width:50%;vertical-align:top">');
+                lines.push('                    <img src="' + logoKlinik + '" style="height:50px;">');
+                lines.push('                </td>');
+                lines.push('                <td style="width:50%; vertical-align:top">');
+                lines.push('                    <p style="margin:0px; margin-top:10px; font-size:12px; text-align:right; color:#000;">' + organisasiHtml + '</p>');
+                lines.push('                </td>');
+                lines.push('            </tr>');
+                lines.push('        </table>');
+                lines.push('    </header>');
+                lines.push('    <footer>');
+                lines.push('        <table style="width:100%;border-top-width: 1px;border-top-style: solid">');
+                lines.push('            <tr>');
+                lines.push('                <td style="width:50%;text-align: left;vertical-align: top;height:100px">');
+                lines.push('                    <h2 style="margin:0px;text-transform: uppercase;font-size: 16px;font-weight: bold">WISHING YOU GOOD HEALTH AND HAPPINESS</h2>');
+                lines.push('                    <p style="margin:0px;text-transform: uppercase;font-size: 14px;">SEMOGA SEHAT DAN BAHAGIA SELALU</p>');
+                lines.push('                </td>');
+                lines.push('                <td style="width:50%;text-align: right;vertical-align: bottom;float: right;height:100px">');
+                lines.push('                    <img src="' + logoQr + '" style="height:85px;margin-right:5px;">');
+                lines.push('                    <img src="' + logoYayasan + '" style="height:75px;">');
+                lines.push('                </td>');
+                lines.push('            </tr>');
+                lines.push('        </table>');
+                lines.push('    </footer>');
+                lines.push('    <main style="font-size:13px!important;">');
+                lines.push('        <p class="title" style="margin-top:20px;">Resep Obat</p>');
+                lines.push('        <p class="title" style="margin-bottom:20px;">PRESCRIPTION</p>');
+                lines.push('        <div class="info-row">');
+                lines.push('            <div><strong>Dokter:</strong> ' + dokter + '</div>');
+                lines.push('            <div><strong>Tanggal:</strong> ' + tanggal + '</div>');
+                lines.push('        </div>');
+                lines.push('        <div class="divider"></div>');
+                lines.push('        <div class="section-title">Daftar Obat</div>');
+                lines.push(daftarObatHtml);
+                if (catatanUmum) {
+                    lines.push('        <div class="divider"></div>');
+                    lines.push('        <div class="section-title">Catatan Umum</div>');
+                    lines.push('        <div style="font-size:12px;">' + catatanUmum + '</div>');
+                }
+                lines.push('    </main>');
+                lines.push('</body>');
+                lines.push('</html>');
+
+                const html = lines.join('\n');
+                console.log('Log: HTML cetak resep selesai dibuat (safe)');
+                return html;
+            }
+
+            /**
+             * printResep
+             * Membuka jendela baru, menulis HTML resep, dan memanggil print.
+             * Log: Menangani proses cetak, error ditangani dengan aman.
+             */
+            function printResep() {
+                try {
+                    const html = generatePrintHtml();
+                    const printWindow = window.open('', '_blank');
+                    if (!printWindow) {
+                        alert('Gagal membuka jendela print. Mohon izinkan pop-up untuk situs ini.');
+                        return;
+                    }
+                    const doc = printWindow.document;
+                    doc.open('text/html', 'replace');
+                    doc.write(html);
+                    doc.close();
+                    printWindow.onload = function() {
+                        try {
+                            printWindow.focus();
+                            printWindow.print();
+                            console.log('Log: Cetak resep dipanggil setelah onload.');
+                        } catch (e) {
+                            console.warn('Log: Gagal memanggil print pada jendela:', e);
+                        }
+                    };
+                } catch (error) {
+                    console.error('Log: Kesalahan saat mencetak resep:', error);
+                    alert('Terjadi kesalahan saat mencoba mencetak resep.');
+                }
+            }
+
+            // Tombol Cetak Resep
+            $('#print-resep').on('click', function() {
+                console.log('Log: Tombol cetak resep diklik');
+                printResep();
+            });
+
             // Simpan resep
             $('#save-resep').click(function() {
                 // Validasi form
