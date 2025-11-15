@@ -200,7 +200,16 @@
                                                     @elseif($key == 'penyakit_keluarga')
                                                         @if (is_array($value))
                                                             :
-                                                            {{ implode(', ',array_map(function ($item) {return getPenyakitKeluarga($item)->name;}, $value)) }}
+                                                            @php
+                                                                $penyakitList = [];
+                                                                if (is_array($value)) {
+                                                                    $penyakitList = array_filter(array_map(function ($item) {
+                                                                        $p = getPenyakitKeluarga($item);
+                                                                        return data_get($p, 'name');
+                                                                    }, $value));
+                                                                }
+                                                            @endphp
+                                                            {{ !empty($penyakitList) ? implode(', ', $penyakitList) : '-' }}
                                                         @else
                                                             : {{ getPenyakitKeluarga($value)?->name ?? 'N/A' }}
                                                         @endif
