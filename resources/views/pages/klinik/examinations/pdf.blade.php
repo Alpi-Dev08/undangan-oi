@@ -681,22 +681,42 @@
                             @endphp
 
                             @if ($activePrescription && $activePrescription->items && $activePrescription->items->count())
-                                @if ($activePrescription->resep_date)
-                                    <p style="margin:0px;">Tanggal Resep: {{ \Carbon\Carbon::parse($activePrescription->resep_date)->format('d/m/Y') }}</p>
-                                @endif
-                                @if (!empty($activePrescription->catatan_umum))
-                                    <p style="margin:0px;">Catatan: {{ $activePrescription->catatan_umum }}</p>
+                                @if ($activePrescription->resep_date || !empty($activePrescription->catatan_umum))
+                                    <p style="margin:0px;">
+                                        @if ($activePrescription->resep_date)
+                                            Tanggal Resep: {{ \Carbon\Carbon::parse($activePrescription->resep_date)->format('d/m/Y') }}
+                                        @endif
+                                        @if (!empty($activePrescription->catatan_umum))
+                                            @if ($activePrescription->resep_date) — @endif
+                                            Catatan: {{ $activePrescription->catatan_umum }}
+                                        @endif
+                                    </p>
                                 @endif
 
-                                @foreach ($activePrescription->items as $item)
-                                    <p style="margin:0px;">
-                                        {{ $item->drug_name ?? data_get($item->drug, 'name') ?? $item->kfa_code }}
-                                        @if (!empty($item->dosis)) — Dosis: {{ $item->dosis }} @endif
-                                        @if (!empty($item->aturan_pakai)) — Aturan: {{ $item->aturan_pakai }} @endif
-                                        @if (!empty($item->qty)) — Qty: {{ $item->qty }} {{ $item->unit }} @endif
-                                        @if (!empty($item->keterangan)) — Ket: {{ $item->keterangan }} @endif
-                                    </p>
-                                @endforeach
+                                <table style="width:100%; border-collapse: collapse; font-size:12px; margin-top:6px;">
+                                    <thead>
+                                        <tr>
+                                            <th style="border:1px solid #000; padding:4px; text-align:left;">Nama Obat</th>
+                                            <th style="border:1px solid #000; padding:4px; text-align:left;">Dosis</th>
+                                            <th style="border:1px solid #000; padding:4px; text-align:left;">Aturan Pakai</th>
+                                            <th style="border:1px solid #000; padding:4px; text-align:left;">Jumlah</th>
+                                            <th style="border:1px solid #000; padding:4px; text-align:left;">Keterangan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($activePrescription->items as $item)
+                                            <tr>
+                                                <td style="border:1px solid #000; padding:4px;">
+                                                    {{ $item->drug_name ?? data_get($item->drug, 'name') ?? $item->kfa_code }}
+                                                </td>
+                                                <td style="border:1px solid #000; padding:4px;">{{ $item->dosis ?: '-' }}</td>
+                                                <td style="border:1px solid #000; padding:4px;">{{ $item->aturan_pakai ?: '-' }}</td>
+                                                <td style="border:1px solid #000; padding:4px;">{{ !empty($item->qty) ? ($item->qty . ' ' . ($item->unit ?: '')) : '-' }}</td>
+                                                <td style="border:1px solid #000; padding:4px;">{{ $item->keterangan ?: '-' }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             @else
                                 @php
                                     // Fallback: dukung data lama yang disimpan di $examination->resep
@@ -713,20 +733,31 @@
                                 @endphp
 
                                 @if (!empty($obat))
-                                    @foreach ($obat as $key => $value)
-                                        @php $drug = getObat($value); @endphp
-                                        @if (isset($drug->name))
-                                            <p style="margin:0px;">
-                                                {{ $drug->name }}
-                                                @if (isset($keterangan[$key]) && $keterangan[$key] !== '')
-                                                    — Ket: {{ $keterangan[$key] }}
+                                    <table style="width:100%; border-collapse: collapse; font-size:12px; margin-top:6px;">
+                                        <thead>
+                                            <tr>
+                                                <th style="border:1px solid #000; padding:4px; text-align:left;">Nama Obat</th>
+                                                <th style="border:1px solid #000; padding:4px; text-align:left;">Dosis</th>
+                                                <th style="border:1px solid #000; padding:4px; text-align:left;">Aturan Pakai</th>
+                                                <th style="border:1px solid #000; padding:4px; text-align:left;">Jumlah</th>
+                                                <th style="border:1px solid #000; padding:4px; text-align:left;">Keterangan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($obat as $key => $value)
+                                                @php $drug = getObat($value); @endphp
+                                                @if (isset($drug->name))
+                                                    <tr>
+                                                        <td style="border:1px solid #000; padding:4px;">{{ $drug->name }}</td>
+                                                        <td style="border:1px solid #000; padding:4px;">-</td>
+                                                        <td style="border:1px solid #000; padding:4px;">-</td>
+                                                        <td style="border:1px solid #000; padding:4px;">{{ isset($qty[$key]) && $qty[$key] !== '' ? $qty[$key] : '-' }}</td>
+                                                        <td style="border:1px solid #000; padding:4px;">{{ isset($keterangan[$key]) && $keterangan[$key] !== '' ? $keterangan[$key] : '-' }}</td>
+                                                    </tr>
                                                 @endif
-                                                @if (isset($qty[$key]) && $qty[$key] !== '')
-                                                    — Qty: {{ $qty[$key] }}
-                                                @endif
-                                            </p>
-                                        @endif
-                                    @endforeach
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 @else
                                     <p style="margin:0px;">-</p>
                                 @endif

@@ -4,7 +4,7 @@
         {!! theme()->getSvgIcon('icons/duotune/ecommerce/ecm010.svg', 'svg-icon-3') !!}
     </a>
 
-    @if ($model->status != 'waiting payment')
+    @if ($model->status == 'done')
         <a href="{{ route('examinations.pdf', ['id' => $model->id]) }}"
             class="btn btn-icon btn-bg-light  btn-active-light-primary btn-sm me-1">
             {!! theme()->getSvgIcon('icons/duotune/files/fil008.svg', 'svg-icon-3 text-primary') !!}
@@ -24,10 +24,14 @@
     @if (Auth::user()->hasRole(['dokter', 'administrator']))
         <a href="{{ route('examinations.edit', ['examination' => $model->id]) }}"
             class="btn btn-icon btn-bg-light  btn-active-light-primary btn-sm me-1">
+            @if($model->status !== 'done')
             {!! theme()->getSvgIcon('icons/duotune/art/art005.svg', 'svg-icon-3 text-primary') !!}
+            @else
+                {!! theme()->getSvgIcon('icons/duotune/general/gen004.svg', 'svg-icon-3 text-warning') !!}
+            @endif
         </a>
     @endif
-    @if (Auth::user()->can('klinik.delete'))
+    @if (Auth::user()->can('klinik.delete') && $model->status !== 'done')
         <form method="POST" action="{{ route('examinations.destroy', $model->id) }}">
             @csrf
             @method('DELETE')
