@@ -314,53 +314,78 @@
                 $('#previewResepModal').modal('show');
             });
 
-            // Generate preview content
+            /**
+             * generatePreview
+             * Membangun konten preview resep dalam modal dengan layout tabel kompak
+             * - Meta: dokter & tanggal dalam baris ringkas
+             * - Tabel: No, Obat, KFA, Qty, Unit, Dosis, Aturan, Keterangan, Perintah
+             * Log: Menandai awal pembuatan dan jumlah item yang dirender
+             */
             function generatePreview() {
-                let html = `
-            <div class="resep-preview">
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <strong>Dokter:</strong> {{ auth()->user()->name }}
-                    </div>
-                    <div class="col-md-6">
-                        <strong>Tanggal:</strong> ${$('input[name="resep_date"]').val()}
-                    </div>
-                </div>
-                <hr>
-                <h6>Daftar Obat:</h6>
-        `;
+                console.log('Log: Membuat konten preview resep (compact)');
+                const tanggal = $('input[name="resep_date"]').val();
+                const dokter = '{{ auth()->user()->name }}';
 
+                let rows = '';
                 $('.resep-item').each(function(index) {
                     const obat = $(this).find('.resep-obat option:selected').text();
                     const qty = $(this).find('.resep-qty').val();
                     const unit = $(this).find('.resep-unit').text();
                     const dosis = $(this).find('.resep-dosis').val();
                     const kfaCode = $(this).find('.resep-kfa').val();
-                    const aturanPakai = $(this).find('select[name*="aturan_pakai"]').find('option:selected')
-                        .text();
+                    const aturanPakai = $(this).find('select[name*="aturan_pakai"]').find('option:selected').text();
                     const keterangan = $(this).find('textarea[name*="keterangan"]').val();
                     const perintahPerawat = $(this).find('textarea[name*="perintah_perawat"]').val();
 
-                    html += `
-                <div class="mb-3">
-                    <strong>${index + 1}. ${obat}</strong><br>
-                    <small>KFA: ${kfaCode ? kfaCode : '-'}</small><br>
-                    <small>Jumlah: ${qty} ${unit}</small><br>
-                    <small>Dosis: ${dosis}</small><br>
-                    ${aturanPakai ? `<small>Aturan pakai: ${aturanPakai}</small><br>` : ''}
-                    ${keterangan ? `<small>Keterangan: ${keterangan}</small><br>` : ''}
-                    ${perintahPerawat ? `<small>Perintah perawat: ${perintahPerawat}</small>` : ''}
-                </div>
-            `;
+                    rows += '<tr>'
+                        + '<td style="width:4%;text-align:center;">' + (index + 1) + '</td>'
+                        + '<td style="width:28%;">' + obat + '</td>'
+                        + '<td style="width:12%;">' + (kfaCode || '-') + '</td>'
+                        + '<td style="width:10%;text-align:center;">' + qty + '</td>'
+                        + '<td style="width:10%;">' + unit + '</td>'
+                        + '<td style="width:12%;">' + (dosis || '-') + '</td>'
+                        + '<td style="width:12%;">' + (aturanPakai || '-') + '</td>'
+                        + '<td style="width:10%;">' + (keterangan || '-') + '</td>'
+                        + '<td style="width:10%;">' + (perintahPerawat || '-') + '</td>'
+                        + '</tr>';
                 });
 
+                const totalItems = $('.resep-item').length;
+                console.log('Log: Preview dirender dengan', totalItems, 'item');
+
                 const catatanUmum = $('textarea[name="resep[catatan_umum]"]').val();
+
+                let html = ''
+                    + '<div class="resep-preview" style="font-size:12px;">'
+                    + '  <div class="d-flex justify-content-between mb-2">'
+                    + '    <div><strong>Dokter:</strong> ' + dokter + '</div>'
+                    + '    <div><strong>Tanggal:</strong> ' + tanggal + '</div>'
+                    + '  </div>'
+                    + '  <div class="table-responsive">'
+                    + '    <table class="table table-sm table-bordered" style="font-size:11px;">'
+                    + '      <thead>'
+                    + '        <tr>'
+                    + '          <th>No</th>'
+                    + '          <th>Obat</th>'
+                    + '          <th>KFA</th>'
+                    + '          <th>Qty</th>'
+                    + '          <th>Unit</th>'
+                    + '          <th>Dosis</th>'
+                    + '          <th>Aturan</th>'
+                    + '          <th>Keterangan</th>'
+                    + '          <th>Perintah</th>'
+                    + '        </tr>'
+                    + '      </thead>'
+                    + '      <tbody>' + rows + '</tbody>'
+                    + '    </table>'
+                    + '  </div>';
+
                 if (catatanUmum) {
-                    html += `
-                <hr>
-                <h6>Catatan Umum:</h6>
-                <p>${catatanUmum}</p>
-            `;
+                    html += ''
+                        + '  <div class="mt-2">'
+                        + '    <strong>Catatan Umum</strong>'
+                        + '    <div style="font-size:11px;">' + catatanUmum + '</div>'
+                        + '  </div>';
                 }
 
                 html += '</div>';
