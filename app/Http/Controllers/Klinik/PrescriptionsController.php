@@ -390,4 +390,70 @@ class PrescriptionsController extends Controller
             abort(500, 'Gagal menyiapkan PDF resep');
         }
     }
+
+    /**
+     * Cek dan muat resep existing berdasarkan pemeriksaan dan tanggal.
+     *
+     * - Mengembalikan JSON berisi data resep jika ditemukan
+     * - Menggunakan transaksi DB (PostgreSQL default) untuk konsistensi baca
+     * - Logging setiap langkah dan nilai kembali
+     */
+    public function check(Request $request): JsonResponse
+    {
+        Log::info('Cek resep existing dimulai', [
+            'actor_id' => Auth::id(),
+            'examination_id' => $request->get('examination_id'),
+            'resep_date' => $request->get('resep_date'),
+        ]);
+
+        $validated = $request->validate([
+            'examination_id' => 'required|integer',
+            'resep_date' => 'required|date',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $existing = Prescription::with(['examination.patient', 'doctor', 'items.drug'])
+                ->where('examination_id', $validated['examination_id'])
+                ->whereDate('resep_date', $validated['resep_date'])
+                ->orderByDesc('id')
+                ->first();
+
+            DB::commit();
+
+            if (!$existing) {
+                Log::info('Tidak ada resep existing untuk parameter yang diberikan', [
+                    'examination_id' => $validated['examination_id'],
+                    'resep_date' => $validated['resep_date'],
+                ]);
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Resep tidak ditemukan untuk pemeriksaan & tanggal ini.',
+                ], 404);
+            }
+
+            Log::info('Resep existing ditemukan', [
+                'prescription_id' => $existing->id,
+                'items_count' => $existing->items->count(),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Resep ditemukan',
+                'data' => $existing,
+            ]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Gagal memuat resep existing', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat memuat resep existing.',
+            ], 500);
+        }
+    }
 }

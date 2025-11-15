@@ -123,6 +123,9 @@
                     <button type="button" class="btn btn-success" id="save-resep">
                         <i class="fas fa-save"></i> Simpan Resep
                     </button>
+                    <a href="#" class="btn btn-outline-primary ms-3 d-none" id="download-pdf-direct" target="_blank" rel="noopener">
+                        <i class="fas fa-file-pdf"></i> Unduh PDF
+                    </a>
                 </div>
             </div>
         </div>
@@ -161,6 +164,8 @@
             let resepIndex = 1;
             // Simpan ID resep terakhir yang berhasil disimpan (untuk cetak/unduh server-side)
             window.currentPrescriptionId = window.currentPrescriptionId || null;
+            // Simpan Examination ID untuk cek existing
+            window.currentExaminationId = window.currentExaminationId || {{ isset($examination) ? (int) $examination->id : 'null' }};
 
             // Inisialisasi Select2 untuk dropdown obat (dengan fallback jika Select2 tidak tersedia)
             function initResepObatSelect2(context) {
@@ -317,6 +322,184 @@
             $('#preview-resep').click(function() {
                 generatePreview();
                 $('#previewResepModal').modal('show');
+            });
+
+            /**
+             * checkExistingPrescription
+             * Mengecek apakah pada pemeriksaan & tanggal terpilih sudah memiliki resep
+             * - Jika ada, memuat ke form dan menampilkan tombol Unduh PDF langsung
+             * Log: Menandai proses cek dan hasilnya
+             */
+            function checkExistingPrescription() {
+                const resepDate = $('input[name="resep_date"]').val();
+                const examId = window.currentExaminationId;
+                if (!examId || !resepDate) {
+                    console.warn('Log: Pemeriksaan ID atau tanggal resep belum tersedia untuk cek existing.');
+                    return;
+                }
+                console.log('Log: Cek resep existing', { examination_id: examId, resep_date: resepDate });
+
+                $.ajax({
+                    url: '{{ route('prescriptions.check') }}',
+                    method: 'GET',
+                    data: { examination_id: examId, resep_date: resepDate },
+                    success: function(resp) {
+                        if (resp && resp.success && resp.data) {
+                            console.log('Log: Resep existing ditemukan', resp.data);
+                            window.currentPrescriptionId = resp.data.id;
+                            populatePrescription(resp.data);
+                            // Tampilkan tombol Unduh PDF langsung
+                            $('#download-pdf-direct').removeClass('d-none');
+                        } else {
+                            console.log('Log: Tidak ada resep existing untuk parameter ini');
+                            $('#download-pdf-direct').addClass('d-none');
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 404) {
+                            console.log('Log: Resep existing tidak ditemukan (404)');
+                            $('#download-pdf-direct').addClass('d-none');
+                        } else {
+                            console.warn('Log: Gagal melakukan cek existing resep', xhr.responseText);
+                        }
+                    }
+                });
+            }
+
+            /**
+             * populatePrescription
+             * Mengisi form peresepan dari data existing
+             * - Set tanggal & catatan umum
+             * - Bangun item resep sesuai data
+             * Log: Menandai jumlah item yang dimuat dan index terakhir
+             */
+            function populatePrescription(prescription) {
+                try {
+                    $('input[name="resep_date"]').val(prescription.resep_date || '{{ date('Y-m-d') }}');
+                    $('textarea[name="resep[catatan_umum]"]').val(prescription.catatan_umum || '');
+
+                    const items = prescription.items || [];
+                    // Reset container
+                    $('#resep-container').empty();
+                    resepIndex = 0;
+
+                    items.forEach(function(item, idx) {
+                        // Tambahkan blok item baru menggunakan template yang ada
+                        const newItem = `
+            <div class="resep-item border rounded p-4 mb-4" data-resep-index="${resepIndex}">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="form-label required">Nama Obat</label>
+                        <select name="resep[obat][${resepIndex}]" class="form-select form-select-solid resep-obat"
+                                data-placeholder="Pilih obat..." required>
+                            <option value="">Pilih obat...</option>
+                            @foreach ($drugs as $drug)
+                                <option value="{{ $drug->id }}"
+                                        data-unit="{{ $drug->unit }}"
+                                        data-dosage="{{ $drug->dosage }}"
+                                        data-kfa="{{ $drug->kfa_code }}">
+                                    {{ $drug->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">KFA Code</label>
+                        <input type="text" name="resep[kfa_code][${resepIndex}]"
+                               class="form-control form-control-solid resep-kfa" placeholder="Masukkan kode KFA...">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label required">Jumlah</label>
+                        <div class="input-group input-group-solid">
+                            <input type="number" name="resep[qty][${resepIndex}]"
+                                   class="form-control resep-qty" min="1" value="1" required>
+                            <span class="input-group-text resep-unit">unit</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label required">Dosis</label>
+                        <input type="text" name="resep[dosis][${resepIndex}]"
+                               class="form-control form-control-solid resep-dosis"
+                               placeholder="Contoh: 3x1 tablet" required>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Aturan Pakai</label>
+                        <select name="resep[aturan_pakai][${resepIndex}]" class="form-select form-select-solid">
+                            <option value="">Pilih aturan pakai...</option>
+                            <option value="sebelum_makan">Sebelum makan</option>
+                            <option value="sesudah_makan">Sesudah makan</option>
+                            <option value="saat_makan">Saat makan</option>
+                            <option value="sebelum_tidur">Sebelum tidur</option>
+                            <option value="setelah_tidur">Setelah bangun tidur</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Keterangan</label>
+                        <textarea name="resep[keterangan][${resepIndex}]" class="form-control form-control-solid"
+                                  rows="2" placeholder="Catatan tambahan..."></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Perintah Perawat</label>
+                        <textarea name="resep[perintah_perawat][${resepIndex}]" class="form-control form-control-solid"
+                                  rows="2" placeholder="Instruksi untuk perawat..."></textarea>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12 text-end">
+                        <button type="button" class="btn btn-sm btn-danger remove-resep-item">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                    </div>
+                </div>
+            </div>`;
+
+                        $('#resep-container').append(newItem);
+
+                        const $item = $('#resep-container .resep-item').last();
+                        // Set nilai-nilai
+                        if (item.drug_id) {
+                            $item.find('.resep-obat').val(item.drug_id).trigger('change');
+                        }
+                        $item.find('.resep-kfa').val(item.kfa_code || '');
+                        $item.find('.resep-qty').val(item.qty || 1);
+                        $item.find('.resep-dosis').val(item.dosis || '');
+                        $item.find('.resep-unit').text(item.unit || 'unit');
+                        $item.find('select[name*="aturan_pakai"]').val(item.aturan_pakai || '').trigger('change');
+                        $item.find('textarea[name*="keterangan"]').val(item.keterangan || '');
+                        $item.find('textarea[name*="perintah_perawat"]').val(item.perintah_perawat || '');
+
+                        resepIndex++;
+                    });
+
+                    updateTotalItems();
+                    // Tampilkan tombol hapus jika > 1 item
+                    if ($('.resep-item').length > 1) {
+                        $('.remove-resep-item').show();
+                    }
+
+                    // Inisialisasi Select2 untuk semua item baru
+                    initResepObatSelect2($('#resep-container'));
+
+                    console.log('Log: Resep existing dimuat ke form, items:', items.length, ', index terakhir:', resepIndex);
+                } catch (e) {
+                    console.warn('Log: Gagal memuat resep existing ke form', e);
+                }
+            }
+
+            // Jalankan cek existing saat halaman siap
+            checkExistingPrescription();
+
+            // Tindakan Unduh PDF langsung
+            $('#download-pdf-direct').on('click', function(e) {
+                e.preventDefault();
+                if (window.currentPrescriptionId) {
+                    const url = '{{ route('prescriptions.pdf', ['prescription' => '__ID__']) }}'.replace('__ID__', window.currentPrescriptionId);
+                    window.open(url, '_blank', 'noopener');
+                } else {
+                    console.warn('Log: Tidak ada ID resep untuk unduh langsung.');
+                }
             });
 
             /**
