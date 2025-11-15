@@ -385,7 +385,7 @@
                 const logoQr = '{{ asset(theme()->getMediaUrlPath() . 'logos/qr.jpeg') }}';
 
                 // Bangun daftar obat dari form
-                let daftarObatHtml = '';
+                let daftarObatRows = '';
                 $('.resep-item').each(function(index) {
                     const obat = $(this).find('.resep-obat option:selected').text();
                     const qty = $(this).find('.resep-qty').val();
@@ -396,15 +396,17 @@
                     const keterangan = $(this).find('textarea[name*="keterangan"]').val();
                     const perintahPerawat = $(this).find('textarea[name*="perintah_perawat"]').val();
 
-                    daftarObatHtml += '<div style="margin-bottom:12px;">'
-                        + '<div style="font-weight:700;">' + (index + 1) + '. ' + obat + '</div>'
-                        + '<div style="font-size:12px;">KFA: ' + (kfaCode ? kfaCode : '-') + '</div>'
-                        + '<div style="font-size:12px;">Jumlah: ' + qty + ' ' + unit + '</div>'
-                        + '<div style="font-size:12px;">Dosis: ' + dosis + '</div>'
-                        + (aturanPakaiText ? '<div style="font-size:12px;">Aturan pakai: ' + aturanPakaiText + '</div>' : '')
-                        + (keterangan ? '<div style="font-size:12px;">Keterangan: ' + keterangan + '</div>' : '')
-                        + (perintahPerawat ? '<div style="font-size:12px;">Perintah perawat: ' + perintahPerawat + '</div>' : '')
-                        + '</div>';
+                    daftarObatRows += '<tr style="page-break-inside:avoid;">'
+                        + '<td style="width:4%;text-align:center;">' + (index + 1) + '</td>'
+                        + '<td style="width:28%;">' + obat + '</td>'
+                        + '<td style="width:12%;">' + (kfaCode || '-') + '</td>'
+                        + '<td style="width:10%;text-align:center;">' + qty + '</td>'
+                        + '<td style="width:10%;">' + unit + '</td>'
+                        + '<td style="width:12%;">' + (dosis || '-') + '</td>'
+                        + '<td style="width:12%;">' + (aturanPakaiText || '-') + '</td>'
+                        + '<td style="width:10%;">' + (keterangan || '-') + '</td>'
+                        + '<td style="width:10%;">' + (perintahPerawat || '-') + '</td>'
+                        + '</tr>';
                 });
 
                 const catatanUmum = $('textarea[name="resep[catatan_umum]"]').val();
@@ -418,57 +420,77 @@
                 lines.push('    <meta name="viewport" content="width=device-width, initial-scale=1.0">');
                 lines.push('    <title>Cetak Resep</title>');
                 lines.push('    <style>');
-                lines.push('        @page { margin: 0.5cm 1.5cm; }');
-                lines.push('        header { position: fixed; top: 0cm; left: 0cm; right: 0cm; height: 6.5cm; }');
-                lines.push('        footer { position: fixed; bottom: 0cm; left: 0cm; right: 0cm; }');
-                lines.push('        body { margin-top: 3cm; margin-bottom: 120px; font-family: Arial, Helvetica, sans-serif; color: #000; }');
-                lines.push('        .title { color:#000; margin:0; font-size:16px; text-align:center; font-weight:800; text-transform:uppercase; text-decoration:underline; }');
-                lines.push('        .section-title { font-weight:700; font-size:14px; margin: 12px 0 6px 0; }');
-                lines.push('        .divider { border-top: 1px solid #000; margin: 10px 0; }');
-                lines.push('        .info-row { display:flex; justify-content:space-between; font-size:13px; margin-bottom:8px; }');
+                lines.push('        @page { size: A4; margin: 1cm; }');
+                lines.push('        header { position: fixed; top: 0; left: 0; right: 0; height: 2.8cm; }');
+                lines.push('        footer { position: fixed; bottom: 0; left: 0; right: 0; height: 2.2cm; }');
+                lines.push('        body { margin-top: 3.2cm; margin-bottom: 2.6cm; font-family: Arial, Helvetica, sans-serif; color: #000; }');
+                lines.push('        .title { color:#000; margin:0; font-size:13px; text-align:center; font-weight:700; text-transform:uppercase; }');
+                lines.push('        .section-title { font-weight:700; font-size:12px; margin: 8px 0 4px 0; }');
+                lines.push('        .divider { border-top: 1px solid #000; margin: 6px 0; }');
+                lines.push('        .meta-table { width:100%; font-size:11px; }');
+                lines.push('        .compact-table { width:100%; border-collapse:collapse; font-size:11px; }');
+                lines.push('        .compact-table th, .compact-table td { border:1px solid #000; padding:4px; }');
+                lines.push('        .footer-left h2 { margin:0; text-transform:uppercase; font-size:14px; font-weight:bold; }');
+                lines.push('        .footer-left p { margin:0; text-transform:uppercase; font-size:12px; }');
                 lines.push('    </style>');
                 lines.push('</head>');
                 lines.push('<body>');
                 lines.push('    <header>');
-                lines.push('        <table style="width:100%;border-bottom-width:5px;border-bottom-style:double">');
+                lines.push('        <table style="width:100%;border-bottom-width:2px;border-bottom-style:solid">');
                 lines.push('            <tr style="vertical-align:baseline">');
                 lines.push('                <td style="width:50%;vertical-align:top">');
-                lines.push('                    <img src="' + logoKlinik + '" style="height:50px;">');
+                lines.push('                    <img src="' + logoKlinik + '" style="height:34px;">');
                 lines.push('                </td>');
                 lines.push('                <td style="width:50%; vertical-align:top">');
-                lines.push('                    <p style="margin:0px; margin-top:10px; font-size:12px; text-align:right; color:#000;">' + organisasiHtml + '</p>');
+                lines.push('                    <p style="margin:0; margin-top:4px; font-size:11px; text-align:right; color:#000;">' + organisasiHtml + '</p>');
                 lines.push('                </td>');
                 lines.push('            </tr>');
                 lines.push('        </table>');
                 lines.push('    </header>');
                 lines.push('    <footer>');
-                lines.push('        <table style="width:100%;border-top-width: 1px;border-top-style: solid">');
+                lines.push('        <table style="width:100%;border-top-width:1px;border-top-style:solid">');
                 lines.push('            <tr>');
-                lines.push('                <td style="width:50%;text-align: left;vertical-align: top;height:100px">');
-                lines.push('                    <h2 style="margin:0px;text-transform: uppercase;font-size: 16px;font-weight: bold">WISHING YOU GOOD HEALTH AND HAPPINESS</h2>');
-                lines.push('                    <p style="margin:0px;text-transform: uppercase;font-size: 14px;">SEMOGA SEHAT DAN BAHAGIA SELALU</p>');
+                lines.push('                <td class="footer-left" style="width:60%;text-align:left;vertical-align:middle;height:80px">');
+                lines.push('                    <h2>WISHING YOU GOOD HEALTH AND HAPPINESS</h2>');
+                lines.push('                    <p>SEMOGA SEHAT DAN BAHAGIA SELALU</p>');
                 lines.push('                </td>');
-                lines.push('                <td style="width:50%;text-align: right;vertical-align: bottom;float: right;height:100px">');
-                lines.push('                    <img src="' + logoQr + '" style="height:85px;margin-right:5px;">');
-                lines.push('                    <img src="' + logoYayasan + '" style="height:75px;">');
+                lines.push('                <td style="width:40%;text-align:right;vertical-align:middle;height:80px">');
+                lines.push('                    <img src="' + logoQr + '" style="height:65px;margin-right:4px;">');
+                lines.push('                    <img src="' + logoYayasan + '" style="height:60px;">');
                 lines.push('                </td>');
                 lines.push('            </tr>');
                 lines.push('        </table>');
                 lines.push('    </footer>');
-                lines.push('    <main style="font-size:13px!important;">');
-                lines.push('        <p class="title" style="margin-top:20px;">Resep Obat</p>');
-                lines.push('        <p class="title" style="margin-bottom:20px;">PRESCRIPTION</p>');
-                lines.push('        <div class="info-row">');
-                lines.push('            <div><strong>Dokter:</strong> ' + dokter + '</div>');
-                lines.push('            <div><strong>Tanggal:</strong> ' + tanggal + '</div>');
-                lines.push('        </div>');
+                lines.push('    <main style="font-size:12px!important;">');
+                lines.push('        <p class="title" style="margin:6px 0 10px 0;">RESEP OBAT / PRESCRIPTION</p>');
+                lines.push('        <table class="meta-table"><tr>');
+                lines.push('            <td><strong>Dokter:</strong> ' + dokter + '</td>');
+                lines.push('            <td style="text-align:right"><strong>Tanggal:</strong> ' + tanggal + '</td>');
+                lines.push('        </tr></table>');
                 lines.push('        <div class="divider"></div>');
                 lines.push('        <div class="section-title">Daftar Obat</div>');
-                lines.push(daftarObatHtml);
+                lines.push('        <table class="compact-table">');
+                lines.push('            <thead>');
+                lines.push('                <tr>');
+                lines.push('                    <th>No</th>');
+                lines.push('                    <th>Obat</th>');
+                lines.push('                    <th>KFA</th>');
+                lines.push('                    <th>Qty</th>');
+                lines.push('                    <th>Unit</th>');
+                lines.push('                    <th>Dosis</th>');
+                lines.push('                    <th>Aturan</th>');
+                lines.push('                    <th>Keterangan</th>');
+                lines.push('                    <th>Perintah</th>');
+                lines.push('                </tr>');
+                lines.push('            </thead>');
+                lines.push('            <tbody>');
+                lines.push(daftarObatRows);
+                lines.push('            </tbody>');
+                lines.push('        </table>');
                 if (catatanUmum) {
                     lines.push('        <div class="divider"></div>');
                     lines.push('        <div class="section-title">Catatan Umum</div>');
-                    lines.push('        <div style="font-size:12px;">' + catatanUmum + '</div>');
+                    lines.push('        <div style="font-size:11px;">' + catatanUmum + '</div>');
                 }
                 lines.push('    </main>');
                 lines.push('</body>');
