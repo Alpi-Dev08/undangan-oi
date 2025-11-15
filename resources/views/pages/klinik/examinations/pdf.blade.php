@@ -666,23 +666,70 @@
                     <tr>
                         <td>
                             @php
-                                $resep = json_decode($examination->resep);
-                                $obat = $resep->obat ?? '';
-                                $keterangan = $resep->keterangan ?? [];
-                                $qty = $resep->qty ?? '';
+                                // Coba tampilkan data prescription terbaru bila tersedia
+                                $activePrescription = null;
+                                if (method_exists($examination, 'prescriptions')) {
+                                    try {
+                                        $activePrescription = $examination->prescriptions()
+                                            ->with(['items.drug'])
+                                            ->orderByDesc('resep_date')
+                                            ->first();
+                                    } catch (\Throwable $e) {
+                                        $activePrescription = null;
+                                    }
+                                }
                             @endphp
-                            @if ($obat)
-                                @foreach ($obat as $key => $value)
-                                    @if (isset(getObat($value)->name))
-                                        <p style="margin:0px;">
-                                            {{ getObat($value)->name }}
-                                            @if (isset($keterangan[$key]))
-                                                {{ $keterangan[$key] }} pc
-                                            @endif
-                                            No. {{ $qty[$key] }}
-                                        </p>
-                                    @endif
+
+                            @if ($activePrescription && $activePrescription->items && $activePrescription->items->count())
+                                @if ($activePrescription->resep_date)
+                                    <p style="margin:0px;">Tanggal Resep: {{ \Carbon\Carbon::parse($activePrescription->resep_date)->format('d/m/Y') }}</p>
+                                @endif
+                                @if (!empty($activePrescription->catatan_umum))
+                                    <p style="margin:0px;">Catatan: {{ $activePrescription->catatan_umum }}</p>
+                                @endif
+
+                                @foreach ($activePrescription->items as $item)
+                                    <p style="margin:0px;">
+                                        {{ $item->drug_name ?? data_get($item->drug, 'name') ?? $item->kfa_code }}
+                                        @if (!empty($item->dosis)) — Dosis: {{ $item->dosis }} @endif
+                                        @if (!empty($item->aturan_pakai)) — Aturan: {{ $item->aturan_pakai }} @endif
+                                        @if (!empty($item->qty)) — Qty: {{ $item->qty }} {{ $item->unit }} @endif
+                                        @if (!empty($item->keterangan)) — Ket: {{ $item->keterangan }} @endif
+                                    </p>
                                 @endforeach
+                            @else
+                                @php
+                                    // Fallback: dukung data lama yang disimpan di $examination->resep
+                                    $resepRaw = $examination->resep ?? null;
+                                    $resepData = is_array($resepRaw)
+                                        ? (object) $resepRaw
+                                        : (is_string($resepRaw)
+                                            ? json_decode($resepRaw ?: '{}', false)
+                                            : null);
+
+                                    $obat = data_get($resepData, 'obat', []);
+                                    $keterangan = data_get($resepData, 'keterangan', []);
+                                    $qty = data_get($resepData, 'qty', []);
+                                @endphp
+
+                                @if (!empty($obat))
+                                    @foreach ($obat as $key => $value)
+                                        @php $drug = getObat($value); @endphp
+                                        @if (isset($drug->name))
+                                            <p style="margin:0px;">
+                                                {{ $drug->name }}
+                                                @if (isset($keterangan[$key]) && $keterangan[$key] !== '')
+                                                    — Ket: {{ $keterangan[$key] }}
+                                                @endif
+                                                @if (isset($qty[$key]) && $qty[$key] !== '')
+                                                    — Qty: {{ $qty[$key] }}
+                                                @endif
+                                            </p>
+                                        @endif
+                                    @endforeach
+                                @else
+                                    <p style="margin:0px;">-</p>
+                                @endif
                             @endif
                         </td>
                     </tr>
