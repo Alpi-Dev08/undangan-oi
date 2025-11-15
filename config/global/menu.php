@@ -145,8 +145,14 @@
                 'icon'  => theme()->getSvgIcon('assets/media/icons/duotune/medicine/med004.svg', 'svg-icon-2'),
             ],
             [
+                'title' => 'prescriptions',
+                'path'  => 'klinik/prescriptions',
+                'role'  => ['farmasi', 'administrator'],
+                'icon'  => theme()->getSvgIcon('assets/media/icons/duotune/medicine/med002.svg', 'svg-icon-2'),
+            ],
+            [
                 'title'      => 'Farmasi',
-                'role'       => ['farmasi', 'administrator'],
+                'role'       => ['farmasi', 'administrator', 'admin-perawat','ners','dokter'],
                 'icon'       => theme()->getSvgIcon('assets/media/icons/duotune/medicine/med002.svg', 'svg-icon-2'),
                 'classes'    => ['item' => 'menu-accordion'],
                 'attributes' => [

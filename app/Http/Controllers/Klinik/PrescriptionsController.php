@@ -10,6 +10,140 @@ use Illuminate\Support\Facades\{Auth, DB, Log};
 class PrescriptionsController extends Controller
 {
     /**
+     * Menampilkan daftar resep yang masuk.
+     *
+     * - Mendukung filter sederhana (status, kata kunci pasien/kode pemeriksaan)
+     * - Menggunakan transaksi DB untuk konsistensi baca sesuai kebiasaan proyek
+     * - Logging tiap langkah dan nilai kembali
+     */
+    public function index(Request $request)
+    {
+        Log::info('Akses halaman daftar resep', [
+            'actor_id' => Auth::id(),
+            'filters' => $request->only(['status', 'q']),
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $query = Prescription::with(['examination.patient', 'doctor'])
+                ->orderByDesc('id');
+
+            if ($status = $request->string('status')->toString()) {
+                $query->where('status', $status);
+            }
+            if ($q = $request->string('q')->toString()) {
+                $query->where(function ($sub) use ($q) {
+                    $sub->whereHas('examination', function ($ex) use ($q) {
+                        $ex->where('examination_code', 'like', "%$q%");
+                    })->orWhereHas('examination.patient', function ($pa) use ($q) {
+                        $pa->where('patient_code', 'like', "%$q%");
+                    });
+                });
+            }
+
+            $prescriptions = $query->paginate(15);
+
+            DB::commit();
+            Log::info('Berhasil memuat daftar resep', ['count' => $prescriptions->total()]);
+
+            return view('pages.klinik.prescriptions.index', compact('prescriptions'));
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Gagal memuat daftar resep', [
+                'error' => $e->getMessage(),
+            ]);
+            return view('pages.klinik.prescriptions.index', [
+                'prescriptions' => collect(),
+                'error' => 'Gagal memuat daftar resep',
+            ]);
+        }
+    }
+
+    /**
+     * Cetak resep (view khusus cetak) untuk satu prescription.
+     *
+     * - Memuat relasi pemeriksaan, pasien, dokter, dan item
+     * - Transaksi baca + logging
+     */
+    public function print(Prescription $prescription)
+    {
+        Log::info('Akses cetak resep', [
+            'actor_id' => Auth::id(),
+            'prescription_id' => $prescription->id,
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $prescription->load(['examination.patient', 'doctor', 'items']);
+            DB::commit();
+            Log::info('Data cetak resep dimuat', ['items' => $prescription->items->count()]);
+            return view('pages.klinik.prescriptions.print', compact('prescription'));
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Gagal memuat data cetak resep', [
+                'error' => $e->getMessage(),
+            ]);
+            abort(500, 'Gagal memuat data cetak resep');
+        }
+    }
+
+    /**
+     * Ubah status resep (saved/printed/dispensed/cancelled).
+     *
+     * - Validasi nilai status
+     * - Transaksi commit/rollback dan logging
+     * - Mengembalikan JSON atau redirect sesuai kebutuhan
+     */
+    public function updateStatus(Request $request, Prescription $prescription)
+    {
+        Log::info('Permintaan ubah status resep', [
+            'actor_id' => Auth::id(),
+            'prescription_id' => $prescription->id,
+            'input' => $request->all(),
+        ]);
+
+        $validated = $request->validate([
+            'status' => ['required', 'in:saved,printed,dispensed,cancelled'],
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $prescription->status = $validated['status'];
+            $prescription->save();
+            DB::commit();
+            Log::info('Status resep diperbarui', [
+                'prescription_id' => $prescription->id,
+                'status' => $prescription->status,
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Status resep diperbarui',
+                    'data' => $prescription,
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'Status resep diperbarui');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Gagal memperbarui status resep', [
+                'error' => $e->getMessage(),
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal memperbarui status resep',
+                    'error' => $e->getMessage(),
+                ], 422);
+            }
+
+            return redirect()->back()->withErrors(['error' => 'Gagal memperbarui status resep']);
+        }
+    }
+
+    /**
      * Menyimpan data resep untuk sebuah pemeriksaan.
      *
      * - Melakukan validasi input header dan items

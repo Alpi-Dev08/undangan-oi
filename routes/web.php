@@ -15,6 +15,7 @@
     use App\Http\Controllers\Klinik\HealthcaresController;
     use App\Http\Controllers\Klinik\HealthcareTypesController;
     use App\Http\Controllers\Klinik\HealthProfesionalsController;
+    use App\Http\Controllers\Klinik\PrescriptionsController;
     use App\Http\Controllers\Klinik\HealthProfesionalTypesController;
     use App\Http\Controllers\Klinik\IcdtenController;
     use App\Http\Controllers\Klinik\JenisPasienController;
@@ -295,6 +296,12 @@
             Route::resource('jenis-pasien', JenisPasienController::class);
             Route::resource('personal-disease-histories', PersonalDiseaseHistoryController::class);
             Route::resource('family-disease-histories', FamilyDiseaseHistoryController::class);
+            
+            // Prescriptions
+            Route::get('prescriptions', [PrescriptionsController::class, 'index'])->name('prescriptions.index');
+            Route::get('prescriptions/{prescription}/print', [PrescriptionsController::class, 'print'])->name('prescriptions.print');
+            Route::put('prescriptions/{prescription}/status', [PrescriptionsController::class, 'updateStatus'])->name('prescriptions.update-status');
+            Route::post('prescriptions', [PrescriptionsController::class, 'store'])->name('prescriptions.store');
         });
 
 
