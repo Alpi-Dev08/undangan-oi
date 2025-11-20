@@ -228,12 +228,16 @@
                     <td style="font-size:12px;width:65%">{{ $examination->vitality->ideal_weight ?? '-' }} Kg</td>
                 </tr>
                 <tr>
-                    <td style="font-size:12px;width:35%;padding-left:10px">Body Fat</td>
-                    <td style="font-size:12px;width:65%">{{ $examination->vitality->body_fat ?? '-' }}</td>
-                </tr>
-                <tr>
                     <td style="font-size:12px;width:35%;padding-left:10px">BMI Conclusion</td>
                     <td style="font-size:12px;width:65%">{{ $examination->vitality->bmi_conclusion ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <td style="font-size:12px;width:35%;padding-left:10px">Abdominal Circumference</td>
+                    <td style="font-size:12px;width:65%">{{ $examination->vitality->adbdominal_circumference ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <td style="font-size:12px;width:35%;padding-left:10px">Arm Circumference</td>
+                    <td style="font-size:12px;width:65%">{{ $examination->vitality->arm_circumference ?? '-' }}</td>
                 </tr>
             </table>
             <hr class="mt-10">
