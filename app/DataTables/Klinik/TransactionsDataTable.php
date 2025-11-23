@@ -3,6 +3,8 @@
 namespace App\DataTables\Klinik;
 
 use App\Models\Klinik\Transaction;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
@@ -19,7 +21,9 @@ class TransactionsDataTable extends DataTable
         $query = $query->whereHas(
             'examination', function ($q) {
                 $q->where('appointment_status', '1')->orWhere('appointment_status', null);
-            })->orderBy('created_at', 'desc');
+            })
+            ->with(['examination.user'])
+            ->orderBy('created_at', 'desc');
 
         return datatables()
             ->eloquent($query)
@@ -33,29 +37,88 @@ class TransactionsDataTable extends DataTable
             ->addIndexColumn()
             ->addColumn('invoice_number', function (Transaction $model) {
                 if (isset($model->examination->user->name)) {
-                    return $model->invoice_number.'<br>'.$model->examination->user->name;
+                    return $model->invoice_number.'<br>'.$model->examination->examination_code.'<br>'.$model->examination->user->name;
                 }
 
                 return $model->invoice_number;
             })
             ->addColumn('amount', function (Transaction $model) {
-                // Hitung total resep dari examination
-                $total_resep = 0;
-                if ($model->examination && $model->examination->resep) {
-                    $resep = json_decode($model->examination->resep);
-                    if (isset($resep->obat)) {
-                        $obat = $resep->obat;
-                        $qty = $resep->qty;
-                        foreach ($obat as $key => $value) {
-                            if (isset(getObat($value)->name)) {
-                                $total_resep += $qty[$key] * getObat($value)->price;
+                // Hitung total resep dari examination (mendukung Prescription baru dan data lama resep JSON)
+                $total_resep = 0.0;
+                try {
+                    DB::beginTransaction();
+
+                    if ($model->examination) {
+                        // Prioritas: prescription terbaru berdasarkan resep_date
+                        try {
+                            $latestPrescription = $model->examination
+                                ->prescriptions()
+                                ->with(['items.drug'])
+                                ->orderByDesc('resep_date')
+                                ->first();
+                                Log::info('Latest Prescription: ', $latestPrescription->toArray());
+                        } catch (\Throwable $e) {
+                            $latestPrescription = null;
+                        }
+
+                        if ($latestPrescription && $latestPrescription->items && $latestPrescription->items->count()) {
+                            foreach ($latestPrescription->items as $item) {
+                                $price = null;
+                                if ($item->relationLoaded('drug') && $item->drug) {
+                                    $price = $item->drug->price;
+                                } elseif (!empty($item->drug_id)) {
+                                    // Fallback ke helper lama bila ada
+                                    $drug = function_exists('getObat') ? getObat($item->drug_id) : null;
+                                    $price = $drug->price ?? null;
+                                }
+
+
+                                $quantity = is_numeric($item->qty) ? (float) $item->qty : 0.0;
+                                if ($price !== null) {
+                                    $total_resep += $quantity * (float) $price;
+
+                                    Log::info('Total Resep: ', $total_resep, ['price' => $price, 'quantity' => $quantity]);
+                                }
+                            }
+                        }
+
+                        // Fallback: dukung data lama yang disimpan di examination->resep (JSON/string)
+                        if ($model->examination->resep) {
+                            $resepRaw = $model->examination->resep;
+                            $resep = is_string($resepRaw) ? json_decode($resepRaw ?: '{}') : (is_array($resepRaw) ? (object) $resepRaw : null);
+                            if ($resep && isset($resep->obat) && is_array($resep->obat)) {
+                                $obat = $resep->obat;
+                                $qty = $resep->qty ?? [];
+                                foreach ($obat as $key => $value) {
+                                    $drug = function_exists('getObat') ? getObat($value) : null;
+                                    if ($drug && isset($drug->name)) {
+                                        $quantity = isset($qty[$key]) && is_numeric($qty[$key]) ? (float) $qty[$key] : 0.0;
+                                        $price = isset($drug->price) ? (float) $drug->price : 0.0;
+                                        $total_resep += $quantity * $price;
+                                    }
+                                }
                             }
                         }
                     }
+
+                    DB::commit();
+                } catch (\Throwable $e) {
+                    DB::rollBack();
+                    Log::error('TransactionsDataTable: gagal menghitung total resep', [
+                        'transaction_id' => $model->id,
+                        'error' => $e->getMessage(),
+                    ]);
                 }
 
                 // Tampilkan amount asli + total resep
-                $total_amount = $model->amount + $total_resep;
+                $total_amount = (float) $model->amount + (float) $total_resep;
+
+                Log::debug('TransactionsDataTable: total amount dihitung', [
+                    'transaction_id' => $model->id,
+                    'amount_asli' => (float) $model->amount,
+                    'total_resep' => (float) $total_resep,
+                    'total_amount' => (float) $total_amount,
+                ]);
 
                 return 'Rp ' . number_format($total_amount, 0, ',', '.') . ',-';
             })

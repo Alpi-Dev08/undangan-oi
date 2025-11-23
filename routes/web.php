@@ -301,6 +301,7 @@
             Route::get('prescriptions', [PrescriptionsController::class, 'index'])->name('prescriptions.index');
             Route::get('prescriptions/{prescription}/print', [PrescriptionsController::class, 'print'])->name('prescriptions.print');
             Route::get('prescriptions/{prescription}/pdf', [PrescriptionsController::class, 'pdf'])->name('prescriptions.pdf');
+            Route::get('prescriptions/check', [PrescriptionsController::class, 'check'])->name('prescriptions.check');
             Route::put('prescriptions/{prescription}/status', [PrescriptionsController::class, 'updateStatus'])->name('prescriptions.update-status');
             Route::post('prescriptions', [PrescriptionsController::class, 'store'])->name('prescriptions.store');
         });
