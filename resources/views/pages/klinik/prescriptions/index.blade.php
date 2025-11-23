@@ -13,7 +13,7 @@
                         <input type="text" name="q" value="{{ request('q') }}" class="form-control form-control-solid border border-gray-300 w-250px ps-15" placeholder="Cari pasien/kode pemeriksaan">
                         <select name="status" class="form-select form-select-solid w-200px">
                             <option value="">Semua Status</option>
-                            @foreach(["saved"=>"Tersimpan","printed"=>"Tercetak","dispensed"=>"Didispensasi","cancelled"=>"Dibatalkan"] as $key => $label)
+                            @foreach(["saved"=>"Tersimpan","printed"=>"Tercetak","dispensed"=>"Didispensasi"] as $key => $label)
                                 <option value="{{ $key }}" @selected(request('status')===$key)>{{ $label }}</option>
                             @endforeach
                         </select>
@@ -57,6 +57,7 @@
                                         ->orderByDesc('created_at')
                                         ->first();
                                     $paymentStatus = $transaction->status ?? null;
+                                    $isDispensed = ($prescription->status === 'dispensed');
                                 @endphp
                                 <div class="d-flex flex-row align-items-center gap-2">
                                     <span class="badge {{ match($prescription->status){
@@ -66,17 +67,19 @@
                                         'cancelled' => 'badge-light-danger',
                                         default => 'badge-light-secondary'
                                     } }}">{{ ucfirst($prescription->status) }}</span>
-                                    @if($paymentStatus)
-                                        @php
-                                            $paymentBadge = match($paymentStatus){
-                                                'paid' => 'badge-light-success',
-                                                'waiting payment' => 'badge-light-warning',
-                                                default => 'badge-light-secondary'
-                                            };
-                                        @endphp
-                                        <span class="badge {{ $paymentBadge }}">{{ $paymentStatus === 'paid' ? 'Paid' : ($paymentStatus === 'waiting payment' ? 'Waiting Payment' : ucfirst($paymentStatus)) }}</span>
-                                    @else
-                                        <span class="badge badge-light-secondary">No Transaction</span>
+                                    @if(!$isDispensed)
+                                        @if($paymentStatus)
+                                            @php
+                                                $paymentBadge = match($paymentStatus){
+                                                    'paid' => 'badge-light-success',
+                                                    'waiting payment' => 'badge-light-warning',
+                                                    default => 'badge-light-secondary'
+                                                };
+                                            @endphp
+                                            <span class="badge {{ $paymentBadge }}">{{ $paymentStatus === 'paid' ? 'Paid' : ($paymentStatus === 'waiting payment' ? 'Waiting Payment' : ucfirst($paymentStatus)) }}</span>
+                                        @else
+                                            <span class="badge badge-light-secondary">No Transaction</span>
+                                        @endif
                                     @endif
                                 </div>
                             </td>
@@ -92,14 +95,16 @@
                                    @if(!$canAct) aria-disabled="true" onclick="return blockedAction('unduh pdf')" @endif>
                                     Unduh PDF
                                 </a>
-                                <button class="btn btn-sm btn-light-success"
-                                        @if(!$canAct) disabled onclick="return blockedAction('dispensasi')" @else onclick="updatePrescriptionStatus({{ $prescription->id }}, 'dispensed')" @endif>
-                                    Dispensasi
-                                </button>
-                                <button class="btn btn-sm btn-light-danger"
-                                        @if(!$canAct) disabled onclick="return blockedAction('batalkan')" @else onclick="updatePrescriptionStatus({{ $prescription->id }}, 'cancelled')" @endif>
-                                    Batalkan
-                                </button>
+                                @if($isDispensed)
+                                    <button class="btn btn-sm btn-light-success" disabled onclick="return blockedAction('dispensasi')">
+                                        Dispensasi
+                                    </button>
+                                @else
+                                    <button class="btn btn-sm btn-light-success"
+                                            @if(!$canAct) disabled onclick="return blockedAction('dispensasi')" @else onclick="updatePrescriptionStatus({{ $prescription->id }}, 'dispensed')" @endif>
+                                        Dispensasi
+                                    </button>
+                                @endif
                             </td>
                         </tr>
                     @empty
