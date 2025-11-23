@@ -116,12 +116,13 @@
                                     $price = isset($drug->price) ? (float) $drug->price : 0.0;
                                 }
                                 $qtyPresc = is_numeric($item->qty) ? (float) $item->qty : 0.0;
+                                $unit = $item->unit ?? data_get($item->drug, 'unit') ?? data_get($item->drug, 'uom') ?? data_get($item, 'uom') ?? data_get($item, 'satuan') ?? '-';
                                 $lineTotal = ($price ?? 0.0) * $qtyPresc;
                                 $totalobat += $lineTotal;
                             @endphp
                             <tr class="border-bottom border-bottom-dashed">
                                 <td class="pe-7">{{ $drugName }}</td>
-                                <td class="pe-7">{{ $qtyPresc }}</td>
+                                <td class="pe-7">{{ $qtyPresc }} {{ $unit }}</td>
                                 <td class="pe-7" style="text-align: right">Rp {{ number_format($price ?? 0,2,'.',',') }}</td>
                                 <td class="pe-7" style="text-align: right">Rp {{ number_format($lineTotal,2,'.',',') }}</td>
                                 <td class="pe-7"></td>
@@ -146,12 +147,13 @@
                                     @php
                                         $qtyLegacy = isset($qty[$i]) && is_numeric($qty[$i]) ? (float) $qty[$i] : 0.0;
                                         $priceLegacy = isset($_obat->price) ? (float) $_obat->price : 0.0;
+                                        $unitLegacy = data_get($_obat, 'unit') ?? data_get($_obat, 'uom') ?? data_get($_obat, 'satuan') ?? '-';
                                         $lineTotalLegacy = $priceLegacy * $qtyLegacy;
                                         $totalobat += $lineTotalLegacy;
                                     @endphp
                                     <tr class="border-bottom border-bottom-dashed">
                                         <td class="pe-7">{{ $_obat->name ?? "-" }}</td>
-                                        <td class="pe-7">{{ $qtyLegacy }}</td>
+                                        <td class="pe-7">{{ $qtyLegacy }} {{ $unitLegacy->name }}</td>
                                         <td class="pe-7" style="text-align: right">Rp {{ number_format($priceLegacy,2,'.',',') }}</td>
                                         <td class="pe-7" style="text-align: right">Rp {{ number_format($lineTotalLegacy,2,'.',',') }}</td>
                                         <td class="pe-7"></td>
