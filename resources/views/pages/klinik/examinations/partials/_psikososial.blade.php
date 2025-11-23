@@ -27,6 +27,8 @@
 
     // Initialize psikososial data
     $psikososial = isset($examination->psikososial) ? json_decode($examination->psikososial) : null;
+    // Status pemeriksaan: kunci form jika 'done'
+    $isExamDone = strtolower($examination->status ?? '') === 'done';
 
     // Define form sections configuration
     $formSections = [
@@ -194,12 +196,14 @@
                     <a href="{{ route('examinations.index') }}" class="btn btn-light me-3">
                         <i class="fas fa-times"></i> Cancel
                     </a>
-                    <button type="submit" class="btn btn-primary" data-kt-examinations-modal-action="submit">
-                        <span class="indicator-label"><i class="fas fa-save"></i> Submit</span>
-                        <span class="indicator-progress">
-                            Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                        </span>
-                    </button>
+                    @if(!$isExamDone)
+                        <button type="submit" class="btn btn-primary" data-kt-examinations-modal-action="submit">
+                            <span class="indicator-label"><i class="fas fa-save"></i> Submit</span>
+                            <span class="indicator-progress">
+                                Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    @endif
                 </div>
             </form>
         </div>
@@ -208,4 +212,36 @@
 
 @push('customscript')
     @include('pages.klinik.examinations.partials.scripts.psikososial-form')
+@endpush
+
+@push('customscript')
+    <script>
+        $(function() {
+            // Simpan status pemeriksaan untuk kontrol penguncian UI
+            window.examinationStatus = window.examinationStatus || '{{ strtolower($examination->status ?? '') }}';
+
+            /**
+             * lockPsikososialIfDone
+             * Mengunci seluruh form psikososial jika status pemeriksaan = 'done'.
+             * Efek UI:
+             * - Nonaktifkan semua input/select/textarea di dalam form
+             * - Sembunyikan tombol Submit
+             * - Tetap izinkan tombol Cancel
+             * Log: Mencatat status dan hasil penguncian
+             */
+            function lockPsikososialIfDone() {
+                const status = (window.examinationStatus || '').toLowerCase();
+                const locked = status === 'done';
+                console.log('Log: Psikososial -> pemeriksaan status =', status, '=> kunci form?', locked);
+                if (!locked) return;
+
+                const $form = $('#psikososial').find('form');
+                $form.find('input, select, textarea').prop('disabled', true);
+                $form.find('[data-kt-examinations-modal-action="submit"]').addClass('d-none');
+            }
+
+            // Jalankan penguncian di awal
+            lockPsikososialIfDone();
+        });
+    </script>
 @endpush
