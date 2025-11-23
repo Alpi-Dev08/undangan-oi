@@ -80,6 +80,8 @@
                         $keterangan = $resep->keterangan ?? [];
                         $qty = $resep->qty ?? [];
                         $hasResep = is_array($obat) && count($obat) > 0;
+                        // Status pemeriksaan: kunci seluruh form jika 'done'
+                        $isExamDone = strtolower($examination->status ?? '') === 'done';
 
                         // Ambil status pembayaran transaksi terbaru berdasarkan examination_id
                         $latestTransaction = \App\Models\Klinik\Transaction::where('examination_id', $examination->id)
@@ -117,7 +119,7 @@
                             @endforeach
                         </div>
 
-                        @if (!$isPaid)
+                        @if (!$isPaid && !$isExamDone)
                             <button type="button" class="btn btn-sm btn-light-primary mt-2" id="tambah_obat">
                                 <i class="fas fa-plus me-2"></i>Tambah Obat
                             </button>
@@ -139,9 +141,11 @@
                     <a href="{{ route('examinations.index') }}" class="btn btn-light me-2">
                         <i class="fas fa-times me-2"></i>Cancel
                     </a>
-                    <button type="submit" class="btn btn-primary" data-kt-examinations-modal-action="submit">
-                        <i class="fas fa-save me-2"></i>Submit
-                    </button>
+                    @if(!$isExamDone)
+                        <button type="submit" class="btn btn-primary" data-kt-examinations-modal-action="submit">
+                            <i class="fas fa-save me-2"></i>Submit
+                        </button>
+                    @endif
                 </div>
             </div>
         </form>
@@ -151,6 +155,33 @@
 @push('customscript')
     <script>
         $(document).ready(function() {
+            // Simpan status pemeriksaan ke window untuk kontrol penguncian UI
+            window.examinationStatus = window.examinationStatus || '{{ strtolower($examination->status ?? '') }}';
+
+            /**
+             * lockExaminationFormIfDone
+             * Mengunci seluruh form pemeriksaan jika status = 'done'.
+             * Efek UI:
+             * - Nonaktifkan semua input/select/textarea di dalam form
+             * - Sembunyikan tombol tambah/hapus resep serta tombol Submit
+             * - Tetap izinkan tombol Cancel
+             * Log: Mencatat status dan hasil penguncian
+             */
+            function lockExaminationFormIfDone() {
+                const status = (window.examinationStatus || '').toLowerCase();
+                const locked = status === 'done';
+                console.log('Log: Pemeriksaan status =', status, '=> kunci form?', locked);
+                if (!locked) return;
+
+                const $form = $('#kt_modal_add_examinations_form');
+                $form.find('input, select, textarea').prop('disabled', true);
+                $('#tambah_obat').addClass('d-none');
+                $('[data-kt-examinations-modal-action="submit"]').addClass('d-none');
+                $('.remove-resep').addClass('d-none');
+            }
+
+            // Jalankan penguncian di awal
+            lockExaminationFormIfDone();
             $('#tambah_obat').click(function() {
                 var newRow = `
                 <div class="row mb-2 align-items-center resep-row">
