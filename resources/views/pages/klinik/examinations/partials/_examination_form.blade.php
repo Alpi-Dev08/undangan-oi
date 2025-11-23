@@ -74,47 +74,55 @@
                 </div>
 
                 <div class="col-12">
-                    <label class="form-label fw-bold">Resep</label>
-                    <div id="resepContainer">
-                        @php
-                            $resep = json_decode($examination->resep);
-                            $obat = $resep->obat ?? [];
-                            $keterangan = $resep->keterangan ?? [];
-                            $qty = $resep->qty ?? [];
-                        @endphp
-                        @foreach ($obat as $key => $value)
-                            <div class="row mb-2 align-items-center resep-row">
-                                <div class="col-md-5 col-sm-12 mb-2 mb-md-0">
-                                    <select name="resep[obat][]" class="form-select" data-control="select2"
-                                        data-placeholder="{{ __('Pilih Obat...') }}">
-                                        <option value="">{{ __('Pilih Obat...') }}</option>
-                                        @foreach ($drugs as $drug)
-                                            <option value="{{ $drug->id }}"
-                                                {{ $drug->id == $value ? 'selected' : '' }}>{{ $drug->name }}
-                                                {{ $drug->kfa_code ? '| KFA-' . $drug->kfa_code : '' }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                    @php
+                        $resep = json_decode($examination->resep);
+                        $obat = $resep->obat ?? [];
+                        $keterangan = $resep->keterangan ?? [];
+                        $qty = $resep->qty ?? [];
+                        $hasResep = is_array($obat) && count($obat) > 0;
+
+                        // Ambil status pembayaran transaksi terbaru berdasarkan examination_id
+                        $latestTransaction = \App\Models\Klinik\Transaction::where('examination_id', $examination->id)
+                            ->latest()
+                            ->first();
+                        $isPaid = $latestTransaction && $latestTransaction->status === 'paid';
+                    @endphp
+
+                    @if ($hasResep)
+                        <label class="form-label fw-bold">Resep</label>
+                        <div id="resepContainer">
+                            @foreach ($obat as $key => $value)
+                                <div class="row mb-2 align-items-center resep-row">
+                                    <div class="col-md-5 col-sm-12 mb-2 mb-md-0">
+                                        <select name="resep[obat][]" class="form-select" data-control="select2"
+                                            data-placeholder="{{ __('Pilih Obat...') }}">
+                                            <option value="">{{ __('Pilih Obat...') }}</option>
+                                            @foreach ($drugs as $drug)
+                                                <option value="{{ $drug->id }}"
+                                                    {{ $drug->id == $value ? 'selected' : '' }}>{{ $drug->name }}
+                                                    {{ $drug->kfa_code ? '| KFA-' . $drug->kfa_code : '' }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 col-sm-8 mb-2 mb-md-0">
+                                        <input placeholder="Keterangan" name="resep[keterangan][]" class="form-control"
+                                            type="text" value="{{ $keterangan[$key] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 mb-2 mb-md-0">
+                                        <input placeholder="Qty" name="resep[qty][]" class="form-control" type="number"
+                                            min="1" value="{{ $qty[$key] ?? '' }}">
+                                    </div>
                                 </div>
-                                <div class="col-md-4 col-sm-8 mb-2 mb-md-0">
-                                    <input placeholder="Keterangan" name="resep[keterangan][]" class="form-control"
-                                        type="text" value="{{ $keterangan[$key] ?? '' }}">
-                                </div>
-                                <div class="col-md-2 col-sm-3 mb-2 mb-md-0">
-                                    <input placeholder="Qty" name="resep[qty][]" class="form-control" type="number"
-                                        min="1" value="{{ $qty[$key] ?? '' }}">
-                                </div>
-                                <div class="col-md-1 col-sm-1">
-                                    <button type="button" class="btn btn-sm btn-icon btn-light-danger remove-resep">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                    <button type="button" class="btn btn-sm btn-light-primary mt-2" id="tambah_obat">
-                        <i class="fas fa-plus me-2"></i>Tambah Obat
-                    </button>
+                            @endforeach
+                        </div>
+
+                        @if (!$isPaid)
+                            <button type="button" class="btn btn-sm btn-light-primary mt-2" id="tambah_obat">
+                                <i class="fas fa-plus me-2"></i>Tambah Obat
+                            </button>
+                        @endif
+                    @endif
                 </div>
 
                 <!-- Saran -->
