@@ -47,19 +47,59 @@
                             <td>{{ $prescription->doctor?->name ?? '-' }}</td>
                             <td>{{ $prescription->total_items }}</td>
                             <td>
-                                <span class="badge {{ match($prescription->status){
-                                    'saved' => 'badge-light-info',
-                                    'printed' => 'badge-light-primary',
-                                    'dispensed' => 'badge-light-success',
-                                    'cancelled' => 'badge-light-danger',
-                                    default => 'badge-light-secondary'
-                                } }}">{{ ucfirst($prescription->status) }}</span>
+                                @php
+                                    // Ambil status pembayaran untuk resep ini berdasarkan transaksi pemeriksaan terkait
+                                    /**
+                                     * Ambil transaksi terbaru dari examination_id (read-only) untuk menampilkan status pembayaran.
+                                     * Disarankan eager loading di controller jika diperlukan optimasi.
+                                     */
+                                    $transaction = \App\Models\Klinik\Transaction::where('examination_id', $prescription->examination_id)
+                                        ->orderByDesc('created_at')
+                                        ->first();
+                                    $paymentStatus = $transaction->status ?? null;
+                                @endphp
+                                <div class="d-flex flex-row align-items-center gap-2">
+                                    <span class="badge {{ match($prescription->status){
+                                        'saved' => 'badge-light-info',
+                                        'printed' => 'badge-light-primary',
+                                        'dispensed' => 'badge-light-success',
+                                        'cancelled' => 'badge-light-danger',
+                                        default => 'badge-light-secondary'
+                                    } }}">{{ ucfirst($prescription->status) }}</span>
+                                    @if($paymentStatus)
+                                        @php
+                                            $paymentBadge = match($paymentStatus){
+                                                'paid' => 'badge-light-success',
+                                                'waiting payment' => 'badge-light-warning',
+                                                default => 'badge-light-secondary'
+                                            };
+                                        @endphp
+                                        <span class="badge {{ $paymentBadge }}">{{ $paymentStatus === 'paid' ? 'Paid' : ($paymentStatus === 'waiting payment' ? 'Waiting Payment' : ucfirst($paymentStatus)) }}</span>
+                                    @else
+                                        <span class="badge badge-light-secondary">No Transaction</span>
+                                    @endif
+                                </div>
                             </td>
+                            @php $canAct = ($paymentStatus === 'paid'); @endphp
                             <td class="d-flex gap-2">
-                                <a href="{{ route('prescriptions.print', $prescription) }}" class="btn btn-sm btn-light-primary">Cetak</a>
-                                <a href="{{ route('prescriptions.pdf', $prescription) }}" class="btn btn-sm btn-light-info" target="_blank" rel="noopener">Unduh PDF</a>
-                                <button class="btn btn-sm btn-light-success" onclick="updatePrescriptionStatus({{ $prescription->id }}, 'dispensed')">Dispensasi</button>
-                                <button class="btn btn-sm btn-light-danger" onclick="updatePrescriptionStatus({{ $prescription->id }}, 'cancelled')">Batalkan</button>
+                                <a href="{{ route('prescriptions.print', $prescription) }}"
+                                   class="btn btn-sm btn-light-primary {{ $canAct ? '' : 'disabled' }}"
+                                   @if(!$canAct) aria-disabled="true" onclick="return blockedAction('cetak')" @endif>
+                                    Cetak
+                                </a>
+                                <a href="{{ route('prescriptions.pdf', $prescription) }}"
+                                   class="btn btn-sm btn-light-info {{ $canAct ? '' : 'disabled' }}" target="{{ $canAct ? '_blank' : '_self' }}" rel="noopener"
+                                   @if(!$canAct) aria-disabled="true" onclick="return blockedAction('unduh pdf')" @endif>
+                                    Unduh PDF
+                                </a>
+                                <button class="btn btn-sm btn-light-success"
+                                        @if(!$canAct) disabled onclick="return blockedAction('dispensasi')" @else onclick="updatePrescriptionStatus({{ $prescription->id }}, 'dispensed')" @endif>
+                                    Dispensasi
+                                </button>
+                                <button class="btn btn-sm btn-light-danger"
+                                        @if(!$canAct) disabled onclick="return blockedAction('batalkan')" @else onclick="updatePrescriptionStatus({{ $prescription->id }}, 'cancelled')" @endif>
+                                    Batalkan
+                                </button>
                             </td>
                         </tr>
                     @empty
@@ -103,6 +143,16 @@
                 console.error('Error jaringan update status resep:', err);
                 alert('Error jaringan');
             });
+        }
+
+        /**
+         * Memblokir aksi ketika transaksi belum dibayar (status bukan "paid").
+         * Menampilkan log dan notifikasi kepada pengguna.
+         */
+        function blockedAction(action){
+            console.warn(`Log: Aksi ${action} diblokir karena transaksi belum paid`);
+            alert('Transaksi belum dibayar. Tidak dapat melakukan ' + action + '.');
+            return false;
         }
     </script>
 </x-base-layout>
