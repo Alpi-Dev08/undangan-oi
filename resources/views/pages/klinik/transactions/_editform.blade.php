@@ -86,27 +86,80 @@
                             RESEP OBAT
                         </td>
                     </tr> -->
-		    @php $totalobat=0; @endphp
-		    @if($examination->resep)
+                    @php $totalobat = 0; @endphp
+
                     @php
-                        $resep = json_decode($examination->resep);
-                        $obat = $resep->obat;
-                        $qty = $resep->qty;
+                        // Tampilkan obat dari Prescription terbaru jika tersedia
+                        $latestPrescription = null;
+                        try {
+                            if (method_exists($examination, 'prescriptions')) {
+                                $latestPrescription = $examination->prescriptions()
+                                    ->with(['items.drug'])
+                                    ->orderByDesc('resep_date')
+                                    ->first();
+                            }
+                        } catch (Throwable $e) {
+                            $latestPrescription = null;
+                        }
                     @endphp
-                    @for($i=0;$i<count($resep->obat);$i++)
-                        @php $_obat = getObat($obat[$i]); @endphp
-			@if(isset($_obat->id))
+
+                    @if($latestPrescription && $latestPrescription->items && $latestPrescription->items->count())
                         <tr class="border-bottom border-bottom-dashed">
-                            <td class="pe-7">{{ $_obat->name ?? "-" }}</td>
-                            <td class="pe-7">{{ $qty[$i] }}</td>
-                            <td class="pe-7" style="text-align: right">Rp {{ number_format($_obat->price,2,'.',',') }}</td>
-                            <td class="pe-7" style="text-align: right">Rp {{ number_format($_obat->price*$qty[$i],2,'.',',') }}</td>
-                            <td class="pe-7"></td>
+                            <td class="pe-7" colspan="5">RESEP OBAT (Prescription)</td>
                         </tr>
-                        @php $totalobat += $_obat->price*$qty[$i]; @endphp
-			@endif
-                    @endfor
-		    @endif
+                        @foreach($latestPrescription->items as $item)
+                            @php
+                                $drugName = $item->drug_name ?? data_get($item->drug, 'name') ?? $item->kfa_code;
+                                $price = isset($item->drug) && isset($item->drug->price) ? (float) $item->drug->price : null;
+                                if($price === null && !empty($item->drug_id) && function_exists('getObat')){
+                                    $drug = getObat($item->drug_id);
+                                    $price = isset($drug->price) ? (float) $drug->price : 0.0;
+                                }
+                                $qtyPresc = is_numeric($item->qty) ? (float) $item->qty : 0.0;
+                                $lineTotal = ($price ?? 0.0) * $qtyPresc;
+                                $totalobat += $lineTotal;
+                            @endphp
+                            <tr class="border-bottom border-bottom-dashed">
+                                <td class="pe-7">{{ $drugName }}</td>
+                                <td class="pe-7">{{ $qtyPresc }}</td>
+                                <td class="pe-7" style="text-align: right">Rp {{ number_format($price ?? 0,2,'.',',') }}</td>
+                                <td class="pe-7" style="text-align: right">Rp {{ number_format($lineTotal,2,'.',',') }}</td>
+                                <td class="pe-7"></td>
+                            </tr>
+                        @endforeach
+                    @endif
+
+                    @if($examination->resep)
+                        @php
+                            $resepRaw = $examination->resep;
+                            $resep = is_string($resepRaw) ? json_decode($resepRaw ?: '{}') : (is_array($resepRaw) ? (object) $resepRaw : null);
+                            $obat = $resep->obat ?? [];
+                            $qty = $resep->qty ?? [];
+                        @endphp
+                        @if (!empty($obat))
+                            <tr class="border-bottom border-bottom-dashed">
+                                <td class="pe-7" colspan="5">RESEP OBAT (Legacy)</td>
+                            </tr>
+                            @for($i=0;$i<count($obat);$i++)
+                                @php $_obat = function_exists('getObat') ? getObat($obat[$i]) : null; @endphp
+                                @if(isset($_obat->id))
+                                    @php
+                                        $qtyLegacy = isset($qty[$i]) && is_numeric($qty[$i]) ? (float) $qty[$i] : 0.0;
+                                        $priceLegacy = isset($_obat->price) ? (float) $_obat->price : 0.0;
+                                        $lineTotalLegacy = $priceLegacy * $qtyLegacy;
+                                        $totalobat += $lineTotalLegacy;
+                                    @endphp
+                                    <tr class="border-bottom border-bottom-dashed">
+                                        <td class="pe-7">{{ $_obat->name ?? "-" }}</td>
+                                        <td class="pe-7">{{ $qtyLegacy }}</td>
+                                        <td class="pe-7" style="text-align: right">Rp {{ number_format($priceLegacy,2,'.',',') }}</td>
+                                        <td class="pe-7" style="text-align: right">Rp {{ number_format($lineTotalLegacy,2,'.',',') }}</td>
+                                        <td class="pe-7"></td>
+                                    </tr>
+                                @endif
+                            @endfor
+                        @endif
+                    @endif
                     <tr class="border-top border-top-dashed align-top fs-6 fw-bold text-gray-700">
                         <th class="text-primary">
                            &nbsp;
@@ -135,7 +188,7 @@
                         <th></th>
                         <th colspan="2" class="fs-4 ps-0">Total</th>
                         <th colspan="2" class="text-end fs-4 text-nowrap">Rp
-                            <span data-kt-element="grand-total">{{ number_format($transaction->amount+$totalobat,2,'.',',') }}</span></th>
+                            <span data-kt-element="grand-total">{{ number_format(($transaction->amount ?? 0) + ($totalobat ?? 0),2,'.',',') }}</span></th>
                     </tr>
                     </tfoot>
                     <!--end::Table foot-->
