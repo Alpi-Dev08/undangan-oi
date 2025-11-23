@@ -166,6 +166,16 @@
             window.currentPrescriptionId = window.currentPrescriptionId || null;
             // Simpan Examination ID untuk cek existing
             window.currentExaminationId = window.currentExaminationId || {{ isset($examination) ? (int) $examination->id : 'null' }};
+            // Simpan Examination Status untuk kontrol penguncian UI
+            window.examinationStatus = window.examinationStatus || '{{ isset($examination) ? strtolower($examination->status ?? '') : '' }}';
+            // Simpan Transaction Status terbaru untuk kontrol penguncian UI
+            @php
+                $latestTransaction = isset($examination)
+                    ? \App\Models\Klinik\Transaction::where('examination_id', $examination->id)->latest()->first()
+                    : null;
+                $transactionStatusBlade = strtolower($latestTransaction->status ?? '');
+            @endphp
+            window.transactionStatus = window.transactionStatus || '{{ $transactionStatusBlade }}';
 
             // Inisialisasi Select2 untuk dropdown obat (dengan fallback jika Select2 tidak tersedia)
             function initResepObatSelect2(context) {
@@ -500,35 +510,55 @@
 
             /**
              * isPrescriptionLocked
-             * Mengecek apakah status resep termasuk terkunci (dispensed/cancelled)
+             * Mengecek apakah form peresepan harus dikunci.
+             * Ketentuan baru (abaikan status peresepan):
+             * - Kunci hanya jika examination status = 'done' DAN transaction status = 'paid'
              * Return: true jika terkunci
              */
             function isPrescriptionLocked() {
-                const locked = ['dispensed', 'cancelled'];
-                const status = (window.prescriptionStatus || '').toLowerCase();
-                const result = locked.includes(status);
-                console.log('Log: Status resep', status, 'terkunci?', result);
+                const examStatus = (window.examinationStatus || '').toLowerCase();
+                const trxStatus = (window.transactionStatus || '').toLowerCase();
+                const result = examStatus === 'done' && trxStatus === 'paid';
+                console.log('Log: Cek kunci peresepan -> exam:', examStatus, ', transaction:', trxStatus, ', locked?', result);
                 return result;
             }
 
             /**
              * applyStatusUiLocks
-             * Menyembunyikan tombol hapus item dan tombol unduh PDF saat status terkunci
-             * - Tidak mengubah tombol preview/simpan sesuai request
+             * Menerapkan penguncian UI saat kondisi terpenuhi:
+             * - Sembunyikan tombol tambah/hapus/simpan
+             * - Nonaktifkan semua input/select/textarea dalam form peresepan
+             * - Biarkan tombol preview & unduh PDF tetap aktif (read-only)
              * Log: Menandai perubahan tampilan akibat status
              */
             function applyStatusUiLocks() {
-                if (isPrescriptionLocked()) {
+                const locked = isPrescriptionLocked();
+                if (locked) {
                     $('.remove-resep-item').hide();
                     $('#add-resep-item').addClass('d-none');
                     $('#save-resep').addClass('d-none');
-                    console.log('Log: UI dikunci karena status resep (hapus & unduh disembunyikan)');
+
+                    // Nonaktifkan seluruh kontrol input dalam area peresepan
+                    const $scope = $('#peresepan');
+                    $scope.find('input, select, textarea').prop('disabled', true);
+
+                    // Tetap izinkan preview & unduh PDF (read-only)
+                    $('#preview-resep').prop('disabled', false);
+                    $('#download-pdf-resep').prop('disabled', false);
+                    $('#download-pdf-direct').removeClass('d-none');
+
+                    console.log('Log: UI peresepan dikunci (hapus/tambah/simpan disembunyikan, semua field disabled)');
                 } else {
                     // Kembalikan tombol hapus jika jumlah item > 1
                     if ($('.resep-item').length > 1) {
                         $('.remove-resep-item').show();
                     }
-                    console.log('Log: UI tidak terkunci, tombol hapus dapat tampil jika diperlukan');
+
+                    // Aktifkan kembali kontrol input (kalau sebelumnya terkunci)
+                    const $scope = $('#peresepan');
+                    $scope.find('input, select, textarea').prop('disabled', false);
+
+                    console.log('Log: UI peresepan tidak terkunci (field aktif, aksi diperbolehkan)');
                 }
             }
 
