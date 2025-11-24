@@ -27,11 +27,32 @@ class TransactionsDataTable extends DataTable
 
         return datatables()
             ->eloquent($query)
+            // Perbaiki pencarian kolom invoice_number
             ->filter(function ($query) {
                 if (request()->has('search')) {
                     $search = request()->get('search');
-                    $query->where('invoice_number', 'like', '%'.$search['value'].'%');
+                    $keyword = is_array($search) ? ($search['value'] ?? '') : (string) $search;
+                    if (!empty($keyword)) {
+                        $query->where('invoice_number', 'like', '%'.$keyword.'%');
+                        \Log::debug('TransactionsDataTable: filter global invoice_number', [
+                            'keyword' => $keyword,
+                        ]);
+                    }
                 }
+            })
+            // Izinkan sorting server-side pada kolom invoice_number (gunakan reorder agar tidak bentrok created_at desc)
+            ->orderColumn('invoice_number', function ($query, $order) {
+                $query->reorder()->orderBy('invoice_number', $order);
+                \Log::debug('TransactionsDataTable: orderColumn invoice_number', [
+                    'order' => $order,
+                ]);
+            })
+            // Izinkan pencarian spesifik kolom invoice_number via filterColumn
+            ->filterColumn('invoice_number', function ($query, $keyword) {
+                $query->where('invoice_number', 'ilike', '%'.$keyword.'%');
+                \Log::debug('TransactionsDataTable: filterColumn invoice_number', [
+                    'keyword' => $keyword,
+                ]);
             })
             ->rawColumns(['action', 'invoice_number', 'amount'])
             ->addIndexColumn()
