@@ -43,7 +43,8 @@ class TransactionsDataTable extends DataTable
                 return $model->invoice_number;
             })
             ->addColumn('amount', function (Transaction $model) {
-                // Hitung total resep dari examination (mendukung Prescription baru dan data lama resep JSON)
+                // Hitung total resep dari examination (gabungkan Prescription terbaru dan resep JSON lama)
+                // Log setiap tahap perhitungan agar mudah ditelusuri.
                 $total_resep = 0.0;
                 try {
                     DB::beginTransaction();
@@ -56,9 +57,23 @@ class TransactionsDataTable extends DataTable
                                 ->with(['items.drug'])
                                 ->orderByDesc('resep_date')
                                 ->first();
-                                Log::info('Latest Prescription: ', $latestPrescription->toArray());
+                                if ($latestPrescription) {
+                                    Log::info('TransactionsDataTable: prescription terbaru dimuat', [
+                                        'transaction_id' => $model->id,
+                                        'prescription_id' => $latestPrescription->id,
+                                        'items_count' => $latestPrescription->items->count(),
+                                    ]);
+                                } else {
+                                    Log::info('TransactionsDataTable: tidak ada prescription terbaru', [
+                                        'transaction_id' => $model->id,
+                                    ]);
+                                }
                         } catch (\Throwable $e) {
                             $latestPrescription = null;
+                            Log::warning('TransactionsDataTable: gagal memuat prescription terbaru', [
+                                'transaction_id' => $model->id,
+                                'error' => $e->getMessage(),
+                            ]);
                         }
 
                         if ($latestPrescription && $latestPrescription->items && $latestPrescription->items->count()) {
@@ -76,8 +91,12 @@ class TransactionsDataTable extends DataTable
                                 $quantity = is_numeric($item->qty) ? (float) $item->qty : 0.0;
                                 if ($price !== null) {
                                     $total_resep += $quantity * (float) $price;
-
-                                    Log::info('Total Resep: ', $total_resep, ['price' => $price, 'quantity' => $quantity]);
+                                    Log::info('TransactionsDataTable: akumulasi resep dari prescription', [
+                                        'transaction_id' => $model->id,
+                                        'subtotal_resep' => (float) $total_resep,
+                                        'price' => (float) $price,
+                                        'quantity' => (float) $quantity,
+                                    ]);
                                 }
                             }
                         }
@@ -95,6 +114,12 @@ class TransactionsDataTable extends DataTable
                                         $quantity = isset($qty[$key]) && is_numeric($qty[$key]) ? (float) $qty[$key] : 0.0;
                                         $price = isset($drug->price) ? (float) $drug->price : 0.0;
                                         $total_resep += $quantity * $price;
+                                        Log::info('TransactionsDataTable: akumulasi resep dari JSON lama', [
+                                            'transaction_id' => $model->id,
+                                            'subtotal_resep' => (float) $total_resep,
+                                            'price' => (float) $price,
+                                            'quantity' => (float) $quantity,
+                                        ]);
                                     }
                                 }
                             }
