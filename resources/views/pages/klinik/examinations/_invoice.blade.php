@@ -145,37 +145,89 @@
                 @endforeach
 
                 <!-- Drugs Section -->
-                @php $total_resep = 0; @endphp
-                @if ($examination->resep)
+                @php
+                    $total_resep = 0;
+
+                    // Siapkan data resep lama (JSON) jika ada
+                    $resep = null;
+                    $obat = [];
+                    $qty = [];
+                    if ($examination->resep) {
+                        $resepRaw = $examination->resep;
+                        $resep = is_string($resepRaw) ? json_decode($resepRaw ?: '{}') : (is_array($resepRaw) ? (object) $resepRaw : null);
+                        $obat = $resep->obat ?? [];
+                        $qty = $resep->qty ?? [];
+                    }
+                    $hasResepJson = is_array($obat) && count($obat) > 0;
+
+                    // Ambil Prescription terbaru jika tersedia
+                    $latestPrescription = null;
+                    try {
+                        if (method_exists($examination, 'prescriptions')) {
+                            $latestPrescription = $examination->prescriptions()
+                                ->with(['items.drug'])
+                                ->orderByDesc('resep_date')
+                                ->first();
+                        }
+                    } catch (Throwable $e) {
+                        $latestPrescription = null;
+                    }
+                    $hasPrescriptionItems = $latestPrescription && $latestPrescription->items && $latestPrescription->items->count();
+                @endphp
+
+                @if ($hasResepJson || $hasPrescriptionItems)
                     <tr>
                         <td colspan="8" class="border-dark fw-bold text-dark bg-light">DRUGS</td>
                     </tr>
-                    @php
-                        $resep = json_decode($examination->resep);
-                    @endphp
-                    @if (isset($resep->obat))
-                        @php
-                            $obat = $resep->obat;
-                            $qty = $resep->qty;
-                        @endphp
+
+                    {{-- Tampilkan item dari Prescription (jika ada) --}}
+                    @if ($hasPrescriptionItems)
+                        @foreach ($latestPrescription->items as $item)
+                            @php
+                                $drugName = $item->drug_name ?? data_get($item->drug, 'name') ?? $item->kfa_code;
+                                $price = isset($item->drug) && isset($item->drug->price) ? (float) $item->drug->price : null;
+                                if ($price === null && !empty($item->drug_id) && function_exists('getObat')){
+                                    $drug = getObat($item->drug_id);
+                                    $price = isset($drug->price) ? (float) $drug->price : 0.0;
+                                }
+                                $qtyPresc = is_numeric($item->qty) ? (float) $item->qty : 0.0;
+                                $unit = $item->unit ?? data_get($item->drug, 'unit') ?? data_get($item->drug, 'uom') ?? data_get($item, 'uom') ?? data_get($item, 'satuan') ?? '-';
+                                $lineTotal = ($price ?? 0.0) * $qtyPresc;
+                                $total_resep += $lineTotal;
+                            @endphp
+                            <tr>
+                                <td class="border-dark text-center">{{ $no++ }}</td>
+                                <td class="border-dark">{{ strtoupper($drugName) }}</td>
+                                <td class="border-dark">PHARMACY OPD 2ND FL</td>
+                                <td class="border-dark text-center">{{ $qtyPresc }}</td>
+                                <td class="border-dark text-center">{{ $unit }}</td>
+                                <td class="border-dark text-end">{{ number_format($lineTotal, 0, ',', '.') }}</td>
+                                <td class="border-dark text-center">0</td>
+                                <td class="border-dark text-end">{{ number_format($lineTotal, 0, ',', '.') }}</td>
+                            </tr>
+                        @endforeach
+                    @endif
+
+                    {{-- Tampilkan resep lama (JSON) --}}
+                    @if ($hasResepJson)
                         @foreach ($obat as $key => $value)
                             @if (isset(getObat($value)->name))
+                                @php
+                                    $priceJson = getObat($value)->price;
+                                    $qtyJson = $qty[$key];
+                                    $lineTotalJson = $qtyJson * $priceJson;
+                                    $total_resep += $lineTotalJson;
+                                @endphp
                                 <tr>
                                     <td class="border-dark text-center">{{ $no++ }}</td>
                                     <td class="border-dark">{{ strtoupper(getObat($value)->name) }}</td>
                                     <td class="border-dark">PHARMACY OPD 2ND FL</td>
-                                    <td class="border-dark text-center">{{ $qty[$key] }}</td>
-                                    <td class="border-dark text-center">{{ getObat($value)->unit?->name ?? 'TAB' }}
-                                    </td>
-                                    <td class="border-dark text-end">
-                                        {{ number_format(getObat($value)->price * $qty[$key], 0, ',', '.') }}</td>
+                                    <td class="border-dark text-center">{{ $qtyJson }}</td>
+                                    <td class="border-dark text-center">{{ getObat($value)->unit?->name ?? 'TAB' }}</td>
+                                    <td class="border-dark text-end">{{ number_format($lineTotalJson, 0, ',', '.') }}</td>
                                     <td class="border-dark text-center">0</td>
-                                    <td class="border-dark text-end">
-                                        {{ number_format(getObat($value)->price * $qty[$key], 0, ',', '.') }}</td>
+                                    <td class="border-dark text-end">{{ number_format($lineTotalJson, 0, ',', '.') }}</td>
                                 </tr>
-                                @php
-                                    $total_resep += $qty[$key] * getObat($value)->price;
-                                @endphp
                             @endif
                         @endforeach
                     @endif
