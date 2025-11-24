@@ -363,39 +363,131 @@
                 @endforeach
 
                 <!-- Drugs Section -->
-                @php $total_resep = 0; @endphp
-                @if ($examination->resep)
+                @php
+                    // Inisialisasi total resep
+                    $total_resep = 0;
+
+                    // Mulai transaksi untuk memuat data Prescription terbaru
+                    try {
+                        DB::beginTransaction();
+                        $latestPrescription = optional($examination)
+                            ->prescriptions()
+                            ->with(['items.drug'])
+                            ->orderByDesc('resep_date')
+                            ->first();
+                        DB::commit();
+                        Log::info('invoice-pdf: prescription terbaru dimuat', [
+                            'examination_id' => $examination->id ?? null,
+                            'prescription_id' => $latestPrescription->id ?? null,
+                            'items_count' => $latestPrescription && $latestPrescription->items ? $latestPrescription->items->count() : 0,
+                        ]);
+                    } catch (\Throwable $e) {
+                        DB::rollBack();
+                        $latestPrescription = null;
+                        Log::warning('invoice-pdf: gagal memuat prescription terbaru', [
+                            'examination_id' => $examination->id ?? null,
+                            'error' => $e->getMessage(),
+                        ]);
+                    }
+
+                    // Deteksi ketersediaan resep JSON lama
+                    $resepJsonObj = null;
+                    $hasOldJson = false;
+                    if (!empty($examination->resep)) {
+                        $resepJsonObj = json_decode($examination->resep);
+                        $hasOldJson = isset($resepJsonObj->obat) && is_array($resepJsonObj->obat);
+                    }
+
+                    // Deteksi ketersediaan items Prescription terbaru
+                    $hasNewPrescriptionItems = $latestPrescription && $latestPrescription->items && $latestPrescription->items->count() > 0;
+                @endphp
+
+                @if ($hasOldJson || $hasNewPrescriptionItems)
                     <tr>
                         <td colspan="8" class="fw-bold" style="background-color: #f0f0f0;">DRUGS</td>
                     </tr>
+                @endif
+
+                {{-- Render resep dari JSON lama --}}
+                @if ($hasOldJson)
                     @php
-                        $resep = json_decode($examination->resep);
+                        $obat = $resepJsonObj->obat;
+                        $qty = $resepJsonObj->qty ?? [];
                     @endphp
-                    @if (isset($resep->obat))
+                    @foreach ($obat as $key => $value)
                         @php
-                            $obat = $resep->obat;
-                            $qty = $resep->qty;
+                            $drugObj = function_exists('getObat') ? getObat($value) : null;
                         @endphp
-                        @foreach ($obat as $key => $value)
-                            @if (isset(getObat($value)->name))
-                                <tr>
-                                    <td class="text-center">{{ $no++ }}</td>
-                                    <td>{{ strtoupper(getObat($value)->name) }}</td>
-                                    <td>PHARMACY OPD 2ND FL</td>
-                                    <td class="text-center">{{ $qty[$key] }}</td>
-                                    <td class="text-center">{{ getObat($value)->unit?->name ?? 'TAB' }}</td>
-                                    <td class="text-right">
-                                        {{ number_format(getObat($value)->price * $qty[$key], 0, ',', '.') }}</td>
-                                    <td class="text-center">0</td>
-                                    <td class="text-right">
-                                        {{ number_format(getObat($value)->price * $qty[$key], 0, ',', '.') }}</td>
-                                </tr>
-                                @php
-                                    $total_resep += $qty[$key] * getObat($value)->price;
-                                @endphp
-                            @endif
-                        @endforeach
-                    @endif
+                        @if ($drugObj && isset($drugObj->name))
+                            @php
+                                $quantity = isset($qty[$key]) && is_numeric($qty[$key]) ? (float) $qty[$key] : 0.0;
+                                $price = isset($drugObj->price) ? (float) $drugObj->price : 0.0;
+                                $subtotal = $quantity * $price;
+                                $total_resep += $subtotal;
+                                Log::info('invoice-pdf: akumulasi resep dari JSON lama', [
+                                    'examination_id' => $examination->id ?? null,
+                                    'subtotal_resep' => (float) $total_resep,
+                                    'price' => (float) $price,
+                                    'quantity' => (float) $quantity,
+                                ]);
+                            @endphp
+                            <tr>
+                                <td class="text-center">{{ $no++ }}</td>
+                                <td>{{ strtoupper($drugObj->name) }}</td>
+                                <td>PHARMACY OPD 2ND FL</td>
+                                <td class="text-center">{{ $quantity }}</td>
+                                <td class="text-center">{{ $drugObj->unit?->name ?? 'TAB' }}</td>
+                                <td class="text-right">{{ number_format($subtotal, 0, ',', '.') }}</td>
+                                <td class="text-center">0</td>
+                                <td class="text-right">{{ number_format($subtotal, 0, ',', '.') }}</td>
+                            </tr>
+                        @endif
+                    @endforeach
+                @endif
+
+                {{-- Render items dari Prescription terbaru --}}
+                @if ($hasNewPrescriptionItems)
+                    @foreach ($latestPrescription->items as $item)
+                        @php
+                            $drugName = null;
+                            $unitName = 'TAB';
+                            $price = 0.0;
+
+                            if ($item->relationLoaded('drug') && $item->drug) {
+                                $drugName = $item->drug->name ?? null;
+                                $unitName = $item->drug->unit->name ?? 'TAB';
+                                $price = (float) ($item->drug->price ?? 0);
+                            } elseif (!empty($item->drug_id) && function_exists('getObat')) {
+                                $drugObj = getObat($item->drug_id);
+                                $drugName = $drugObj->name ?? null;
+                                $unitName = $drugObj->unit->name ?? 'TAB';
+                                $price = (float) ($drugObj->price ?? 0);
+                            }
+
+                            $quantity = is_numeric($item->qty) ? (float) $item->qty : 0.0;
+                            $subtotal = $quantity * $price;
+                            $total_resep += $subtotal;
+                            Log::info('invoice-pdf: akumulasi resep dari prescription', [
+                                'examination_id' => $examination->id ?? null,
+                                'subtotal_resep' => (float) $total_resep,
+                                'price' => (float) $price,
+                                'quantity' => (float) $quantity,
+                            ]);
+                        @endphp
+
+                        @if (!empty($drugName))
+                            <tr>
+                                <td class="text-center">{{ $no++ }}</td>
+                                <td>{{ strtoupper($drugName) }}</td>
+                                <td>PHARMACY OPD 2ND FL</td>
+                                <td class="text-center">{{ $quantity }}</td>
+                                <td class="text-center">{{ $unitName }}</td>
+                                <td class="text-right">{{ number_format($subtotal, 0, ',', '.') }}</td>
+                                <td class="text-center">0</td>
+                                <td class="text-right">{{ number_format($subtotal, 0, ',', '.') }}</td>
+                            </tr>
+                        @endif
+                    @endforeach
                 @endif
             </tbody>
         </table>
