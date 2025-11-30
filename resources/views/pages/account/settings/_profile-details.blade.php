@@ -12,81 +12,97 @@
             @method('PUT')
             <input type="hidden" name="user_id" value="{{$user->id}}">
             <div class="row g-9 mb-8">
-                <!-- Photo Upload -->
+                <!-- Avatar Card -->
                 <div class="col-12 col-md-4">
-                    <div class="image-input image-input-outline {{ isset($info) && $info->photo ? '' : 'image-input-empty' }}" data-kt-image-input="true" style="background-image: url({{ asset(theme()->getMediaUrlPath() . 'photos/blank.png') }})">
-                        <div class="image-input-wrapper w-150px h-150px" style="background-image: {{ isset($info) && $info->photo ? 'url('.asset('storage/'.$info->photo).')' : 'none' }};"></div>
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header">
+                            <h3 class="card-title">{{ __('Avatar') }}</h3>
+                        </div>
+                        <div class="card-body d-flex align-items-center justify-content-center">
+                            <div class="image-input image-input-outline {{ isset($info) && $info->photo ? '' : 'image-input-empty' }}" data-kt-image-input="true" style="background-image: url({{ asset(theme()->getMediaUrlPath() . 'photos/blank.png') }})">
+                                <div class="image-input-wrapper w-150px h-150px" style="background-image: {{ isset($info) && $info->photo ? 'url('.asset('storage/'.$info->photo).')' : 'none' }};"></div>
 
-                        <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Change avatar">
-                            <i class="bi bi-pencil-fill fs-7"></i>
-                            <input type="file" name="photo" accept=".png, .jpg, .jpeg"/>
-                            <input type="hidden" name="avatar_remove"/>
-                        </label>
+                                <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Change avatar">
+                                    <i class="bi bi-pencil-fill fs-7"></i>
+                                    <input type="file" name="photo" accept=".png, .jpg, .jpeg"/>
+                                    <input type="hidden" name="avatar_remove"/>
+                                </label>
 
-                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="Cancel avatar">
-                            <i class="bi bi-x fs-2"></i>
-                        </span>
+                                <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="Cancel avatar">
+                                    <i class="bi bi-x fs-2"></i>
+                                </span>
 
-                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="Remove avatar">
-                            <i class="bi bi-x fs-2"></i>
-                        </span>
+                                <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="Remove avatar">
+                                    <i class="bi bi-x fs-2"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-footer py-3">
+                            <div class="form-text">Allowed file types: png, jpg, jpeg.</div>
+                        </div>
                     </div>
-                    <div class="form-text">Allowed file types: png, jpg, jpeg.</div>
                 </div>
 
-                <!-- Basic Info -->
+                <!-- Basic Information Card -->
                 <div class="col-12 col-md-8">
-                    <div class="row g-9">
-                        <!-- Title Prefix/Suffix -->
-                        <div class="col-md-6 fv-row">
-                            <label class="fs-6 fw-bold mb-2">{{ __('Title Prefix') }}</label>
-                            <input type="text" class="form-control form-control-solid" placeholder="{{ __('Prefix (e.g., Dr., Prof.)') }}" name="title_prefix" value="{{ old('title_prefix', $info->title_prefix ?? '') }}"/>
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header">
+                            <h3 class="card-title">{{ __('Basic Information') }}</h3>
                         </div>
-                        <div class="col-md-6 fv-row">
-                            <label class="fs-6 fw-bold mb-2">{{ __('Title Suffix') }}</label>
-                            <input type="text" class="form-control form-control-solid" placeholder="{{ __('Suffix (e.g., Jr., Sr.)') }}" name="title_suffix" value="{{ old('title_suffix', $info->title_suffix ?? '') }}"/>
-                        </div>
+                        <div class="card-body">
+                            <div class="row g-9">
+                                <!-- Title Prefix/Suffix -->
+                                <div class="col-md-6 fv-row">
+                                    <label class="fs-6 fw-bold mb-2">{{ __('Title Prefix') }}</label>
+                                    <input type="text" class="form-control form-control-solid" placeholder="{{ __('Prefix (e.g., Dr., Prof.)') }}" name="title_prefix" value="{{ old('title_prefix', $info->title_prefix ?? '') }}"/>
+                                </div>
+                                <div class="col-md-6 fv-row">
+                                    <label class="fs-6 fw-bold mb-2">{{ __('Title Suffix') }}</label>
+                                    <input type="text" class="form-control form-control-solid" placeholder="{{ __('Suffix (e.g., Jr., Sr.)') }}" name="title_suffix" value="{{ old('title_suffix', $info->title_suffix ?? '') }}"/>
+                                </div>
 
-                        <div class="col-md-6 fv-row">
-                            <label class="fs-6 fw-bold mb-2">{{ __('First Name') }}</label>
-                            <input type="text" class="form-control form-control-solid" placeholder="First name" name="first_name" value="{{ old('first_name', $user->first_name ?? '') }}"/>
-                        </div>
-                        <div class="col-md-6 fv-row">
-                            <label class="fs-6 fw-bold mb-2">{{ __('Last Name') }}</label>
-                            <input type="text" class="form-control form-control-solid" placeholder="Last name" name="last_name" value="{{ old('last_name', $user->last_name ?? '') }}"/>
-                        </div>
+                                <div class="col-md-6 fv-row">
+                                    <label class="fs-6 fw-bold mb-2">{{ __('First Name') }}</label>
+                                    <input type="text" class="form-control form-control-solid" placeholder="First name" name="first_name" value="{{ old('first_name', $user->first_name ?? '') }}"/>
+                                </div>
+                                <div class="col-md-6 fv-row">
+                                    <label class="fs-6 fw-bold mb-2">{{ __('Last Name') }}</label>
+                                    <input type="text" class="form-control form-control-solid" placeholder="Last name" name="last_name" value="{{ old('last_name', $user->last_name ?? '') }}"/>
+                                </div>
 
-                        <div class="col-md-6 fv-row">
-                            <label class="fs-6 fw-bold mb-2">{{ __('Place of Birth') }}</label>
-                            <input type="text" class="form-control form-control-solid" placeholder="{{ __('Place of Birth') }}" name="place_of_birth" value="{{ old('place_of_birth', $info->place_of_birth ?? '') }}"/>
-                        </div>
-                        <div class="col-md-6 fv-row">
-                            <label class="fs-6 fw-bold mb-2">{{ __('Date of Birth') }}</label>
-                            <input type="date" class="form-control form-control-solid" placeholder="Date of Birth" name="date_of_birth" value="{{ old('date_of_birth', $info->date_of_birth ?? '') }}"/>
-                        </div>
+                                <div class="col-md-6 fv-row">
+                                    <label class="fs-6 fw-bold mb-2">{{ __('Place of Birth') }}</label>
+                                    <input type="text" class="form-control form-control-solid" placeholder="{{ __('Place of Birth') }}" name="place_of_birth" value="{{ old('place_of_birth', $info->place_of_birth ?? '') }}"/>
+                                </div>
+                                <div class="col-md-6 fv-row">
+                                    <label class="fs-6 fw-bold mb-2">{{ __('Date of Birth') }}</label>
+                                    <input type="date" class="form-control form-control-solid" placeholder="Date of Birth" name="date_of_birth" value="{{ old('date_of_birth', $info->date_of_birth ?? '') }}"/>
+                                </div>
 
-                        <div class="col-md-6 fv-row">
-                            <label class="fs-6 fw-bold mb-2">{{ __('Phone') }}</label>
-                            <input type="tel" class="form-control form-control-solid" placeholder="Phone number" name="phone" value="{{ old('phone', $user->phone ?? '') }}"/>
-                        </div>
+                                <div class="col-md-6 fv-row">
+                                    <label class="fs-6 fw-bold mb-2">{{ __('Phone') }}</label>
+                                    <input type="tel" class="form-control form-control-solid" placeholder="Phone number" name="phone" value="{{ old('phone', $user->phone ?? '') }}"/>
+                                </div>
 
-                        <!-- ID Card -->
-                        @isset($cards)
-                        <div class="col-md-6 fv-row">
-                            <label class="fs-6 fw-bold mb-2">{{ __('ID Card Type') }}</label>
-                            <select id="card_type_id" name="card_type_id" class="form-select form-select-solid" data-control="select2" data-placeholder="{{ __('Select a Card...') }}">
-                                @foreach($cards as $card)
-                                    <option value="{{ $card->id }}" {{ $card->id === old('card_type_id', $info->card_type_id ?? '') ? 'selected' : '' }}>{{ $card->name }}</option>
-                                @endforeach
-                            </select>
+                                <!-- ID Card -->
+                                @isset($cards)
+                                <div class="col-md-6 fv-row">
+                                    <label class="fs-6 fw-bold mb-2">{{ __('ID Card Type') }}</label>
+                                    <select id="card_type_id" name="card_type_id" class="form-select form-select-solid" data-control="select2" data-placeholder="{{ __('Select a Card...') }}">
+                                        @foreach($cards as $card)
+                                            <option value="{{ $card->id }}" {{ $card->id === old('card_type_id', $info->card_type_id ?? '') ? 'selected' : '' }}>{{ $card->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-6 fv-row">
+                                    <label class="fs-6 fw-bold mb-2">{{ __('ID Card Number') }}</label>
+                                    <input type="text" class="form-control form-control-solid" placeholder="{{ __('Card Number') }}" name="card_number" id="card_number" value="{{ old('card_number', $info->card_number ?? '') }}"/>
+                                    <input type="hidden" name="his_number" id="his_number" value="{{ old('his_number', $info->his_number ?? '') }}"/>
+                                    <div id="error-message" class="text-danger" style="display: none;">{{ __('Card Number is required.') }}</div>
+                                </div>
+                                @endisset
+                            </div>
                         </div>
-                        <div class="col-md-6 fv-row">
-                            <label class="fs-6 fw-bold mb-2">{{ __('ID Card Number') }}</label>
-                            <input type="text" class="form-control form-control-solid" placeholder="{{ __('Card Number') }}" name="card_number" id="card_number" value="{{ old('card_number', $info->card_number ?? '') }}"/>
-                            <input type="hidden" name="his_number" id="his_number" value="{{ old('his_number', $info->his_number ?? '') }}"/>
-                            <div id="error-message" class="text-danger" style="display: none;">{{ __('Card Number is required.') }}</div>
-                        </div>
-                        @endisset
                     </div>
                 </div>
             </div>
