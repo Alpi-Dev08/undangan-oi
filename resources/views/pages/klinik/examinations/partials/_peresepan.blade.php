@@ -336,23 +336,23 @@
 
             /**
              * checkExistingPrescription
-             * Mengecek apakah pada pemeriksaan & tanggal terpilih sudah memiliki resep
-             * - Jika ada, memuat ke form dan menampilkan tombol Unduh PDF langsung
+             * Mengecek apakah pada pemeriksaan terpilih sudah memiliki resep (ABA IKAN tanggal)
+             * - Hanya kirim parameter examination_id
+             * - Jika ada, muat ke form dan tampilkan tombol Unduh PDF
              * Log: Menandai proses cek dan hasilnya
              */
             function checkExistingPrescription() {
-                const resepDate = $('input[name="resep_date"]').val();
                 const examId = window.currentExaminationId;
-                if (!examId || !resepDate) {
-                    console.warn('Log: Pemeriksaan ID atau tanggal resep belum tersedia untuk cek existing.');
+                if (!examId) {
+                    console.warn('Log: Pemeriksaan ID belum tersedia untuk cek existing.');
                     return;
                 }
-                console.log('Log: Cek resep existing', { examination_id: examId, resep_date: resepDate });
+                console.log('Log: Cek resep existing', { examination_id: examId });
 
                 $.ajax({
                     url: '{{ route('prescriptions.check') }}',
                     method: 'GET',
-                    data: { examination_id: examId, resep_date: resepDate },
+                    data: { examination_id: examId },
                     success: function(resp) {
                         if (resp && resp.success && resp.data) {
                             console.log('Log: Resep existing ditemukan', resp.data);
@@ -368,7 +368,7 @@
                                 $('#save-resep').removeClass('d-none');
                             }
                         } else {
-                            console.log('Log: Tidak ada resep existing untuk parameter ini');
+                            console.log('Log: Tidak ada resep existing untuk pemeriksaan ini');
                             $('#download-pdf-direct').addClass('d-none');
                         }
                     },

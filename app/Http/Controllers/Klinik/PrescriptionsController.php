@@ -392,7 +392,7 @@ class PrescriptionsController extends Controller
     }
 
     /**
-     * Cek dan muat resep existing berdasarkan pemeriksaan dan tanggal.
+     * Cek dan muat resep existing berdasarkan pemeriksaan saja (abaikan tanggal).
      *
      * - Mengembalikan JSON berisi data resep jika ditemukan
      * - Menggunakan transaksi DB (PostgreSQL default) untuk konsistensi baca
@@ -403,33 +403,29 @@ class PrescriptionsController extends Controller
         Log::info('Cek resep existing dimulai', [
             'actor_id' => Auth::id(),
             'examination_id' => $request->get('examination_id'),
-            'resep_date' => $request->get('resep_date'),
         ]);
 
         $validated = $request->validate([
-            'examination_id' => 'required|integer',
-            'resep_date' => 'required|date',
+            'examination_id' => 'required|integer'
         ]);
 
         DB::beginTransaction();
         try {
             $existing = Prescription::with(['examination.patient', 'doctor', 'items.drug'])
                 ->where('examination_id', $validated['examination_id'])
-                ->whereDate('resep_date', $validated['resep_date'])
                 ->orderByDesc('id')
                 ->first();
 
             DB::commit();
 
             if (!$existing) {
-                Log::info('Tidak ada resep existing untuk parameter yang diberikan', [
-                    'examination_id' => $validated['examination_id'],
-                    'resep_date' => $validated['resep_date'],
+                Log::info('Tidak ada resep existing untuk pemeriksaan yang diberikan', [
+                    'examination_id' => $validated['examination_id']
                 ]);
 
                 return response()->json([
                     'success' => false,
-                    'message' => 'Resep tidak ditemukan untuk pemeriksaan & tanggal ini.',
+                    'message' => 'Resep tidak ditemukan untuk pemeriksaan ini.',
                 ], 404);
             }
 
