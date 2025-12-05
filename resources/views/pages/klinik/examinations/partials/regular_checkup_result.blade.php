@@ -74,7 +74,12 @@
                                         <td>{{ $item->drug_name ?? data_get($item->drug, 'name') ?? $item->kfa_code }}</td>
                                         <td>{{ $item->dosis ?: '-' }}</td>
                                         <td>{{ $item->aturan_pakai ?: '-' }}</td>
-                                        <td>{{ !empty($item->qty) ? ($item->qty . ' ' . ($item->unit ?: '')) : '-' }}</td>
+                                        <td>
+                                            @php
+                                                $unitDisplay = $item->unit ?: (data_get($item->drug, 'unit.name') ?? 'TAB');
+                                            @endphp
+                                            {{ !empty($item->qty) ? ($item->qty . ' ' . $unitDisplay) : '-' }}
+                                        </td>
                                         <td>{{ $item->keterangan ?: '-' }}</td>
                                     </tr>
                                 @endforeach
@@ -116,7 +121,11 @@
                                                 <td>{{ $drug->name }}</td>
                                                 <td>-</td>
                                                 <td>-</td>
-                                                <td>{{ isset($qty[$key]) && $qty[$key] !== '' ? $qty[$key] : '-' }}</td>
+                                                @php
+                                                    $unitLegacy = $drug->unit->name ?? 'TAB';
+                                                    $qtyDisplay = (isset($qty[$key]) && $qty[$key] !== '') ? $qty[$key] : '';
+                                                @endphp
+                                                <td>{{ $qtyDisplay !== '' ? ($qtyDisplay . ' ' . $unitLegacy) : '-' }}</td>
                                                 <td>{{ isset($keterangan[$key]) && $keterangan[$key] !== '' ? $keterangan[$key] : '-' }}</td>
                                             </tr>
                                         @endif
