@@ -240,7 +240,107 @@
                     </h5>
                     <div class="row g-3">
                         <div class="col-12">
-                            <p class="text-muted">Tidak ada data riwayat pengobatan</p>
+                            @php
+                                // Ambil seluruh resep pada pemeriksaan ini dengan item dan relasi drug
+                                $historyPrescriptions = null;
+                                try {
+                                    if (isset($examination) && method_exists($examination, 'prescriptions')) {
+                                        $historyPrescriptions = $examination->prescriptions()
+                                            ->with(['items.drug'])
+                                            ->orderByDesc('resep_date')
+                                            ->get();
+                                    }
+                                } catch (\Throwable $e) {
+                                    \Log::warning('Gagal memuat riwayat pengobatan: ' . $e->getMessage());
+                                    $historyPrescriptions = collect();
+                                }
+                            @endphp
+
+                            @if ($historyPrescriptions && $historyPrescriptions->count())
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-bordered align-middle">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th style="width: 20%">Tanggal Resep</th>
+                                                <th>Nama Obat</th>
+                                                <th style="width: 12%">Dosis</th>
+                                                <th style="width: 18%">Aturan Pakai</th>
+                                                <th style="width: 12%">Jumlah</th>
+                                                <th style="width: 18%">Keterangan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($historyPrescriptions as $presc)
+                                                @foreach ($presc->items as $item)
+                                                    @php
+                                                        $drugName = $item->drug_name ?? data_get($item->drug, 'name') ?? $item->kfa_code;
+                                                        $unitDisplay = $item->unit ?: (data_get($item->drug, 'unit.name') ?? 'TAB');
+                                                        $qtyDisplay = !empty($item->qty) ? ($item->qty . ' ' . $unitDisplay) : '-';
+                                                    @endphp
+                                                    <tr>
+                                                        <td>{{ $presc->resep_date ? \Carbon\Carbon::parse($presc->resep_date)->format('d/m/Y') : '-' }}</td>
+                                                        <td>{{ $drugName }}</td>
+                                                        <td>{{ $item->dosis ?: '-' }}</td>
+                                                        <td>{{ $item->aturan_pakai ?: '-' }}</td>
+                                                        <td>{{ $qtyDisplay }}</td>
+                                                        <td>{{ $item->keterangan ?: '-' }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @else
+                                @php
+                                    // Fallback: dukung data lama yang disimpan di $examination->resep
+                                    $resepRaw = $examination->resep ?? null;
+                                    $resepData = is_array($resepRaw)
+                                        ? (object) $resepRaw
+                                        : (is_string($resepRaw)
+                                            ? json_decode($resepRaw ?: '{}', false)
+                                            : null);
+
+                                    $obat = data_get($resepData, 'obat', []);
+                                    $keterangan = data_get($resepData, 'keterangan', []);
+                                    $qty = data_get($resepData, 'qty', []);
+                                @endphp
+
+                                @if (!empty($obat))
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered align-middle">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Nama Obat</th>
+                                                    <th style="width: 12%">Dosis</th>
+                                                    <th style="width: 18%">Aturan Pakai</th>
+                                                    <th style="width: 12%">Jumlah</th>
+                                                    <th style="width: 18%">Keterangan</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($obat as $key => $value)
+                                                    @php $drug = function_exists('getObat') ? getObat($value) : null; @endphp
+                                                    @if ($drug && isset($drug->name))
+                                                        @php
+                                                            $unitLegacy = $drug->unit->name ?? 'TAB';
+                                                            $qtyLegacy = (isset($qty[$key]) && $qty[$key] !== '') ? $qty[$key] : '';
+                                                        @endphp
+                                                        <tr>
+                                                            <td>{{ $drug->name }}</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>{{ $qtyLegacy !== '' ? ($qtyLegacy . ' ' . $unitLegacy) : '-' }}</td>
+                                                            <td>{{ isset($keterangan[$key]) && $keterangan[$key] !== '' ? $keterangan[$key] : '-' }}</td>
+                                                        </tr>
+                                                    @endif
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                @else
+                                    <p class="text-muted">Tidak ada data riwayat pengobatan</p>
+                                @endif
+                            @endif
                         </div>
                     </div>
                 </div>
