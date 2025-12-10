@@ -24,7 +24,5 @@ class Religion extends Model
     public function info()
     {
         return $this->HasMany(UserInfo::class);
-
-
     }
 }

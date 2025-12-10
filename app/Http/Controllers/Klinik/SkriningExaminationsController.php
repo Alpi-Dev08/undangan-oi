@@ -134,31 +134,36 @@ class SkriningExaminationsController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Validasi awal tanpa aturan panjang nik_bpjs
+        // Validasi dasar
         $validator = Validator::make($request->all(), [
             'first_name'           => 'required|string|max:255',
             'last_name'            => 'required|string|max:255',
             'date_of_birth'        => 'required|date',
             'gender_id'            => 'required|exists:genders,id',
-            'location_id'  => 'required|string|max:255',
+            'location_id'          => 'required|string|max:255',
             'examination_date'     => 'required|date',
             'card_type'            => 'required|in:ktp,bpjs',
-            'nik_bpjs'             => 'required|string|max:20',
+            'nik_bpjs'             => 'nullable|string|max:20', // sekarang nullable
             'phone'                => 'nullable|string|max:20',
             'address'              => 'nullable|string|max:255',
             'hasil'                => 'nullable|string',
             'keterangan'           => 'nullable|string',
         ]);
 
-        // Validasi panjang nik_bpjs sesuai card_type
+        // Validasi panjang, tapi skip jika nilainya "-"
         $validator->after(function ($validator) use ($request) {
-            $nik_bpjs = $request->nik_bpjs;
+            $nik = $request->nik_bpjs;
 
-            if ($request->card_type === 'ktp' && strlen($nik_bpjs) < 16) {
+            // Jika nik = "-" → lewati semua validasi panjang
+            if ($nik === '-' || $nik === null || $nik === '') {
+                return;
+            }
+
+            if ($request->card_type === 'ktp' && strlen($nik) < 16) {
                 $validator->errors()->add('nik_bpjs', 'No. NIK harus minimal 16 digit.');
             }
 
-            if ($request->card_type === 'bpjs' && strlen($nik_bpjs) < 10) {
+            if ($request->card_type === 'bpjs' && strlen($nik) < 10) {
                 $validator->errors()->add('nik_bpjs', 'No. BPJS harus minimal 10 digit.');
             }
         });
@@ -170,7 +175,10 @@ class SkriningExaminationsController extends Controller
 
         $validated = $validator->validated();
 
-        // Hitung ulang usia
+        // Jika nik kosong atau "-" → tetap jadikan "-"
+        $validated['nik_bpjs'] = $validated['nik_bpjs'] ?: '-';
+
+        // Hitung usia
         $validated['age'] = Carbon::parse($validated['date_of_birth'])->age;
 
         // Update data
@@ -195,7 +203,7 @@ class SkriningExaminationsController extends Controller
 
     public function store(Request $request)
     {
-          // Validasi awal tanpa aturan panjang nik_bpjs
+        // Validasi awal tanpa aturan panjang nik_bpjs
         $validator = Validator::make($request->all(), [
             'first_name'       => 'required|string|max:255',
             'last_name'        => 'required|string|max:255',
@@ -204,39 +212,41 @@ class SkriningExaminationsController extends Controller
             'location_id'      => 'required|string|max:255',
             'examination_date' => 'required|date',
             'card_type'        => 'required|in:ktp,bpjs',
-            'nik_bpjs'         => 'required|string|max:20',
+            'nik_bpjs'         => 'nullable|string|max:20', // ← berubah
             'phone'            => 'nullable|string|max:20',
             'address'          => 'nullable|string|max:255',
         ]);
 
-          // Tambahkan validasi panjang nik_bpjs tergantung card_type
+        // Validasi panjang nik_bpjs tergantung card_type
         $validator->after(function ($validator) use ($request) {
-            $nik_bpjs = $request->nik_bpjs;
+            $nik = $request->nik_bpjs;
 
-            if ($request->card_type === 'ktp' && strlen($nik_bpjs) < 16) {
+            if ($request->card_type === 'ktp' && $nik && strlen($nik) < 16) {
                 $validator->errors()->add('nik_bpjs', 'No. NIK harus minimal 16 digit.');
             }
 
-            if ($request->card_type === 'bpjs' && strlen($nik_bpjs) < 10) {
+            if ($request->card_type === 'bpjs' && $nik && strlen($nik) < 10) {
                 $validator->errors()->add('nik_bpjs', 'No. BPJS harus minimal 10 digit.');
             }
         });
 
-          // Cek validasi
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
         $validated = $validator->validated();
 
-          // Hitung usia
+        // Jika nik_bpjs kosong → jadikan "-"
+        $validated['nik_bpjs'] = $validated['nik_bpjs'] ?: '-';
+
+        // Hitung usia
         $validated['age'] = Carbon::parse($validated['date_of_birth'])->age;
 
-          // Generate examination_id
+        // Generate examination_id
         $lastExaminationId           = SkriningExamination::max('examination_id') ?? 0;
         $validated['examination_id'] = $lastExaminationId + 1;
 
-          // Simpan data
+        // Simpan data
         SkriningExamination::create($validated);
 
         return redirect()->route('skriningexaminations.index')

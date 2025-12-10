@@ -13,7 +13,7 @@
 
         public function __construct()
         {
-            //$this->pcare = new Pcare(config('bpjs.pcare'));
+            // $this->pcare = new Pcare(config('bpjs.pcare'));
         }
 
         public function getDokter(Request $request)
@@ -40,7 +40,6 @@
         }
 
         // API untuk mendapatkan data dokter
-
         public function index()
         {
             return view('pages.klinik.pcare.index');
@@ -185,7 +184,6 @@
                 }
         }
 
-
         public function getProvider(Request $request)
         {
             if (request()->ajax()) {
@@ -255,7 +253,7 @@
          * @return \Illuminate\Http\JsonResponse
          */
         public function getSubSpesialis(Request $request)
-        {
+        {   
             if (request()->ajax()) {
                 try {
                     $keyword = $request->keyword;
@@ -335,7 +333,6 @@
                     $kodeSubSpesialis = $request->kodeSubSpesialis;
                     $tanggalRujuk     = "25-04-2025";
 
-
                     $response = new PCare\Spesialis(config('bpjs.pcare'));
                     $response = $response->rujuk()
                                          ->subSpesialis($kodeSubSpesialis)
@@ -390,7 +387,6 @@
             return view('pages.klinik.pcare.rujukansubspesialis');
         }
 
-
         public function getPeserta(Request $request, $nomorPencarian)
         {
             $jenisId = $request->query('jenisId', 'noPeserta');
@@ -443,7 +439,7 @@
                     'rujukBalik'        => 'nullable|integer',
                     'kdTkp'             => 'required|string',
                 ]);
-  // Format date from DD-MM-YYYY to YYYY-MM-DD for database
+                // Format date from DD-MM-YYYY to YYYY-MM-DD for database
                 $tglDaftar = date('d-m-Y', strtotime($request->tglDaftar));
 
                 // Prepare data for PCare API

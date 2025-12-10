@@ -10,7 +10,6 @@
     use Doctrine\DBAL\Driver\PDO\Exception;
     use Illuminate\Support\Facades\Auth;
 
-
     class EducationsController extends Controller
     {
         public $user;

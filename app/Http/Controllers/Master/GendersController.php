@@ -10,7 +10,6 @@ use App\Http\Requests\Master\UpdateGenderRequest;
 use Doctrine\DBAL\Driver\PDO\Exception;
 use Illuminate\Support\Facades\Auth;
 
-
 class GendersController extends Controller
 {
     public $user;
@@ -111,7 +110,7 @@ class GendersController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\UpdateGenderRequest  $request
-     * @param  \App\Models\Gender  $gender
+     * @param  \App\Models\Gender $gender
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateGenderRequest $request, Gender $gender)

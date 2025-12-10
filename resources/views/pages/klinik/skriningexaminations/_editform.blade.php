@@ -5,7 +5,7 @@
 
     <div class="row mb-6">
         <label class="col-lg-4 required col-form-label fw-bold fs-6">{{ __('ID Card') }}</label>
-        <div class="col-lg-8">
+        <div class="col-lg-8"> 
             <div class="row"> 
                 {{-- Card Type --}}
                 <div class="col-lg-4 fv-row">
@@ -28,7 +28,6 @@
                 {{-- Card Number --}}
                 <div class="col-lg-8 fv-row">
                     <input type="text"
-                        required
                         name="nik_bpjs"
                         id="nik_bpjs"
                         class="form-control form-control-lg form-control-solid border border-gray-300"
@@ -41,7 +40,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> 
 
     <div class="separator separator-dashed my-6"></div>
 

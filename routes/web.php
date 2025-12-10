@@ -313,7 +313,6 @@
             Route::resource('audit', AuditLogsController::class)->only(['index', 'destroy']);
         });
 
-
         Route::prefix('pcare')->name('pcare.')->group(function () {
             Route::get('/', [PcareController::class, 'index'])->name('index');
             Route::get('/dokter', [PcareController::class, 'getDokter'])->name('dokter');

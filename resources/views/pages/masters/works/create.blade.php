@@ -9,7 +9,7 @@
 
             <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" title=""
                  data-bs-original-title="Click to cancel">
-                <a href="{{ route('works.index')  }}" class="btn btn-sm btn-light-primary">
+                <a href="{{ route('works.index') }}" class="btn btn-sm btn-light-primary">
                     <!--begin::Svg Icon | path: assets/media/icons/duotune/arrows/arr079.svg-->
                     <span class="svg-icon svg-icon-muted svg-icon-2hx">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

@@ -27,7 +27,6 @@
                 {{-- Card Number --}}
                 <div class="col-lg-8 fv-row">
                     <input type="text"
-                        required
                         name="nik_bpjs"
                         id="nik_bpjs"
                         class="form-control form-control-lg form-control-solid border border-gray-300"

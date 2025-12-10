@@ -10,7 +10,6 @@
     use Doctrine\DBAL\Driver\PDO\Exception;
     use Illuminate\Support\Facades\Auth;
 
-
     class WorksController extends Controller
     {
         public $user;
@@ -22,6 +21,7 @@
                 return $next($request);
             });
         }
+        
         /**
          * Display a listing of the resource.
          *

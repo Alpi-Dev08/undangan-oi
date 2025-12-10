@@ -201,7 +201,6 @@
     </div>
 </div>
 
-
 @push('customscript')
     <script>
         document.getElementById('cekPeserta').addEventListener('click', function() {
@@ -494,7 +493,7 @@
                 // Validasi kdPoli
                 const kdPoli = document.getElementById('kdPoli').value.trim();
                 if (kdPoli) {
-                    // Verifikasi kode poli valid
+                    // Verifikasi kode poli valid 
                     $.ajax({
                         url: '/pcare/get-poli',
                         dataType: "json",
