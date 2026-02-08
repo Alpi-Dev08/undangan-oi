@@ -383,6 +383,36 @@ return [
                 ],
             ],
         ],
+        'kategori_web' => [
+            '*' => [
+                'title' => 'Kategori',
+            ],
+            'assets' => [
+                'custom' => [
+                    'css' => [
+                        'plugins/custom/datatables/datatables.bundle.css',
+                    ],
+                    'js' => [
+                        'plugins/custom/datatables/datatables.bundle.js',
+                    ],
+                ],
+            ],
+        ], 
+         'kategori_video' => [
+            '*' => [
+                'title' => 'Kategori',
+            ],
+            'assets' => [
+                'custom' => [
+                    'css' => [
+                        'plugins/custom/datatables/datatables.bundle.css',
+                    ],
+                    'js' => [
+                        'plugins/custom/datatables/datatables.bundle.js',
+                    ],
+                ],
+            ],
+        ], 
     ],
 
     'kfa' => [

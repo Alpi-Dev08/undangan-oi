@@ -1,68 +1,17 @@
 <?php
 
     use App\Http\Controllers\Account\SettingsController;
-    use App\Http\Controllers\Auth\SocialiteLoginController;
-    use App\Http\Controllers\Klinik\AdditionalExaminationsController;
-    use App\Http\Controllers\Klinik\AnamnesisCategoriesController;
-    use App\Http\Controllers\Klinik\AnamnesisController;
-    use App\Http\Controllers\Klinik\AnamnesisExaminationsController;
-    use App\Http\Controllers\Klinik\AppointmentsController;
-    use App\Http\Controllers\Klinik\DiseasesController;
-    use App\Http\Controllers\Klinik\DrugsController;
-    use App\Http\Controllers\Klinik\ExaminationsController;
-    use App\Http\Controllers\Klinik\FamilyDiseaseHistoryController;
-    use App\Http\Controllers\Klinik\HealthcareCategoriesController;
-    use App\Http\Controllers\Klinik\HealthcaresController;
-    use App\Http\Controllers\Klinik\HealthcareTypesController;
-    use App\Http\Controllers\Klinik\HealthProfesionalsController;
-    use App\Http\Controllers\Klinik\PrescriptionsController;
-    use App\Http\Controllers\Klinik\HealthProfesionalTypesController;
-    use App\Http\Controllers\Klinik\IcdtenController;
-    use App\Http\Controllers\Klinik\JenisPasienController;
-    use App\Http\Controllers\Klinik\KomunikasiEfektifController;
-    use App\Http\Controllers\Klinik\LaboratoryExaminationsController;
-    use App\Http\Controllers\Klinik\LocationsController;
-    use App\Http\Controllers\Klinik\OrganizationController;
-    use App\Http\Controllers\Klinik\OtherExaminationsController;
-    use App\Http\Controllers\Klinik\PackagesController;
-    use App\Http\Controllers\Klinik\PatientsController;
-    use App\Http\Controllers\Klinik\PersonalDiseaseHistoryController;
-    use App\Http\Controllers\Klinik\PhysicalCategoriesController;
-    use App\Http\Controllers\Klinik\PhysicalExaminationsController;
-    use App\Http\Controllers\Klinik\PhysicalsController;
-    use App\Http\Controllers\Klinik\SbarController;
-    use App\Http\Controllers\Klinik\ServiceCategoriesController;
-    use App\Http\Controllers\Klinik\ServicesController;
-    use App\Http\Controllers\Klinik\SpecialitiesController;
-    use App\Http\Controllers\Klinik\TransactionsController;
-    use App\Http\Controllers\Klinik\UnitController;
-    use App\Http\Controllers\Klinik\VitalityExaminationsController;
-    use App\Http\Controllers\Klinik\SkriningExaminationsController;
-    use App\Http\Controllers\Klinik\LocationExaminationsController;
-    use App\Http\Controllers\KycController;
     use App\Http\Controllers\Logs\AuditLogsController;
     use App\Http\Controllers\Logs\SystemLogsController;
-    use App\Http\Controllers\Master\BloodTypesController;
-    use App\Http\Controllers\Master\CardTypesController;
-    use App\Http\Controllers\Master\CitiesController;
-    use App\Http\Controllers\Master\CountriesController;
-    use App\Http\Controllers\Master\DistrictsController;
-    use App\Http\Controllers\Master\EducationsController;
-    use App\Http\Controllers\Master\GendersController;
-    use App\Http\Controllers\Master\MaritalStatusesController;
-    use App\Http\Controllers\Master\OdontogramSymbolsController;
-    use App\Http\Controllers\Master\ProvincesController;
-    use App\Http\Controllers\Master\RelationshipStatusesController;
-    use App\Http\Controllers\Master\ReligionsController;
-    use App\Http\Controllers\Master\SubDistrictsController;
-    use App\Http\Controllers\Master\WorksController;
-    use App\Http\Controllers\PagesController;
-    use App\Http\Controllers\PcareController;
     use App\Http\Controllers\PermissionsController;
     use App\Http\Controllers\RolesController;
     use App\Http\Controllers\UsersController;
     use Illuminate\Support\Facades\Route;
     use Modules\Dashboard\App\Http\Controllers\DashboardController;
+
+    use App\Http\Controllers\Master\KategoriWebsiteController;
+    use App\Http\Controllers\Master\KategoriVideoController;
+
 
     /*
     |--------------------------------------------------------------------------
@@ -78,15 +27,6 @@
     Route::get('/',[DashboardController::class,'index']);
     Route::get('/',[DashboardController::class,'index']);
 
-    Route::get('bukti-penyampaian-informasi/{id}', [PagesController::class, 'bukti_penyampaian_informasi'])->name('buktipenyampaianinformasi');
-    Route::post('bukti-penyampaian-informasi', [PagesController::class, 'store_bukti_penyampaian_informasi'])->name('buktipenyampaianinformasi.store');
-    Route::get('bukti-penyampaian/{id}', [PagesController::class, 'get_bukti_penyampaian_informasi'])->name('bukti_penyampaian');
-    Route::get('generate-pdf/{id}', [PagesController::class, 'generatePDF'])->name('generate.pdf');
-
-    //     Route::get('persetujuan-tindakan-medis/{id}', [PagesController::class, 'persetujuan_tindakan_medis'])->name('persetujuantindakanmedis');
-    //     Route::post('persetujuan-tindakan-medis', [PagesController::class, 'store_persetujuan-tindakan-medis'])->name('persetujuantindakanmedis.store');
-    //     Route::get('persetujuan-tindakan/{id}', [PagesController::class, 'get_persetujuan-tindakan-medis'])->name('bukti_persetujuan');
-
     // Documentations pages
     Route::prefix('documentation')->group(function () {
         Route::get('getting-started/changelog', [PagesController::class, 'index']);
@@ -101,19 +41,9 @@
             Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
             Route::put('settings', [SettingsController::class, 'update'])->name('settings.update');
             Route::put('setting/nakes', [SettingsController::class, 'nakes'])->name('settings.nakes');
-            Route::get('examinations', [SettingsController::class, 'examinations'])->name('settings.examinations');
-            Route::post('examinations', [SettingsController::class, 'createExamination'])
-                 ->name('settings.create.examination');
             Route::put('settings/email', [SettingsController::class, 'changeEmail'])->name('settings.changeEmail');
             Route::put('settings/password', [SettingsController::class, 'changePassword'])
                  ->name('settings.changePassword');
-
-            Route::get('payments', [SettingsController::class, 'payments'])->name('settings.payment');
-            Route::post('payments', [SettingsController::class, 'createPayment'])->name('settings.create.payment');
-
-            Route::get('appointments', [SettingsController::class, 'appointments'])->name('settings.appointments');
-            Route::post('appointments', [SettingsController::class, 'createAppointment'])
-                 ->name('settings.create.appointment');
         });
 
         //User Management
@@ -123,247 +53,20 @@
 
         //Masters Data
         Route::prefix('masters')->group(function () {
-            Route::resource('religions', ReligionsController::class);
-            Route::resource('odontogramsymbols', OdontogramSymbolsController::class);
-            Route::resource('genders', GendersController::class);
-            Route::resource('works', WorksController::class);
-            Route::resource('educations', EducationsController::class);
-            Route::resource('bloodtypes', BloodTypesController::class);
-            Route::resource('maritalstatuses', MaritalStatusesController::class);
-            Route::resource('relationshipstatuses', RelationshipStatusesController::class);
-            Route::resource('countries', CountriesController::class);
-            Route::resource('cardtypes', CardTypesController::class);
-            Route::resource('provinces', ProvincesController::class);
-            Route::get('province-country', [ProvincesController::class, 'getProvinceByCountryId']);
-            Route::resource('cities', CitiesController::class);
-            Route::get('city-province', [CitiesController::class, 'getCityByProvinceId']);
-            Route::resource('districts', DistrictsController::class);
-            Route::get('district-city', [DistrictsController::class, 'getDistrictByCityId']);
-            Route::resource('subdistricts', SubDistrictsController::class);
-            Route::get('district-sub', [SubDistrictsController::class, 'getSubDistrictByCityId']);
+            Route::resource('kategori_web', KategoriWebsiteController::class);
+            Route::resource('kategori_video', KategoriVideoController::class);
         });
 
         //Masters Data
         Route::prefix('klinik')->group(callback: function () {
-            Route::resource('healthcarecategories', HealthcareCategoriesController::class);
-            Route::resource('healthcaretypes', HealthcareTypesController::class);
-            Route::resource('healthcares', HealthcaresController::class);
-            Route::resource('healthprofesionaltypes', HealthProfesionalTypesController::class);
-            Route::resource('healthprofesionals', HealthProfesionalsController::class);
-            Route::resource('patients', PatientsController::class);
-            Route::get('patients/print/{id}', [PatientsController::class, 'print'])->name('patients.print');
-            Route::post('patients/pretest', [PatientsController::class, 'pretest'])->name('patients.pretest');
-            Route::post('patients/check-nik', [PatientsController::class, 'check_nik'])->name('patients.ceknik');
 
-            Route::resource('specialities', SpecialitiesController::class);
-            Route::resource('diseases', DiseasesController::class);
-            Route::get('/examinations/invoice-pdf', [ExaminationsController::class, 'invoicePdf'])->name('examinations.invoice.pdf');
-
-            Route::resource('examinations', ExaminationsController::class);
-            Route::get('examinations-service', [ExaminationsController::class, 'services'])
-                 ->name('examinations.services');
-            Route::get('examinations-pdf', [ExaminationsController::class, 'pdf'])->name('examinations.pdf');
-            Route::get('examinations-invoice', [ExaminationsController::class, 'invoice'])
-                 ->name('examinations.invoice');
-            Route::get('examinations-payments', [ExaminationsController::class, 'payments'])
-                 ->name('examinations.payment');
-            Route::post('examinations-payments', [ExaminationsController::class, 'createPayment'])
-                 ->name('examinations.create.payment');
-            Route::resource('transactions', TransactionsController::class);
-            Route::get('examinations-vitality', [ExaminationsController::class, 'vitality'])
-                 ->name('examinations.vitality');
-            Route::POST('examinations-service-store', [ExaminationsController::class, 'storeservices'])
-                 ->name('examinations.storeservices');
-            Route::get('transactions-service', [TransactionsController::class, 'service'])
-                 ->name('transactions.service');
-
-            Route::post('examinations-psikososial', [ExaminationsController::class, 'psikososial'])
-                 ->name('examination.psikososial');
-
-            Route::post('/examinations/{examination}/hakkewajiban', [ExaminationsController::class, 'hakkewajiban'])->name('suket.hakkewajiban');
-            Route::get('/examinations/{examination}/hakkewajiban/pdf', [ExaminationsController::class, 'hakkewajiban_pdf'])->name('suket.hakkewajiban.pdf');
-
-            Route::post('/examinations/{examination}/hakkewajiban', [ExaminationsController::class, 'hakkewajiban'])->name('suket.hakkewajiban');
-            Route::get('/examinations/{examination}/hakkewajiban/pdf', [ExaminationsController::class, 'hakkewajiban_pdf'])->name('suket.hakkewajiban.pdf');
-
-            Route::post('suket-sehat/{id}', [ExaminationsController::class, 'sehat'])->name('suket.sehat');
-            Route::post('suket-sakit/{id}', [ExaminationsController::class, 'sakit'])->name('suket.sakit');
-            Route::post('suket-hak-dan-kewajiban/{id}', [ExaminationsController::class, 'hakkewajiban'])
-                 ->name('suket.hakkewajiban');
-            Route::post('suket-persetujuan/{id}', [ExaminationsController::class, 'persetujuan'])
-                 ->name('suket.persetujuan');
-            Route::post('suket-surgicalsafetychecklist/{id}', [ExaminationsController::class, 'surgicalsafetychecklist'])
-                 ->name('suket.surgicalsafetychecklist');
-            Route::post('suket-operasi/{id}', [ExaminationsController::class, 'penandaan_operasi'])->name('suket.operasi');
-
-            // Tambahkan route yang hilang
-            Route::post('suket-hak-kewajiban/{id}', [ExaminationsController::class, 'hak_kewajiban'])->name('suket.hak_kewajiban');
-            Route::post('suket-persetujuan-tindakan/{id}', [ExaminationsController::class, 'persetujuan_tindakan'])->name('suket.persetujuan_tindakan');
-            
-            // KFA Integration Routes
-            Route::get('drugs/kfa-search', [DrugsController::class, 'kfaSearch'])->name('drugs.kfa-search');
-            Route::get('drugs/search-kfa-products', [DrugsController::class, 'kfaSearch'])->name('drugs.search-kfa-products');
-            Route::post('drugs/{drug}/update-kfa-code', [DrugsController::class, 'updateKfaCode'])->name('drugs.update-kfa-code');
-            Route::post('suket-penandaan-operasi/{id}', [ExaminationsController::class, 'penandaan_operasi'])->name('suket.penandaan_operasi');
-            Route::post('suket-surgical-checklist/{id}', [ExaminationsController::class, 'surgical_checklist'])->name('suket.surgical_checklist');
-
-            // Tambahkan route yang hilang
-            Route::post('suket-hak-kewajiban/{id}', [ExaminationsController::class, 'hak_kewajiban'])->name('suket.hak_kewajiban');
-            Route::post('suket-persetujuan-tindakan/{id}', [ExaminationsController::class, 'persetujuan_tindakan'])->name('suket.persetujuan_tindakan');
-            Route::post('suket-penandaan-operasi/{id}', [ExaminationsController::class, 'penandaan_operasi'])->name('suket.penandaan_operasi');
-            Route::post('suket-surgical-checklist/{id}', [ExaminationsController::class, 'surgical_checklist'])->name('suket.surgical_checklist');
-
-            Route::resource('servicecategories', ServiceCategoriesController::class);
-            Route::resource('services', ServicesController::class);
-            Route::resource('packages', PackagesController::class);
-            Route::resource('packages', PackagesController::class);
-            Route::resource('vitalityexaminations', VitalityExaminationsController::class);
-            Route::post('vitalityexaminations-skrining', [VitalityExaminationsController::class, 'skrining'])
-                 ->name('vitalityexaminations.skrining');
-
-            Route::resource('anamnesiscategories', AnamnesisCategoriesController::class);
-            Route::resource('anamnesis', AnamnesisController::class);
-            Route::resource('physicalcategories', PhysicalCategoriesController::class);
-            Route::resource('physicals', PhysicalsController::class);
-            Route::resource('anamnesisexaminations', AnamnesisExaminationsController::class);
-            Route::resource('physicalexaminations', PhysicalExaminationsController::class);
-            Route::resource('otherexaminations', OtherExaminationsController::class);
-            Route::resource('additionalexaminations', AdditionalExaminationsController::class);
-            Route::resource('appointments', AppointmentsController::class);
-
-            Route::get('laboratoryexamination-lab', [LaboratoryExaminationsController::class, 'lab'])
-                 ->name('laboratoryexaminations.lab');
-            Route::get('laboratoryexamination-result', [LaboratoryExaminationsController::class, 'result'])
-                 ->name('laboratoryexaminations.result');
-            Route::get('laboratoryexamination-download', [LaboratoryExaminationsController::class, 'download'])
-                 ->name('laboratoryexaminations.download');
-            Route::put('laboratoryexamination-result', [LaboratoryExaminationsController::class, 'resultUpdate'])
-                 ->name('result.update');
-            Route::resource('laboratoryexaminations', LaboratoryExaminationsController::class);
-
-            Route::get('skriningexaminations/export', [SkriningExaminationsController::class, 'export'])
-                 ->name('skriningexaminations.export');
-
-            Route::resource('skriningexaminations', SkriningExaminationsController::class);
-
-            Route::get('skriningexaminations-result', [SkriningExaminationsController::class, 'result'])
-               ->name('skriningexaminations.result');
-            Route::put('skriningexaminations-result', [SkriningExaminationsController::class, 'resultUpdate'])
-               ->name('skriningexaminations.result.update');
-            Route::get('skriningexamination-download', [SkriningExaminationsController::class, 'download'])
-               ->name('skriningexaminations.download');
-            Route::get('skriningexaminations/{skrining}/detail', [SkriningExaminationsController::class, 'detail'])
-               ->name('skriningexaminations.detail');
-
-            Route::post('skriningexaminations/filter', [SkriningExaminationsController::class, 'filter'])
-               ->name('skriningexaminations.filter');
-
-            Route::resource('locationexaminations', LocationExaminationsController::class);
-
-            // Routes for Komunikasi Efektif
-            Route::get('/komunikasi-efektif/form/{examination}', [KomunikasiEfektifController::class, 'showForm'])
-                 ->name('komunikasi.efektif.form');
-            Route::post('/komunikasi-efektif/store', [KomunikasiEfektifController::class, 'store'])
-                ->name('komunikasi.efektif.store');
-            Route::get('/komunikasi-efektif/status/{examination}', [KomunikasiEfektifController::class, 'status'])
-                ->name('komunikasi.efektif.status');
-            //Route::get('/sbar', [Sbar::class, 'index']); //route ke fungsi index
-            Route::resource('sbar', SbarController::class);
-            Route::post('/sbar/{id}/verify', [SbarController::class, 'verify'])->name('sbar.verify');
-
-            Route::resource('organization', OrganizationController::class);
-            Route::resource('locations', LocationsController::class);
-
-            Route::resource('units', UnitController::class);
-            Route::get('drugs/export', [DrugsController::class, 'export'])->name('drugs.export');
-            Route::get('drugs/import', [DrugsController::class, 'import'])->name('drugs.import');
-            Route::post('drugs/import', [DrugsController::class, 'processImport'])->name('drugs.process-import');
-            Route::resource('drugs', DrugsController::class);
-            Route::get('kfa/product-detail', [DrugsController::class, 'getKfaProductDetail'])->name('kfa.product-detail');
-            Route::get('drugs/{drug}/detail', [DrugsController::class, 'detail'])->name('drugs.detail');
-            Route::put('drugs/{drug}/detail', [DrugsController::class, 'updateDetail'])->name('drugs.detail_');
-            Route::get('klinik/drugs/{drug}/detail', [DrugsController::class, 'showDetail'])->name('drugs.detail__');
-            Route::put('klinik/drugs/{drug}/detail', [DrugsController::class, 'updateDetail'])->name('drugs.update1');
-
-            Route::get('drugs/{drug}/reduceDetail', [DrugsController::class, 'reduceDetail'])->name('drugs.reduceDetail');
-            Route::put('drugs/{drug}/reduceDetail', [DrugsController::class, 'updateDetail'])->name('drugs.reduceDetail_');
-            Route::get('klinik/drugs/{drug}/reduceDetail', [DrugsController::class, 'showDetailReduce'])->name('drugs.reduceDetail__');
-            Route::put('klinik/drugs/{drug}/reduceDetail', [DrugsController::class, 'updateDetailReduce'])->name('drugs.update1_');
-
-            Route::get('icdten/search', [IcdtenController::class,'search'])->name('icdten.search');
-            Route::resource('icdten', IcdtenController::class);
-
-            Route::resource('jenis-pasien', JenisPasienController::class);
-            Route::resource('personal-disease-histories', PersonalDiseaseHistoryController::class);
-            Route::resource('family-disease-histories', FamilyDiseaseHistoryController::class);
-            
-            // Prescriptions
-            Route::get('prescriptions', [PrescriptionsController::class, 'index'])->name('prescriptions.index');
-            Route::get('prescriptions/{prescription}/print', [PrescriptionsController::class, 'print'])->name('prescriptions.print');
-            Route::get('prescriptions/{prescription}/pdf', [PrescriptionsController::class, 'pdf'])->name('prescriptions.pdf');
-            Route::get('prescriptions/check', [PrescriptionsController::class, 'check'])->name('prescriptions.check');
-            Route::put('prescriptions/{prescription}/status', [PrescriptionsController::class, 'updateStatus'])->name('prescriptions.update-status');
-            Route::post('prescriptions', [PrescriptionsController::class, 'store'])->name('prescriptions.store');
         });
-
-
+        
         // Logs pages
         Route::prefix('log')->name('log.')->group(function () {
             Route::resource('system', SystemLogsController::class)->only(['index', 'destroy']);
             Route::resource('audit', AuditLogsController::class)->only(['index', 'destroy']);
         });
-
-        Route::prefix('pcare')->name('pcare.')->group(function () {
-            Route::get('/', [PcareController::class, 'index'])->name('index');
-            Route::get('/dokter', [PcareController::class, 'getDokter'])->name('dokter');
-            Route::get('/peserta/{noKartu}', [PcareController::class, 'getPeserta']);
-            Route::get('/riwayat-pendaftaran', [PcareController::class, 'getRiwayatPendaftaran'])->name('riwayat-pendaftaran');
-            // Tambahkan rute lain sesuai kebutuhan
-
-            Route::get('/diagnosa', [PcareController::class, 'getDiagnosa'])->name('diagnosa');
-            Route::get('/get-diagnosa', [PcareController::class, 'getDiagnosa'])->name('get-diagnosa');
-
-            Route::get('/kesadaran', [PcareController::class, 'getKesadaran'])->name('kesadaran');
-            Route::get('/get-kesadaran', [PcareController::class, 'getKesadaran'])->name('get-kesadaran');
-
-            Route::get('/poli', [PcareController::class, 'getPoli'])->name('poli');
-            Route::get('/get-poli', [PcareController::class, 'getPoli'])->name('get-poli');
-            Route::get('/cek-poli', [PcareController::class, 'getPoli2'])->name('cek-poli');
-
-            Route::get('/provider', [PcareController::class, 'getProvider'])->name('provider');
-            Route::get('/get-provider', [PcareController::class, 'getProvider'])->name('get-provider');
-
-            Route::get('/spesialis', [PcareController::class, 'getSpesialis'])->name('spesialis');
-            Route::get('/getspesialis', [PcareController::class, 'getSpesialis'])->name('get-spesialis');
-
-            Route::get('/subspesialis', [PcareController::class, 'getSubSpesialis'])->name('subspesialis');
-            Route::get('/get-subspesialis', [PcareController::class, 'getSubSpesialis'])->name('get-subspesialis');
-
-            Route::get('/sarana', [PcareController::class, 'getSarana'])->name('sarana');
-            Route::get('/get-sarana', [PcareController::class, 'getSarana'])->name('get-sarana');
-
-            Route::get('/khusus', [PcareController::class, 'getKhusus'])->name('get-khusus');
-
-            // PCare Rujukan Subspesialis routes
-            Route::get('/rujukan-subspesialis', [PcareController::class, 'rujukanSubspesialis'])->name('rujukan-subspesialis');
-            Route::post('/filter-rujukan-subspesialis', [PcareController::class, 'rujukanSubspesialis'])->name('filter-rujukan-subspesialis');
-
-            Route::post('/pendaftaran',[PcareController::class, 'submitPendaftaran'])->name('pendaftaran');
-
-        });
     });
 
-    Route::get('/invoice/{invoiceNumber}', [App\Http\Controllers\Klinik\ExaminationsController::class, 'verifyInvoice'])
-        ->name('invoice.verify')
-        ->where('invoiceNumber', '[A-Za-z0-9\-]+');
-    Route::get('/sick-letter/{sickLetterNumber}', [App\Http\Controllers\Klinik\ExaminationsController::class, 'verifySickLetter'])
-        ->name('sick-letter.verify')
-        ->where('sickLetterNumber', '[A-Za-z0-9\-]+');
-    /**
-     * Socialite login using Google service
-     * https://laravel.com/docs/8.x/socialite
-     */
-    Route::get('/auth/redirect/{provider}', [SocialiteLoginController::class, 'redirect']);
-
     require __DIR__ . '/auth.php';
-

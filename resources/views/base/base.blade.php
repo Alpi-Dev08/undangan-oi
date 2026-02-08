@@ -97,7 +97,7 @@ License: {{ theme()->getOption('product', 'license') }}
 {{-- begin::Body --}}
 
 <body {!! theme()->printHtmlAttributes('body') !!} {!! theme()->printHtmlClasses('body') !!} {!! theme()->printCssVariables('body') !!} data-kt-name="metronic">
-
+<!-- 
     <div class="alert alert-warning p-2 mb-0"
         style="position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100000; overflow: hidden;display:none">
         <div class="marquee">
@@ -118,7 +118,7 @@ License: {{ theme()->getOption('product', 'license') }}
                 </span>
             </span>
         </div>
-    </div>
+    </div> -->
 
     <!--begin::Theme mode setup on page load-->
     <script>

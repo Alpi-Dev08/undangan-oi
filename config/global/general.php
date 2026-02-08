@@ -3,9 +3,9 @@
 return [
     // Product
     'product' => [
-        'name' => 'Klinik Satriabudi Dharma Medika',
-        'description' => 'Klinik Satriabudi Dharma Medika',
-        'preview' => 'https://putrakuningan.com',
+        'name' => 'Undangan Online',
+        'description' => 'Undangan Online',
+        'preview' => 'https://undanganonlineindonesia.com',
         'home' => 'https://putrakuningan.com',
         'purchase' => 'https://putrakuningan.com',
         'licenses' => [
@@ -37,7 +37,7 @@ return [
 
     // Meta
     'meta' => [
-        'title' => 'Klinik Satriabudi Dharma Medika',
+        'title' => 'Undangan Online',
         'description' => '',
         'keywords' => '',
         'canonical' => '',
@@ -45,11 +45,11 @@ return [
 
     // General
     'general' => [
-            'website' => 'https://kliniksatriabudi.com',
-        'copyright' => 'https://kliniksatriabudi.com',
-        'about' => 'https://kliniksatriabudi.com',
+        'website' => 'https://undanganonlineindonesia.com',
+        'copyright' => 'https://undanganonlineindonesia.com',
+        'about' => 'https://undanganonlineindonesia.com',
         'contact' => 'mailto:support@kliniksatriabudi.com',
-        'support' => 'https://kliniksatriabudi.com/support',
+        'support' => 'https://undanganonlineindonesia.com/support',
         'bootstrap-docs-link' => 'https://getbootstrap.com/docs/5.0',
         'licenses' => 'https://putrakuningan.com',
         'social-accounts' => [
@@ -80,8 +80,8 @@ return [
         // Docs
         'docs' => [
             'logo-path' => [
-                'default' => 'logos/logo-klinik.png',
-                'dark' => 'logos/logo-klinik.png',
+                'default' => '',
+                'dark' => '',
             ],
             'logo-class' => 'h-25px',
         ],
