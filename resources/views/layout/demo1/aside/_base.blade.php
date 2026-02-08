@@ -1,8 +1,8 @@
 @php
-    $logoFileName = 'logo-klinik.png';
+    $logoFileName = 'UI';
 
     if (theme()->getOption('layout', 'aside/theme') === 'light') {
-        $logoFileName = 'logo-klinik.png';
+        $logoFileName = 'UI';
     }
 @endphp
 

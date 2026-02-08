@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'name' => 'Klinik',
+    'name' => 'Undangan Online',
 ];

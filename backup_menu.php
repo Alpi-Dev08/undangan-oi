@@ -45,6 +45,72 @@
                 'content' => '<span class="menu-section text-muted text-uppercase fs-8 ls-1">Modules</span>',
             ],
 
+            // [
+            //     'title' => 'Registrasi', // Patients
+            //     'path'  => '#',
+            //     'role'  => ['admin', 'administrator', 'admin-perawat',],
+            //     'icon'  => theme()->getSvgIcon('assets/media/icons/duotune/communication/com014.svg', 'svg-icon-2'),
+            // ],
+            [
+                'title' => 'Data Pembayaran',
+                'path'  => '#',
+                'role'  => ['admin', 'administrator', 'admin-perawat'],
+                'icon'  => theme()->getSvgIcon('assets/media/icons/duotune/finance/fin007.svg', 'svg-icon-2'),
+            ],
+
+            [
+                'title' => 'Data Customer',
+                'path'  => '#',
+                'role'  => ['admin', 'administrator', 'admin-perawat'],
+                'icon'  => theme()->getSvgIcon('assets/media/icons/duotune/finance/fin007.svg', 'svg-icon-2'),
+            ],
+            
+            [
+                'title' => 'Manage Undangan',
+                'path'  => '#',
+                'role'  => ['admin', 'administrator', 'admin-perawat'],
+                'icon'  => theme()->getSvgIcon('assets/media/icons/duotune/finance/fin007.svg', 'svg-icon-2'),
+            ],
+
+            //// Data Pengguna
+            // [
+            //     'title'      => 'Data Pengguna',
+            //     'icon'       => [
+            //         'svg'  => theme()->getSvgIcon('assets/media/icons/duotune/general/gen051.svg', 'svg-icon-2'),
+            //         'font' => '<i class="bi bi-layers fs-3"></i>',
+            //     ],
+            //     'classes'    => ['item' => 'menu-accordion'],
+            //     'attributes' => [
+            //         'data-kt-menu-trigger' => 'click',
+            //     ],
+            //     'role'       => ['administrator'],
+            //     'sub'        => [
+            //         'class' => 'menu-sub-accordion menu-active-bg',
+            //         'items' => [
+            //             [
+            //                 'title'  => 'Users',
+            //                 'path'   => 'users',
+            //                 'bullet' => '<span class="bullet bullet-dot"></span>',
+            //             ],
+            //             [
+            //                 'title'  => 'Practitioners',
+            //                 'path'   => 'klinik/healthprofesionals',
+            //                 'bullet' => '<span class="bullet bullet-dot"></span>',
+            //             ],
+            //             [
+            //                 'title'  => 'Roles',
+            //                 'path'   => 'roles',
+            //                 'bullet' => '<span class="bullet bullet-dot"></span>',
+            //             ],
+            //             [
+            //                 'title'  => 'Permissions',
+            //                 'path'   => 'permissions',
+            //                 'bullet' => '<span class="bullet bullet-dot"></span>',
+            //             ],
+            //         ],
+            //     ],
+            // ],
+
             // Undangan Website
             [
                 'title'      => 'Undangan Website',
@@ -56,14 +122,14 @@
                 'attributes' => [
                     'data-kt-menu-trigger' => 'click',
                 ],
-                'role'       => ['administrator', 'admin'],
+                'role'       => ['administrator', 'admin', 'admin-perawat'],
                 'permission' => ['masters.read'],
                 'sub'        => [
                     'class' => 'menu-sub-accordion menu-active-bg',
                     'items' => [
                         [
                             'title'      => 'Kategori',
-                            'path'       => 'masters/kategori_web',
+                            'path'       => 'klinik/kategori-undangan',
                             'bullet'     => '<span class="bullet bullet-dot"></span>',
                             'permission' => ['masters.read'],
                         ],
@@ -88,19 +154,58 @@
                 'attributes' => [
                     'data-kt-menu-trigger' => 'click',
                 ],
-                'role'       => ['administrator', 'admin'],
+                'role'       => ['administrator', 'admin', 'admin-perawat'],
                 'permission' => ['masters.read'],
                 'sub'        => [
                     'class' => 'menu-sub-accordion menu-active-bg',
                     'items' => [
                         [
                             'title'      => 'Kategori',
-                            'path'       => 'masters/kategori_video',
+                            'path'       => '#',
                             'bullet'     => '<span class="bullet bullet-dot"></span>',
                             'permission' => ['masters.read'],
                         ],
                         [
                             'title'      => 'Tema',
+                            'path'       => '#',
+                            'bullet'     => '<span class="bullet bullet-dot"></span>',
+                            'permission' => ['masters.read'],
+                        ],
+                    ],
+                ],
+            ],
+            
+            // Paket Undangan
+            [
+                'title'      => 'Paket Undangan',
+                'icon'       => [
+                    'svg'  => theme()->getSvgIcon('assets/media/icons/duotune/abstract/abs029.svg', 'svg-icon-2'),
+                    'font' => '<i class="bi bi-layers fs-3"></i>',
+                ],
+                'classes'    => ['item' => 'menu-accordion'],
+                'attributes' => [
+                    'data-kt-menu-trigger' => 'click',
+                ],
+                'role'       => ['administrator', 'admin', 'admin-perawat'],
+                'permission' => ['masters.read'],
+                'sub'        => [
+                    'class' => 'menu-sub-accordion menu-active-bg',
+                    'items' => [
+                        [
+                            'title'      => 'Paket 1',
+                            'path'       => '#',
+                            'bullet'     => '<span class="bullet bullet-dot"></span>',
+                            'permission' => ['masters.read'],
+                        ],
+                        [
+                            'title'      => 'Paket 2',
+                            'path'       => '#',
+                            'bullet'     => '<span class="bullet bullet-dot"></span>',
+                            'permission' => ['masters.read'],
+                        ],
+
+                        [
+                            'title'      => 'Paket 3',
                             'path'       => '#',
                             'bullet'     => '<span class="bullet bullet-dot"></span>',
                             'permission' => ['masters.read'],

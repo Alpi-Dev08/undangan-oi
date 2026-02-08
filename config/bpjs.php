@@ -1,5 +1,4 @@
 <?php
-
 return [
     'pcare' => [
         'consid'       => env('BPJS_PCARE_CONSID'),
