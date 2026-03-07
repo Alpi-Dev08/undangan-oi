@@ -6,13 +6,19 @@
     use App\Http\Controllers\PermissionsController;
     use App\Http\Controllers\RolesController;
     use App\Http\Controllers\UsersController;
-    use Illuminate\Support\Facades\Route;
+    use Illuminate\Support\Facades\Route; 
     use Modules\Dashboard\App\Http\Controllers\DashboardController;
 
     use App\Http\Controllers\Master\KategoriWebsiteController;
     use App\Http\Controllers\Master\KategoriVideoController;
 
+    use App\Http\Controllers\Master\TemplateWebsiteController;
+    use App\Http\Controllers\DemoController;
 
+    use App\Http\Controllers\Master\TemplateVideoController;
+    use App\Http\Controllers\Master\FiturController;
+    use App\Http\Controllers\Master\PaketController;
+ 
     /*
     |--------------------------------------------------------------------------
     | Web Routes
@@ -55,8 +61,16 @@
         Route::prefix('masters')->group(function () {
             Route::resource('kategori_web', KategoriWebsiteController::class);
             Route::resource('kategori_video', KategoriVideoController::class);
-        });
 
+            Route::resource('template_web', TemplateWebsiteController::class);
+            Route::get('/demo/{slug}', [DemoController::class, 'show'])->name('demo.template');
+
+            Route::resource('template_video', TemplateVideoController::class);
+
+            Route::resource('fitur', FiturController::class);
+            Route::resource('paket', PaketController::class);
+        });
+ 
         //Masters Data
         Route::prefix('klinik')->group(callback: function () {
 

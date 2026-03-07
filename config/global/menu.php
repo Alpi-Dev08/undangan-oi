@@ -69,7 +69,7 @@
                         ],
                         [
                             'title'      => 'Tema',
-                            'path'       => '#',
+                            'path'       => 'masters/template_web',
                             'bullet'     => '<span class="bullet bullet-dot"></span>',
                             'permission' => ['masters.read'],
                         ],
@@ -101,13 +101,28 @@
                         ],
                         [
                             'title'      => 'Tema',
-                            'path'       => '#',
+                            'path'       => 'masters/template_video',
                             'bullet'     => '<span class="bullet bullet-dot"></span>',
                             'permission' => ['masters.read'],
                         ],
                     ],
                 ],
             ],
+
+            [
+                'title'      => 'Fitur',
+                'path'       => 'masters/fitur',
+                'icon'  => theme()->getSvgIcon('assets/media/icons/duotune/art/art002.svg', 'svg-icon-2'),
+                'permission' => ['masters.read'],
+            ],
+
+            [
+                'title'      => 'Paket',
+                'path'       => 'masters/paket',
+                'icon'  => theme()->getSvgIcon('assets/media/icons/duotune/art/art002.svg', 'svg-icon-2'),
+                'permission' => ['masters.read'],
+            ],
+
 
             // System
             [
@@ -124,12 +139,6 @@
                 'sub'        => [
                     'class' => 'menu-sub-accordion menu-active-bg',
                     'items' => [
-                        [
-                            'title'      => 'General Setting',
-                            'path'       => 'setting',
-                            'bullet'     => '<span class="bullet bullet-dot"></span>',
-                            'permission' => ['settings.read'],
-                        ],
                         [
                             'title'      => 'Audit Log',
                             'path'       => 'log/audit',

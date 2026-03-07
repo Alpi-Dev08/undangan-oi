@@ -28,4 +28,18 @@ class Jenis extends Model
             'id'     
         );
     }
+
+    public function template()
+    {
+        return $this->hasMany(
+            Template::class,
+            'jenis_id',
+            'id'
+        );
+    }
+
+    public function paket()
+    {
+        return $this->hasMany(Paket::class, 'jenis_id', 'id');
+    }
 }

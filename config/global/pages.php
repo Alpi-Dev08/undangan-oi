@@ -172,222 +172,11 @@ return [
     ],
 
     'masters' => [
-        'religions' => [
-            '*' => [
-                'title' => 'Religions',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'genders' => [
-            '*' => [
-                'title' => 'Gender',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'works' => [
-            '*' => [
-                'title' => 'Work',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'educations' => [
-            '*' => [
-                'title' => 'Education',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'bloodtypes' => [
-            '*' => [
-                'title' => 'Blood Type',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'maritalstatuses' => [
-            '*' => [
-                'title' => 'Marital Status',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'relationshipstatuses' => [
-            '*' => [
-                'title' => 'Relationship Status',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'cardtypes' => [
-            '*' => [
-                'title' => 'Card Types',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'countries' => [
-            '*' => [
-                'title' => 'Country',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-
-        'provinces' => [
-            '*' => [
-                'title' => 'Province',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'cities' => [
-            '*' => [
-                'title' => 'City',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'districts' => [
-            '*' => [
-                'title' => 'District',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'subdistricts' => [
-            '*' => [
-                'title' => 'Sub District',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'odontogramsymbols' => [
-            '*' => [
-                'title' => 'Daftar Singkatan Odontogram',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
         'kategori_web' => [
             '*' => [
                 'title' => 'Kategori',
             ],
-            'assets' => [
+            'assets' => [ 
                 'custom' => [
                     'css' => [
                         'plugins/custom/datatables/datatables.bundle.css',
@@ -398,7 +187,7 @@ return [
                 ],
             ],
         ], 
-         'kategori_video' => [
+        'kategori_video' => [
             '*' => [
                 'title' => 'Kategori',
             ],
@@ -412,496 +201,66 @@ return [
                     ],
                 ],
             ],
+        ],  
+        'template_web' => [
+            '*' => [
+                'title' => 'Template',
+            ],
+            'assets' => [
+                'custom' => [
+                    'css' => [
+                        'plugins/custom/datatables/datatables.bundle.css',
+                    ],
+                    'js' => [
+                        'plugins/custom/datatables/datatables.bundle.js',
+                    ],
+                ],
+            ],
+        ], 
+        'template_video' => [
+            '*' => [
+                'title' => 'Template',
+            ],
+            'assets' => [
+                'custom' => [
+                    'css' => [
+                        'plugins/custom/datatables/datatables.bundle.css',
+                    ],
+                    'js' => [
+                        'plugins/custom/datatables/datatables.bundle.js',
+                    ],
+                ],
+            ],
+        ], 
+        'fitur' => [ 
+            '*' => [ 
+                'title' => 'Fitur',
+            ],
+            'assets' => [
+                'custom' => [
+                    'css' => [
+                        'plugins/custom/datatables/datatables.bundle.css',
+                    ],
+                    'js' => [
+                        'plugins/custom/datatables/datatables.bundle.js',
+                    ],
+                ],
+            ],
+        ], 
+        'paket' => [ 
+            '*' => [ 
+                'title' => 'Paket',
+            ],
+            'assets' => [
+                'custom' => [
+                    'css' => [
+                        'plugins/custom/datatables/datatables.bundle.css',
+                    ],
+                    'js' => [
+                        'plugins/custom/datatables/datatables.bundle.js',
+                    ],
+                ],
+            ],
         ], 
     ],
-
-    'kfa' => [
-            '*' => [
-                'title' => 'KFA',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-
-    'pcare' => [
-        'title' => 'PCare',
-        'diagnosa' => [
-            'title' => 'Diagnosa'
-        ],
-        'dokter' => [
-            'title' => 'Dokter'
-        ],
-        'kesadaran' => [
-            'title' => 'Kesadaran'
-        ],
-        'poli' => [
-            'title' => 'Poli'
-        ],
-        'provider' => [
-            'title' => 'Provider'
-        ],
-        'spesialis' => [
-            'title' => 'Spesialis'
-        ],
-        'subspesialis' => [
-            'title' => 'Sub Spesialis'
-        ],
-        'sarana' => [
-            'title' => 'Sarana'
-        ],
-        'khusus' => [
-            'title' => 'Khusus'
-        ],
-        [
-            'rujukan-subspesialis' => [
-            'title' => 'Rujukan Sub Spesialis'
-            ]
-        ]
-    ],
-
-    'klinik' => [
-        'healthprofesionals' => [
-            'title' => 'Health Profesional',
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'patients' => [
-            'title' => 'Patient',
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'healthcarecategories' => [
-            '*' => [
-                'title' => 'Healthcare Category',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'healthcaretypes' => [
-            '*' => [
-                'title' => 'Healthcare Type',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'healthcares' => [
-            '*' => [
-                'title' => 'Healthcare',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'locations' => [
-            '*' => [
-                'title' => 'Location',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'healthprofesionaltypes' => [
-            '*' => [
-                'title' => 'Health Profesional Type',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'specialities' => [
-            '*' => [
-                'title' => 'Speciality',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'diseases' => [
-            '*' => [
-                'title' => 'Disease',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'examinations' => [
-            '*' => [
-                'title' => 'Examinations',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'laboratoryexaminations' => [
-            '*' => [
-                'title' => 'Examinations',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'appointments' => [
-            '*' => [
-                'title' => 'Appointments',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'transactions' => [
-            '*' => [
-                'title' => 'Transactions',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-            'create' => [
-                'title' => 'Create Transaction',
-                'assets' => [
-                    'custom' => [
-                        'js' => [
-                            'js/custom/apps/invoices/create.js',
-                        ],
-                    ],
-                ],
-            ],
-        ],
-        'servicecategories' => [
-            '*' => [
-                'title' => 'Service Category',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-
-        'services' => [
-            '*' => [
-                'title' => 'Service',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-
-        'packages' => [
-            '*' => [
-                'title' => 'Package',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-
-        'anamnesiscategories' => [
-            '*' => [
-                'title' => 'Service Category',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-
-        'anamnesis' => [
-            '*' => [
-                'title' => 'Service',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'physicalcategories' => [
-            '*' => [
-                'title' => 'Physical Category',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-
-        'physicals' => [
-            '*' => [
-                'title' => 'Physical',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'icdten' => [
-            '*' => [
-                'title' => 'ICD-10',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'jenis-pasien' => [
-            '*' => [
-                'title' => 'Jenis Pasien',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'personal-disease-histories' => [
-            '*' => [
-                'title' => 'Jenis Riwayat Penyakit Pribadi',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'family-disease-histories' => [
-            '*' => [
-                'title' => 'Jenis Riwayat Penyakit Keluarga',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-
-        'units' => [
-            '*' => [
-                'title' => 'Unit',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-
-        'drugs' => [
-            '*' => [
-                'title' => 'Drug',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-
-        'skriningexaminations' => [
-            '*' => [
-                'title' => 'Examinations',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-        'locationexaminations' => [
-            '*' => [
-                'title' => 'Location Examinations',
-            ],
-            'assets' => [
-                'custom' => [
-                    'css' => [
-                        'plugins/custom/datatables/datatables.bundle.css',
-                    ],
-                    'js' => [
-                        'plugins/custom/datatables/datatables.bundle.js',
-                    ],
-                ],
-            ],
-        ],
-    ],
-
 ];
