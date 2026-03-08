@@ -72,16 +72,16 @@ class KategoriWebsiteController extends Controller
         return redirect()->route('kategori_web.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Religion  $religion
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Religion $religion)
-    {
-        //
-    }
+    // /**
+    //  * Display the specified resource.
+    //  *
+    //  * @param  \App\Models\Religion  $religion
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function show(Religion $religion)
+    // {
+    //     //
+    // }
 
     /**
      * Show the form for editing the specified resource.
