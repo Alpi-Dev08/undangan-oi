@@ -63,7 +63,7 @@
             Route::resource('kategori_video', KategoriVideoController::class);
 
             Route::resource('template_web', TemplateWebsiteController::class);
-            Route::get('/demo/{slug}', [DemoController::class, 'show'])->name('demo.template');
+            //Route::get('/demo/{slug}', [DemoController::class, 'show'])->name('demo.template');
 
             Route::resource('template_video', TemplateVideoController::class);
 
