@@ -39,4 +39,13 @@ class Kategori extends Model
             'id'
         );
     }
+
+    public function templateVideo()
+    {
+        return $this->hasMany(
+            TemplateVideo::class,
+            'kategori_id',
+            'id'
+        );
+    }
 }

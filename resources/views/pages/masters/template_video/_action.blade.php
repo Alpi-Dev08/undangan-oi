@@ -1,22 +1,31 @@
-<div class="d-flex flex-row flex-center">
-    @if (Auth::user()->can('masters.update'))
-        <a href="#"
-            class="btn btn-icon btn-bg-light  btn-active-light-primary btn-sm me-1">
-            {!! theme()->getSvgIcon('icons/duotune/art/art005.svg', 'svg-icon-3') !!}
-        </a>
-    @endif
+<div class="d-flex flex-row flex-center gap-1">
 
-    @if (Auth::user()->can('masters.delete'))
-    <form method="POST" action="#" class="d-inline">
+    {{-- TOGGLE STATUS --}}
+    <button 
+        class="btn btn-sm toggle-status 
+        {{ $model->status == 'aktif' ? 'btn-light-success' : 'btn-light-danger' }}"
+        data-id="{{ $model->id }}"
+        title="Klik untuk ubah status">
+        {{ $model->status == 'aktif' ? 'Aktif' : 'Nonaktif' }}
+    </button>
+
+    {{-- EDIT --}}
+    <a href="{{ route('template_video.edit', $model->id) }}"
+       class="btn btn-icon btn-bg-light btn-active-light-primary btn-sm">
+        {!! theme()->getSvgIcon('icons/duotune/art/art005.svg', 'svg-icon-3') !!}
+    </a>
+
+    {{-- DELETE --}}
+    <form method="POST"
+          action="{{ route('template_video.destroy', $model->id) }}"
+          class="d-inline">
         @csrf
         @method('DELETE')
 
-        <button
-            type="button"
-            class="delete btn btn-icon btn-bg-light btn-active-light-danger btn-sm"
-            title="Hapus">
+        <button type="button"
+                class="delete btn btn-icon btn-bg-light btn-active-light-danger btn-sm">
             {!! theme()->getSvgIcon('icons/duotune/general/gen027.svg', 'svg-icon-3') !!}
         </button>
     </form>
-    @endif
+
 </div>
