@@ -24,7 +24,7 @@
                 <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
                      title=""
                      data-bs-original-title="Click to add a role">
-                    <a href="#" class="btn btn-sm btn-light-primary">
+                    <a href="{{ route('template_video.create') }}" class="btn btn-sm btn-light-primary">
                         <!--begin::Svg Icon | path: /var/www/preview.keenthemes.com/kt-products/metronic/releases/2022-07-14-092914/core/html/src/media/icons/duotune/arrows/arr013.svg-->
                         <span class="svg-icon svg-icon-muted svg-icon-2hx">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

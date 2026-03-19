@@ -42,4 +42,13 @@ class Jenis extends Model
     {
         return $this->hasMany(Paket::class, 'jenis_id', 'id');
     }
+
+    public function templateVideo()
+    {
+        return $this->hasMany(
+            TemplateVideo::class,
+            'jenis_id',
+            'id'
+        );
+    }
 }

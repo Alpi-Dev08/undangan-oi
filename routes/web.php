@@ -13,7 +13,7 @@
     use App\Http\Controllers\Master\KategoriVideoController;
 
     use App\Http\Controllers\Master\TemplateWebsiteController;
-    use App\Http\Controllers\DemoController;
+    use App\Http\Controllers\Master\DemoController;
 
     use App\Http\Controllers\Master\TemplateVideoController;
     use App\Http\Controllers\Master\FiturController;
@@ -63,9 +63,12 @@
             Route::resource('kategori_video', KategoriVideoController::class);
 
             Route::resource('template_web', TemplateWebsiteController::class);
-            //Route::get('/demo/{slug}', [DemoController::class, 'show'])->name('demo.template');
+            Route::get('/demo/{slug}', [DemoController::class, 'show'])->name('demo.template');
 
             Route::resource('template_video', TemplateVideoController::class);
+            Route::get('/demo/template-video/{slug}', [DemoController::class, 'show'])->name('masters.demo.template_video');
+            Route::patch('/template-video/{id}/toggle-status', [TemplateVideoController::class, 'toggleStatus'])
+            ->name('template_video.toggle_status');
 
             Route::resource('fitur', FiturController::class);
             Route::resource('paket', PaketController::class);
