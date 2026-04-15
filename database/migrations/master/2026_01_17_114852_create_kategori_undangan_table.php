@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kategori_undangan', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama_kategori', 50);
-            $table->string('deskripsi', 150)->nullable();
-            $table->timestamps();     
-            $table->softDeletes();   
-        });
+        if (!Schema::hasTable('kategori_undangan')) {
+            Schema::create('kategori_undangan', function (Blueprint $table) {
+                $table->id();
+                $table->string('nama_kategori', 50);
+                $table->string('deskripsi', 150)->nullable();
+                $table->timestamps();
+                $table->softDeletes();
+            });
+        }
     }
 
     /**

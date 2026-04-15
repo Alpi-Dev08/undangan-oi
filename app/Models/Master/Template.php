@@ -17,6 +17,7 @@ class Template extends Model
         'jenis_id',
         'kategori_id',
         'preview_image',
+        'template_file',
         'is_premium',
         'harga',
         'status',

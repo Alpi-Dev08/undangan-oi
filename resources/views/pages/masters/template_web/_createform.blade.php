@@ -4,6 +4,16 @@
 
     @csrf
 
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
     <!-- Nama Template --> 
     <div class="mb-7">
         <label class="required fw-bold fs-6 mb-2">Nama Template</label>
@@ -16,6 +26,9 @@
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
+
+    {{-- Hidden value Jenis --}}
+    <input type="hidden" name="jenis_id" value="3">
 
     <!-- Kategori -->
     <div class="mb-7">
@@ -68,12 +81,26 @@
     <div class="mb-7">
         <label class="fw-bold fs-6 mb-2">Preview Image</label>
         <input type="file"
-               name="preview_image"
-               class="form-control @error('preview_image') is-invalid @enderror">
-
+        name="preview_image"
+        class="form-control @error('preview_image') is-invalid @enderror">
+        
         @error('preview_image')
-            <div class="invalid-feedback">{{ $message }}</div>
+        <div class="invalid-feedback">{{ $message }}</div>
         @enderror
+    </div>
+    
+    <!-- Template File -->
+    <div class="mb-7">
+        <label class="fw-bold fs-6 mb-2">Source Code Template</label>
+
+        <input type="file"
+            name="template_file"
+            class="form-control"
+            accept=".zip">
+
+        <small class="text-muted">
+            Upload file template dalam format ZIP
+        </small>
     </div>
 
     <div class="text-center pt-10">

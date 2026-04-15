@@ -6,6 +6,8 @@
     use App\Http\Controllers\PermissionsController;
     use App\Http\Controllers\RolesController;
     use App\Http\Controllers\UsersController;
+    use App\Http\Controllers\PagesController;
+    use App\Http\Controllers\KycController;
     use Illuminate\Support\Facades\Route; 
     use Modules\Dashboard\App\Http\Controllers\DashboardController;
 

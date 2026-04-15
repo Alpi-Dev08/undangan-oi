@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+
+// Call zip
+use ZipArchive;
+
 
 class TemplateWebsiteController extends Controller
 {
@@ -61,6 +66,39 @@ class TemplateWebsiteController extends Controller
                 ->store('templates', 'public');
         }
 
+        // Upload template file
+        $templatePath = null;
+
+        if ($request->hasFile('template_file')) {
+
+            $templatePath = $request->file('template_file')
+                ->store('template_source', 'public');
+        }
+
+        $templateFolder = null;
+
+        if ($request->hasFile('template_file')) {
+
+            $file = $request->file('template_file');
+            $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $fileName = $originalName.'.zip';
+            $file->storeAs('template_source', $fileName, 'public');
+            $zipPath = storage_path('app/public/template_source/'.$fileName);
+            $folderName = pathinfo($fileName, PATHINFO_FILENAME);
+            $extractPath = public_path('templates/'.$folderName);
+
+            if (!file_exists($extractPath)) {
+                mkdir($extractPath, 0777, true);
+            }
+
+            $zip = new ZipArchive;
+
+            if ($zip->open($zipPath) === TRUE) {
+                $zip->extractTo($extractPath);
+                $zip->close();
+            }
+        }
+
         // Generate unique slug
         $baseSlug = Str::slug($request->nama_template);
         $slug = $baseSlug;
@@ -76,6 +114,7 @@ class TemplateWebsiteController extends Controller
             'jenis_id'      => 3, // FIXED WEBSITE
             'kategori_id'   => $request->kategori_id,
             'preview_image' => $imagePath, 
+            'template_file' => $templatePath,
             'is_premium'    => $request->boolean('is_premium'),
             'harga'         => $request->boolean('is_premium') ? $request->harga : 0,
             'status'        => 'aktif',
